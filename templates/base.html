@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<head>
+    <title>{{ page_title }}</title>
+</head>
+<body>
+  <table width="100%" height="100%" border="1" cellspacing="0" cellpadding="0">
+    <tr>
+      {% if user.is_authenticated %}
+      <td align="left">{{ user.username }}</td>
+      <td align="right"><a href="/accounts/logout/">Выйти</a></td>
+      {% else %}
+      <td align="left">Кто вы, незнакомец?</td>
+      <td align="right"><a href="/accounts/login/">Войти</a></td>
+      {% endif %}
+    </tr>
+    <tr>
+      <td colspan="2">
+	Баннер
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+	<table width="100%" height="100%" border="1">
+	  <tr>
+	    <td style="width: 200px;">
+	      left
+	    </td>
+	    <td>
+	      {% block content %}{% endblock %}
+	    </td>
+	  </tr>
+	</table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

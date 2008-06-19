@@ -1,0 +1,33 @@
+{% extends "shopbase.html" %}
+
+{% block content %}
+<div>
+  <div class="item">
+    <div class="title">
+      {{ item_title }}
+    </div>
+    
+    <div class="categories title">
+      <a href="/shop">Рынок</a> /
+      {% for parcat in parent_cats %}
+      <a href="{{ parcat.get_absolute_url }}">{{ parcat.name }}</a>{% if not forloop.last %} / {% endif %}
+      {% endfor %}
+    </div>
+    
+    <div style="padding: 1em;">
+      <div style="image">
+	<img src="http://cargo/pics/morda.png" width="100" height="100"/>
+      </div>
+      
+      <div class="info">
+	<div>Разброс цен: {{ price_min }} .. {{ price_max }} рублей.</div>
+	<div>Средняя цена: {{ price|floatformat:2 }} рублей.</div>
+	<div>Количество предложений: {{ sellers }} магазинов.</div>
+	<div>Описание:</div>
+	<div class="desc">{{ desc }}</div>
+      </div>
+    
+    </div>
+  </div>
+</div>
+{% endblock %}

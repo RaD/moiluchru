@@ -1,0 +1,15 @@
+{% extends "djangobook-base.html" %}
+
+{% block content %}
+  <h2 class="title">Новости перевода</h2>
+  {% for News in object_list %}
+  <div class="news">
+    <div class="title">
+      {{ News.title }} - {{ News.datetime }}
+    </div>
+    <div class="body">
+      {{ News.text|safe }}
+    </div>
+  </div>
+  {% endfor %}
+{% endblock %}

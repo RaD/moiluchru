@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ru">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="Content-Language" content="ru"/>
+  <meta name="ROBOTS" content="ALL"/>
+  <meta name="keywords" content="Python, Django, framework, open-source, �����, ������"/>
+  <meta name="description" content="������ �������� ��������������� ������ ���������� ���������� �� ����� �����, ������� �������� �� ���������� ������� ���������� � ����� ������."/>
+  <meta name="generator" content="Django"/>
+  <title>{{ page_title }}</title>
+  <link rel="stylesheet" href="/css/djangobook.css" type="text/css"/>
+  <link rel="shortcut icon" href="/pics/favicon.png"/>
+  <script type="text/javascript" src="http://cargo/js/prototype.js"></script> 
+  <script type="text/javascript" src="http://cargo/js/fixpng.js"></script>
+  <script type="text/javascript" src="http://cargo/js/djangobook.js"></script> 
+  <script type="text/javascript" src="http://cargo/js/spelling.js"></script> 
+<!--   <link rel="stylesheet" href="/css/djangobook.css" type="text/css"/> -->
+<!--   <script type="text/javascript" src="/js/prototype.js"></script>  -->
+<!--   <script type="text/javascript" src="/js/fixpng.js"></script> -->
+<!--   <script type="text/javascript" src="/js/djangobook.js"></script>  -->
+<!--   <script type="text/javascript" src="/js/spelling.js"></script>  -->
+<!--
+  <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
+  <script type="text/javascript">_uacct = "UA-3919032-1"; urchinTracker();</script>
+//-->
+</head>
+<body onLoad="init(); spelling.init();">
+  <div class="topic">
+    <div>
+      <img src="/pics/djangobook-title.png" class="titleimage"/>
+    </div>
+    {% if user.is_authenticated %}
+    <div class="usergreeting">Добро пожаловать, {{ user.username }}!
+    <button onClick="window.location='/accounts/logout/';">Выйти</button>
+    </div>
+    {% else %}
+    <div class="usergreeting">Здравствуйте, незнакомец!
+    <button onClick="window.location='/accounts/login/';">Войти</button>
+    </div>
+    {% endif %}
+
+    <div class="sections">
+      <span><a href="/djangobook/">Главная</a></span> |
+      <span><a href="/djangobook/news/">Новости</a></span>
+    </div>
+
+    <div class="search">
+      <img class="soon" src="/pics/soon.png" width="22" height="30" border="0" alt=""/>
+      <form>
+	<span>Поиск по книге:</span>
+	<span><input type="text" class="field" disabled="true"/></span>
+	<span><button class="searchbutton" disabled="true">Найти</button></span>
+      </form>
+    </div>
+  </div>
+
+  <div class="content">
+    {% block content %}{% endblock %}
+  </div>
+  
+  <div class="comments">
+    {% block comments %}{% endblock %}
+  </div>
+
+  <div class="footer">
+    <div class="line">
+      &copy; 2008 Руслан Попов &lt;radz &bull; yandex &bull; ru&gt;
+    </div>
+    <div class="line">
+      Автор перевода указан в начале каждой главы.
+    </div>
+  </div>
+
+  <div class="rss-banner">
+    RSS:<br/>
+    <a href="http://feeds.feedburner.com/djangobook-in-russian-latest/">Последние новости</a>
+  </div>
+
+  <div class="offline-download">
+    <img class="soon" src="/pics/soon.png" width="22" height="30"/>
+    Скачать в формате <a href="#">CHM</a> или <a href="#">PDF</a>.
+  </div>
+
+  <div class="spelling">
+    <div class="question">
+      Увидели ошибку?
+    </div>
+    <br/>
+    <div class="answer">
+      Выделите её мышкой<br/>и нажмите Ctrl-Enter!
+    </div>
+    <br/>
+    <div class="pending">
+      Ждут обработки: {{ spelling_error_count }}
+    </div>
+  </div>
+
+<!--
+  <div class="yandex-money">
+    <table cellpadding="0" cellspacing="0" border="0" style="font: 0.8em Arial, sans-serif; border: 0px;">
+      <tr>
+	<td width="116" height="77" style="background:url(http://www.yandex.ru/redir?dtype=stred&pid=41&cid=132&url=https://img.yandex.net/i/money/top-1rub-default.gif) repeat-y; text-align:center" align="center" valign="bottom">
+	  <form style="margin: 0; padding: 0 0 2px;" action="https://money.yandex.ru/donate.xml" method="post">
+	    <input type="hidden" name="to" value="41001223475816"/>
+	    <input type="hidden" name="s5" value="1rub"/>
+	    <input type="submit" value="Дай рубль"/>
+	  </form>
+	</td>
+      </tr>
+      <tr>
+	<td width="116" height="38" style="background:url(https://img.yandex.net/i/money/bg-default.gif) repeat-y; text-align:center; padding: 5px 0; color: black;" align="center" valign="top">
+	  <b>на поддержку перевода</b>
+	</td>
+      </tr>
+      <tr>
+	<td>
+	  <img src="https://img.yandex.net/i/money/bottom-default.gif" width="116" height="40" alt="" usemap="#button" border="0" />
+	  <map name="button">
+	    <area alt="Яндекс" coords="38,2,49,21" href="http://www.yandex.ru"/>
+	    <area alt="Яндекс.Деньги" coords="52,1,84,28" href="https://money.yandex.ru"/>
+	    <area alt="Хочу такую же кнопку" coords="17,29,100,40" href="https://money.yandex.ru/choose-banner.xml"/>
+	  </map>
+	</td>
+      </tr>
+    </table>
+  </div>
+//-->  
+</body>
+</html>
