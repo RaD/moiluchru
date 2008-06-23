@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-23 23:00+0400\n"
+"POT-Creation-Date: 2008-06-23 23:41+0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Ruslan Popov <EMAIL@ADDRESS>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: djangobook/models.py:6 shop/models.py:8 shop/models.py:22 shop/models.py:36
-#: shop/models.py:70 shop/models.py:72
+#: shop/models.py:70 shop/models.py:72 shop/models.py:95
 msgid "Title"
 msgstr "Название"
 
@@ -32,7 +32,7 @@ msgstr "Жалоба"
 msgid "Claims"
 msgstr "Жалобы"
 
-#: shop/models.py:11
+#: shop/models.py:11 shop/models.py:100
 msgid "Color"
 msgstr "Цвет"
 
@@ -60,7 +60,7 @@ msgstr "Города"
 msgid "Company"
 msgstr "Компания"
 
-#: shop/models.py:57
+#: shop/models.py:57 shop/models.py:98
 msgid "Producer"
 msgstr "Производитель"
 
@@ -68,13 +68,21 @@ msgstr "Производитель"
 msgid "Producers"
 msgstr "Производители"
 
-#: shop/models.py:75
+#: shop/models.py:75 shop/models.py:97
 msgid "Category"
 msgstr "Категория"
 
 #: shop/models.py:76
 msgid "Categories"
 msgstr "Категории"
+
+#: shop/models.py:99
+msgid "Price"
+msgstr "Цена"
+
+#: shop/models.py:101
+msgid "Count"
+msgstr "Количество"
 
 #: shop/models.py:106
 msgid "Item"

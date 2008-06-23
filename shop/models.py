@@ -92,13 +92,13 @@ class Category(models.Model):
         return self.categories_set.all()
 
 class Item(models.Model):
-    title = models.CharField(max_length=60)
+    title = models.CharField(ugettext('Title'), max_length=60)
     desc = models.TextField()
-    category = models.ForeignKey(Category)
-    producer = models.ForeignKey(Producer)
-    price = models.FloatField()
-    color = models.ForeignKey(Color)
-    count = models.PositiveIntegerField()
+    category = models.ForeignKey(Category, verbose_name=ugettext('Category'))
+    producer = models.ForeignKey(Producer, verbose_name=ugettext('Producer'))
+    price = models.FloatField(ugettext('Price'))
+    color = models.ForeignKey(Color, verbose_name=ugettext('Color'))
+    count = models.PositiveIntegerField(ugettext('Count'))
     reg_date = models.DateTimeField()
 #    image = models.ImageField(upload_to='/tmp')
     
