@@ -5,25 +5,17 @@
   <meta http-equiv="Content-Language" content="ru"/>
   <meta name="ROBOTS" content="ALL"/>
   <meta name="keywords" content="Python, Django, framework, open-source, Питон, Джанго"/>
-  <meta name="description" content="Джанго является высокоуровневой средой разработки основанной на языке Питон, которая на
-целена на ускоренный процесс разработки и явный дизайн."/>
+  <meta name="description" content="Джанго является высокоуровневой средой разработки основанной на языке Питон, которая нацелена на ускоренный процесс разработки и явный дизайн."/>
   <meta name="generator" content="Django"/>
   <title>{{ page_title }}</title>
   <link rel="stylesheet" href="/css/djangobook.css" type="text/css"/>
   <link rel="shortcut icon" href="/pics/favicon.png"/>
-  <script type="text/javascript" src="http://cargo/js/prototype.js"></script> 
-  <script type="text/javascript" src="http://cargo/js/fixpng.js"></script>
-  <script type="text/javascript" src="http://cargo/js/djangobook.js"></script> 
-  <script type="text/javascript" src="http://cargo/js/spelling.js"></script> 
-<!--   <link rel="stylesheet" href="/css/djangobook.css" type="text/css"/> -->
-<!--   <script type="text/javascript" src="/js/prototype.js"></script>  -->
-<!--   <script type="text/javascript" src="/js/fixpng.js"></script> -->
-<!--   <script type="text/javascript" src="/js/djangobook.js"></script>  -->
-<!--   <script type="text/javascript" src="/js/spelling.js"></script>  -->
-<!--
+  <script type="text/javascript" src="/js/prototype.js"></script>
+  <script type="text/javascript" src="/js/fixpng.js"></script>
+  <script type="text/javascript" src="/js/djangobook.js"></script>
+  <script type="text/javascript" src="/js/spelling.js"></script>
   <script src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script>
   <script type="text/javascript">_uacct = "UA-3919032-1"; urchinTracker();</script>
-//-->
 </head>
 <body onLoad="init(); spelling.init();">
   <div class="topic">
@@ -46,12 +38,25 @@
     </div>
 
     <div class="search">
-      <img class="soon" src="/pics/soon.png" width="22" height="30" border="0" alt=""/>
-      <form>
-	<span>Поиск по книге:</span>
-	<span><input type="text" class="field" disabled="true"/></span>
-	<span><button class="searchbutton" disabled="true">Найти</button></span>
+      <form name="web" method="get" action="http://www.yandex.ru/yandsearch">
+        Поиск по сайту:
+        <input type="text" name="text" size="40" value="" maxlength="160" class="field"/>
+        <input type="submit" value="Найти" class="searchbutton"/>
+        <input type="hidden" name="serverurl" value="http://cargo.caml.ru/djangobook/" />
+        <input type="hidden" name="server_name" value="DjangoBook по-русски" />
+
+        <input type="hidden" name="referrer1" value="http://cargo.caml.ru/djangobook/">
+        <input type="hidden" name="referrer2" value="DjangoBook по-русски">
       </form>
+
+      <div class="searchexamples">
+        <b>Примеры запросов:</b>
+        <font size="-1">
+          <span class="item">Технологии и продукты Яндекса</span> |
+          <span class="item">партнерские программы</span> |
+          <span class="item">Блог Яндекса</span>
+        </font>
+      </div>
     </div>
   </div>
 
@@ -79,7 +84,9 @@
 
   <div class="offline-download">
     <img class="soon" src="/pics/soon.png" width="22" height="30"/>
-    Скачать в формате <a href="#">CHM</a> или <a href="#">PDF</a>.
+    Скачать в формате:<br/>
+    <a href="http://depositfiles.com/files/5551541">CHM от 23 мая</a><br/>
+    <a href="http://r-a-d.livejournal.com/217556.html">А нужен ли PDF?</a>.
   </div>
 
   <div class="spelling">
@@ -96,7 +103,17 @@
     </div>
   </div>
 
-<!--
+  <div class="accesskeys">
+    <div class="title">
+      Мышка достала?
+    </div>
+    <div>
+      [alt]+[h] - главная страница<br/>
+      [alt]+[p] - предыдущая страница<br/>
+      [alt]+[n] - следующая страница
+    </div>
+  </div>
+
   <div class="yandex-money">
     <table cellpadding="0" cellspacing="0" border="0" style="font: 0.8em Arial, sans-serif; border: 0px;">
       <tr>
@@ -124,7 +141,12 @@
 	</td>
       </tr>
     </table>
+    <div class="webmoney">
+      R130494980980<br/>
+      Z425285133788<br/>
+      E112528079659<br/>
+      U327380922061
+    </div>
   </div>
-//-->  
 </body>
 </html>
