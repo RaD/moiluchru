@@ -115,14 +115,14 @@ TABLE { font: 12px arial; color: white; border: 1px solid black;border-collapse:
 .rss-banner { border: 0px; background-color: #94CE4A;
    font: 10px arial; padding: 0.5em 2px;
    text-align: center; color: black;
-   position: absolute; top: 175px; left: 2px; width: 116px;  }
+   position: absolute; top: 110px; left: 2px; width: 116px;  }
 .rss-banner .soon { position: absolute; top: -5px; left: 100px; }
 .rss-banner A { color: blue; }
 
 .offline-download { border: 0px; background-color: #94CE4A;
    font: 10px arial; padding: 0.5em 2px;
    text-align: center; color: black;
-   position: absolute; top: 400px; left: 2px; width: 116px;  }
+   position: absolute; top: 160px; left: 2px; width: 116px; }
 .offline-download .soon { position: absolute; top: 4px; left: 100px; }
 .offline-download A { color: blue; }
 
@@ -148,12 +148,19 @@ TABLE { font: 12px arial; color: white; border: 1px solid black;border-collapse:
 .spelling { position: absolute; top: 1em; left: 2px; width: 116px;
    border: 0px; background-color: #94CE4A; color: black;
    font: 10px arial; text-align: center; padding: 4px; }
-.spelling .question { font-weight: bold; }
+.spelling .question { font: 12px arial; font-weight: bold; }
 .spelling .answer { }
 
 .yandex-money { border: 0px; background-color: #487858; 
    position: absolute; top: 225px; left: 2px; }
+.yandex-money .webmoney { color: white; font-family: monospace; font-size: 12px; text-align: center; }
 
 .splashwidget { position: absolute; top: 20px; left: 20px;
    font: 12px arial; padding: 1em;
    border: 1px solid red; background-color: gray; }
+
+.accesskeys { position: absolute; top: 460px; left: 2px; width: 116px;
+   border: 0px; background-color: #94CE4A; color: black;
+   font: 10px arial; text-align: center; padding: 4px; }
+.accesskeys .title { font: 12px arial; font-weight: bold; margin-bottom: 0.5em; }
+
