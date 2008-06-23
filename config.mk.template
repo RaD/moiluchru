@@ -1,0 +1,14 @@
+
+PROJECTNAME=cargo
+
+OWNER=rad
+GROUP=rad
+
+INSTALL_DJANGO_DIR=/home/rad/django
+INSTALL_APACHE_DIR=/var/www-$(PROJECTNAME)
+
+HTMLS_SRC=/home/rad/docbookxml/HTML/djangobook
+
+PO=$(wildcard ./locale/ru/*.po)
+MO=$(patsubst %.po,%.mo,$(PO))
+

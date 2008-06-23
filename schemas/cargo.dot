@@ -4,38 +4,8 @@ digraph G {
 	node [shape=plaintext, fontname="Verdana", fontsize=8];
 	edge [arrowsize=1, color=black, fontname="Verdana", fontsize=8];
 	
-subgraph cluster_producers {label="producer"; labelloc="t"; fontname="Verdana"; fontsize=12; producers};
-producers [shape=record, label="{<id> id integer not null|name CharField(30)|<country> country|website URLField}"]
-
-subgraph cluster_categories {label="category"; labelloc="t"; fontname="Verdana"; fontsize=12; categories};
-categories [shape=record, label="{<id> id integer not null|name CharField(30)|<parent> parent}"]
-
-subgraph cluster_items {label="item"; labelloc="t"; fontname="Verdana"; fontsize=12; items};
-items [shape=record, label="{<id> id integer not null|title CharField(60)|desc TextField|<category> category|<producer> producer|image ImageField()|reg_date DateTimeField()}"]
-
-subgraph cluster_offers {label="offer"; labelloc="t"; fontname="Verdana"; fontsize=12; offers};
-offers [shape=record, label="{<id> id integer not null|<item> item|<seller> seller|color CharField(60)|count PositiveIntegerField()|price FloatField()|reg_date DateTimeField()}"]
-
-subgraph cluster_orders {label="order"; labelloc="t"; fontname="Verdana"; fontsize=12; orders};
-orders [shape=record, label="{<id>id integer not null|<buyer> buyer|count PositiveIntegerField()|totalprice FloatField()|reg_date DateTimeField()|<status> status}"]
-
-subgraph cluster_orderdetails {label="orderdetail"; labelloc="t"; fontname="Verdana"; fontsize=12; orderdetails};
-orderdetails [shape=record, label="{<id>id integer not null|<order> order|<item> item|count PositiveIntegerField()|price FloatField()}"]
-
-subgraph cluster_orderstatus {label="orderstatus"; labelloc="t"; fontname="Verdana"; fontsize=12; orderstatus};
-orderstatus [shape=record, label="{<id>id integer not null|title CharField(30)}"]
-
-subgraph cluster_orderstatuschanges {label="orderstatuschange"; labelloc="t"; fontname="Verdana"; fontsize=12; orderstatuschanges};
-orderstatuschanges [shape=record, label="{<id>id integer not null|<order> order|<old_status> old_status|<new_status> new_status|reg_date DateTimeField()}"]
-
-subgraph cluster_buyers {label="buyer"; labelloc="t"; fontname="Verdana"; fontsize=12; buyers};
-buyers [shape=record, label="{<id>id integer not null|firstname CharField(30)|lastname CharField(40)|address CharField(50)|email EmailField()|<city> city|join_date DateTimeField()}"]
-
-subgraph cluster_sellers {label="seller"; labelloc="t"; fontname="Verdana"; fontsize=12; sellers};
-sellers [shape=record, label="{<id> id integer not null|title CharField(30)|firstname CharField(30)|lastname CharField(40)|address CharField(50)|<city> city|email EmailField()|website URLField()|headshot ImageField()|join_date DateTimeField()|status BooleanField()}"]
-
-subgraph cluster_couriers {label="courier"; labelloc="t"; fontname="Verdana"; fontsize=12; couriers};
-couriers [shape=record, label="{<id> id integer not null|firstname CharField(30)|lastname CharField(40)|parname CharField(50)|phone CharField(20)|address CharField(50)|<city> city|<seller> seller|headshot ImageField()|passport ImageField()|join_date DateTimeField()|status BooleanField()}"]
+subgraph cluster_color {label="color"; labelloc="t"; fontname="Verdana"; fontsize=12; color};
+color [shape=record, label="{<id> id integer not null|title CharField(60)}"]
 
 subgraph cluster_countries {label="country"; labelloc="t"; fontname="Verdana"; fontsize=12; countries};
 countries [shape=record, label="{<id>id integer not null|title CharField(60)}"]
@@ -43,29 +13,54 @@ countries [shape=record, label="{<id>id integer not null|title CharField(60)}"]
 subgraph cluster_cities {label="city"; labelloc="t"; fontname="Verdana"; fontsize=12; cities};
 cities [shape=record, label="{<id>id integer not null|title CharField(60)|<country> country}"]
 
-subgraph cluster_phones {label="phone"; labelloc="t"; fontname="Verdana"; fontsize=12; phones};
-phones [shape=record, label="{<id>id integer not null|number CharField(20)|<type> type|<owner> owner}"]
+subgraph cluster_producers {label="producer"; labelloc="t"; fontname="Verdana"; fontsize=12; producers};
+producers [shape=record, label="{<id> id integer not null|name CharField(30)|<country> country|website URLField}"]
+
+subgraph cluster_categories {label="category"; labelloc="t"; fontname="Verdana"; fontsize=12; categories};
+categories [shape=record, label="{<id> id integer not null|name CharField(30)|<parent> parent}"]
+
+subgraph cluster_items {label="item"; labelloc="t"; fontname="Verdana"; fontsize=12; items};
+items [shape=record, label="{<id> id integer not null|title CharField(60)|desc TextField|<category> category|<producer> producer|<color> color|count PositiveIntegerField()|price FloatField()|image ImageField()|reg_date DateTimeField()}"]
+
+subgraph cluster_buyers {label="buyer"; labelloc="t"; fontname="Verdana"; fontsize=12; buyers};
+buyers [shape=record, label="{<id>id integer not null|firstname CharField(30)|lastname CharField(40)|address CharField(50)|email EmailField()|<city> city|join_date DateTimeField()}"]
+
+subgraph cluster_orderstatus {label="orderstatus"; labelloc="t"; fontname="Verdana"; fontsize=12; orderstatus};
+orderstatus [shape=record, label="{<id>id integer not null|title CharField(30)}"]
+
+subgraph cluster_orders {label="order"; labelloc="t"; fontname="Verdana"; fontsize=12; orders};
+orders [shape=record, label="{<id>id integer not null|<buyer> buyer|count PositiveIntegerField()|totalprice FloatField()|reg_date DateTimeField()|<status> status|<courier> courier}"]
+
+subgraph cluster_orderdetails {label="orderdetail"; labelloc="t"; fontname="Verdana"; fontsize=12; orderdetails};
+orderdetails [shape=record, label="{<id>id integer not null|<order> order|<item> item|count PositiveIntegerField()|price FloatField()}"]
+
+subgraph cluster_orderstatuschanges {label="orderstatuschange"; labelloc="t"; fontname="Verdana"; fontsize=12; orderstatuschanges};
+orderstatuschanges [shape=record, label="{<id>id integer not null|<order> order|<old_status> old_status|<new_status> new_status|reg_date DateTimeField()}"]
+
+subgraph cluster_couriers {label="courier"; labelloc="t"; fontname="Verdana"; fontsize=12; couriers};
+couriers [shape=record, label="{<id> id integer not null|firstname CharField(30)|lastname CharField(40)|parname CharField(50)|phone CharField(20)|address CharField(50)|<city> city|headshot ImageField()|passport ImageField()|join_date DateTimeField()|status BooleanField()}"]
 
 subgraph cluster_phonetypes {label="phonetype"; labelloc="t"; fontname="Verdana"; fontsize=12; phonetypes};
 phonetypes [shape=record, label="{<id>id integer not null|title CharField(20)}"]
+
+subgraph cluster_phones {label="phone"; labelloc="t"; fontname="Verdana"; fontsize=12; phones};
+phones [shape=record, label="{<id>id integer not null|number CharField(20)|<type> type|<owner> owner}"]
 
 producers:country -> countries:id [tailport=e, headport=w];
 categories:parent -> categories:id;
 items:category -> categories:id;
 items:producer -> producers:id;
-offers:item -> items:id;
-offers:seller -> sellers:id;
+items:color -> color:id;
 orders:buyer -> buyers:id;
 orders:status -> orderstatus:id;
+orders:courier -> couriers:id;
 orderdetails:order -> orders:id;
 orderdetails:item -> items:id;
 orderstatuschanges:order -> orders:id;
 orderstatuschanges:old_status -> orderstatus:id;
 orderstatuschanges:new_status -> orderstatus:id;
 buyers:city -> cities:id;
-sellers:city -> cities:id;
 couriers:city -> cities:id;
-couriers:seller -> sellers:id;
 cities:country -> countries:id;
 phones:type -> phonetypes:id;
 phones:owner -> buyers:id;

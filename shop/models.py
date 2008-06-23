@@ -4,6 +4,20 @@ from django.utils.translation import ugettext
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 
+class Color(models.Model):
+    title = models.CharField(ugettext('Title'), max_length=60)
+
+    class Meta:
+        verbose_name = _('Color')
+        verbose_name_plural = _('Colors')
+
+    class Admin:
+        list_display = ('title',)
+        ordering = ('title',)
+
+    def __unicode__(self):
+        return self.title
+    
 class Country(models.Model):
     title = models.CharField(ugettext('Title'), max_length=60)
 
@@ -77,35 +91,14 @@ class Category(models.Model):
         """ Этот метод возвращает список дочерних категорий. """
         return self.categories_set.all()
 
-class Seller(models.Model):
-    title = models.CharField(max_length=30)
-    firstname = models.CharField(max_length=30)
-    lastname = models.CharField(max_length=40)
-    address = models.CharField(max_length=50)
-    city = models.ForeignKey(City)
-    email = models.EmailField()
-    website = models.URLField(verify_exists=False)
-    join_date = models.DateTimeField()
-    status = models.BooleanField()
-#    headshot = models.ImageField(upload_to='/tmp')
-
-    class Meta:
-        verbose_name = _('Seller')
-        verbose_name_plural = _('Sellers')
-
-    class Admin:
-        list_display = ('title', 'lastname', 'firstname', 'city')
-        ordering = ('title', 'lastname', 'firstname')
-        search_fields = ('title', 'lastname')
-
-    def __unicode__(self):
-        return self.title
-    
 class Item(models.Model):
     title = models.CharField(max_length=60)
     desc = models.TextField()
     category = models.ForeignKey(Category)
     producer = models.ForeignKey(Producer)
+    price = models.FloatField()
+    color = models.ForeignKey(Color)
+    count = models.PositiveIntegerField()
     reg_date = models.DateTimeField()
 #    image = models.ImageField(upload_to='/tmp')
     
@@ -114,7 +107,7 @@ class Item(models.Model):
         verbose_name_plural = _('Items')
 
     class Admin:
-        list_display = ('title', 'category', 'producer')
+        list_display = ('title', 'category', 'producer', 'price', 'count')
         ordering = ('title', 'category')
         search_fields = ('title', 'category')
 
@@ -123,26 +116,6 @@ class Item(models.Model):
     
     def get_absolute_url(self):
         return "/shop/item/%s" % self.id
-    
-class Offer(models.Model):
-    item = models.ForeignKey(Item)
-    seller = models.ForeignKey(Seller)
-    price = models.FloatField()
-    color = models.CharField(max_length=60)
-    count = models.PositiveIntegerField()
-    reg_date = models.DateTimeField()
-    
-    class Meta:
-        verbose_name = _('Offer')
-        verbose_name_plural = _('Offers')
-
-    class Admin:
-        list_display = ('item', 'seller', 'price', 'color', 'count')
-        ordering = ('item', 'seller', 'price', 'color', 'count')
-        search_fields = ('item', 'seller')
-
-    def __unicode__(self):
-        return self.item.title
     
 class Buyer(models.Model):
     firstname = models.CharField(max_length=30)
@@ -179,12 +152,25 @@ class OrderStatus(models.Model):
     def __unicode__(self):
         return self.title
     
+class Courier(models.Model):
+    firstname = models.CharField(max_length=30)
+    lastname = models.CharField(max_length=40)
+    parname = models.CharField(max_length=50)
+    phone = models.CharField(max_length=20)
+    address = models.CharField(max_length=50)
+    city = models.ForeignKey(City)
+    join_date = models.DateTimeField()
+    status = models.BooleanField()
+#    headshot = models.ImageField(upload_to='/tmp')
+#    passport = models.ImageField(upload_to='/tmp')
+
 class Order(models.Model):
     buyer = models.ForeignKey(Buyer)
     count = models.PositiveIntegerField()
     totalprice = models.FloatField()
     reg_date = models.DateTimeField()
     status = models.ForeignKey(OrderStatus)
+    courier = models.ForeignKey(Courier)
 
     class Meta:
         verbose_name = _('Order')
@@ -209,19 +195,6 @@ class OrderStatusChange(models.Model):
     old_status = models.ForeignKey(OrderStatus, related_name="old_status")
     new_status = models.ForeignKey(OrderStatus, related_name="new_status")
     reg_time = models.DateTimeField()
-
-class Courier(models.Model):
-    firstname = models.CharField(max_length=30)
-    lastname = models.CharField(max_length=40)
-    parname = models.CharField(max_length=50)
-    phone = models.CharField(max_length=20)
-    address = models.CharField(max_length=50)
-    city = models.ForeignKey(City)
-    seller = models.ForeignKey(Seller)
-    join_date = models.DateTimeField()
-    status = models.BooleanField()
-#    headshot = models.ImageField(upload_to='/tmp')
-#    passport = models.ImageField(upload_to='/tmp')
 
 class PhoneType(models.Model):
     title = models.CharField(max_length=20)

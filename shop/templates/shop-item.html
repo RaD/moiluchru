@@ -4,7 +4,7 @@
 <div>
   <div class="item">
     <div class="title">
-      {{ item_title }}
+      {{ item.title }}
     </div>
     
     <div class="categories title">
@@ -20,11 +20,10 @@
       </div>
       
       <div class="info">
-	<div>Разброс цен: {{ price_min }} .. {{ price_max }} рублей.</div>
-	<div>Средняя цена: {{ price|floatformat:2 }} рублей.</div>
-	<div>Количество предложений: {{ sellers }} магазинов.</div>
+	<div><a href="/shop/add/{{ item.id }}">Добавить в корзину</a></div>
+	<div>Цена: {{ item.price|floatformat:2 }} рублей.</div>
 	<div>Описание:</div>
-	<div class="desc">{{ desc }}</div>
+	<div class="desc">{{ item.desc }}</div>
       </div>
     
     </div>

@@ -1,0 +1,159 @@
+// Отправка сообщения об ошибке в тексте
+// Скрипт основан на системе найденной на сайте Лаборатории Касперского
+
+var spelling = {
+
+  init: function() {
+    var it = this;
+    parent.document.onkeypress = function(e) { return it.onkeypress(e); }
+    window.status = 'claim module initialized...';
+  },
+
+  onkeypress: function(e) {
+    var it = this;
+    var pressed=0;
+    var we = null;
+    if (window.event) we = window.event;
+    else if (parent && parent.event) we = parent.event;
+    if (we) { // IE & Opera
+      pressed = we.keyCode==10 ||  // IE
+      (we.keyCode == 13 && we.ctrlKey); // Opera 
+    } else if (e) { // NN
+      pressed = 
+        (e.which==10 && e.modifiers==2) || // NN4
+        (e.keyCode==0 && e.charCode==106 && e.ctrlKey) ||
+        (e.keyCode==13 && e.ctrlKey) // Mozilla
+    }
+    if (pressed) {
+      //alert('pressed');
+      it.dosend();
+      return false;
+    }
+  },
+
+  strip: function(text) {
+    text = ""+text;
+    return text.replace("\r", "").replace("\n", "").replace(
+      new RegExp("^\\s+|\\s+$", "g"), "");
+  },
+  
+  dosend: function(recurrent) {
+    // проверка на древность браузера
+    if (navigator.appName.indexOf("Netscape")!=-1 && 
+	eval(navigator.appVersion.substring(0,1))<5) {
+      return; // ничего не делаем
+    }
+
+    // получаем то, что выделил пользователь
+    var userSelection;
+    if (window.getSelection) { // ie, mozilla, object
+      userSelection = window.getSelection();
+    } else if (document.getSelection) { // konqueror, string
+      userSelection = document.getSelection();
+    } else if (document.selection) { // opera, object
+      userSelection = document.selection.createRange();
+    }
+
+    // получаем контекст выделения
+    var context_left, context_error, context_right;
+    
+    var bodyEl = document.getElementsByTagName('BODY')[0];
+    var bodyText;
+    if (typeof userSelection == 'object') {
+      var range = userSelection.getRangeAt(0); // берём первое выделение
+      context_left = range.startContainer.nodeValue.substring(0, range.startOffset);
+      context_error = userSelection.toString();
+      context_right = range.endContainer.nodeValue.substring(range.endOffset);
+    } else if (typeof userSelection == 'string') {
+      // получаем текст документа (без \n и с нормализованными пробелами)
+      bodyText = bodyEl.innerText.replace(/[ \n]+/g, ' ');
+
+      // находим первое совпадение
+      var index = bodyText.indexOf(userSelection);
+      var context_start = index;
+      var context_end = index + userSelection.length;
+      // вычисляем контекст
+      var counter = 5
+      while (counter > 0 && context_start >= 0) {
+	if (bodyText.charAt(context_start-1)==" ") counter--;
+	context_start--;
+      }
+      counter = 5;
+      while (counter > 0 && context_end < bodyText.length) {
+	if (bodyText.charAt(context_end+1)==" ") counter--;
+	context_end++;
+      }
+      // результат
+      context_left = bodyText.slice(context_start, index);
+      context_error = userSelection;
+      context_right = bodyText.slice(index+userSelection.length, context_end);
+    }
+  
+    // усечение данных
+    if (context_error.length > 255) {
+      alert('Нельзя выделять больше 255 символов!');
+      return;
+    }
+    if (context_left.length > 255) context_left = context_left.substring(context_left.length-255);
+    if (context_right.length > 255) context_right = context_right.substring(0, 255);
+
+    // генерируем форму
+    var textarea;
+    var form = _dom('form',
+		    [ _dom('div',
+			   [ _txt('Форма сообщения об ошибке') ],
+			   [['class', 'claim-title']]),
+		      _dom('div',
+			   [ _txt('Контекст ошибки'),
+			     _dom('div',
+				  [ _dom('span', _txt(context_left), []),
+				    _dom('span', _txt(context_error), 
+					 [['class', 'claim-error']]),
+				    _dom('span', _txt(context_right), []) ],
+				  [['class', 'claim-context-widget']]) ],
+			   [['class', 'claim-context']]),
+		      _dom('div',
+			   [ _txt('Комментарий'),
+			     _dom('div',
+				  textarea = _dom('textarea', _txt('Ваш комментарий'), []),
+				  []) ],
+			   [['class', 'claim-comment']]),
+		      _dom('div',
+			   [ _dom('button', _txt('Отправить'), 
+				  [['onclick', function() {
+				      new Ajax.Request('/djangobook/claim/',
+						       { method: 'post',
+							 parameters: 
+							 { ctx_left: context_left,
+							   selected: context_error,
+							   ctx_right: context_right,
+							   comment: textarea.value },
+							 onSuccess: function(transport) {
+							   var response = transport.responseText || "нет ответа";
+							   splashwidget.init('Успешно!', 2000);
+							 },
+							 onFailure: function() {
+							   window.status = 'Что-то сломалось :(';
+							   splashwidget.init('Ошибка!', 2000);
+							 }
+						       });
+				      // уничтожаем объект
+				      form.parentNode.removeChild(form);
+				    }]]),
+			     _dom('span', _txt(' '), []), // место между кнопками
+			     _dom('button', _txt('Отменить'),
+				  [['onclick', function() {
+				      // уничтожаем объект
+				      form.parentNode.removeChild(form);
+				    }]]) ],
+			   [['class', 'claim-button']]) ],
+		    [['class', 'claim']]);
+    document.getElementsByTagName('BODY')[0].appendChild(form);
+
+    // позиционирование на середине экрана
+    var gForm = getGeometry(form);
+    form.style.top = (self.innerHeight / 2 - gForm.height / 2 + self.pageYOffset) + 'px';
+    form.style.left = (self.innerWidth / 2 - gForm.width / 2) + 'px';
+
+  }
+}

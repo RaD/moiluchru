@@ -1,4 +1,4 @@
-INSERT INTO shop_countries (title) VALUES 
+INSERT INTO shop_country (title) VALUES 
 	('Российская Федерация'),
 	('Соединённые Штаты Америки'),
 	('Япония'),

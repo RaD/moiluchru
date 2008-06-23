@@ -1,0 +1,41 @@
+BODY { padding: 1em; font: 14px arial, helvetica, sans-serif; 
+   color: black; background-color: #E0E0E0; 
+}
+
+.header { width: 100%; }
+.header-title { font: 24px arial; font-weight: bold; vertical-align: bottom; }
+.header-city { font: 14px arial; vertical-align: bottom; }
+.header-visitor { font: 14px arial; vertical-align: bottom; }
+.header-basket { font: 14px arial; text-align: right; vertical-align: bottom; }
+
+.search-table { padding: 1em; background-color: #C2C2C2; width: 100%; }
+.search-text { white-space: nowrap; }
+.searchfield { width: 95%; border: 1px solid gray; -moz-border-radius: 4px; 
+   padding: 2px 4px; }
+.searchbutton { width: 100%; color: #black; background: #A0A0A0;
+   margin: 1px; padding: 1px 2px; border: 1px solid gray;
+   -moz-border-radius: 4px; cursor: default; }
+
+.content { width: 100%; border: 0px; background-color: white; color: black; }
+.content .main { width: 60%; height: 100%; vertical-align: top; }
+.content .related { width: 40%; height: 100%; vertical-align: top; }
+
+.footer { padding: 1em; background-color: #C2C2C2; width: 100%; 
+   font: 10px arial; width: 100%; }
+.footer-left { text-align: left; }
+.footer-center {}
+.footer-right { text-align: right; }
+
+.categories { padding: 1em; }
+.categories .title { font: 14px fantasy; color: black; font-weight: bold; padding: 4px 0px;}
+
+.category { font: 14px arial; color: black; margin: 4px 0px;}
+.subcategories { font: 10px arial; color: black; margin: 4px 2em;}
+
+.sectioncontent { padding: 1em; }
+
+.item { padding: 1em; }
+.item .title { font: 14px arial; color: black; font-weight: bold; margin: 4px 0px; }
+
+.help { padding: 1em; height: 100%; }
+.help .title { font: 18px fantasy; color: black; font-weight: bold; padding: 4px 0px;}

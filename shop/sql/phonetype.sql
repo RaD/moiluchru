@@ -1,4 +1,4 @@
-INSERT INTO shop_phonetypes (title) VALUES 
+INSERT INTO shop_phonetype (title) VALUES 
 	('домашний'),
 	('мобильный'),
 	('рабочий');

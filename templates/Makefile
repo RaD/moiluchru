@@ -1,8 +1,16 @@
-HTMLS=/home/rad/docbookxml/HTML/djangobook
+TOP_DIR=..
 
-all:
+include $(TOP_DIR)/config.mk
+
+CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/templates
+FILES=$(wildcard *.html) djangobook.html.zip
+
+all: buildzip
+
+buildzip: $(HTMLS_SRC)/*.html
 	set -x;
-	for i in `ls $(HTMLS)/*.html`; do \
+	mkdir ./zip;
+	for i in `ls $(HTMLS_SRC)/*.html`; do \
 	    echo `basename $$i`; \
 	    cat $$i | \
 	    sed 's/^.*<body[^>]*>//' | \
@@ -10,5 +18,13 @@ all:
 	    > ./zip/`basename $$i`; \
 	done;
 	cd ./zip; \
-	zip -m djangobook.html.zip *.html; \
-	mv djangobook.html.zip ../;
+	zip -m ../djangobook.html.zip *.html; \
+	cd -; \
+	rmdir ./zip; \
+
+install: create_dir install_files
+
+clean:
+	rm -f *.zip *~
+
+include $(TOP_DIR)/targets.mk

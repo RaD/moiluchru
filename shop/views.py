@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.shortcuts import render_to_response
-from cargo.shop.models import Category, Producer, Item, Offer
+from cargo.shop.models import Category, Producer, Item
 
 def main_page(request):
     """This function shows the main page of a site."""
@@ -18,24 +18,9 @@ def subcats(request, category):
 
 def showitem(request, item):
     curr_item = Item.objects.get(id=item)
-    offer_count = Offer.objects.filter(item=curr_item).count()
-    # вставить проверку количества предложений
-
-
-    
-    all_offers = [o.price for o in Offer.objects.filter(item=curr_item)]
-    avg_price = sum(all_offers, 0.0) / len(all_offers)
-#     reduce(lambda a,b: a + b,
-#                        [o.price for o in Offer.objects.filter(item=curr_item)]
-#                        )[0] / offer_count,
     return render_to_response('shop-item.html',
-                              {'item_title': curr_item.title,
+                              {'item': curr_item,
                                'parent_cats': get_parent_cats(curr_item.category),
-                               'price_min': Offer.objects.filter(item=curr_item).order_by('price')[0].price,
-                               'price_max': Offer.objects.filter(item=curr_item).order_by('-price')[0].price,
-                               'price': avg_price,
-                               'sellers': offer_count,
-                               'desc': curr_item.desc
                                })
     
 
@@ -64,7 +49,7 @@ def get_sub_cats(category):
 
 def get_currcat_items(category):
     """Функция возвращает элементы текущей категории."""
-    return Item.objects.filter(category=category).filter(offer__isnull=False).distinct()
+    return Item.objects.filter(category=category)
 
 def get_currcat_procs(category):
     """Функция возвращает производителей текущей категории."""
