@@ -7,7 +7,7 @@ FILES=$(wildcard *.html)
 
 all:
 
-install: create_dir install_files
+install: create_dir install_templates
 
 clean:
 	rm -f *.mo *~

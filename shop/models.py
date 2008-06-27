@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.utils.translation import ugettext
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ugettext, gettext_lazy as _
 from django.db import models
 
 class Color(models.Model):

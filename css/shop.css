@@ -39,3 +39,12 @@ BODY { padding: 1em; font: 14px arial, helvetica, sans-serif;
 
 .help { padding: 1em; height: 100%; }
 .help .title { font: 18px fantasy; color: black; font-weight: bold; padding: 4px 0px;}
+
+.widget { position: absolute; top: 100px; left: 100px; z-index: 20; 
+   border: 1px solid gray; -moz-border-radius: 4px; 
+   font: 14px arial;
+   }
+
+.widget .title { background-color: #C2C2C2; padding: 2px 2em;
+   color: black; font-weight: bold;
+}

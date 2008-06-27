@@ -32,6 +32,13 @@ create_dir:
 install_files:
 	cp $(FILES) $(CURRENT_INSTALL_DIR)/;
 
+install_templates:
+	for i in $(FILES) end-of-files-list; do \
+	  if [ $$i != end-of-files-list ]; then \
+	    sed 's/$(REGEXP_DEVEL_URL)//' < $$i > $(CURRENT_INSTALL_DIR)/$$i; \
+	  fi; \
+	done
+
 chown_all:
 	chown -R $(OWNER):$(GROUP) $(CURRENT_INSTALL_DIR);
 

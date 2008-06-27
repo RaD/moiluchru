@@ -1,30 +1,53 @@
 # -*- coding: utf-8 -*-
 
 from django.shortcuts import render_to_response
+from django.utils.translation import ugettext, gettext_lazy as _
+from django.core import validators
 from cargo.shop.models import Category, Producer, Item
 
-def main_page(request):
-    """This function shows the main page of a site."""
+def show_main_page(request):
+    """
+    Функция для отображения главной страницы сайта.
+    Осуществляем проверку поддержки Cookie.
+    """
+    request.session.set_test_cookie()
+    return render_to_response('shop-show-main.html',
+                              {'queryset': Category.objects.filter(parent__isnull=True)[:5]})
     
-def subcats(request, category):
-    """ Функция для отображения подчинённых категорий. """
-    current_category = Category.objects.get(id=category)
-    return render_to_response('shop-subcats.html',
-                              {'parent_cats': get_parent_cats(current_category),
-                               'categories': current_category.category_set.all(),
-                               'producers': get_currcat_procs(current_category),
+def show_category_page(request, category):
+    """
+    Функция для отображения подчинённых категорий.
+    """
+    if request.session.test_cookie_worked():
+        request.session["basket"] = "test"
+    else:
+        raise validators.ValidationError("Your Web browser doesn't appear " +
+                                         "to have cookies enabled. " +
+                                         "Cookies are required for logging in.")
+    c = Category.objects.get(id=category)
+    return render_to_response('shop-show-category.html',
+                              {'parent_cats': get_parent_cats(c),
+                               'categories': c.category_set.all(),
+                               'producers': get_currcat_procs(c),
                                'items': get_currcat_items(category)
                                })
 
-def showitem(request, item):
+def show_item_page(request, item):
     curr_item = Item.objects.get(id=item)
-    return render_to_response('shop-item.html',
+    return render_to_response('shop-show-item.html',
                               {'item': curr_item,
                                'parent_cats': get_parent_cats(curr_item.category),
                                })
     
 
 def get_parent_cats(category):
+    """
+    Выборка с помощью метода select_related() получает из БД все
+    связанные категории, но возвращается только указанная, которая
+    и помещается в массив. Далее вся работа идёт с кэшем, БД здесь
+    больше не используется. НО ЧТО-ТО НЕ ЗАХОТЕЛО РАБОТАТЬ :(
+    """
+    #a = [Category.objects.select_related().get(id=category)]
     a = [category]
     curcat = category
     while True:

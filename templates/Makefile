@@ -3,11 +3,12 @@ TOP_DIR=..
 include $(TOP_DIR)/config.mk
 
 CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/templates
-FILES=$(wildcard *.html) djangobook.html.zip
+DJZIP=djangobook.html.zip
+FILES=$(wildcard *.html) $(DJZIP)
 
-all: buildzip
+all: $(DJZIP)
 
-buildzip: $(HTMLS_SRC)/*.html
+$(DJZIP): $(HTMLS_SRC)/*.html
 	set -x;
 	mkdir ./zip;
 	for i in `ls $(HTMLS_SRC)/*.html`; do \
@@ -18,11 +19,11 @@ buildzip: $(HTMLS_SRC)/*.html
 	    > ./zip/`basename $$i`; \
 	done;
 	cd ./zip; \
-	zip -m ../djangobook.html.zip *.html; \
+	zip -m ../$(DJZIP) *.html; \
 	cd -; \
 	rmdir ./zip; \
 
-install: create_dir install_files
+install: create_dir install_templates
 
 clean:
 	rm -f *.zip *~

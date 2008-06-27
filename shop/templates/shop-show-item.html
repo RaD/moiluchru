@@ -20,7 +20,8 @@
       </div>
       
       <div class="info">
-	<div><a href="/shop/add/{{ item.id }}">Добавить в корзину</a></div>
+	<div style="cursor: pointer;"
+	  onClick="show_form({{ item.id }}, '{{ item.title }}'); return false;"><u>Добавить в корзину</u></div>
 	<div>Цена: {{ item.price|floatformat:2 }} рублей.</div>
 	<div>Описание:</div>
 	<div class="desc">{{ item.desc }}</div>
