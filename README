@@ -1,1 +1,19 @@
-make && make install
+Получить проект из репозитория:
+
+    git clone ssh://rad@caml.ru/home/rad/sites/cargo/repos/cargo.git
+
+Получить из репозитория изменения:
+
+    git pull
+    
+Поместить изменения в локальный репозиторий:
+
+    git commit -a
+    
+Отправить изменения, помещённые в локальный репозиторий, в удалённый:
+
+    git push
+    
+Собрать и установить:
+
+    make && make install
