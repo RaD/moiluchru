@@ -20,7 +20,13 @@
     <td class="header-title"><a href="/shop/">Автогарант</a></td>
     <td class="header-city">Город: Кемерово</td>
     <td class="header-visitor">Посетитель: Новый</td>
-    <td class="header-basket">Корзина: 0.00 руб (0 товаров)</td>
+    <td class="header-basket">
+      <div>
+	Корзина: <span id="cart_price">{{ cart_price|floatformat:2 }}</span> руб
+	(<span id="cart_count">{{ cart_count }}</span> товаров)
+      </div>
+      <div onClick="clean_cart(); return false;" style="cursor: pointer;">Очистить</div>
+    </td>
   </tr>
 </table>
 

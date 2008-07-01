@@ -12,7 +12,7 @@ BODY { padding: 1em; font: 14px arial, helvetica, sans-serif;
 .search-text { white-space: nowrap; }
 .searchfield { width: 95%; border: 1px solid gray; -moz-border-radius: 4px; 
    padding: 2px 4px; }
-.searchbutton { width: 100%; color: #black; background: #A0A0A0;
+.searchbutton { width: 100%; color: black; background: #A0A0A0;
    margin: 1px; padding: 1px 2px; border: 1px solid gray;
    -moz-border-radius: 4px; cursor: default; }
 
@@ -40,11 +40,19 @@ BODY { padding: 1em; font: 14px arial, helvetica, sans-serif;
 .help { padding: 1em; height: 100%; }
 .help .title { font: 18px fantasy; color: black; font-weight: bold; padding: 4px 0px;}
 
-.widget { position: absolute; top: 100px; left: 100px; z-index: 20; 
+.widget { position: absolute; top: 100px; left: 100px; z-index: 10; 
    border: 1px solid gray; -moz-border-radius: 4px; 
-   font: 14px arial;
+   font: 14px arial; background-color: white;
    }
-
 .widget .title { background-color: #C2C2C2; padding: 2px 2em;
    color: black; font-weight: bold;
 }
+.widget .body { padding: 4px; }
+.widget .button { border: 1px solid gray; -moz-border-radius: 4px; }
+.widget #item_quantity { width: 32px; text-align: right; }
+.widget #buttons { text-align: center; }
+
+.splashwidget { position: absolute; top: 20px; left: 20px;
+   font: 12px arial; padding: 1em;
+   border: 1px solid red; background-color: gray; }
+
