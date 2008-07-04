@@ -2,9 +2,10 @@
 
 from django.shortcuts import render_to_response
 from django.utils.translation import ugettext, gettext_lazy as _
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core import validators
-from cargo.shop.models import Category, Producer, Item
+from django import newforms as forms
+from cargo.shop import models
 
 def show_main_page(request):
     """
@@ -16,7 +17,7 @@ def show_main_page(request):
     else:
         does_cart_exist(request)
     return render_to_response('shop-show-main.html',
-                              {'queryset': Category.objects.filter(parent__isnull=True)[:5],
+                              {'queryset': models.Category.objects.filter(parent__isnull=True)[:5],
                                'cart_count': request.session.get('cart_count', 0),
                                'cart_price': request.session.get('cart_price', 0.00)
                                })
@@ -26,7 +27,7 @@ def show_category_page(request, category):
     Функция для отображения подчинённых категорий.
     """
     does_cart_exist(request)
-    c = Category.objects.get(id=category)
+    c = models.Category.objects.get(id=category)
     return render_to_response('shop-show-category.html',
                               {'parent_cats': get_parent_cats(c),
                                'categories': c.category_set.all(),
@@ -38,7 +39,7 @@ def show_category_page(request, category):
 
 def show_item_page(request, item):
     does_cart_exist(request)
-    curr_item = Item.objects.get(id=item)
+    curr_item = models.Item.objects.get(id=item)
     return render_to_response('shop-show-item.html',
                               {'item': curr_item,
                                'parent_cats': get_parent_cats(curr_item.category),
@@ -77,7 +78,7 @@ def add_to_cart(request):
         if not 'cart_items' in request.session:
             does_cart_exist(request)
         # добавить информацию о товаре в сессию
-        price = Item.objects.get(id=id).price
+        price = models.Item.objects.get(id=id).price
         items = request.session.get('cart_items', {})
         if not id in items:
             items[id] = {}
@@ -88,7 +89,7 @@ def add_to_cart(request):
         request.session['cart_price'] = 0.00
         for i in items:
             request.session['cart_count'] += int(items[i]['count'])
-            request.session['cart_price'] += int(items[i]['count']) * float(Item.objects.get(id=i).price)
+            request.session['cart_price'] += int(items[i]['count']) * float(models.Item.objects.get(id=i).price)
         # поместить в сессию
         request.session['cart_items'] = items
         return HttpResponse('<result><text>ok</text><cart_count>%s</cart_count><cart_price>%s</cart_price></result>'
@@ -107,6 +108,111 @@ def clean_cart(request):
     else:
         return HttpResponse('<result>error 2</result>', mimetype="text/xml")
 
+def show_cart(request):
+    """
+    Отображение содержимого корзины.
+    """
+    class CartItem:
+        def __init__(self, title, count, price):
+            self.title = title
+            self.count = count
+            self.price = price
+            self.cost = count * price
+    items = []
+    cart = request.session.get('cart_items', {})
+    if len(cart) == 0:
+        items.append(CartItem("Нет товаров", 0, 0.00))
+    else:
+        for i in cart:
+            record = models.Item.objects.get(id=i)
+            items.append(CartItem(record.title, cart[i]['count'], cart[i]['price']))
+    return render_to_response('shop-show-cart.html',
+                              {'cart_items': items,
+                               'cart_count': request.session.get('cart_count', 0),
+                               'cart_price': request.session.get('cart_price', 0.00)
+                               })
+
+def show_offer(request):
+    """
+    Отображение формы для ввода данных о покупателе.
+    """
+    if not 'cart' in request.session or request.session['cart_count'] == 0:
+        return HttpResponseRedirect('/shop/')
+    # Определяем класс для отображения формы
+    class OfferForm(forms.Form):
+        fname = forms.CharField(label=ugettext('Last name'), max_length=64,
+                                widget=forms.TextInput(attrs={'class':'longitem wideitem'}))
+        iname = forms.CharField(label=ugettext('First name'), max_length=64,
+                                widget=forms.TextInput(attrs={'class':'longitem wideitem'}))
+        oname = forms.CharField(label=ugettext('Second name'), max_length=64,
+                                widget=forms.TextInput(attrs={'class':'longitem wideitem'}))
+        address = forms.CharField(label=ugettext('Address'), max_length=255,
+                                  widget=forms.TextInput(attrs={'class':'longitem wideitem'}))
+        city = forms.ModelChoiceField(queryset=models.City.objects.all(),
+                                      label=ugettext('City'),
+                                      widget=forms.Select(attrs={'class':'longitem wideitem'}))
+#         country = forms.ModelChoiceField(queryset=models.Country.objects.all(),
+#                                          label=ugettext('Country'), initial=1,
+#                                          widget=forms.Select(attrs={'class':'longitem wideitem'}))
+        phone = forms.CharField(label=ugettext('Contact phone'), max_length=20,
+                                widget=forms.TextInput(attrs={'class':'longitem wideitem'}))
+        phonetype = forms.ModelChoiceField(queryset=models.PhoneType.objects.all(),
+                                           label=ugettext('Phone type'),
+                                           widget=forms.Select(attrs={'class':'longitem wideitem'}))
+        email = forms.EmailField(label=ugettext('E-mail'), max_length=75,
+                                 widget=forms.TextInput(attrs={'class':'longitem wideitem'}))
+        comment = forms.CharField(label=ugettext('Comment'), 
+                                  widget=forms.Textarea(attrs={'class':'longitem wideitem'}))
+        
+    if request.method == 'POST':
+        form = OfferForm(request.POST)
+        if form.is_valid():
+            # обработать форму
+            try:
+                phone_type = models.PhoneType.objects.get(id=request.POST['phonetype'])
+                city = models.City.objects.get(id=request.POST['city'])
+                status = models.OrderStatus.objects.get(id=1)
+                buyer, created = models.Buyer.objects.get_or_create(lastname = request.POST['fname'],
+                                                                    firstname = request.POST['iname'],
+                                                                    secondname = request.POST['oname'],
+                                                                    address = request.POST['address'],
+                                                                    email =  request.POST['email'],
+                                                                    city = city)
+                phone, created = models.Phone.objects.get_or_create(number = request.POST['phone'],
+                                                                    type = phone_type,
+                                                                    owner = buyer)
+                order, created = models.Order.objects.get_or_create(buyer = buyer,
+                                                                    count = request.session.get('cart_count', 0),
+                                                                    totalprice = request.session.get('cart_price', 0.00),
+                                                                    status = status)
+                cart = request.session.get('cart_items', {})
+                for i in cart:
+                    item = models.Item.objects.get(id=i)
+                    orderdetail = models.OrderDetail(order = order,
+                                                     item = item,
+                                                     count = cart[i]['count'],
+                                                     price = cart[i]['price'])
+                    orderdetail.save()
+                return HttpResponseRedirect('/shop/ordered/')
+            except Exception:
+                return HttpResponse('bad form data')
+        else:
+            return HttpResponse('bad form')
+    else:
+        form = OfferForm(auto_id='field_%s')
+        return render_to_response('shop-show-offer.html',
+                                  {'form': form,
+                                   'cart_count': request.session.get('cart_count', 0),
+                                   'cart_price': request.session.get('cart_price', 0.00)
+                                   });
+
+def show_ordered(request):
+    init_cart(request)
+    return render_to_response('shop-show-ordered.html',
+                              {'cart_count': request.session.get('cart_count', 0),
+                               'cart_price': request.session.get('cart_price', 0.00)
+                               });
+    
 def get_parent_cats(category):
     """
     Выборка с помощью метода select_related() получает из БД все
@@ -139,7 +245,7 @@ def get_sub_cats(category):
 
 def get_currcat_items(category):
     """Функция возвращает элементы текущей категории."""
-    return Item.objects.filter(category=category)
+    return models.Item.objects.filter(category=category)
 
 def get_currcat_procs(category):
     """Функция возвращает производителей текущей категории."""
@@ -149,4 +255,4 @@ def get_sub_cats_items(category):
     """Функция возвращает элементы всех дочерних категорий,
     включая указанную."""
     cats = set(get_sub_cats(category))
-    return Item.objects.filter(category__in=cats)
+    return models.Item.objects.filter(category__in=cats)

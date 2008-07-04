@@ -1,0 +1,37 @@
+{% extends "shopbase.html" %}
+
+{% block content %}
+<div>
+  <div class="cart">
+    <div class="title">
+      Корзина
+    </div>
+    
+    <table width="100%">
+      <tr class="header">
+	<td width="40%">Наименование</td>
+	<td width="20%" class="center">Цена</td>
+	<td width="20%" class="center">Кол-во</td>
+	<td width="20%" class="center">Стоимость</td>
+      </tr>
+      {% for i in cart_items %}
+      <tr>
+	<td class="longitem" title="{{ i.title }}">{{ i.title }}</td>
+	<td class="money">{{ i.price|floatformat:2 }} руб</td>
+	<td class="right">{{ i.count }}</td>
+	<td class="money">{{ i.cost|floatformat:2 }} руб.</td>
+      </tr>
+      {% endfor %}
+      <tr class="footer">
+	<td class="total" colspan="3">Итого</td>
+	<td class="money total">{{ cart_price|floatformat:2 }} руб.</td>
+      </tr>
+    </table>
+
+    <div class="right">
+      <button onClick="document.location='/shop/offer';">Оформить заказ</button>
+      <button onClick="clean_cart(); document.location='/shop';">Отменить заказ</button>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "shopbase.html" %}
+
+{% block content %}
+<div>
+  <div class="cart">
+    <div class="title">
+      Информация о покупателе
+    </div>
+
+    <form id="customer" method="post" action="">
+      <table width="100%">
+	{{ form }}
+      </table>
+
+      <div class="right">
+	<input type="submit" value="Подтвердить заказ"/>
+	<input type="reset" NONonClick="clean_cart(); document.location='/shop';" value="Отменить заказ"/>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

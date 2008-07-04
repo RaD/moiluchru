@@ -10,5 +10,8 @@ urlpatterns = patterns('',
     (r'^item/(?P<item>\d+)/', 'cargo.shop.views.show_item_page'),
     (r'^add', 'cargo.shop.views.add_to_cart'),
     (r'^clean', 'cargo.shop.views.clean_cart'),
+    (r'^cart', 'cargo.shop.views.show_cart'),
+    (r'^offer', 'cargo.shop.views.show_offer'),
+    (r'^ordered', 'cargo.shop.views.show_ordered'),
 )
 

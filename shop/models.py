@@ -117,12 +117,13 @@ class Item(models.Model):
         return "/shop/item/%s" % self.id
     
 class Buyer(models.Model):
-    firstname = models.CharField(max_length=30)
-    lastname = models.CharField(max_length=40)
-    address = models.CharField(max_length=50)
+    lastname = models.CharField(max_length=64)
+    firstname = models.CharField(max_length=64)
+    secondname = models.CharField(max_length=64)
+    address = models.CharField(max_length=255)
     email = models.EmailField()
     city = models.ForeignKey(City)
-    join_date = models.DateTimeField()
+    join_date = models.DateTimeField(auto_now_add=True)
     
     class Meta:
         verbose_name = _('Buyer')
@@ -167,9 +168,9 @@ class Order(models.Model):
     buyer = models.ForeignKey(Buyer)
     count = models.PositiveIntegerField()
     totalprice = models.FloatField()
-    reg_date = models.DateTimeField()
+    reg_date = models.DateTimeField(auto_now_add=True)
     status = models.ForeignKey(OrderStatus)
-    courier = models.ForeignKey(Courier)
+    courier = models.ForeignKey(Courier, null=True)
 
     class Meta:
         verbose_name = _('Order')
@@ -198,6 +199,13 @@ class OrderStatusChange(models.Model):
 class PhoneType(models.Model):
     title = models.CharField(max_length=20)
 
+    class Meta:
+        verbose_name = _('Phone type')
+        verbose_name_plural = _('Phone types')
+
+    def __unicode__(self):
+        return self.title
+    
 class Phone(models.Model):
     number = models.CharField(max_length=20)
     type = models.ForeignKey(PhoneType)

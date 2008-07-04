@@ -2,6 +2,12 @@ BODY { padding: 1em; font: 14px arial, helvetica, sans-serif;
    color: black; background-color: #E0E0E0; 
 }
 
+BUTTON { border: 1px solid black; cursor: pointer; }
+
+.left { text-align: left; }
+.center { text-align: center; }
+.right { text-align: right; }
+
 .header { width: 100%; }
 .header-title { font: 24px arial; font-weight: bold; vertical-align: bottom; }
 .header-city { font: 14px arial; vertical-align: bottom; }
@@ -40,6 +46,17 @@ BODY { padding: 1em; font: 14px arial, helvetica, sans-serif;
 .help { padding: 1em; height: 100%; }
 .help .title { font: 18px fantasy; color: black; font-weight: bold; padding: 4px 0px;}
 
+.cart { padding: 1em; }
+.cart .title { font: 14px arial; color: black; font-weight: bold; margin: 4px 0px; }
+.cart TABLE { border-collapse: collapse; margin: 1em 4px; }
+.cart .header { border-top: 1px solid gray; border-bottom: 1px solid gray; }
+.cart .footer { border-top: 1px solid gray; border-bottom: 1px solid gray; }
+
+.cart .money { text-align: right; background-color: #E0E0E0; }
+.cart .total { font-weight: bold; }
+
+#customer TH { text-align: left; text-weight: normal; }
+
 .widget { position: absolute; top: 100px; left: 100px; z-index: 10; 
    border: 1px solid gray; -moz-border-radius: 4px; 
    font: 14px arial; background-color: white;
@@ -56,3 +73,5 @@ BODY { padding: 1em; font: 14px arial, helvetica, sans-serif;
    font: 12px arial; padding: 1em;
    border: 1px solid red; background-color: gray; }
 
+.wideitem { width: 100%; }
+.longitem { white-space: nowrap; overflow: hidden; text-overflow : ellipsis; }
