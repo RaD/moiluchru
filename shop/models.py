@@ -98,6 +98,7 @@ class Item(models.Model):
     price = models.FloatField(ugettext('Price'))
     color = models.ForeignKey(Color, verbose_name=ugettext('Color'))
     count = models.PositiveIntegerField(ugettext('Count'))
+    reserved = models.PositiveIntegerField(ugettext('Reserved'), default=0)
     reg_date = models.DateTimeField()
 #    image = models.ImageField(upload_to='/tmp')
     

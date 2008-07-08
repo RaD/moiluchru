@@ -42,6 +42,7 @@ def show_item_page(request, item):
     curr_item = models.Item.objects.get(id=item)
     return render_to_response('shop-show-item.html',
                               {'item': curr_item,
+                               'item_remains' : curr_item.count - curr_item.reserved,
                                'parent_cats': get_parent_cats(curr_item.category),
                                'cart_count': request.session.get('cart_count', 0),
                                'cart_price': request.session.get('cart_price', 0.00)
@@ -67,7 +68,7 @@ def add_to_cart(request):
     """
     if (request.is_ajax()):
         id = request.POST.get('item_id', 0)
-        cnt = request.POST.get('item_count', 0)
+        cnt = int(request.POST.get('item_count', 0))
         # проверить количество
         if id == 0 or cnt == 0:
             return HttpResponse('<result><code>302</code><desc>wrong parameters</desc></result>',
@@ -76,18 +77,21 @@ def add_to_cart(request):
         if not 'cart_items' in request.session:
             does_cart_exist(request)
         item = models.Item.objects.get(id=id)
-        if int(item.count) < int(cnt):
+        if int(item.count) < cnt:
             return HttpResponse('<result><code>301</code><desc>not enough items</desc>' +
                                 '<cart_count>%s</cart_count><cart_price>%s</cart_price></result>'
                                 % (request.session['cart_count'], request.session['cart_price']),
                                 mimetype="text/xml")
         else:
+            # зарезервировать товар
+            item.reserved += cnt
+            item.save()
             # добавить информацию о товаре в сессию
             price = item.price
             items = request.session.get('cart_items', {})
             if not id in items:
                 items[id] = {}
-            items[id]['count'] = int(items[id].get('count', 0)) + int(cnt)
+            items[id]['count'] = int(items[id].get('count', 0)) + cnt
             items[id]['price'] = price
             # пересчитываем корзину
             request.session['cart_count'] = 0
@@ -98,8 +102,8 @@ def add_to_cart(request):
             # поместить в сессию
             request.session['cart_items'] = items
             return HttpResponse('<result><code>200</code><desc>success</desc>' +
-                                '<cart_count>%s</cart_count><cart_price>%s</cart_price></result>'
-                                % (request.session['cart_count'], request.session['cart_price']),
+                                '<cart_count>%s</cart_count><cart_price>%s</cart_price><remains>%s</remains></result>'
+                                % (request.session['cart_count'], request.session['cart_price'], int(item.count) - int(item.reserved)),
                                 mimetype="text/xml")
     else:
         return HttpResponse('<result><code>400</code><desc>it tmust be ajax call</desc></result>', mimetype="text/xml")
@@ -109,6 +113,12 @@ def clean_cart(request):
     Функция очистки корзины
     """
     if (request.is_ajax()):
+        items = request.session.get('cart_items', {})
+        for i in items:
+            dbitem = models.Item.objects.get(id=i)
+            count = items[i].get('count', 0)
+            dbitem.reserved -= count
+            dbitem.save()
         init_cart(request)
         return HttpResponse('<result><code>200</code><desc>done</desc></result>', mimetype="text/xml")
     else:

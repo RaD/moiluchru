@@ -13,23 +13,23 @@ function show_form(item_id, item_title) {
 				     item_count: form.item_quantity.value },
 		       onSuccess: function(transport) {
 			 var response = transport.responseText || "нет ответа";
-			 var xml = transport.responseXML;
+			 var xml = transport.responseXML.firstChild;
 			 var result = '';
-			 var code = get_xml_item(xml.firstChild, 'code');
+			 var code = get_xml_item(xml, 'code');
 			 if (code == '200') {
-			   update_cart(get_xml_item(xml.firstChild, 'cart_count'),
-				       get_xml_item(xml.firstChild, 'cart_price'));
-			   $('item_exists').innerHTML = parseInt(form.item_quantity.value) - 1;
+			   update_cart(get_xml_item(xml, 'cart_count'),
+				       get_xml_item(xml, 'cart_price'));
+			   $('item_remains').innerHTML = get_xml_item(xml, 'remains');
 			   result = 'Успешно';
 			 } else {
-			   result = 'Неудачно: ['+code+'] '+get_xml_item(xml.firstChild, 'desc');
+			   result = 'Неудачно: ['+code+'] '+get_xml_item(xml, 'desc');
 			 }
 			 splashwidget.init(result, 2000);
 		       },
 		       onFailure: function(transport) {
 			 window.status = 'Что-то сломалось :(';
 			 var response = transport.responseText || "нет ответа";
-			 splashwidget.init(get_xml_item(xml.firstChild, 'desc'), 20000);
+			 splashwidget.init(get_xml_item(xml, 'desc'), 20000);
 		       }
 		     });
     // уничтожаем объект
