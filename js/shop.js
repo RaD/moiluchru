@@ -123,3 +123,37 @@ function clean_cart() {
 		   });
 }
 
+function show_item_count_info(item_id) {
+  var ajax_success = function(transport) {
+    var response = transport.responseText || "нет ответа";
+    var xml = transport.responseXML.firstChild;
+    var result = '';
+    var code = get_xml_item(xml, 'code');
+    window.status = 'code = '+code;
+
+    if (code == '200') {
+      $('item_remains').innerHTML = get_xml_item(xml, 'remains');
+      result = 'Успешно';
+    } else {
+      result = 'Неудачно: ['+code+'] '+get_xml_item(xml, 'desc');
+    }
+  }
+
+  var ajax_failure = function(transport) {
+    window.status = 'Что-то сломалось :(';
+    var response = transport.responseText || "нет ответа";
+    var xml = transport.responseXML.firstChild;
+    var result = 'Неудачно: ['+code+'] '+get_xml_item(xml, 'desc');
+    splashwidget.init(result, 2000);
+  }
+
+  var callback = function() {
+    new Ajax.Request('/shop/count/',
+		     { method: 'post',
+		       parameters: { item_id: item_id },
+		       onSuccess: ajax_success,
+		       onFailure: ajax_failure });
+  }
+
+  var pe = new PeriodicalExecuter(callback, 30);
+}

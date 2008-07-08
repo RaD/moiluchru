@@ -42,7 +42,8 @@ def show_item_page(request, item):
     curr_item = models.Item.objects.get(id=item)
     return render_to_response('shop-show-item.html',
                               {'item': curr_item,
-                               'item_remains' : curr_item.count - curr_item.reserved,
+                               'item_remains': curr_item.count - curr_item.reserved,
+                               'js_onload': 'show_item_count_info(%s);' % item,
                                'parent_cats': get_parent_cats(curr_item.category),
                                'cart_count': request.session.get('cart_count', 0),
                                'cart_price': request.session.get('cart_price', 0.00)
@@ -61,6 +62,22 @@ def init_cart(request):
     request.session['cart_items'] = {}
     request.session['cart_count'] = 0
     request.session['cart_price'] = 0.00
+
+def show_count(request):
+    """
+    Функция получения количества товара на складе
+    """
+    if (request.is_ajax()):
+        id = request.POST.get('item_id', 0)
+        if id > 0:
+            item = models.Item.objects.get(id=id)
+            return HttpResponse('<result><code>200</code><desc>success</desc>' +
+                                '<remains>%i</remains></result>' % (int(item.count) - int(item.reserved)),
+                                mimetype="text/xml")
+        else:
+            return HttpResponse('<result><code>300</code><desc>bad id</desc></result>', mimetype="text/xml")
+    else:
+        return HttpResponse('<result><code>400</code><desc>it must be ajax call</desc></result>', mimetype="text/xml")
 
 def add_to_cart(request):
     """
@@ -106,7 +123,7 @@ def add_to_cart(request):
                                 % (request.session['cart_count'], request.session['cart_price'], int(item.count) - int(item.reserved)),
                                 mimetype="text/xml")
     else:
-        return HttpResponse('<result><code>400</code><desc>it tmust be ajax call</desc></result>', mimetype="text/xml")
+        return HttpResponse('<result><code>400</code><desc>it must be ajax call</desc></result>', mimetype="text/xml")
 
 def clean_cart(request):
     """
@@ -117,12 +134,13 @@ def clean_cart(request):
         for i in items:
             dbitem = models.Item.objects.get(id=i)
             count = items[i].get('count', 0)
-            dbitem.reserved -= count
-            dbitem.save()
+            if dbitem.reserved > 0:
+                dbitem.reserved -= count
+                dbitem.save()
         init_cart(request)
         return HttpResponse('<result><code>200</code><desc>done</desc></result>', mimetype="text/xml")
     else:
-        return HttpResponse('<result><code>300</code><desc>cannot clean cart</desc></result>', mimetype="text/xml")
+        return HttpResponse('<result><code>400</code><desc>it must be ajax call</desc></result>', mimetype="text/xml")
 
 def show_cart(request):
     """
