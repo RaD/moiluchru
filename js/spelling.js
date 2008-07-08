@@ -132,9 +132,10 @@ var spelling = {
 							   var response = transport.responseText || "нет ответа";
 							   splashwidget.init('Успешно!', 2000);
 							 },
-							 onFailure: function() {
+							 onFailure: function(transport) {
 							   window.status = 'Что-то сломалось :(';
-							   splashwidget.init('Ошибка!', 2000);
+							   var response = transport.responseText;
+							   splashwidget.init('Ошибка!' + response, 20000);
 							 }
 						       });
 				      // уничтожаем объект
