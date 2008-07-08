@@ -1,5 +1,9 @@
 // Отображение формы подтверждения
 
+function get_xml_item(obj, tag_name) {
+  return _elts(obj, tag_name)[0].firstChild.nodeValue;
+}
+
 function show_form(item_id, item_title) {
 
   var apply_func = function() {
@@ -10,14 +14,23 @@ function show_form(item_id, item_title) {
 		       onSuccess: function(transport) {
 			 var response = transport.responseText || "нет ответа";
 			 var xml = transport.responseXML;
-			 update_cart(_elts(xml.firstChild, 'cart_count')[0].firstChild.nodeValue,
-				     _elts(xml.firstChild, 'cart_price')[0].firstChild.nodeValue);
-			 splashwidget.init('Успешно!', 2000);
+			 var result = '';
+			 alert(get_xml_item(xml.firstChild, 'cart_count'));
+			 var code = get_xml_item(xml.firstChild, 'code');
+			 if (code == '200') {
+			   update_cart(get_xml_item(xml.firstChild, 'cart_count'),
+				       get_xml_item(xml.firstChild, 'cart_price'));
+			   $('item_exists').innerText = parseInt(form.item_quantity.value) - 1;
+			   result = 'Успешно';
+			 } else {
+			   result = 'Неудачно: ['+code+'] '+get_xml_item(xml.firstChild, 'desc');
+			 }
+			 splashwidget.init(result, 2000);
 		       },
 		       onFailure: function(transport) {
 			 window.status = 'Что-то сломалось :(';
 			 var response = transport.responseText || "нет ответа";
-			 splashwidget.init('Ошибка! ' + response, 20000);
+			 splashwidget.init(get_xml_item(xml.firstChild, 'desc'), 20000);
 		       }
 		     });
     // уничтожаем объект
@@ -91,8 +104,10 @@ function show_form(item_id, item_title) {
 }
 
 function update_cart(count, price) {
-  $('cart_count').innerText = count;
-  $('cart_price').innerText = price;
+  $('cart_count').innerHTML = count;
+  $('cart_price').innerHTML = price;
+//   $('cart_count').innerText = count;
+//   $('cart_price').innerText = price;
 }
 
 function clean_cart() {
@@ -101,12 +116,12 @@ function clean_cart() {
 		     onSuccess: function(transport) {
 		       var response = transport.responseText || "нет ответа";
 		       update_cart("0", "0.00");
-		       splashwidget.init('Успешно!', 2000);
+		       splashwidget.init('Очистка: Успешно!', 2000);
 		     },
 		     onFailure: function(transport) {
 		       window.status = 'Что-то сломалось :(';
 		       var response = transport.responseText || "нет ответа";
-		       splashwidget.init('Ошибка! ' + response, 20000);
+		       splashwidget.init('Очистка: Ошибка! ' + response, 20000);
 		     }
 		   });
 }

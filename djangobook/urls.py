@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.conf.urls.defaults import *
 from django.views.generic import list_detail
 from django.contrib.comments.models import FreeComment

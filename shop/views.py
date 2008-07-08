@@ -49,7 +49,7 @@ def show_item_page(request, item):
     
 def does_cart_exist(request):
     if request.session.test_cookie_worked():
-        if not 'cart' in request.session:
+        if not 'cart_items' in request.session:
             init_cart(request)
     else:
         raise validators.ValidationError("Your Web browser doesn't appear " +
@@ -68,35 +68,41 @@ def add_to_cart(request):
     if (request.is_ajax()):
         id = request.POST.get('item_id', 0)
         cnt = request.POST.get('item_count', 0)
-#         id = request.GET.get('item_id', 0)
-#         cnt = request.GET.get('item_count', 0)
-        #  return HttpResponse('<result>error<id>%s</id><count>%s</count></result>' % (id, cnt), mimetype="text/xml")
         # проверить количество
         if id == 0 or cnt == 0:
-            return HttpResponse('<result>error 1</result>', mimetype="text/xml")
+            return HttpResponse('<result><code>302</code><desc>wrong parameters</desc></result>',
+                                mimetype="text/xml")
         # инициализация корзины
         if not 'cart_items' in request.session:
             does_cart_exist(request)
-        # добавить информацию о товаре в сессию
-        price = models.Item.objects.get(id=id).price
-        items = request.session.get('cart_items', {})
-        if not id in items:
-            items[id] = {}
-        items[id]['count'] = int(items[id].get('count', 0)) + int(cnt)
-        items[id]['price'] = price
-        # пересчитываем корзину
-        request.session['cart_count'] = 0
-        request.session['cart_price'] = 0.00
-        for i in items:
-            request.session['cart_count'] += int(items[i]['count'])
-            request.session['cart_price'] += int(items[i]['count']) * float(models.Item.objects.get(id=i).price)
-        # поместить в сессию
-        request.session['cart_items'] = items
-        return HttpResponse('<result><text>ok</text><cart_count>%s</cart_count><cart_price>%s</cart_price></result>'
-                            % (request.session['cart_count'], request.session['cart_price']),
-                            mimetype="text/xml")
+        item = models.Item.objects.get(id=id)
+        if int(item.count) < int(cnt):
+            return HttpResponse('<result><code>301</code><desc>not enough items</desc>' +
+                                '<cart_count>%s</cart_count><cart_price>%s</cart_price></result>'
+                                % (request.session['cart_count'], request.session['cart_price']),
+                                mimetype="text/xml")
+        else:
+            # добавить информацию о товаре в сессию
+            price = item.price
+            items = request.session.get('cart_items', {})
+            if not id in items:
+                items[id] = {}
+            items[id]['count'] = int(items[id].get('count', 0)) + int(cnt)
+            items[id]['price'] = price
+            # пересчитываем корзину
+            request.session['cart_count'] = 0
+            request.session['cart_price'] = 0.00
+            for i in items:
+                request.session['cart_count'] += int(items[i]['count'])
+                request.session['cart_price'] += int(items[i]['count']) * float(models.Item.objects.get(id=i).price)
+            # поместить в сессию
+            request.session['cart_items'] = items
+            return HttpResponse('<result><code>200</code><desc>success</desc>' +
+                                '<cart_count>%s</cart_count><cart_price>%s</cart_price></result>'
+                                % (request.session['cart_count'], request.session['cart_price']),
+                                mimetype="text/xml")
     else:
-        return HttpResponse('<result><text>error</text></result>', mimetype="text/xml")
+        return HttpResponse('<result><code>400</code><desc>it tmust be ajax call</desc></result>', mimetype="text/xml")
 
 def clean_cart(request):
     """
@@ -104,9 +110,9 @@ def clean_cart(request):
     """
     if (request.is_ajax()):
         init_cart(request)
-        return HttpResponse('<result>ok</result>', mimetype="text/xml")
+        return HttpResponse('<result><code>200</code><desc>done</desc></result>', mimetype="text/xml")
     else:
-        return HttpResponse('<result>error 2</result>', mimetype="text/xml")
+        return HttpResponse('<result><code>300</code><desc>cannot clean cart</desc></result>', mimetype="text/xml")
 
 def show_cart(request):
     """
@@ -193,6 +199,9 @@ def show_offer(request):
                                                      count = cart[i]['count'],
                                                      price = cart[i]['price'])
                     orderdetail.save()
+                    # резервируем товар
+                    item.count -= cart[i]['count']
+                    item.save()
                 return HttpResponseRedirect('/shop/ordered/')
             except Exception:
                 return HttpResponse('bad form data')

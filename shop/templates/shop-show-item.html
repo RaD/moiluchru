@@ -23,6 +23,7 @@
 	<div style="cursor: pointer;"
 	  onClick="show_form({{ item.id }}, '{{ item.title }}'); return false;"><u>Добавить в корзину</u></div>
 	<div>Цена: {{ item.price|floatformat:2 }} рублей.</div>
+	<div>В наличии: <span id="item_exists">{{ item.count }}</span></div>
 	<div>Описание:</div>
 	<div class="desc">{{ item.desc }}</div>
       </div>
