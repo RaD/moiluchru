@@ -135,7 +135,8 @@ def show_cart(request):
     return render_to_response('shop-show-cart.html',
                               {'cart_items': items,
                                'cart_count': request.session.get('cart_count', 0),
-                               'cart_price': request.session.get('cart_price', 0.00)
+                               'cart_price': request.session.get('cart_price', 0.00),
+                               'cart_show' : 'yes'
                                })
 
 def show_offer(request):

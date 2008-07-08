@@ -15,12 +15,11 @@ function show_form(item_id, item_title) {
 			 var response = transport.responseText || "нет ответа";
 			 var xml = transport.responseXML;
 			 var result = '';
-			 alert(get_xml_item(xml.firstChild, 'cart_count'));
 			 var code = get_xml_item(xml.firstChild, 'code');
 			 if (code == '200') {
 			   update_cart(get_xml_item(xml.firstChild, 'cart_count'),
 				       get_xml_item(xml.firstChild, 'cart_price'));
-			   $('item_exists').innerText = parseInt(form.item_quantity.value) - 1;
+			   $('item_exists').innerHTML = parseInt(form.item_quantity.value) - 1;
 			   result = 'Успешно';
 			 } else {
 			   result = 'Неудачно: ['+code+'] '+get_xml_item(xml.firstChild, 'desc');
@@ -106,8 +105,6 @@ function show_form(item_id, item_title) {
 function update_cart(count, price) {
   $('cart_count').innerHTML = count;
   $('cart_price').innerHTML = price;
-//   $('cart_count').innerText = count;
-//   $('cart_price').innerText = price;
 }
 
 function clean_cart() {
@@ -125,3 +122,4 @@ function clean_cart() {
 		     }
 		   });
 }
+

@@ -25,10 +25,12 @@
 	Корзина: <span id="cart_price">{{ cart_price|floatformat:2 }}</span> руб
 	(Кол-во: <span id="cart_count">{{ cart_count }}</span>)
       </div>
+      {% if not cart_show %}
       <div>
 	<a href="/shop/cart">Содержимое</a>
 	<span onClick="clean_cart(); return false;" style="cursor: pointer;">Очистить</span>
       </div>
+      {% endif %}
     </td>
   </tr>
 </table>
