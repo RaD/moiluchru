@@ -171,7 +171,7 @@ def show_offer(request):
     """
     Отображение формы для ввода данных о покупателе.
     """
-    if not 'cart' in request.session or request.session['cart_count'] == 0:
+    if not 'cart_items' in request.session or request.session['cart_count'] == 0:
         return HttpResponseRedirect('/shop/')
     # Определяем класс для отображения формы
     class OfferForm(forms.Form):
