@@ -94,7 +94,7 @@ def add_to_cart(request):
         if not 'cart_items' in request.session:
             does_cart_exist(request)
         item = models.Item.objects.get(id=id)
-        if int(item.count) < cnt:
+        if (int(item.count) - int(item.reserved)) < cnt:
             return HttpResponse('<result><code>301</code><desc>not enough items</desc>' +
                                 '<cart_count>%s</cart_count><cart_price>%s</cart_price></result>'
                                 % (request.session['cart_count'], request.session['cart_price']),
