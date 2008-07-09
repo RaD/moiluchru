@@ -68,7 +68,7 @@ def show_count(request):
     Функция получения количества товара на складе
     """
     if (request.is_ajax()):
-        id = request.POST.get('item_id', 0)
+        id = request.GET.get('item_id', 0)
         if id > 0:
             item = models.Item.objects.get(id=id)
             return HttpResponse('<result><code>200</code><desc>success</desc>' +

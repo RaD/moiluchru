@@ -149,11 +149,11 @@ function show_item_count_info(item_id) {
 
   var callback = function() {
     new Ajax.Request('/shop/count/',
-		     { method: 'post',
+		     { method: 'get',
 		       parameters: { item_id: item_id },
 		       onSuccess: ajax_success,
 		       onFailure: ajax_failure });
   }
 
-  var pe = new PeriodicalExecuter(callback, 30);
+  var pe = new PeriodicalExecuter(callback, 60);
 }
