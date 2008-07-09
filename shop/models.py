@@ -183,7 +183,11 @@ class Order(models.Model):
         search_fields = ('buyer', 'status')
 
     def __unicode__(self):
-        return self.buyer
+        return self.buyer.lastname
+    
+    def get_absolute_url(self):
+        """ This returns the absolute URL for a record. """
+        return '/shop/minfo/%i/' % self.id
     
 class OrderDetail(models.Model):
     order = models.ForeignKey(Order)

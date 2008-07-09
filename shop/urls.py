@@ -17,5 +17,7 @@ urlpatterns = patterns('',
 
     # раздел менеджера
     (r'^manager', 'cargo.shop.manager.login'),
+    (r'^morders/(?P<act>[a-z]+)/', 'cargo.shop.manager.orders'),
+                       
 )
 

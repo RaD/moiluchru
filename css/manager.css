@@ -12,6 +12,12 @@ BUTTON { border: 1px solid black; cursor: pointer; }
 .header .title { font: 24px arial; font-weight: bold; vertical-align: bottom; }
 .header .subtitle { font: 14px arial; font-weight: bold; vertical-align: bottom; }
 
+.footer { padding: 1em; background-color: #C2C2C2; width: 100%; 
+   font: 10px arial; width: 100%; }
+.footer-left { text-align: left; }
+.footer-center {}
+.footer-right { text-align: right; }
+
 .error { width: 40%; border: 2px dotted red; margin: 1em; padding: 1em;
    font: 14px arial; font-weight: bold; vertical-align: middle; }
 .error .desc { margin: 1em;
@@ -23,3 +29,10 @@ FORM INPUT,TEXTAREA,SELECT { border: 1px solid gray; -moz-border-radius: 4px; pa
 
 .wideitem { width: 100%; }
 .longitem { white-space: nowrap; overflow: hidden; text-overflow : ellipsis; }
+
+.panel { padding: 1em; background-color: #C2C2C2; width: 100%; }
+
+.orders { width: 100%; border-collapse: collapse; border: 0px; background-color: white; color: black; }
+.orders TD { cursor: pointer; padding: 2px 4px; }
+.orders .header { border-top: 1px solid gray; border-bottom: 1px solid gray; }
+.orders .even { background-color: #F0F0F0; }

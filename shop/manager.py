@@ -29,7 +29,7 @@ def login(request):
                 user = auth.authenticate(username=login, password=passwd)
                 if user is not None and user.is_active:
                     auth.login(request, user)
-                    return HttpResponseRedirect("/shop/manager/orders/active/")
+                    return HttpResponseRedirect("/shop/morders/active/")
                 else:
                     return render_to_response('manager-login.html',
                                               {'form': form, 'panel_hide': 'yes',
@@ -45,3 +45,10 @@ def login(request):
         form = LoginForm(auto_id='field_%s')
         return render_to_response('manager-login.html', {'form': form, 'panel_hide': 'yes'})
 
+def orders(request, act):
+    """
+    Представление для отображения активных заказов.
+    """
+    if act == 'active': status = 1
+    orders = models.Order.objects.filter(status=status)
+    return render_to_response('manager-orders.html', {'orders': orders})
