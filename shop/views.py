@@ -228,8 +228,9 @@ def show_offer(request):
                                                      count = cart[i]['count'],
                                                      price = cart[i]['price'])
                     orderdetail.save()
-                    # резервируем товар
+                    # убираем товар с витрины
                     item.count -= cart[i]['count']
+                    item.reserved -= cart[i]['count']
                     item.save()
                 return HttpResponseRedirect('/shop/ordered/')
             except Exception:
