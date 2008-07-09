@@ -3,9 +3,17 @@
 from django.shortcuts import render_to_response
 from django.utils.translation import ugettext, gettext_lazy as _
 from django.http import HttpResponse, HttpResponseRedirect
+from django.template import RequestContext
 from django.core import validators
 from django import newforms as forms
 from cargo.shop import models
+
+def cart_ctx_proc(request):
+    """
+    Контекстный процессор для заполнения данных о корзине.
+    """
+    return {'cart_count': request.session.get('cart_count', 0),
+            'cart_price': request.session.get('cart_price', 0.00)}
 
 def show_main_page(request):
     """
@@ -17,10 +25,8 @@ def show_main_page(request):
     else:
         does_cart_exist(request)
     return render_to_response('shop-show-main.html',
-                              {'queryset': models.Category.objects.filter(parent__isnull=True)[:5],
-                               'cart_count': request.session.get('cart_count', 0),
-                               'cart_price': request.session.get('cart_price', 0.00)
-                               })
+                              {'queryset': models.Category.objects.filter(parent__isnull=True)[:5]},
+                              context_instance=RequestContext(request, processors=[cart_ctx_proc]))
     
 def show_category_page(request, category):
     """
@@ -32,10 +38,8 @@ def show_category_page(request, category):
                               {'parent_cats': get_parent_cats(c),
                                'categories': c.category_set.all(),
                                'producers': get_currcat_procs(c),
-                               'items': get_currcat_items(category),
-                               'cart_count': request.session.get('cart_count', 0),
-                               'cart_price': request.session.get('cart_price', 0.00)
-                               })
+                               'items': get_currcat_items(category)},
+                              context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
 def show_item_page(request, item):
     does_cart_exist(request)
@@ -44,10 +48,8 @@ def show_item_page(request, item):
                               {'item': curr_item,
                                'item_remains': curr_item.count - curr_item.reserved,
                                'js_onload': 'show_item_count_info(%s);' % item,
-                               'parent_cats': get_parent_cats(curr_item.category),
-                               'cart_count': request.session.get('cart_count', 0),
-                               'cart_price': request.session.get('cart_price', 0.00)
-                               })
+                               'parent_cats': get_parent_cats(curr_item.category)},
+                              context_instance=RequestContext(request, processors=[cart_ctx_proc]))
     
 def does_cart_exist(request):
     if request.session.test_cookie_worked():
@@ -162,10 +164,8 @@ def show_cart(request):
             items.append(CartItem(record.title, cart[i]['count'], cart[i]['price']))
     return render_to_response('shop-show-cart.html',
                               {'cart_items': items,
-                               'cart_count': request.session.get('cart_count', 0),
-                               'cart_price': request.session.get('cart_price', 0.00),
-                               'cart_show' : 'yes'
-                               })
+                               'cart_show' : 'yes'},
+                              context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
 def show_offer(request):
     """
@@ -240,17 +240,13 @@ def show_offer(request):
     else:
         form = OfferForm(auto_id='field_%s')
         return render_to_response('shop-show-offer.html',
-                                  {'form': form,
-                                   'cart_count': request.session.get('cart_count', 0),
-                                   'cart_price': request.session.get('cart_price', 0.00)
-                                   });
+                                  {'form': form},
+                                  context_instance=RequestContext(request, processors=[cart_ctx_proc]));
 
 def show_ordered(request):
     init_cart(request)
-    return render_to_response('shop-show-ordered.html',
-                              {'cart_count': request.session.get('cart_count', 0),
-                               'cart_price': request.session.get('cart_price', 0.00)
-                               });
+    return render_to_response('shop-show-ordered.html',{},
+                              context_instance=RequestContext(request, processors=[cart_ctx_proc]));
     
 def get_parent_cats(category):
     """
