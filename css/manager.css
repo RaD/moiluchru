@@ -1,0 +1,25 @@
+BODY { padding: 1em; font: 14px arial, helvetica, sans-serif; 
+   color: black; background-color: #E0E0E0; 
+}
+
+BUTTON { border: 1px solid black; cursor: pointer; }
+
+.left { text-align: left; }
+.center { text-align: center; }
+.right { text-align: right; }
+
+.header { width: 100%; }
+.header .title { font: 24px arial; font-weight: bold; vertical-align: bottom; }
+.header .subtitle { font: 14px arial; font-weight: bold; vertical-align: bottom; }
+
+.error { width: 40%; border: 2px dotted red; margin: 1em; padding: 1em;
+   font: 14px arial; font-weight: bold; vertical-align: middle; }
+.error .desc { margin: 1em;
+   font: 12px arial; font-weight: normal; vertical-align: middle; }
+
+#login { width: 40%; }
+FORM TH { text-align: left; font-weight: normal; }
+FORM INPUT,TEXTAREA,SELECT { border: 1px solid gray; -moz-border-radius: 4px; padding: 2px 4px; }
+
+.wideitem { width: 100%; }
+.longitem { white-space: nowrap; overflow: hidden; text-overflow : ellipsis; }

@@ -14,5 +14,8 @@ urlpatterns = patterns('',
     (r'^cart', 'cargo.shop.views.show_cart'),
     (r'^offer', 'cargo.shop.views.show_offer'),
     (r'^ordered', 'cargo.shop.views.show_ordered'),
+
+    # раздел менеджера
+    (r'^manager', 'cargo.shop.manager.login'),
 )
 

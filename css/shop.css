@@ -56,6 +56,7 @@ BUTTON { border: 1px solid black; cursor: pointer; }
 .cart .total { font-weight: bold; }
 
 #customer TH { text-align: left; font-weight: normal; }
+#customer INPUT,TEXTAREA,SELECT { border: 1px solid gray; -moz-border-radius: 4px; padding: 2px 4px; }
 
 .widget { position: absolute; top: 100px; left: 100px; z-index: 10; 
    border: 1px solid gray; -moz-border-radius: 4px; 

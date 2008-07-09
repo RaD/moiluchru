@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ru">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="Content-Language" content="ru"/>
+  <meta name="generator" content="Django"/>
+  <meta name="keywords" content=""/>
+  <meta name="description" content=""/>
+  <link rel="stylesheet" href="http://cargo/css/manager.css" type="text/css"/>
+  <link rel="shortcut icon" href="http://cargo/pics/favicon.png"/>
+  <script type="text/javascript" src="http://cargo/js/prototype.js"></script>
+  <script type="text/javascript" src="http://cargo/js/common.js"></script>
+  <script type="text/javascript" src="http://cargo/js/shop.js"></script>
+  <title>Магазин - Управление заказами</title>
+</head>
+<body onLoad="{{ js_onload }}">
+
+<table class="header">
+  <tr>
+    <td class="title"><a href="/shop/">Автогарант</a> <span class="subtitle">Управление заказами</span></td>
+  </tr>
+</table>
+
+<br/>
+
+{% if not panel_hide %}
+<table class="panel">
+  <tr>
+    <td>
+      Заказы:
+      <span>Активные</span>
+      <span>Выполненные</span>
+      <span>Отменённые</span>
+    </td>
+  </tr>
+</table>
+
+<br/>
+{% endif %}
+
+<div class="content">
+  {% block content %}{% endblock %}
+</div>
+	
+{% if not panel_hide %}
+<br/>
+
+<table class="footer">
+  <tr>
+    <td class="footer-left">Разработка &copy; 2008 Руслан Попов</td>
+    <td class="footer-center">&nbsp;</td>
+    <td class="footer-right">Что-нибудь &trade;</td>
+  </tr>
+</table>
+{% endif %}
+
+</body>
+</html>
