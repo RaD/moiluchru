@@ -1,5 +1,5 @@
 digraph G {
-	graph [rankdir = "TB", compound=true, ratio=compress, size="12,10", 
+	graph [rankdir = "TB", compound=true, ratio=compress, size="16,10", 
 		remincross=true, center=true];
 	node [shape=plaintext, fontname="Verdana", fontsize=8];
 	edge [arrowsize=1, color=black, fontname="Verdana", fontsize=8];
@@ -20,7 +20,7 @@ subgraph cluster_categories {label="category"; labelloc="t"; fontname="Verdana";
 categories [shape=record, label="{<id> id integer not null|name CharField(30)|<parent> parent}"]
 
 subgraph cluster_items {label="item"; labelloc="t"; fontname="Verdana"; fontsize=12; items};
-items [shape=record, label="{<id> id integer not null|title CharField(60)|desc TextField|<category> category|<producer> producer|<color> color|count PositiveIntegerField()|price FloatField()|image ImageField()|reg_date DateTimeField()}"]
+items [shape=record, label="{<id> id integer not null|title CharField(60)|desc TextField|<category> category|<producer> producer|<color> color|count PositiveIntegerField()|reserved PositiveIntegerField()|price FloatField()|image ImageField()|reg_date DateTimeField()}"]
 
 subgraph cluster_buyers {label="buyer"; labelloc="t"; fontname="Verdana"; fontsize=12; buyers};
 buyers [shape=record, label="{<id>id integer not null|firstname CharField(30)|lastname CharField(40)|address CharField(50)|email EmailField()|<city> city|join_date DateTimeField()}"]
