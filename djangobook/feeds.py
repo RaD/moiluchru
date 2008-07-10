@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # файл с трансляциями
 
 from django.contrib.syndication.feeds import Feed
