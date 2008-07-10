@@ -101,7 +101,7 @@ class Item(models.Model):
     count = models.PositiveIntegerField(ugettext('Count'))
     reserved = models.PositiveIntegerField(ugettext('Reserved'), default=0)
     reg_date = models.DateTimeField()
-#    image = models.ImageField(upload_to='/tmp')
+    image = models.ImageField(upload_to="itempics")
     
     class Meta:
         verbose_name = _('Item')
