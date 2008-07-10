@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-09 20:41+0400\n"
+"POT-Creation-Date: 2008-07-10 19:15+0400\n"
 "PO-Revision-Date: 2008-07-09 20:40+0400\n"
 "Last-Translator: Ruslan Popov <radz@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: djangobook/models.py:6 shop/models.py:7 shop/models.py:21 shop/models.py:35
-#: shop/models.py:69 shop/models.py:71 shop/models.py:94
+#: djangobook/models.py:6 shop/models.py:8 shop/models.py:22 shop/models.py:36
+#: shop/models.py:70 shop/models.py:72 shop/models.py:95
 msgid "Title"
 msgstr "Название"
 
@@ -32,107 +32,115 @@ msgstr "Жалоба"
 msgid "Claims"
 msgstr "Жалобы"
 
-#: shop/manager.py:18
+#: shop/manager.py:23
 msgid "Login"
 msgstr "Логин"
 
-#: shop/manager.py:20
+#: shop/manager.py:25
 msgid "Password"
 msgstr "Пароль"
 
-#: shop/models.py:10 shop/models.py:99
+#: shop/manager.py:84
+msgid "Status"
+msgstr "Состояние"
+
+#: shop/manager.py:87
+msgid "Courier"
+msgstr "Курьер"
+
+#: shop/models.py:11 shop/models.py:100
 msgid "Color"
 msgstr "Цвет"
 
-#: shop/models.py:11
+#: shop/models.py:12
 msgid "Colors"
 msgstr "Цвета"
 
-#: shop/models.py:24 shop/models.py:36 shop/models.py:52
+#: shop/models.py:25 shop/models.py:37 shop/models.py:53
 msgid "Country"
 msgstr "Страна"
 
-#: shop/models.py:25
+#: shop/models.py:26
 msgid "Countries"
 msgstr "Страны"
 
-#: shop/models.py:39 shop/views.py:187
+#: shop/models.py:40 shop/views.py:187
 msgid "City"
 msgstr "Город"
 
-#: shop/models.py:40
+#: shop/models.py:41
 msgid "Cities"
 msgstr "Города"
 
-#: shop/models.py:51
+#: shop/models.py:52
 msgid "Company"
 msgstr "Компания"
 
-#: shop/models.py:56 shop/models.py:97
+#: shop/models.py:57 shop/models.py:98
 msgid "Producer"
 msgstr "Производитель"
 
-#: shop/models.py:57
+#: shop/models.py:58
 msgid "Producers"
 msgstr "Производители"
 
-#: shop/models.py:74 shop/models.py:96
+#: shop/models.py:75 shop/models.py:97
 msgid "Category"
 msgstr "Категория"
 
-#: shop/models.py:75
+#: shop/models.py:76
 msgid "Categories"
 msgstr "Категории"
 
-#: shop/models.py:98
+#: shop/models.py:99
 msgid "Price"
 msgstr "Цена"
 
-#: shop/models.py:100
+#: shop/models.py:101
 msgid "Count"
 msgstr "Количество"
 
-#: shop/models.py:101
+#: shop/models.py:102
 msgid "Reserved"
-msgstr ""
+msgstr "Зарезервировано"
 
-#: shop/models.py:106
+#: shop/models.py:107
 msgid "Item"
 msgstr "Товар"
 
-#: shop/models.py:107
+#: shop/models.py:108
 msgid "Items"
 msgstr "Товары"
 
-#: shop/models.py:130
+#: shop/models.py:131
 msgid "Buyer"
 msgstr "Покупатель"
 
-#: shop/models.py:131
+#: shop/models.py:132
 msgid "Buyers"
 msgstr "Покупатели"
 
-#: shop/models.py:145
+#: shop/models.py:146
 msgid "Order status"
 msgstr "Статус заказа"
 
-#: shop/models.py:146
+#: shop/models.py:147
 msgid "Order statuses"
 msgstr "Статусы заказа"
 
-#: shop/models.py:177
+#: shop/models.py:166
 msgid "Order"
 msgstr "Заказ"
 
-#: shop/models.py:178
+#: shop/models.py:167
 msgid "Orders"
 msgstr "Заказы"
 
-#: shop/models.py:204 shop/views.py:195
+#: shop/models.py:201 shop/views.py:195
 msgid "Phone type"
 msgstr "Тип телефона"
 
-#: shop/models.py:205
+#: shop/models.py:202
 msgid "Phone types"
 msgstr "Типы телефона"
 
@@ -163,3 +171,4 @@ msgstr "Е-почта"
 #: shop/views.py:199
 msgid "Comment"
 msgstr "Комментарий"
+
