@@ -165,6 +165,18 @@ class Courier(models.Model):
 #    headshot = models.ImageField(upload_to='/tmp')
 #    passport = models.ImageField(upload_to='/tmp')
 
+    class Meta:
+        verbose_name = _('Courier')
+        verbose_name_plural = _('Couriers')
+
+    class Admin:
+        list_display = ('lastname','firstname')
+	ordering = ('lastname',)
+	search_fields = ('lastname',)
+    
+    def __unicode__(self):
+        return '%s %s %s' % (self.lastname, self.firstname, self.parname)
+    
 class Order(models.Model):
     buyer = models.ForeignKey(Buyer)
     count = models.PositiveIntegerField()
@@ -187,13 +199,17 @@ class Order(models.Model):
     
     def get_absolute_url(self):
         """ This returns the absolute URL for a record. """
-        return '/shop/minfo/%i/' % self.id
+        return '/shop/orderinfo/%i/' % self.id
     
 class OrderDetail(models.Model):
     order = models.ForeignKey(Order)
     item = models.ForeignKey(Item)
     count = models.PositiveIntegerField()
     price = models.FloatField()
+
+    def __unicode__(self):
+        return self.item.title
+   
 
 class OrderStatusChange(models.Model):
     order = models.ForeignKey(Order)

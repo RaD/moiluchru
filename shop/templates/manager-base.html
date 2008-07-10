@@ -18,6 +18,13 @@
 <table class="header">
   <tr>
     <td class="title"><a href="/shop/">Автогарант</a> <span class="subtitle">Управление заказами</span></td>
+    <td>&nbsp;</td>
+    <td>
+      {% if user.is_authenticated %}
+      {{ user.get_full_name }}
+      <button onclick="document.location='/shop/logout';">Выйти</button>
+      {% endif %}
+    </td>
   </tr>
 </table>
 
@@ -28,8 +35,8 @@
   <tr>
     <td>
       Заказы:
-      <span>Все</span>
-      <span>Активные</span>
+      <span><a href="/shop/orders/all/">Все</a></span>
+      <span><a href="/shop/orders/active/">Активные</a></span>
       <span>Выполненные</span>
       <span>Отменённые</span>
     </td>

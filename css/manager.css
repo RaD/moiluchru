@@ -25,7 +25,7 @@ BUTTON { border: 1px solid black; cursor: pointer; }
 
 #login { width: 40%; }
 FORM TH { text-align: left; font-weight: normal; }
-FORM INPUT,TEXTAREA,SELECT { border: 1px solid gray; -moz-border-radius: 4px; padding: 2px 4px; }
+BUTTON,INPUT,TEXTAREA,SELECT { border: 1px solid gray; -moz-border-radius: 4px; padding: 2px 4px; }
 
 .wideitem { width: 100%; }
 .longitem { white-space: nowrap; overflow: hidden; text-overflow : ellipsis; }
