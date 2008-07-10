@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.utils.translation import ugettext, gettext_lazy as _
+from django.contrib.admin.models import User
 from django.db import models
 
 class Color(models.Model):
@@ -153,37 +154,13 @@ class OrderStatus(models.Model):
     def __unicode__(self):
         return self.title
     
-class Courier(models.Model):
-    firstname = models.CharField(max_length=30)
-    lastname = models.CharField(max_length=40)
-    parname = models.CharField(max_length=50)
-    phone = models.CharField(max_length=20)
-    address = models.CharField(max_length=50)
-    city = models.ForeignKey(City)
-    join_date = models.DateTimeField()
-    status = models.BooleanField()
-#    headshot = models.ImageField(upload_to='/tmp')
-#    passport = models.ImageField(upload_to='/tmp')
-
-    class Meta:
-        verbose_name = _('Courier')
-        verbose_name_plural = _('Couriers')
-
-    class Admin:
-        list_display = ('lastname','firstname')
-	ordering = ('lastname',)
-	search_fields = ('lastname',)
-    
-    def __unicode__(self):
-        return '%s %s %s' % (self.lastname, self.firstname, self.parname)
-    
 class Order(models.Model):
     buyer = models.ForeignKey(Buyer)
     count = models.PositiveIntegerField()
     totalprice = models.FloatField()
     reg_date = models.DateTimeField(auto_now_add=True)
     status = models.ForeignKey(OrderStatus)
-    courier = models.ForeignKey(Courier, null=True)
+    courier = models.ForeignKey(User, null=True)
 
     class Meta:
         verbose_name = _('Order')
@@ -231,3 +208,14 @@ class Phone(models.Model):
     number = models.CharField(max_length=20)
     type = models.ForeignKey(PhoneType)
     owner = models.ForeignKey(Buyer)
+
+class Profile(models.Model):
+    # обязательная часть профайла
+    user = models.ForeignKey(User, unique=True)
+    # моё
+    phone = models.CharField(max_length=20)
+    address = models.CharField(max_length=50)
+    city = models.ForeignKey(City)
+#    headshot = models.ImageField(upload_to='/tmp')
+#    passport = models.ImageField(upload_to='/tmp')
+    

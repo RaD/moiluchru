@@ -8,6 +8,7 @@ from django.core import validators
 from django import newforms as forms
 from django.contrib import auth
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.admin import models as admmodels
 from cargo.shop import models
 
 def is_stuff(user):
@@ -50,6 +51,7 @@ def login(request):
         return render_to_response('manager-login.html',
                                   {'user': request.user, 'form': form, 'panel_hide': 'yes'})
 
+@user_passes_test(is_stuff, login_url="/shop/manager/")
 def logout(request):
     """
     Представление для осуществления выхода из административной части.
@@ -72,14 +74,19 @@ def order_info(request, order_id):
     """
     Представление для отображения полной информации о заказе.
     """
+    # Класс предназначен для переопределения метода отображения списка курьеров
+    class CourierSelect(forms.ModelChoiceField):
+        def label_from_instance(self, obj):
+            return "%s" % obj.get_full_name()
+            
     class OrderForm(forms.Form):
         status = forms.ModelChoiceField(queryset=models.OrderStatus.objects.all(),
-                                      label=ugettext('Status'),
-                                      widget=forms.Select(attrs={'class':'longitem wideitem'}))
-        courier = forms.ModelChoiceField(queryset=models.Courier.objects.all(),
-                                      label=ugettext('Courier'),
-                                      widget=forms.Select(attrs={'class':'longitem wideitem'}))
-
+                                        label=ugettext('Status'),
+                                        widget=forms.Select(attrs={'class':'longitem wideitem'}))
+        courier = CourierSelect(queryset=admmodels.User.objects.filter(groups=1),
+                                label=ugettext('Courier'),
+                                widget=forms.Select(attrs={'class':'longitem wideitem'}))
+        
     class CartItem:
         def __init__(self, title, count, price):
             self.title = title
