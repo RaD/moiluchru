@@ -192,7 +192,8 @@ class OrderStatusChange(models.Model):
     order = models.ForeignKey(Order)
     old_status = models.ForeignKey(OrderStatus, related_name="old_status")
     new_status = models.ForeignKey(OrderStatus, related_name="new_status")
-    reg_time = models.DateTimeField()
+    courier = models.ForeignKey(User)
+    reg_time = models.DateTimeField(auto_now_add=True)
 
 class PhoneType(models.Model):
     title = models.CharField(max_length=20)

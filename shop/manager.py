@@ -34,7 +34,7 @@ def login(request):
                 user = auth.authenticate(username=login, password=passwd)
                 if user is not None and user.is_active:
                     auth.login(request, user)
-                    return HttpResponseRedirect("/shop/orders/active/")
+                    return HttpResponseRedirect("/shop/orders/all/")
                 else:
                     return render_to_response('manager-login.html',
                                               {'form': form, 'panel_hide': 'yes',
@@ -64,8 +64,18 @@ def orders(request, act):
     """
     Представление для отображения активных заказов.
     """
-    if act == 'active': status = 1
-    orders = models.Order.objects.filter(status=status)
+    if act == 'all':
+        orders = models.Order.objects.all().order_by('-id')
+    elif act == 'waiting': 
+        orders = models.Order.objects.filter(status=1).order_by('-id')
+    elif act == 'confirmed': 
+        orders = models.Order.objects.filter(status=2).order_by('-id')
+    elif act == 'delivered': 
+        orders = models.Order.objects.filter(status=3).order_by('-id')
+    elif act == 'canceled': 
+        orders = models.Order.objects.filter(status=4).order_by('-id')
+    elif act == 'impossible': 
+        orders = models.Order.objects.filter(status=5).order_by('-id')
     return render_to_response('manager-orders.html', {'orders': orders,
                                                       'user': request.user})
 
@@ -79,14 +89,16 @@ def order_info(request, order_id):
         def label_from_instance(self, obj):
             return "%s" % obj.get_full_name()
             
+    # класс формы
     class OrderForm(forms.Form):
         status = forms.ModelChoiceField(queryset=models.OrderStatus.objects.all(),
-                                        label=ugettext('Status'),
+                                        label=ugettext('Status'), 
                                         widget=forms.Select(attrs={'class':'longitem wideitem'}))
         courier = CourierSelect(queryset=admmodels.User.objects.filter(groups=1),
                                 label=ugettext('Courier'),
                                 widget=forms.Select(attrs={'class':'longitem wideitem'}))
-        
+
+    # класс объекта
     class CartItem:
         def __init__(self, title, count, price):
             self.title = title
@@ -99,9 +111,21 @@ def order_info(request, order_id):
         if form.is_valid():
             # обработать форму
             try:
-                pass
-            except Exception:
-                return HttpResponse('bad form data')
+                courier = admmodels.User.objects.get(id=request.POST['courier'])
+                status = models.OrderStatus.objects.get(id=request.POST['status'])
+                order = models.Order.objects.get(id=order_id)
+                if order.status != status or order.courier != courier:
+                    change = models.OrderStatusChange(order = order,
+                                                      old_status = order.status,
+                                                      new_status = status,
+                                                      courier = courier)
+                    change.save()
+                    order.courier = courier
+                    order.status = status
+                order.save()
+                return HttpResponseRedirect('/shop/orderinfo/%i' % int(order_id))
+            except Exception, e:
+                return HttpResponse('bad form data: %s' % e)
         else:
             return HttpResponse('bad form')
     else:
@@ -109,9 +133,17 @@ def order_info(request, order_id):
         o = models.Order.objects.get(id=order_id)
         p = models.Phone.objects.get(owner=o.buyer)
         d = models.OrderDetail.objects.filter(order=order_id)
+        if o.courier:
+            courier = o.courier.id
+        else:
+            courier = 0
+        form = OrderForm(auto_id='field_%s', initial={'status': o.status.id,
+                                                      'courier': courier})
+        # корзина
         for i in d:
             items.append(CartItem(i, i.count, i.price))
-        form = OrderForm(auto_id='field_%s', initial={'status': o.status.id})
+        # история
+        history = models.OrderStatusChange.objects.filter(order=order_id).order_by('-reg_time')
         return render_to_response('manager-orderinfo.html',
                                   {'form': form, 'order': o, 'phone': p, 'items': items,
-                                   'user_full_name': request.user.first_name})
+                                   'history': history, 'user': request.user})

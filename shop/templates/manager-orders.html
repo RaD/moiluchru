@@ -19,9 +19,7 @@
     <td class="right">{{ order.totalprice|floatformat:2 }} руб.</td>
     <td class="center even">{{ order.status }}</td>
     <td class="center">{{ order.reg_date }}</td>
-    <td class="even">
-      <a href="{{ order.courier.get_absolute_url }}">{{ order.courier.lastname }} {{ order.courier.firstname }} {{ order.courier.pardname }}</a>
-    </td>
+    <td class="even">{{ order.courier.get_full_name }}</td>
   </tr>
   {% endfor %}
 </table>
