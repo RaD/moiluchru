@@ -177,25 +177,25 @@ def show_offer(request):
     # Определяем класс для отображения формы
     class OfferForm(forms.Form):
         fname = forms.CharField(label=ugettext('Last name'), max_length=64,
-                                widget=forms.TextInput(attrs={'class':'longitem wideitem'}))
+                                widget=forms.TextInput(attrs={'class':'longitem'}))
         iname = forms.CharField(label=ugettext('First name'), max_length=64,
-                                widget=forms.TextInput(attrs={'class':'longitem wideitem'}))
+                                widget=forms.TextInput(attrs={'class':'longitem'}))
         oname = forms.CharField(label=ugettext('Second name'), max_length=64,
-                                widget=forms.TextInput(attrs={'class':'longitem wideitem'}))
+                                widget=forms.TextInput(attrs={'class':'longitem'}))
         address = forms.CharField(label=ugettext('Address'), max_length=255,
-                                  widget=forms.TextInput(attrs={'class':'longitem wideitem'}))
+                                  widget=forms.TextInput(attrs={'class':'longitem'}))
         city = forms.ModelChoiceField(queryset=models.City.objects.all(),
                                       label=ugettext('City'),
-                                      widget=forms.Select(attrs={'class':'longitem wideitem'}))
+                                      widget=forms.Select(attrs={'class':'longitem'}))
         phone = forms.CharField(label=ugettext('Contact phone'), max_length=20,
-                                widget=forms.TextInput(attrs={'class':'longitem wideitem'}))
+                                widget=forms.TextInput(attrs={'class':'longitem'}))
         phonetype = forms.ModelChoiceField(queryset=models.PhoneType.objects.all(),
                                            label=ugettext('Phone type'),
-                                           widget=forms.Select(attrs={'class':'longitem wideitem'}))
+                                           widget=forms.Select(attrs={'class':'longitem'}))
         email = forms.EmailField(label=ugettext('E-mail'), max_length=75,
-                                 widget=forms.TextInput(attrs={'class':'longitem wideitem'}))
+                                 widget=forms.TextInput(attrs={'class':'longitem'}))
         comment = forms.CharField(label=ugettext('Comment'), 
-                                  widget=forms.Textarea(attrs={'class':'longitem wideitem'}))
+                                  widget=forms.Textarea(attrs={'class':'longitem'}))
         
     if request.method == 'POST':
         form = OfferForm(request.POST)

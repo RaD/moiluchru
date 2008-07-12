@@ -24,9 +24,9 @@ def login(request):
     # Класс для формы логина
     class LoginForm(forms.Form):
         login = forms.CharField(label=ugettext('Login'), max_length=30,
-                                widget=forms.TextInput(attrs={'class':'longitem wideitem'}))
+                                widget=forms.TextInput(attrs={'class':'longitem'}))
         passwd = forms.CharField(label=ugettext('Password'), max_length=128,
-                                 widget=forms.PasswordInput(attrs={'class':'longitem wideitem'}))
+                                 widget=forms.PasswordInput(attrs={'class':'longitem'}))
 
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -95,10 +95,10 @@ def order_info(request, order_id):
     class OrderForm(forms.Form):
         status = forms.ModelChoiceField(queryset=models.OrderStatus.objects.all(),
                                         label=ugettext('Status'), 
-                                        widget=forms.Select(attrs={'class':'longitem wideitem'}))
+                                        widget=forms.Select(attrs={'class':'longitem'}))
         courier = CourierSelect(queryset=admmodels.User.objects.filter(groups=1),
                                 label=ugettext('Courier'),
-                                widget=forms.Select(attrs={'class':'longitem wideitem'}))
+                                widget=forms.Select(attrs={'class':'longitem'}))
 
     # класс объекта
     class CartItem:
