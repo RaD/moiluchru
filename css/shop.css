@@ -33,7 +33,7 @@ BUTTON { border: 1px solid black; cursor: pointer; }
 .footer-right { text-align: right; }
 
 .categories { padding: 1em; }
-.categories .title { font: 14px fantasy; color: black; font-weight: bold; padding: 4px 0px;}
+.categories .title { font: 14px arial; color: black; font-weight: bold; padding: 4px 0px;}
 
 .category { font: 14px arial; color: black; margin: 4px 0px;}
 .subcategories { font: 10px arial; color: black; margin: 4px 2em;}
@@ -44,7 +44,7 @@ BUTTON { border: 1px solid black; cursor: pointer; }
 .item .title { font: 14px arial; color: black; font-weight: bold; margin: 4px 0px; }
 
 .help { padding: 1em; height: 100%; }
-.help .title { font: 18px fantasy; color: black; font-weight: bold; padding: 4px 0px;}
+.help .title { font: 18px arial; color: black; font-weight: bold; padding: 4px 0px;}
 
 .cart { padding: 1em; }
 .cart .title { font: 14px arial; color: black; font-weight: bold; margin: 4px 0px; }
