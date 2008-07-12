@@ -14,6 +14,6 @@ clean: clean_subdirs
 locale: $(MO)
 
 %.mo: %.po
-	compile-messages.py
+	django-admin.py compilemessages
 
 include targets.mk
