@@ -27,11 +27,12 @@
 	<td class="money total">{{ cart_price|floatformat:2 }} руб.</td>
       </tr>
     </table>
-
+    {% if cart %}
     <div class="right">
       <button onClick="document.location='/shop/offer';">Оформить заказ</button>
       <button onClick="clean_cart(); document.location='/shop';">Отменить заказ</button>
     </div>
+    {% endif %}
   </div>
 </div>
 {% endblock %}

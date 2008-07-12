@@ -163,7 +163,8 @@ def show_cart(request):
             record = models.Item.objects.get(id=i)
             items.append(CartItem(record.title, cart[i]['count'], cart[i]['price']))
     return render_to_response('shop-show-cart.html',
-                              {'cart_items': items,
+                              {'cart': cart, # для отключения кнопок
+                               'cart_items': items,
                                'cart_show' : 'yes'},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
@@ -186,9 +187,6 @@ def show_offer(request):
         city = forms.ModelChoiceField(queryset=models.City.objects.all(),
                                       label=ugettext('City'),
                                       widget=forms.Select(attrs={'class':'longitem wideitem'}))
-#         country = forms.ModelChoiceField(queryset=models.Country.objects.all(),
-#                                          label=ugettext('Country'), initial=1,
-#                                          widget=forms.Select(attrs={'class':'longitem wideitem'}))
         phone = forms.CharField(label=ugettext('Contact phone'), max_length=20,
                                 widget=forms.TextInput(attrs={'class':'longitem wideitem'}))
         phonetype = forms.ModelChoiceField(queryset=models.PhoneType.objects.all(),
