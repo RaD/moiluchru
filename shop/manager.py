@@ -18,6 +18,9 @@ def login(request):
     """
     Функция для отображения страницы для ввода логина.
     """
+    if is_stuff(request.user):
+        return HttpResponseRedirect("/shop/orders/all/")
+
     # Класс для формы логина
     class LoginForm(forms.Form):
         login = forms.CharField(label=ugettext('Login'), max_length=30,
@@ -39,7 +42,6 @@ def login(request):
                     return render_to_response('manager-login.html',
                                               {'form': form, 'panel_hide': 'yes',
                                                'login_error': 'Возможно, вы неправильно указали данные.'})
-                    return HttpResponseRedirect("/shop/manager/")
             except Exception:
                 return HttpResponse('bad form data')
         else:
