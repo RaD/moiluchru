@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     (r'^ordered', 'cargo.shop.views.show_ordered'),
 
     # раздел менеджера
-    (r'^manager', 'cargo.shop.manager.login'),
+    (r'^manager/', 'cargo.shop.manager.login'),
     (r'^logout', 'cargo.shop.manager.logout'),
     (r'^orders/(?P<act>[a-z]+)/', 'cargo.shop.manager.orders'),
     (r'^orderinfo/(?P<order_id>\d+)/', 'cargo.shop.manager.order_info'),

@@ -1,0 +1,37 @@
+{% extends "shop-base.html" %}
+
+{% block content %}
+<div class="content">
+  <div class="item">
+    <div class="title">{{ item.title }}</div>
+    
+    <div class="cat-widget">
+      <a href="/shop">Главная</a> /
+      {% for parcat in parent_cats %}
+      <a href="{{ parcat.get_absolute_url }}">{{ parcat.name }}</a>{% if not forloop.last %} / {% endif %}
+      {% endfor %}
+    </div>
+    
+    <br/>
+
+    <div class="image"><img src="{{ item.get_image_url }}"/></div>
+
+    <div class="info">
+      <div style="cursor: pointer;"
+	   onClick="show_form({{ item.id }}, '{{ item.title }}'); return false;"><u>Добавить в корзину</u></div>
+      <div>Цена: <span class="price">{{ item.price|floatformat:2 }}</span> рублей.</div>
+      <div>В наличии: <span id="item_remains">{{ item_remains }}</span></div>
+    </div>
+    
+    <br/>
+
+    <div class="clear">
+      <div>Описание:</div>
+      <div class="desc">{{ item.desc }}</div>
+    </div>
+
+    <br/>
+    
+  </div>
+</div>
+{% endblock %}

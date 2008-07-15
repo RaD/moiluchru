@@ -28,30 +28,34 @@ def login(request):
         passwd = forms.CharField(label=ugettext('Password'), max_length=128,
                                  widget=forms.PasswordInput(attrs={'class':'longitem'}))
 
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            try:
-                login = request.POST['login']
-                passwd = request.POST['passwd']
-                user = auth.authenticate(username=login, password=passwd)
-                if user is not None and user.is_active:
-                    auth.login(request, user)
-                    return HttpResponseRedirect("/shop/orders/all/")
-                else:
-                    return render_to_response('manager-login.html',
-                                              {'form': form, 'panel_hide': 'yes',
-                                               'login_error': 'Возможно, вы неправильно указали данные.'})
-            except Exception:
-                return HttpResponse('bad form data')
+    if request.session.test_cookie_worked():
+        #request.session.delete_test_cookie()
+
+        if request.method == 'POST':
+            form = LoginForm(request.POST)
+            if form.is_valid():
+                try:
+                    login = request.POST['login']
+                    passwd = request.POST['passwd']
+                    user = auth.authenticate(username=login, password=passwd)
+                    if user is not None and user.is_active:
+                        auth.login(request, user)
+                        return HttpResponseRedirect("/shop/orders/all/")
+                    else:
+                        return render_to_response('manager-login.html',
+                                                  {'form': form, 'panel_hide': 'yes',
+                                                   'login_error': 'Возможно, вы неправильно указали данные.'})
+                except Exception:
+                    return HttpResponse('bad form data')
+            else:
+                return HttpResponse('bad form')
         else:
-            return HttpResponse('bad form')
+            form = LoginForm(auto_id='field_%s')
+            return render_to_response('manager-login.html',
+                                      {'user': request.user, 'form': form, 'panel_hide': 'yes'})
     else:
-        if not request.session.test_cookie_worked():
-            request.session.set_test_cookie()
-        form = LoginForm(auto_id='field_%s')
-        return render_to_response('manager-login.html',
-                                  {'user': request.user, 'form': form, 'panel_hide': 'yes'})
+        request.session.set_test_cookie()
+        return HttpResponseRedirect("/shop/manager/")
 
 @user_passes_test(is_stuff, login_url="/shop/manager/")
 def logout(request):
@@ -78,8 +82,7 @@ def orders(request, act):
         orders = models.Order.objects.filter(status=4).order_by('-id')
     elif act == 'impossible': 
         orders = models.Order.objects.filter(status=5).order_by('-id')
-    return render_to_response('manager-orders.html', {'orders': orders,
-                                                      'user': request.user})
+    return render_to_response('manager-orders.html', {'orders': orders, 'user': request.user})
 
 @user_passes_test(is_stuff, login_url="/shop/manager/")
 def order_info(request, order_id):

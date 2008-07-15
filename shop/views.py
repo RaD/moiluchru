@@ -6,51 +6,17 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.core import validators
 from django import newforms as forms
+from cargo import settings
 from cargo.shop import models
 
 def cart_ctx_proc(request):
     """
     Контекстный процессор для заполнения данных о корзине.
     """
-    return {'cart_count': request.session.get('cart_count', 0),
+    return {'site_name': settings.SITE_NAME,
+            'cart_count': request.session.get('cart_count', 0),
             'cart_price': request.session.get('cart_price', 0.00)}
 
-def show_main_page(request):
-    """
-    Функция для отображения главной страницы сайта.
-    Осуществляем проверку поддержки Cookie.
-    """
-    if not request.session.test_cookie_worked():
-        request.session.set_test_cookie()
-    else:
-        does_cart_exist(request)
-    return render_to_response('shop-show-main.html',
-                              {'queryset': models.Category.objects.filter(parent__isnull=True)[:5]},
-                              context_instance=RequestContext(request, processors=[cart_ctx_proc]))
-    
-def show_category_page(request, category):
-    """
-    Функция для отображения подчинённых категорий.
-    """
-    does_cart_exist(request)
-    c = models.Category.objects.get(id=category)
-    return render_to_response('shop-show-category.html',
-                              {'parent_cats': get_parent_cats(c),
-                               'categories': c.category_set.all(),
-                               'producers': get_currcat_procs(c),
-                               'items': get_currcat_items(category)},
-                              context_instance=RequestContext(request, processors=[cart_ctx_proc]))
-
-def show_item_page(request, item):
-    does_cart_exist(request)
-    curr_item = models.Item.objects.get(id=item)
-    return render_to_response('shop-show-item.html',
-                              {'item': curr_item,
-                               'item_remains': curr_item.count - curr_item.reserved,
-                               'js_onload': 'show_item_count_info(%s);' % item,
-                               'parent_cats': get_parent_cats(curr_item.category)},
-                              context_instance=RequestContext(request, processors=[cart_ctx_proc]))
-    
 def does_cart_exist(request):
     if request.session.test_cookie_worked():
         if not 'cart_items' in request.session:
@@ -65,6 +31,43 @@ def init_cart(request):
     request.session['cart_count'] = 0
     request.session['cart_price'] = 0.00
 
+def show_main_page(request):
+    """
+    Функция для отображения главной страницы сайта.
+    Осуществляем проверку поддержки Cookie.
+    """
+    if request.session.test_cookie_worked():
+        #request.session.delete_test_cookie()
+        does_cart_exist(request)
+    else:
+        request.session.set_test_cookie()
+    return render_to_response('shop-main.html',
+                              {'queryset': models.Category.objects.filter(parent__isnull=True)[:5]},
+                              context_instance=RequestContext(request, processors=[cart_ctx_proc]))
+    
+def show_category_page(request, category):
+    """
+    Функция для отображения подчинённых категорий.
+    """
+    does_cart_exist(request)
+    c = models.Category.objects.get(id=category)
+    return render_to_response('shop-category.html',
+                              {'parent_cats': get_parent_cats(c),
+                               'categories': c.category_set.all(),
+                               'producers': get_currcat_procs(c),
+                               'items': get_currcat_items(category)},
+                              context_instance=RequestContext(request, processors=[cart_ctx_proc]))
+
+def show_item_page(request, item):
+    does_cart_exist(request)
+    curr_item = models.Item.objects.get(id=item)
+    return render_to_response('shop-item.html',
+                              {'item': curr_item,
+                               'item_remains': curr_item.count - curr_item.reserved,
+                               'js_onload': 'show_item_count_info(%s);' % item,
+                               'parent_cats': get_parent_cats(curr_item.category)},
+                              context_instance=RequestContext(request, processors=[cart_ctx_proc]))
+    
 def show_count(request):
     """
     Функция получения количества товара на складе
@@ -162,7 +165,7 @@ def show_cart(request):
         for i in cart:
             record = models.Item.objects.get(id=i)
             items.append(CartItem(record.title, cart[i]['count'], cart[i]['price']))
-    return render_to_response('shop-show-cart.html',
+    return render_to_response('shop-cart.html',
                               {'cart': cart, # для отключения кнопок
                                'cart_items': items,
                                'cart_show' : 'yes'},
@@ -237,13 +240,13 @@ def show_offer(request):
             return HttpResponse('bad form')
     else:
         form = OfferForm(auto_id='field_%s')
-        return render_to_response('shop-show-offer.html',
-                                  {'form': form},
+        return render_to_response('shop-offer.html',
+                                  {'form': form, 'cart_show' : 'yes'},
                                   context_instance=RequestContext(request, processors=[cart_ctx_proc]));
 
 def show_ordered(request):
     init_cart(request)
-    return render_to_response('shop-show-ordered.html',{},
+    return render_to_response('shop-ordered.html',{},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]));
     
 def get_parent_cats(category):

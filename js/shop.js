@@ -66,30 +66,30 @@ function show_form(item_id, item_title) {
   parent.document.onkeypress = function(e) { return onkeypress(e); }
 
   var form = _dom('form',
-		  [ _dom('div',
-			 [ _txt('Добавить в корзину') ],
-			 [['class', 'title']]),
-		    _dom('div',
-			 [ _txt('Товар'),
-			   _dom('span', _txt(item_title)) ], 
-			 [['class', 'body']]),
-		    _dom('div',
-			 [ _txt('Количество'),
-			   _dom('input', [], 
-				[['type', 'text'],
-				 ['value', '1'], // добавить валидатор
-				 ['id', 'item_quantity'],
-				 ['maxlength', '2']]) ],
-			 [['class', 'body']]),
+		  [ _dom('div', _txt('Добавить в корзину'), [['class', 'title']]),
+		    _table(null, 
+			   [ 
+			     _tr(null,
+				 [ _td(_txt('Товар'), [['class', 'middle']]),
+				   _td(_dom('span', _txt(item_title)), [['class', 'middle']]) ],
+				 []),
+			     _tr(null,
+				 [ _td(_txt('Количество'), [['class', 'middle']]),
+				   _td(_dom('input', [], 
+					    [['class', 'middle'],
+					     ['type', 'text'],
+					     ['value', '1'], // добавить валидатор
+					     ['id', 'item_quantity'],
+					     ['maxlength', '2']])) ],
+				 []) 
+			   ], [['class', 'body']]),
 		    _dom('div',
 			 [ _dom('button', _txt('Отправить'), 
-				[['class', 'button'], 
-				 ['onclick', apply_func]]),
+				[['class', 'button'], ['onclick', apply_func]]),
 			   _dom('span', _txt(' '), []), // место между кнопками
 			   _dom('button', _txt('Отменить'),
-				[['class', 'button'], 
-				 ['onclick', cancel_func]]) ],
-			 [['id', 'buttons'], ['class', 'body']]) ],
+				[['class', 'button'], ['onclick', cancel_func]]) ],
+			 [['class', 'body center']]) ],
 		  [['class', 'widget']]);
   document.getElementsByTagName('BODY')[0].appendChild(form);
   
@@ -107,13 +107,15 @@ function update_cart(count, price) {
   $('cart_price').innerHTML = price;
 }
 
-function clean_cart() {
+function clean_cart(url) {
   new Ajax.Request('/shop/clean/',
 		   { method: 'post',
 		     onSuccess: function(transport) {
 		       var response = transport.responseText || "нет ответа";
 		       update_cart("0", "0.00");
 		       splashwidget.init('Очистка: Успешно!', 2000);
+		       if (url) 
+			 window.setTimeout(function() { document.location = url; }, 3000);
 		     },
 		     onFailure: function(transport) {
 		       window.status = 'Что-то сломалось :(';

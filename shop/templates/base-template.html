@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01//EN' 'http://www.w3.org/TR/html4/strict.dtd'>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Language" content="ru"/>
+    <meta name="generator" content="Django"/>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <link rel="stylesheet" href="http://cargo/css/shop.css" type="text/css"/>
+    <link rel="shortcut icon" href="http://cargo/pics/favicon.png"/>
+    <script type="text/javascript" src="http://cargo/js/prototype.js"></script>
+    <script type="text/javascript" src="http://cargo/js/common.js"></script>
+    <script type="text/javascript" src="http://cargo/js/shop.js"></script>
+    <title>{{ site_name }}</title>
+  </head>
+  <body onload="{{ js_onload }}">
+
+    <table border="0" cellpadding="0" cellspacing="0">
+      <tr class="header">
+	<td class="caption"><a href="/shop/">{{ site_name }}</a></td>
+	<td>&nbsp;</td>
+	<td class="cartinfo">
+	  {% if not cart_show %}<a href="/shop/cart/">Корзина</a>{% else %}Корзина{% endif %}:
+	  <span id="cart_price">{{ cart_price|floatformat:2 }}</span> руб
+	  (Кол-во: <span id="cart_count">{{ cart_count }}</span>)
+	  {% if not cart_show %}
+	  <button onclick="clean_cart(); return false;" style="cursor: pointer;">Очистить</button>
+	  {% endif %}
+	</td>
+      </tr>
+    </table>
+    
+    <br/>
+    
+    {% block container %}{% endblock %}
+    
+    <br/>
+    
+    <table border="0" cellpadding="0" cellspacing="0">
+      <tr class="footer">
+	<td class="footer-left">Разработка &copy; 2008 Руслан Попов</td>
+	<td class="footer-center">&nbsp;</td>
+	<td class="footer-right">Этот сайт создан для <a href="http://www.mozilla.com/">Firefox 3!</a></td>
+      </tr>
+    </table>
+    
+  </body>
+</html>

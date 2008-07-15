@@ -118,6 +118,37 @@ function _elts_class(el, className) {
   return elements;
 }
 
+function _table(table, content, attrs) {
+  if(table == null)
+    table = document.createElement('TABLE');
+  if(table.tBodies[0] == null)
+    table.appendChild(document.createElement('TBODY'));
+  flat_insert(table.tBodies[0], content);
+  set_attrs(table, attrs);
+  return table;
+}
+
+function _th(content, attrs) {
+    var th = document.createElement('TH');
+    flat_insert(th, content);
+    set_attrs(th, attrs);
+    return th;
+}
+
+function _tr(tr, content, attrs) {
+    if (!tr) tr = document.createElement('TR');
+    flat_insert(tr, content);
+    set_attrs(tr, attrs);
+    return tr;
+}
+
+function _td(content, attrs) {
+    var td = document.createElement('TD');
+    flat_insert(td, content);
+    set_attrs(td, attrs);
+    return td;
+}
+
 function getGeometry(obj) {
   var top = obj.offsetTop;
   var left = obj. offsetLeft;

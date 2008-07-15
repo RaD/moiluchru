@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # Django settings for cargo project.
 
 DEBUG = True
@@ -89,3 +91,6 @@ INSTALLED_APPS = (
 )
 
 AUTH_PROFILE_MODULE = "shop.profile"
+
+SITE_NAME = "Шоп-На"
+

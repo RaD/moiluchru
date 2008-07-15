@@ -1,0 +1,58 @@
+{% extends "shop-base.html" %}
+
+{% block content %}
+<div class="content">
+  <div class="title">
+    Категории товаров
+  </div>
+
+  <div class="cat-widget">
+    <a href="/shop">Главная</a> /
+    {% for parcat in parent_cats %}
+    <a href="{{ parcat.get_absolute_url }}">{{ parcat.name }}</a>{% if not forloop.last %} / {% endif %}
+    {% endfor %}
+  </div>
+    
+  <div class="sectioncontent">
+    {# получаем список категорий, см. shop/urls.py #}
+    {% for category in categories %}
+    <div class="category">
+      <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+      {% if category.category_set.count %}<span title="Есть подкатегории">(+)</span>{% endif %}
+      <span title="Количество наименований товаров, попадающих в категорию">()</span>
+      <div class="subcategories">
+	{# модель categories имеет метод subcats, получаем два подчинённых элемента #}
+	{% for subcat in category.subcats|slice:":2" %}
+	<span class="subcategory">
+	  {# устанавливаем запятую после каждого элемента, кроме последнего #}
+	  <a href="{{ subcat.get_absolute_url }}">{{ subcat.name }}</a>{% if not forloop.last %}, {% endif %}
+	</span>
+	{% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="sectioncontent">
+    Производители:
+    <div class="subcategories">
+      {% for producer in producers %}
+      <span class="subcategory">
+	{# устанавливаем запятую после каждого элемента, кроме последнего #}
+	<a href="{{ producer.get_absolute_url }}">{{ producer.name }}</a>{% if not forloop.last %}, {% endif %}
+      </span>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="sectioncontent">
+    Товары:
+    <div class="subcategories">
+      {% for item in items %}
+      <span class="subcategory">
+	{# устанавливаем запятую после каждого элемента, кроме последнего #}
+	<a href="{{ item.get_absolute_url }}">{{ item.title }}</a>{% if not forloop.last %}, {% endif %}
+      </span>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
