@@ -13,6 +13,10 @@ clean: clean_subdirs
 
 locale: $(MO)
 
+dump:
+	grep PASS settings.py
+	mysqldump -u cargo -p cargo > cargo.mysql.dump
+
 %.mo: %.po
 	django-admin.py compilemessages
 
