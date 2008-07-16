@@ -17,8 +17,10 @@
     <div class="image"><img src="{{ item.get_image_url }}"/></div>
 
     <div class="info">
-      <div style="cursor: pointer;"
-	   onClick="show_form({{ item.id }}, '{{ item.title }}'); return false;"><u>Добавить в корзину</u></div>
+      <div style="cursor: pointer; padding: 0.5em 0px;" onclick="show_form({{ item.id }}, '{{ item.title }}'); return false;">
+	<img src="http://cargo/pics/add.png" title="Добавить в корзину" width="32" height="32"/>
+	<u>Добавить в корзину</u>
+      </div>
       <div>Цена: <span class="price">{{ item.price|floatformat:2 }}</span> рублей.</div>
       <div>В наличии: <span id="item_remains">{{ item_remains }}</span></div>
     </div>
@@ -27,7 +29,7 @@
 
     <div class="clear">
       <div>Описание:</div>
-      <div class="desc">{{ item.desc }}</div>
+      <div class="desc">{{ item.desc|escape|linebreaks }}</div>
     </div>
 
     <br/>

@@ -65,6 +65,9 @@ class Producer(models.Model):
     def __unicode__(self):
         return self.name
     
+    def get_absolute_url(self):
+        return "/shop/producer/%i/" % self.id
+
 class Category(models.Model):
     """ The categories of items. """
     name = models.CharField(ugettext('Title'), max_length=30)
@@ -85,7 +88,7 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return "/shop/category/%s" % self.id
+        return "/shop/category/%i/" % self.id
 
     def subcats(self):
         """ Этот метод возвращает список дочерних категорий. """
@@ -101,7 +104,7 @@ class Item(models.Model):
     count = models.PositiveIntegerField(ugettext('Count'))
     reserved = models.PositiveIntegerField(ugettext('Reserved'), default=0)
     reg_date = models.DateTimeField()
-    image = models.ImageField(upload_to="itempics")
+    image = models.ImageField(upload_to="itempics", blank=True)
     
     class Meta:
         verbose_name = _('Item')
@@ -116,7 +119,7 @@ class Item(models.Model):
         return self.title
     
     def get_absolute_url(self):
-        return "/shop/item/%s" % self.id
+        return "/shop/item/%i/" % self.id
     
 class Buyer(models.Model):
     lastname = models.CharField(max_length=64)

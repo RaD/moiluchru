@@ -53,9 +53,25 @@ def show_category_page(request, category):
     c = models.Category.objects.get(id=category)
     return render_to_response('shop-category.html',
                               {'parent_cats': get_parent_cats(c),
+                               'currentcat': c,
                                'categories': c.category_set.all(),
                                'producers': get_currcat_procs(c),
                                'items': get_currcat_items(category)},
+                              context_instance=RequestContext(request, processors=[cart_ctx_proc]))
+
+def show_producer_page(request, producer, category):
+    """
+    Функция для отображения подчинённых категорий для данного производителя.
+    """
+    does_cart_exist(request)
+    c = models.Category.objects.get(id=category)
+    p = models.Producer.objects.get(id=producer)
+    return render_to_response('shop-category.html',
+                              {'parent_cats': get_parent_cats(c),
+                               'currentcat': c,
+                               'categories': c.category_set.all(),
+                               'producers': [p],
+                               'items': get_currcat_items(c, p)},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
 def show_item_page(request, item):
@@ -279,13 +295,16 @@ def get_sub_cats(category):
                   [get_sub_cats(l) for l in result],
                   result)
 
-def get_currcat_items(category):
+def get_currcat_items(category, producer=None):
     """Функция возвращает элементы текущей категории."""
-    return models.Item.objects.filter(category=category)
+    i =  models.Item.objects.filter(category=category)
+    if producer:
+        i = i.filter(producer=producer)
+    return i
 
 def get_currcat_procs(category):
     """Функция возвращает производителей текущей категории."""
-    return [l.producer for l in get_currcat_items(category)]
+    return set([l.producer for l in get_currcat_items(category)])
     
 def get_sub_cats_items(category):
     """Функция возвращает элементы всех дочерних категорий,
