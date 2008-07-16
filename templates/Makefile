@@ -6,7 +6,12 @@ CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/templates
 DJZIP=djangobook.html.zip
 FILES=$(wildcard *.html) $(DJZIP)
 
-all: $(DJZIP)
+all: 
+
+zip: $(DJZIP)
+
+sendzip: $(DJZIP)
+	scp $(DJZIP) caml.ru:django/cargo/templates/
 
 $(DJZIP): $(HTMLS_SRC)/*.html
 	set -x;
