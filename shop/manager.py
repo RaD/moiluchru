@@ -9,10 +9,16 @@ from django import newforms as forms
 from django.contrib import auth
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.admin import models as admmodels
+from cargo import settings
 from cargo.shop import models
 
 def is_stuff(user):
     return user.is_authenticated()
+
+def ctx_processor(request):
+    """ Контекстный процессор. """
+    return {'site_name': settings.SITE_NAME,
+            'user': request.user}
 
 def login(request):
     """
@@ -52,7 +58,8 @@ def login(request):
         else:
             form = LoginForm(auto_id='field_%s')
             return render_to_response('manager-login.html',
-                                      {'user': request.user, 'form': form, 'panel_hide': 'yes'})
+                                      {'form': form, 'panel_hide': 'yes'},
+                                      context_instance=RequestContext(request, processors=[ctx_processor]))
     else:
         request.session.set_test_cookie()
         return HttpResponseRedirect("/shop/manager/")
@@ -82,7 +89,8 @@ def orders(request, act):
         orders = models.Order.objects.filter(status=4).order_by('-id')
     elif act == 'impossible': 
         orders = models.Order.objects.filter(status=5).order_by('-id')
-    return render_to_response('manager-orders.html', {'orders': orders, 'user': request.user})
+    return render_to_response('manager-orders.html', {'orders': orders},
+                              context_instance=RequestContext(request, processors=[ctx_processor]))
 
 @user_passes_test(is_stuff, login_url="/shop/manager/")
 def order_info(request, order_id):
@@ -150,5 +158,5 @@ def order_info(request, order_id):
         # история
         history = models.OrderStatusChange.objects.filter(order=order_id).order_by('-reg_time')
         return render_to_response('manager-orderinfo.html',
-                                  {'form': form, 'order': o, 'phone': p, 'items': items,
-                                   'history': history, 'user': request.user})
+                                  {'form': form, 'order': o, 'phone': p, 'items': items, 'history': history},
+                                  context_instance=RequestContext(request, processors=[ctx_processor]))

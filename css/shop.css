@@ -47,15 +47,16 @@ FORM TABLE { margin: 0.5em; }
 .cart TABLE TD { white-space: nowrap; }
 .cart .header { border-top: 1px solid gray; border-bottom: 1px solid gray; }
 
+.mono { font-family: monospace; }
 .money { font-family: monospace; text-align: right; }
 .cart .total { border-top: 1px solid gray; border-bottom: 1px solid gray; background-color: #E0E0E0; }
 
-#customer TH { text-align: left; font-weight: normal; }
+#customer TH { text-align: left; font-weight: normal; width: 30%; }
 
 /* Информационный виджет */
 .widget { position: absolute; top: 100px; left: 100px; z-index: 10; 
    border: 1px solid gray; -moz-border-radius: 4px; 
-   font-size: 12px; background-color: white; }
+   font-size: 12px; background-color: white; width: 40%; }
 .widget .title { background-color: #C2C2C2; padding: 2px 2em;
    color: black; font-size: 14px; font-weight: bold; }
 .widget .body { padding: 4px; }

@@ -68,8 +68,7 @@ function show_form(item_id, item_title) {
   var form = _dom('form',
 		  [ _dom('div', _txt('Добавить в корзину'), [['class', 'title']]),
 		    _table(null, 
-			   [ 
-			     _tr(null,
+			   [ _tr(null,
 				 [ _td(_txt('Товар'), [['class', 'middle']]),
 				   _td(_dom('span', _txt(item_title)), [['class', 'middle']]) ],
 				 []),
@@ -81,8 +80,8 @@ function show_form(item_id, item_title) {
 					     ['value', '1'], // добавить валидатор
 					     ['id', 'item_quantity'],
 					     ['maxlength', '2']])) ],
-				 []) 
-			   ], [['class', 'body']]),
+				 []) ], 
+			   [['class', 'body']]),
 		    _dom('div',
 			 [ _dom('button', _txt('Отправить'), 
 				[['class', 'button'], ['onclick', apply_func]]),
