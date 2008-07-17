@@ -13,7 +13,7 @@
     <script type="text/javascript" src="http://cargo/js/shop.js"></script>
     <title>{{ site_name }}</title>
   </head>
-  <body onload="{{ js_onload }}">
+  <body onload="{{ js_onload }}">{# необязательная инициализация JS #}
 
     <table border="0" cellpadding="0" cellspacing="0">
       <tr class="header">
@@ -25,7 +25,9 @@
 	  <span id="cart_price">{{ cart_price|floatformat:2 }}</span> руб
 	  (Кол-во: <span id="cart_count">{{ cart_count }}</span>)
 	  {% if not cart_show %}
+	  {% ifnotequal cart_count 0 %}
 	  <button onclick="clean_cart(); return false;" style="cursor: pointer;">Очистить</button>
+	  {% endifnotequal %}
 	  {% endif %}
 	</td>
       </tr>

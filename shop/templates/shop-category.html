@@ -32,6 +32,8 @@
     </div>
     {% endfor %}
   </div>
+
+  {% if producers %}
   <div class="sectioncontent">
     Производители:
     <div class="subcategories">
@@ -43,6 +45,9 @@
       {% endfor %}
     </div>
   </div>
+  {% endif %}
+  
+  {% if items %}
   <div class="sectioncontent">
     Товары:
     <div class="subcategories">
@@ -54,5 +59,6 @@
       {% endfor %}
     </div>
   </div>
+  {% endif %}
 </div>
 {% endblock %}
