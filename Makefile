@@ -17,6 +17,11 @@ dump:
 	grep PASS settings.py
 	mysqldump -u cargo -p cargo > cargo.mysql.dump
 
+translate:
+	for i in $(LANGS); do \
+		django-admin.py makemessages -l $$i; \
+	done
+
 %.mo: %.po
 	django-admin.py compilemessages
 

@@ -213,6 +213,22 @@ class Phone(models.Model):
     type = models.ForeignKey(PhoneType)
     owner = models.ForeignKey(Buyer)
 
+class Howtos(models.Model):
+    key = models.CharField(max_length=32)
+    title = models.CharField(max_length=32)
+    text = models.TextField()
+
+    class Meta:
+        verbose_name = _('Text')
+        verbose_name_plural = _('Texts')
+
+    class Admin:
+        list_display = ('key', 'title')
+        ordering = ('key',)
+
+    def __unicode__(self):
+        return self.key
+
 class Profile(models.Model):
     # обязательная часть профайла
     user = models.ForeignKey(User, unique=True)
