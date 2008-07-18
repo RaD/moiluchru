@@ -6,6 +6,7 @@ from cargo.shop.models import Category
 
 urlpatterns = patterns('',
     (r'^$', 'cargo.shop.views.show_main_page'),
+    (r'^howto/(?P<howto>\d+)/', 'cargo.shop.views.show_howto_page'),
     (r'^category/(?P<category>\d+)/', 'cargo.shop.views.show_category_page'),
     (r'^producer/(?P<producer>\d+)/(?P<category>\d+)/', 'cargo.shop.views.show_producer_page'),
     (r'^item/(?P<item>\d+)/', 'cargo.shop.views.show_item_page'),

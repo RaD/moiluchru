@@ -229,6 +229,10 @@ class Howtos(models.Model):
     def __unicode__(self):
         return self.key
 
+    def get_absolute_url(self):
+        """ This returns the absolute URL for a record. """
+        return '/shop/howto/%i/' % self.id
+
 class Profile(models.Model):
     # обязательная часть профайла
     user = models.ForeignKey(User, unique=True)

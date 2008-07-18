@@ -22,10 +22,14 @@
   <tr>
     <td class="related">
       <div class="title">Помощь</div>
-      <div class="category">
-	Как выбрать товары
-	<div class="subcategories">Интерфейс, Корзина, Сессия, ...</div>
-      </div>
+
+      {% for el in howtos %}
+      <span class="subcategory">
+	{# устанавливаем запятую после каждого элемента, кроме последнего #}
+	<a href="{{ el.get_absolute_url }}">{{ el.title }}</a>{% if not forloop.last %}, {% endif %}
+      </span>
+      {% endfor %}
+
     </td>
   </tr>
 </table>
