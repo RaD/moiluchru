@@ -25,9 +25,9 @@
 	  <span id="cart_price">{{ cart_price|floatformat:2 }}</span> руб
 	  (Кол-во: <span id="cart_count">{{ cart_count }}</span>)
 	  {% if not cart_show %}
-	  {% ifnotequal cart_count 0 %}
-	  <button onclick="clean_cart(); return false;" style="cursor: pointer;">Очистить</button>
-	  {% endifnotequal %}
+	  <span id="clean_button" class="{% ifequal cart_count 0 %}hide{% else %}show{% endifequal %}">
+	    <button onclick="clean_cart(); return false;" style="cursor: pointer;">Очистить</button>
+	  </span>
 	  {% endif %}
 	</td>
       </tr>

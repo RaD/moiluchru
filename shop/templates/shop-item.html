@@ -22,7 +22,7 @@
 	<u>Добавить в корзину</u>
       </div>
       <div>Цена: <span class="price">{{ item.price|floatformat:2 }}</span> рублей.</div>
-      <div>В наличии: <span id="item_remains">{{ item_remains }}</span></div>
+      <div>В наличии: <span id="item_remains" item_id="{{ item.id }}">{{ item_remains }}</span></div>
     </div>
     
     <br/>

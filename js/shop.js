@@ -19,7 +19,6 @@ function show_form(item_id, item_title) {
 			 if (code == '200') {
 			   update_cart(get_xml_item(xml, 'cart_count'),
 				       get_xml_item(xml, 'cart_price'));
-			   $('item_remains').innerHTML = get_xml_item(xml, 'remains');
 			   result = 'Успешно';
 			 } else {
 			   result = 'Неудачно: ['+code+'] '+get_xml_item(xml, 'desc');
@@ -104,6 +103,11 @@ function show_form(item_id, item_title) {
 function update_cart(count, price) {
   $('cart_count').innerHTML = count;
   $('cart_price').innerHTML = price;
+  $('clean_button').className = (count == 0) ? 'hide' : 'show';
+  if ($('item_remains')) {
+    // обновляем информацию о товаре, если находимся на соответствующей странице
+    show_item_count_info(_attr($('item_remains'), 'item_id'));
+  }
 }
 
 function clean_cart(url) {
@@ -156,5 +160,6 @@ function show_item_count_info(item_id) {
 		       onFailure: ajax_failure });
   }
 
+  callback(); // для мгновенного обновления
   var pe = new PeriodicalExecuter(callback, 60);
 }

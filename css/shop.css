@@ -12,6 +12,8 @@ FORM TABLE { margin: 0.5em; }
 .center { text-align: center; }
 .right { text-align: right; }
 .middle { vertical-align: middle; }
+.show { display: block; }
+.hide { display: none; }
 
 .title { font-size: 18px; color: black; font-weight: bold; padding: 4px 0px 0.5em 0px;}
 
