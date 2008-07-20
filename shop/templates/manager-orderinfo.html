@@ -7,15 +7,17 @@
   <div class="area">
     <table width="100%" border="0" cellpadding="0" cellspacing="0">
       <tr>
-	<td>
+	<td valign="top">
 	  <div class="title">Информация о клиенте</div>
 	  <div class="content">
 	    <div class="client">{{ order.buyer.lastname }} {{ order.buyer.firstname }} {{ order.buyer.secondname }}</div>
 	    <div>Адрес: {{ order.buyer.city }}, {{ order.buyer.address }}</div>
 	    <div>Контактный телефон: {{ phone.number }}, {{ phone.type }}</div>
 	  </div>
+	  <div class="title">Комментарий к заказу</div>
+	  <div class="content">{{ order.comment }}</div>
 	</td>
-	<td width="40%">
+	<td valign="top" width="40%">
 	  <form id="order" method="post" action="">
 	    <table width="100%">
 	      {{ form }}

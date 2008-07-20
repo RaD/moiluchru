@@ -14,7 +14,7 @@ def cart_ctx_proc(request):
     Контекстный процессор для заполнения данных о корзине.
     """
     return {'site_name': settings.SITE_NAME,
-            'howtos': models.Howtos.objects.all(),
+            'howtos': models.Howto.objects.all(),
             'cart_count': request.session.get('cart_count', 0),
             'cart_price': request.session.get('cart_price', 0.00)}
 
@@ -48,11 +48,12 @@ def show_main_page(request):
     
 def show_howto_page(request, howto):
     """
-    Функция для отображения информации.
+    Функция для отображения вспомогательной информации.
     """
     does_cart_exist(request)
-    h = models.Howtos.objects.get(id=howto)
-    return render_to_response('shop-howto.html', {'howto': h, 'back_to': request.META['HTTP_REFERER']},
+    last_page = request.META.get('HTTP_REFERER', '#')
+    h = models.Howto.objects.get(id=howto)
+    return render_to_response('shop-howto.html', {'howto': h, 'back_to': last_page},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
 def show_category_page(request, category):
@@ -246,6 +247,7 @@ def show_offer(request):
                 order, created = models.Order.objects.get_or_create(buyer = buyer,
                                                                     count = request.session.get('cart_count', 0),
                                                                     totalprice = request.session.get('cart_price', 0.00),
+                                                                    comment = request.POST['comment'],
                                                                     status = status)
                 cart = request.session.get('cart_items', {})
                 for i in cart:

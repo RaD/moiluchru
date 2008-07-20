@@ -24,10 +24,9 @@
       <div class="title">Помощь</div>
 
       {% for el in howtos %}
-      <span class="subcategory">
-	{# устанавливаем запятую после каждого элемента, кроме последнего #}
-	<a href="{{ el.get_absolute_url }}">{{ el.title }}</a>{% if not forloop.last %}, {% endif %}
-      </span>
+      <div>
+	<div class="howto"><a href="{{ el.get_absolute_url }}">{{ el.title }}</a></div>
+      </div>
       {% endfor %}
 
     </td>

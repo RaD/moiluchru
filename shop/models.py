@@ -161,6 +161,7 @@ class Order(models.Model):
     buyer = models.ForeignKey(Buyer)
     count = models.PositiveIntegerField()
     totalprice = models.FloatField()
+    comment = models.TextField(blank=True)
     reg_date = models.DateTimeField(auto_now_add=True)
     status = models.ForeignKey(OrderStatus)
     courier = models.ForeignKey(User, null=True)
@@ -213,7 +214,7 @@ class Phone(models.Model):
     type = models.ForeignKey(PhoneType)
     owner = models.ForeignKey(Buyer)
 
-class Howtos(models.Model):
+class Howto(models.Model):
     key = models.CharField(max_length=32)
     title = models.CharField(max_length=32)
     text = models.TextField()
