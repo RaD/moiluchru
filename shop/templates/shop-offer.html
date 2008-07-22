@@ -2,19 +2,21 @@
 
 {% block content %}
 <div>
-    <div class="title">
-      Информация о покупателе
+  <div class="title">
+    Информация о покупателе
+  </div>
+  
+  <form id="customer" method="post" action="">
+    <table class="container" celpadding="0" cellspacing="0">
+      {{ form }}
+    </table>
+    
+    <div class="right">
+      <input type="submit" id="order_submit" value="Подтвердить заказ"/>
+      <input type="reset" id="order_cancel"
+	     onclick="clean_cart('/shop/'); $('order_submit').disabled=$('order_cancel').disabled=true;" 
+	     value="Отменить заказ"/>
     </div>
-
-    <form id="customer" method="post" action="">
-      <table width="100%">
-	{{ form }}
-      </table>
-
-      <div class="right">
-	<input type="submit" value="Подтвердить заказ"/>
-	<input type="reset" onclick="clean_cart('/shop/');" value="Отменить заказ"/>
-      </div>
-    </form>
+  </form>
 </div>
 {% endblock %}

@@ -30,7 +30,8 @@
     {% if cart %}
     <div class="right">
       <button id="offer_apply" onclick="document.location='/shop/offer/';">Оформить заказ</button>
-      <button id="offer_cancel" onclick="clean_cart('/shop/'); $('offer_apply').disabled=$('offer_cancel').disabled=true;">Отменить заказ</button>
+      <button id="offer_cancel" 
+	      onclick="clean_cart('/shop/'); $('offer_apply').disabled=$('offer_cancel').disabled=true;">Отменить заказ</button>
     </div>
     {% endif %}
   </div>

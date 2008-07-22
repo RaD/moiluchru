@@ -1,11 +1,10 @@
 BODY { font: 14px arial; color: black; background-color: #E0E0E0; }
-TABLE { width: 100%; border-collapse: collapse; }
-TD { /* border: 1px dashed red; */ vertical-align: top; }
-BUTTON { color: black; background: #A0A0A0;
-   margin: 1px; padding: 1px 2px; border: 1px solid gray;
-   -moz-border-radius: 4px; cursor: default; }
-INPUT,TEXTAREA,SELECT { border: 1px solid gray; -moz-border-radius: 4px; padding: 2px 4px; }
+BUTTON { border: 1px solid gray; -moz-border-radius: 4px; padding: 2px 4px; cursor: default; }
+INPUT,TEXTAREA,SELECT { border: 1px solid gray; -moz-border-radius: 4px; padding: 2px 4px; margin: 2px 0px;}
 FORM TABLE { margin: 0.5em; }
+TABLE { width: 100%; border-collapse: collapse; }
+TD { vertical-align: top; /*border: 1px dashed red;*/ }
+#customer TH { text-align: left; font-weight: normal; width: 30%; }
 
 .pointer { cursor: pointer; }
 .left { text-align: left; }
@@ -56,8 +55,6 @@ FORM TABLE { margin: 0.5em; }
 .money { font-family: monospace; text-align: right; }
 .cart .total { border-top: 1px solid gray; border-bottom: 1px solid gray; background-color: #E0E0E0; }
 
-#customer TH { text-align: left; font-weight: normal; width: 30%; }
-
 /* Информационный виджет */
 .widget { position: absolute; top: 100px; left: 100px; z-index: 10; 
    border: 1px solid gray; -moz-border-radius: 4px; 
@@ -73,6 +70,10 @@ FORM TABLE { margin: 0.5em; }
    opacity: 1; filter: alpha(opacity=1);
 }
 
-.wideitem { width: 95%; }
+.wideitem { width: 100%; }
 .longitem { width: 100%; white-space: nowrap; overflow: hidden; text-overflow : ellipsis; }
-* html .longitem { width: 100%; white-space: nowrap; overflow: hidden; text-overflow : ellipsis; }
+
+/* IE6 */
+* html .wideitem { width: 96%; }
+* html .longitem { width: 96%; white-space: nowrap; overflow: hidden; text-overflow : ellipsis; }
+* html INPUT,TEXTAREA,SELECT { border: 1px solid gray; -moz-border-radius: 4px; padding: 2px 4px; margin: 2px 0px;}
