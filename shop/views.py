@@ -4,10 +4,9 @@ from django.shortcuts import render_to_response
 from django.utils.translation import ugettext, gettext_lazy as _
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
-from django.core import validators
 from django import newforms as forms
 from cargo import settings
-from cargo.shop import models
+from cargo.shop import models, common
 
 def cart_ctx_proc(request):
     """
@@ -18,20 +17,6 @@ def cart_ctx_proc(request):
             'cart_count': request.session.get('cart_count', 0),
             'cart_price': request.session.get('cart_price', 0.00)}
 
-def does_cart_exist(request):
-    if request.session.test_cookie_worked():
-        if not 'cart_items' in request.session:
-            init_cart(request)
-    else:
-        raise validators.ValidationError("Your Web browser doesn't appear " +
-                                         "to have cookies enabled. " +
-                                         "Cookies are required for logging in.")
-
-def init_cart(request):
-    request.session['cart_items'] = {}
-    request.session['cart_count'] = 0
-    request.session['cart_price'] = 0.00
-
 def show_main_page(request):
     """
     Функция для отображения главной страницы сайта.
@@ -39,7 +24,7 @@ def show_main_page(request):
     """
     if request.session.test_cookie_worked():
         #request.session.delete_test_cookie()
-        does_cart_exist(request)
+        common.does_cart_exist(request)
     else:
         request.session.set_test_cookie()
     return render_to_response('shop-main.html',
@@ -50,7 +35,7 @@ def show_howto_page(request, howto):
     """
     Функция для отображения вспомогательной информации.
     """
-    does_cart_exist(request)
+    common.does_cart_exist(request)
     last_page = request.META.get('HTTP_REFERER', '#')
     h = models.Howto.objects.get(id=howto)
     return render_to_response('shop-howto.html', {'howto': h, 'back_to': last_page},
@@ -60,120 +45,41 @@ def show_category_page(request, category):
     """
     Функция для отображения подчинённых категорий.
     """
-    does_cart_exist(request)
+    common.does_cart_exist(request)
     c = models.Category.objects.get(id=category)
     return render_to_response('shop-category.html',
-                              {'parent_cats': get_parent_cats(c),
+                              {'parent_cats': common.get_parent_cats(c),
                                'currentcat': c,
                                'categories': c.category_set.all(),
-                               'producers': get_currcat_procs(c),
-                               'items': get_currcat_items(category)},
+                               'producers': common.get_currcat_procs(c),
+                               'items': common.get_currcat_items(category)},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
 def show_producer_page(request, producer, category):
     """
     Функция для отображения подчинённых категорий для данного производителя.
     """
-    does_cart_exist(request)
+    common.does_cart_exist(request)
     c = models.Category.objects.get(id=category)
     p = models.Producer.objects.get(id=producer)
     return render_to_response('shop-category.html',
-                              {'parent_cats': get_parent_cats(c),
+                              {'parent_cats': common.get_parent_cats(c),
                                'currentcat': c,
                                'categories': c.category_set.all(),
                                'producers': [p],
-                               'items': get_currcat_items(c, p)},
+                               'items': common.get_currcat_items(c, p)},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
 def show_item_page(request, item):
-    does_cart_exist(request)
+    common.does_cart_exist(request)
     curr_item = models.Item.objects.get(id=item)
     return render_to_response('shop-item.html',
                               {'item': curr_item,
                                'item_remains': curr_item.count - curr_item.reserved,
                                'js_onload': 'show_item_count_info(%s);' % item,
-                               'parent_cats': get_parent_cats(curr_item.category)},
+                               'parent_cats': common.get_parent_cats(curr_item.category)},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
     
-def show_count(request):
-    """
-    Функция получения количества товара на складе
-    """
-    if (request.is_ajax()):
-        id = request.GET.get('item_id', 0)
-        if id > 0:
-            item = models.Item.objects.get(id=id)
-            return HttpResponse('<result><code>200</code><desc>success</desc>' +
-                                '<remains>%i</remains></result>' % (int(item.count) - int(item.reserved)),
-                                mimetype="text/xml")
-        else:
-            return HttpResponse('<result><code>300</code><desc>bad id</desc></result>', mimetype="text/xml")
-    else:
-        return HttpResponse('<result><code>400</code><desc>it must be ajax call</desc></result>', mimetype="text/xml")
-
-def add_to_cart(request):
-    """
-    Функция добавления товара в корзину.
-    """
-    if (request.is_ajax()):
-        id = request.POST.get('item_id', 0)
-        cnt = int(request.POST.get('item_count', 0))
-        # проверить количество
-        if id == 0 or cnt == 0:
-            return HttpResponse('<result><code>302</code><desc>wrong parameters</desc></result>',
-                                mimetype="text/xml")
-        # инициализация корзины
-        if not 'cart_items' in request.session:
-            does_cart_exist(request)
-        item = models.Item.objects.get(id=id)
-        if (int(item.count) - int(item.reserved)) < cnt:
-            return HttpResponse('<result><code>301</code><desc>not enough items</desc>' +
-                                '<cart_count>%s</cart_count><cart_price>%s</cart_price></result>'
-                                % (request.session['cart_count'], request.session['cart_price']),
-                                mimetype="text/xml")
-        else:
-            # зарезервировать товар
-            item.reserved += cnt
-            item.save()
-            # добавить информацию о товаре в сессию
-            price = item.price
-            items = request.session.get('cart_items', {})
-            if not id in items:
-                items[id] = {}
-            items[id]['count'] = int(items[id].get('count', 0)) + cnt
-            items[id]['price'] = price
-            # пересчитываем корзину
-            request.session['cart_count'] = 0
-            request.session['cart_price'] = 0.00
-            for i in items:
-                request.session['cart_count'] += int(items[i]['count'])
-                request.session['cart_price'] += int(items[i]['count']) * float(models.Item.objects.get(id=i).price)
-            # поместить в сессию
-            request.session['cart_items'] = items
-            return HttpResponse('<result><code>200</code><desc>success</desc>' +
-                                '<cart_count>%s</cart_count><cart_price>%s</cart_price><remains>%s</remains></result>'
-                                % (request.session['cart_count'], request.session['cart_price'], int(item.count) - int(item.reserved)),
-                                mimetype="text/xml")
-    else:
-        return HttpResponse('<result><code>400</code><desc>it must be ajax call</desc></result>', mimetype="text/xml")
-
-def clean_cart(request):
-    """
-    Функция очистки корзины
-    """
-    if (request.is_ajax()):
-        items = request.session.get('cart_items', {})
-        for i in items:
-            dbitem = models.Item.objects.get(id=i)
-            count = items[i].get('count', 0)
-            if dbitem.reserved > 0:
-                dbitem.reserved -= count
-                dbitem.save()
-        init_cart(request)
-        return HttpResponse('<result><code>200</code><desc>done</desc></result>', mimetype="text/xml")
-    else:
-        return HttpResponse('<result><code>400</code><desc>it must be ajax call</desc></result>', mimetype="text/xml")
-
 def show_cart(request):
     """
     Отображение содержимого корзины.
@@ -273,53 +179,7 @@ def show_offer(request):
                                   context_instance=RequestContext(request, processors=[cart_ctx_proc]));
 
 def show_ordered(request):
-    init_cart(request)
+    common.init_cart(request)
     return render_to_response('shop-ordered.html',{},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]));
     
-def get_parent_cats(category):
-    """
-    Выборка с помощью метода select_related() получает из БД все
-    связанные категории, но возвращается только указанная, которая
-    и помещается в массив. Далее вся работа идёт с кэшем, БД здесь
-    больше не используется. НО ЧТО-ТО НЕ ЗАХОТЕЛО РАБОТАТЬ :(
-    """
-    #a = [Category.objects.select_related().get(id=category)]
-    a = [category]
-    curcat = category
-    while True:
-        if curcat.parent:
-            a.insert(0, curcat.parent)
-            curcat = curcat.parent
-        else:
-            break
-    return a
-
-# def gg(c):
-#     a = [c]
-#     return a + [gg(c.parent) if c.parent]
-
-def get_sub_cats(category):
-    """Функция возвращает все дочерние категории,
-    даже дочерние дочерних и так далее."""
-    result = list(category.category_set.all())
-    return reduce(lambda a,b: a + b,
-                  [get_sub_cats(l) for l in result],
-                  result)
-
-def get_currcat_items(category, producer=None):
-    """Функция возвращает элементы текущей категории."""
-    i =  models.Item.objects.filter(category=category)
-    if producer:
-        i = i.filter(producer=producer)
-    return i
-
-def get_currcat_procs(category):
-    """Функция возвращает производителей текущей категории."""
-    return set([l.producer for l in get_currcat_items(category)])
-    
-def get_sub_cats_items(category):
-    """Функция возвращает элементы всех дочерних категорий,
-    включая указанную."""
-    cats = set(get_sub_cats(category))
-    return models.Item.objects.filter(category__in=cats)
