@@ -31,13 +31,18 @@ TD { vertical-align: top; /*border: 1px dashed red;*/ }
 
 .search { height: 100%; }
 .content { padding-left: 1em; }
-.sectioncontent { padding: 1em; }
+.sectioncontent { padding: 0.5em 1em; }
 
 .category { font-size: 14px; color: black; margin: 4px 0px;}
 .subcategories { font-size: 10px; color: black; margin: 4px 2em;}
 .cat-widget { font-size: 14px; }
 
-.howto { font-style: italic; }
+.producers { border-top: 1px solid gray; border-bottom: 1px solid gray; }
+
+.itemlist {}
+.itemlist .title { font-size: 14px; color: black; font-weight: bold; margin: 4px 0px; }
+
+.howto { font-size: 12px; font-style: italic; }
 
 .price { font-weight: bold; }
 .image { width: 40%; float: left; }

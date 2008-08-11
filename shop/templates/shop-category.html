@@ -35,8 +35,7 @@
 
   {% if producers %}
   <div class="sectioncontent">
-    Производители:
-    <div class="subcategories">
+    <div class="producers">
       {% for producer in producers %}
       <span class="subcategory">
 	{# устанавливаем запятую после каждого элемента, кроме последнего #}
@@ -49,13 +48,12 @@
   
   {% if items %}
   <div class="sectioncontent">
-    Товары:
-    <div class="subcategories">
+    <div class="itemlist">
       {% for item in items %}
-      <span class="subcategory">
-	{# устанавливаем запятую после каждого элемента, кроме последнего #}
-	<a href="{{ item.get_absolute_url }}">{{ item.title }}</a>{% if not forloop.last %}, {% endif %}
-      </span>
+      <div class="itemshortinfo">
+	<a href="{{ item.get_absolute_url }}"><img src="{{ item.get_image_url }}" border="0" title="{{ item.title }}"/></a>
+	<div class="title">{{ item.title }}</div>
+      </div>
       {% endfor %}
     </div>
   </div>
