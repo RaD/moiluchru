@@ -19,6 +19,7 @@ function show_form(item_id, item_title) {
 			 if (code == '200') {
 			   update_cart(get_xml_item(xml, 'cart_count'),
 				       get_xml_item(xml, 'cart_price'));
+			   splash_cart();
 			   result = 'Успешно';
 			 } else {
 			   result = 'Неудачно: ['+code+'] '+get_xml_item(xml, 'desc');
@@ -117,6 +118,7 @@ function clean_cart(url) {
 		       var response = transport.responseText || "нет ответа";
 		       update_cart("0", "0.00");
 		       splashwidget.init('Очистка: Успешно!', 2000);
+		       splash_cart();
 		       if (url) 
 			 window.setTimeout(function() { document.location = url; }, 3000);
 		     },
@@ -162,4 +164,10 @@ function show_item_count_info(item_id) {
 
   callback(); // для мгновенного обновления
   var pe = new PeriodicalExecuter(callback, 60);
+}
+
+function splash_cart() {
+  var border = $('cart').style.border;
+  $('cart').style.border = '4px solid red';
+  window.setTimeout(function() { $('cart').style.border = border; }, 300);
 }
