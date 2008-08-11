@@ -20,8 +20,10 @@
 	<td class="caption"><a href="/shop/">{{ site_name }}</a></td>
 	<td>&nbsp;</td>
 	<td class="cartinfo">
-	  <img src="http://cargo/pics/cart.png" title="Корзина" width="32" height="32"
-	  {% if not cart_show %}class="pointer" onclick="document.location='/shop/cart/';"{% endif %}>
+	  <span id="cart">
+	      <img src="http://cargo/pics/cart.png" title="Корзина" width="32" height="32"
+		   {% if not cart_show %}class="pointer" onclick="document.location='/shop/cart/';"{% endif %}/>
+	  </span>
 	  <span id="cart_price">{{ cart_price|floatformat:2 }}</span> руб
 	  (Кол-во: <span id="cart_count">{{ cart_count }}</span>)
 	  {% if not cart_show %}
