@@ -7,13 +7,15 @@ register = Library()
 THUMBNAILS = 'thumbnails'
 SCALE_WIDTH = 'w'
 SCALE_HEIGHT = 'h'
+SCALE_BOTH = 'x'
 
 def scale(max_x, pair):
     x, y = pair
     new_y = (float(max_x) / x) * y
     return (int(max_x), int(new_y))
     
-# Thumbnail filter based on code from http://batiste.dosimple.ch/blog/2007-05-13-1/
+# Thumbnail filter based on code from
+# http://batiste.dosimple.ch/blog/2007-05-13-1/
 def thumbnail(original_image_path, arg):  
     if not original_image_path:  
         return ''  
@@ -25,9 +27,11 @@ def thumbnail(original_image_path, arg):
         upload_path = ''
 
     if (size.lower().endswith('h')):
-        mode = 'h'
+        mode = SCALE_HEIGHT
+    elif (size.lower().endswith('w')):
+        mode = SCALE_WIDTH
     else:
-        mode = 'w'
+        mode = SCALE_BOTH
         
     # defining the size  
     size = size[:-1]
@@ -50,7 +54,13 @@ def thumbnail(original_image_path, arg):
         or os.path.getmtime(original_image_path) > os.path.getmtime(miniature_filename):
         image = Image.open(original_image_path)  
         image_x, image_y = image.size  
-        
+
+        if mode == SCALE_BOTH:
+            if image_x > image_y:
+                mode = SCALE_WIDTH
+            else:
+                mode = SCALE_HEIGHT
+            
         if mode == SCALE_HEIGHT:
             image_y, image_x = scale(max_size, (image_y, image_x))
         else:

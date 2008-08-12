@@ -20,3 +20,6 @@ you'd use something like this:
 
 Note the number has changed from 300 to 140, and the trailing letter
 from 'w' to 'h'.
+
+If you need to limit the maximum size if an image, no matters the height or the width,
+just use 'x' suffix.
