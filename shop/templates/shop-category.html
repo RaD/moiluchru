@@ -1,5 +1,7 @@
 {% extends "shop-base.html" %}
 
+{% load thumbnail_filter %}
+
 {% block content %}
 <div class="content">
   <div class="title">
@@ -51,8 +53,20 @@
     <div class="itemlist">
       {% for item in items %}
       <div class="itemshortinfo">
-	<a href="{{ item.get_absolute_url }}"><img src="{{ item.get_image_url }}" border="0" title="{{ item.title }}"/></a>
-	<div class="title">{{ item.title }}</div>
+        <table width="100%">
+          <tr>
+	    <td valign="top" width="100">
+	      <a href="{{ item.get_absolute_url }}">
+	        <img src="{{ item.get_image_filename|thumbnail:"100w,itempics" }}" 
+	             border="0" title="{{ item.title }}" align="left"/>
+	      </a>
+	    </td>
+	    <td valign="top">
+	      <div class="title">{{ item.title }}</div>
+	      <div><a href="{{ item.get_absolute_url }}">Далее...</a></div>
+	    </td>
+          </tr>
+	</table>
       </div>
       {% endfor %}
     </div>

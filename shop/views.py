@@ -71,6 +71,9 @@ def show_producer_page(request, producer, category):
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
 def show_item_page(request, item):
+    """
+    Отображение информации о товаре.
+    """
     common.does_cart_exist(request)
     curr_item = models.Item.objects.get(id=item)
     return render_to_response('shop-item.html',
@@ -107,6 +110,7 @@ def show_cart(request):
 def show_offer(request):
     """
     Отображение формы для ввода данных о покупателе.
+    Обработка пользовательского ввода.
     """
     if not 'cart_items' in request.session or request.session['cart_count'] == 0:
         return HttpResponseRedirect('/shop/')
@@ -138,23 +142,27 @@ def show_offer(request):
         if form.is_valid():
             # обработать форму
             try:
-                phone_type = models.PhoneType.objects.get(id=request.POST['phonetype'])
-                city = models.City.objects.get(id=request.POST['city'])
-                status = models.OrderStatus.objects.get(id=1)
-                buyer, created = models.Buyer.objects.get_or_create(lastname = request.POST['fname'],
-                                                                    firstname = request.POST['iname'],
-                                                                    secondname = request.POST['oname'],
-                                                                    address = request.POST['address'],
-                                                                    email =  request.POST['email'],
-                                                                    city = city)
-                phone, created = models.Phone.objects.get_or_create(number = request.POST['phone'],
-                                                                    type = phone_type,
-                                                                    owner = buyer)
-                order, created = models.Order.objects.get_or_create(buyer = buyer,
-                                                                    count = request.session.get('cart_count', 0),
-                                                                    totalprice = request.session.get('cart_price', 0.00),
-                                                                    comment = request.POST['comment'],
-                                                                    status = status)
+                clean = form.cleaned_data
+                phone_type = clean['phonetype']
+                city = clean['city']
+                buyer, created = models.Buyer.objects.get_or_create(
+                    lastname = clean['fname'],
+                    firstname = clean['iname'],
+                    secondname = clean['oname'],
+                    address = clean['address'],
+                    email =  clean['email'],
+                    city = city
+                    )
+                phone, created = models.Phone.objects.get_or_create(
+                    number = clean['phone'], type = phone_type, owner = buyer
+                    )
+                order, created = models.Order.objects.get_or_create(
+                    buyer = buyer,
+                    count = request.session.get('cart_count', 0),
+                    totalprice = request.session.get('cart_price', 0.00),
+                    comment = clean['comment'],
+                    status = models.OrderStatus.objects.get(id=1)
+                    )
                 cart = request.session.get('cart_items', {})
                 for i in cart:
                     item = models.Item.objects.get(id=i)

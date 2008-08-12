@@ -1,0 +1,22 @@
+A Django image thumbnail filter, adapted from code by Batiste Bieler.
+
+This updated version drops support for cropping and just rescales. You
+should use it in your templates like this:
+
+<img src='{{ MEDIA_URL }}{{ image.get_image_filename|thumbnail:"300w,listingimages" }}' 
+	alt="{{ image.title }}" title="{{ image.title }}" />
+
+This will produce a 300-pixel wide thumbnail of image, with the height
+scaled appropriately to keep the same image aspect
+ratio. 'listingimages' is the path under your MEDIA_ROOT that the
+image lives in - it'll be whatever upload_to is set to in your
+ImageField.
+
+If instead you wanted an image scaled to a maximum height of 140px,
+you'd use something like this:
+
+<img src='{{ MEDIA_URL }}{{ image.get_image_filename|thumbnail:"140h,listingimages" }}' 
+	alt="{{ image.title }}" title="{{ image.title }}" />
+
+Note the number has changed from 300 to 140, and the trailing letter
+from 'w' to 'h'.
