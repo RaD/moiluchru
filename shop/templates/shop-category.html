@@ -53,20 +53,17 @@
     <div class="itemlist">
       {% for item in items %}
       <div class="itemshortinfo">
-        <table width="100%">
-          <tr>
-	    <td valign="top" width="100">
-	      <a href="{{ item.get_absolute_url }}">
-	        <img src="{{ item.get_image_filename|thumbnail:"100x,itempics" }}" 
-	             border="0" title="{{ item.title }}" align="left"/>
-	      </a>
-	    </td>
-	    <td valign="top">
-	      <div class="title">{{ item.title }}</div>
-	      <div><a href="{{ item.get_absolute_url }}">Далее...</a></div>
-	    </td>
-          </tr>
-	</table>
+	<div class="thumbnail">
+	  <a href="{{ item.get_absolute_url }}">
+	    <img src="{{ item.get_image_filename|thumbnail:"100x,itempics" }}"
+	         border="0" title="{{ item.title }}" />
+	  </a>
+	</div>
+	<div class="info">
+	  <div class="title">{{ item.title }}</div>
+	  <div class="more"><a href="{{ item.get_absolute_url }}">Далее...</a></div>
+	</div>
+	<div class="clear"></div>
       </div>
       {% endfor %}
     </div>

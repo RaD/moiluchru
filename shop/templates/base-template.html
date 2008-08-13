@@ -19,18 +19,31 @@
       <tr class="header">
 	<td class="caption"><a href="/shop/">{{ site_name }}</a></td>
 	<td>&nbsp;</td>
-	<td class="cartinfo">
-	  <span id="cart">
+	<td class="informer">
+	  <div style="width:160px; border:1px dashed red; text-align:left;">
+	    <div id="cart" style="width:32px;float: left; padding:8px 2px;">
 	      <img src="http://cargo/pics/cart.png" title="Корзина" width="32" height="32"
-		   {% if not cart_show %}class="pointer" onclick="document.location='/shop/cart/';"{% endif %}/>
-	  </span>
-	  <span id="cart_price">{{ cart_price|floatformat:2 }}</span> руб
-	  (Кол-во: <span id="cart_count">{{ cart_count }}</span>)
-	  {% if not cart_show %}
-	  <span id="clean_button" class="{% ifequal cart_count 0 %}hide{% else %}show{% endifequal %}">
-	    <button onclick="clean_cart(); return false;" style="cursor: pointer;">Очистить</button>
-	  </span>
-	  {% endif %}
+	      {% if not cart_show %}class="pointer" onclick="document.location='/shop/cart/';"{% endif %}/>
+	    </div>
+	    <div style="margin-left: 1em;">
+	      <div>
+		{% if not cart_show %}<a href="/shop/cart/">{% endif%}
+		Корзина
+		{% if not cart_show %}</a>{% endif%}
+	      </div>
+	      <div>
+		Цена: <span id="cart_price">{{ cart_price|floatformat:2 }}</span> руб
+	      </div>
+	      <div>
+		Кол-во: <span id="cart_count">{{ cart_count }}</span>
+	      </div>
+	      {% if not cart_show %}
+	      <span id="clean_button" class="{% ifequal cart_count 0 %}hide{% else %}show{% endifequal %}">
+		<button onclick="clean_cart(); return false;" style="cursor: pointer;">Очистить</button>
+	      </span>
+	      {% endif %}
+	    </div>
+	  </div>
 	</td>
       </tr>
     </table>

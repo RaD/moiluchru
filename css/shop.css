@@ -18,7 +18,12 @@ TD { vertical-align: top; /*border: 1px dashed red;*/ }
 
 .header { background-color: #C2C2C2; }
 .caption { font-size: 24px; font-weight: bold; padding: 1em; width: 40%; }
-.cartinfo { font-size: 12px; padding: 1em; min-width: 30%; vertical-align: bottom; text-align: right; }
+.informer { font-size: 12px; padding: 1em; min-width: 30%; vertical-align: bottom; text-align: right; }
+
+.imformer .icon { position: relative; width: 32px; height: 32px; top: 4px; left: 4px; }
+
+.errorlist { border: 1px dashed red; padding: 2px 4px; }
+.error { font-family: monospace; font-size: 10px; }
 
 .container { width: 100%; border: 0px; background-color: white; color: black; }
 .container .main { min-width: 60%; vertical-align: top; }
@@ -35,6 +40,9 @@ TD { vertical-align: top; /*border: 1px dashed red;*/ }
 
 .category { font-size: 14px; color: black; margin: 4px 0px;}
 .subcategories { font-size: 10px; color: black; margin: 4px 2em;}
+.itemlist .thumbnail { width: 100px; height: 100px; float: left; text-align: center; border:1px solid gray; }
+.itemlist .info { margin-left: 1em; }
+.itemlist .more { font-size: 12px; }
 .cat-widget { font-size: 14px; }
 
 .producers { border-top: 1px solid gray; border-bottom: 1px solid gray; }

@@ -5,6 +5,7 @@ from django.utils.translation import ugettext, gettext_lazy as _
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django import newforms as forms
+from django.newforms.util import ErrorList
 from cargo import settings
 from cargo.shop import models, common
 
@@ -114,6 +115,13 @@ def show_offer(request):
     """
     if not 'cart_items' in request.session or request.session['cart_count'] == 0:
         return HttpResponseRedirect('/shop/')
+    # Определяем класс для отображения ошибок в пользовательском вводе
+    class DivErrorList(ErrorList):
+        def __unicode__(self):
+            return self.as_divs()
+        def as_divs(self):
+            if not self: return u''
+            return u'<div class="errorlist">%s</div>' % ''.join([u'<div class="error">%s</div>' % e for e in self])
     # Определяем класс для отображения формы
     class OfferForm(forms.Form):
         fname = forms.CharField(label=ugettext('Last name'), max_length=64,
@@ -179,7 +187,10 @@ def show_offer(request):
             except Exception, e:
                 return HttpResponse('bad form data: %s' % e)
         else:
-            return HttpResponse('bad form')
+            form = OfferForm(request.POST, auto_id='field_%s', error_class=DivErrorList)
+            return render_to_response('shop-offer.html',
+                                      {'form': form, 'cart_show' : 'yes'},
+                                      context_instance=RequestContext(request, processors=[cart_ctx_proc]));
     else:
         form = OfferForm(auto_id='field_%s')
         return render_to_response('shop-offer.html',

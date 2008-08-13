@@ -69,7 +69,7 @@ def thumbnail(original_image_path, arg):
         
         image = image.resize((image_x, image_y), Image.ANTIALIAS)
               
-        image.save(miniature_filename, image.format)  
+        image.save(miniature_filename, image.format)
 
     return miniature_url  
 
