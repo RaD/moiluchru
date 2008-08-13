@@ -176,8 +176,8 @@ def show_offer(request):
                     item.reserved -= cart[i]['count']
                     item.save()
                 return HttpResponseRedirect('/shop/ordered/')
-            except Exception:
-                return HttpResponse('bad form data')
+            except Exception, e:
+                return HttpResponse('bad form data: %s' % e)
         else:
             return HttpResponse('bad form')
     else:
