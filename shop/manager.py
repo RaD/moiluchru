@@ -6,6 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.core import validators
 from django import newforms as forms
+from django.newforms.util import ErrorList
 from django.contrib import auth
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.admin import models as admmodels
@@ -111,6 +112,13 @@ def order_info(request, order_id):
                                 label=ugettext('Courier'),
                                 widget=forms.Select(attrs={'class':'longitem'}))
 
+    # Определяем класс для отображения ошибок в пользовательском вводе
+    class DivErrorList(ErrorList):
+        def __unicode__(self):
+            return self.as_divs()
+        def as_divs(self):
+            if not self: return u''
+            return u'<div class="errorlist">%s</div>' % ''.join([u'<div class="error">%s</div>' % e for e in self])
     # класс объекта
     class CartItem:
         def __init__(self, title, count, price):
@@ -140,9 +148,25 @@ def order_info(request, order_id):
             except Exception, e:
                 return HttpResponse('bad form data: %s' % e)
         else:
+            o = models.Order.objects.get(id=order_id)
+            p = models.Phone.objects.get(owner=o.buyer)
+            d = models.OrderDetail.objects.filter(order=order_id)
+            if o.courier:
+                courier = o.courier.id
+            else:
+                courier = 0
+            form = OrderForm(request.POST, auto_id='field_%s', error_class=DivErrorList)
+            # корзина
+            items = []
+            for i in d:
+                items.append(CartItem(i, i.count, i.price))
+            # история
+            history = models.OrderStatusChange.objects.filter(order=order_id).order_by('-reg_time')
+            return render_to_response('manager-orderinfo.html',
+                                      {'form': form, 'order': o, 'phone': p, 'items': items, 'history': history },
+                                      context_instance=RequestContext(request, processors=[ctx_processor]));
             return HttpResponse('bad form')
     else:
-        items = []
         o = models.Order.objects.get(id=order_id)
         p = models.Phone.objects.get(owner=o.buyer)
         d = models.OrderDetail.objects.filter(order=order_id)
@@ -153,6 +177,7 @@ def order_info(request, order_id):
         form = OrderForm(auto_id='field_%s', initial={'status': o.status.id,
                                                       'courier': courier})
         # корзина
+        items = []
         for i in d:
             items.append(CartItem(i, i.count, i.price))
         # история

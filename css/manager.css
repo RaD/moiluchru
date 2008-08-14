@@ -16,10 +16,10 @@ BODY { padding: 1em; font: 14px arial, helvetica, sans-serif;
 .footer-center {}
 .footer-right { text-align: right; }
 
-.error { width: 40%; border: 2px dotted red; margin: 1em; padding: 1em;
+/*.error { width: 40%; border: 2px dotted red; margin: 1em; padding: 1em;
    font: 14px arial; font-weight: bold; vertical-align: middle; }
 .error .desc { margin: 1em;
-   font: 12px arial; font-weight: normal; vertical-align: middle; }
+   font: 12px arial; font-weight: normal; vertical-align: middle; }*/
 
 #login { width: 40%; }
 FORM TH { text-align: left; font-weight: normal; }
@@ -42,3 +42,7 @@ BUTTON,INPUT,TEXTAREA,SELECT { border: 1px solid gray; -moz-border-radius: 4px; 
 .orderinfo .area .title { font: 16px arial; font-weight: bold; vertical-align: bottom; }
 .orderinfo .area .content { padding: 1em; }
 .orderinfo .client { font-weight: bold; margin: 0.5em 0em; }
+
+.errorlist { border: 1px dashed red; padding: 2px 4px; }
+.error { font-family: monospace; font-size: 10px; }
+
