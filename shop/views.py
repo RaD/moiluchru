@@ -4,6 +4,7 @@ from django.shortcuts import render_to_response
 from django.utils.translation import ugettext, gettext_lazy as _
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
+from django.core.paginator import Paginator
 from django import newforms as forms
 from django.newforms.util import ErrorList
 from cargo import settings
@@ -42,18 +43,21 @@ def show_howto_page(request, howto):
     return render_to_response('shop-howto.html', {'howto': h, 'back_to': last_page},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
-def show_category_page(request, category):
+def show_category_page(request, category, page=1):
     """
     Функция для отображения подчинённых категорий.
     """
     common.does_cart_exist(request)
+    i = common.get_currcat_items(category)
     c = models.Category.objects.get(id=category)
+    p = Paginator(i, settings.SHOP_ITEMS_PER_PAGE)
     return render_to_response('shop-category.html',
                               {'parent_cats': common.get_parent_cats(c),
                                'currentcat': c,
                                'categories': c.category_set.all(),
                                'producers': common.get_currcat_procs(c),
-                               'items': common.get_currcat_items(category)},
+                               'items': p.page(page).object_list,
+                               'page': p.page(page), 'page_range': p.page_range},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
 def show_producer_page(request, producer, category):

@@ -68,6 +68,24 @@
       {% endfor %}
     </div>
   </div>
+
+  {# странички #}
+  <div class="paginator">
+    {% if page.has_previous %}
+    <span title="Предыдущая страница"><a href="{{ currentcat.get_absolute_url }}{{ page.previous_page_number }}/">&lt;&lt;&lt;</a></span>
+    {% endif %}
+    {% for page_number in page_range %}
+      {% ifnotequal page_number page.number %}
+      <span><a href="{{ currentcat.get_absolute_url }}{{ page_number }}/">{{ page_number }}</a></span>{% if not forloop.last %}, {% endif %}
+      {% else %}
+      <span>{{ page_number }}</span>{% if not forloop.last %}, {% endif %}
+      {% endifnotequal %}
+    {% endfor %}
+    {% if page.has_next %}
+    <span title="Следующая страница"><a href="{{ currentcat.get_absolute_url }}{{ page.next_page_number }}/">&gt;&gt;&gt;</a></span>
+    {% endif %}
+  </div>
+
   {% endif %}
 </div>
 {% endblock %}

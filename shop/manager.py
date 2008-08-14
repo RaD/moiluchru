@@ -5,6 +5,7 @@ from django.utils.translation import ugettext, gettext_lazy as _
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.core import validators
+from django.core.paginator import Paginator
 from django import newforms as forms
 from django.newforms.util import ErrorList
 from django.contrib import auth
@@ -74,7 +75,7 @@ def logout(request):
     return HttpResponseRedirect('/shop/')
     
 @user_passes_test(is_stuff, login_url="/shop/manager/")
-def orders(request, act):
+def orders(request, act, page=1):
     """
     Представление для отображения активных заказов.
     """
@@ -90,7 +91,10 @@ def orders(request, act):
         orders = models.Order.objects.filter(status=4).order_by('-id')
     elif act == 'impossible': 
         orders = models.Order.objects.filter(status=5).order_by('-id')
-    return render_to_response('manager-orders.html', {'orders': orders},
+    p = Paginator(orders, settings.MANAGER_ORDERS_PER_PAGE)
+    return render_to_response('manager-orders.html', {'orders': p.page(page).object_list,
+                                                      'page': p.page(page), 'page_range': p.page_range,
+                                                      'url': '/shop/orders/%s/' % act},
                               context_instance=RequestContext(request, processors=[ctx_processor]))
 
 @user_passes_test(is_stuff, login_url="/shop/manager/")

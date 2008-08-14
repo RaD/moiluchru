@@ -84,7 +84,11 @@ TD { vertical-align: top; /*border: 1px dashed red;*/ }
 }
 
 .wideitem { width: 100%; }
-.longitem { width: 100%; white-space: nowrap; overflow: hidden; text-overflow : ellipsis; }
+.longitem { width: 90%; white-space: nowrap; overflow: hidden; text-overflow : ellipsis; }
+
+.paginator { border-top: 1px solid gray; border-bottom: 1px solid gray; 
+   font-size: 10px; padding: 0px 1em; }
+.paginator A { font-family: monospace; }
 
 /* IE6 */
 * html .wideitem { width: 96%; }
