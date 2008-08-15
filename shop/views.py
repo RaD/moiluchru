@@ -56,23 +56,28 @@ def show_category_page(request, category, page=1):
                                'currentcat': c,
                                'categories': c.category_set.all(),
                                'producers': common.get_currcat_procs(c),
+                               'url': c.get_absolute_url(),
                                'items': p.page(page).object_list,
                                'page': p.page(page), 'page_range': p.page_range},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
-def show_producer_page(request, producer, category):
+def show_producer_page(request, producer, category, page=1):
     """
     Функция для отображения подчинённых категорий для данного производителя.
     """
     common.does_cart_exist(request)
     c = models.Category.objects.get(id=category)
     p = models.Producer.objects.get(id=producer)
+    i = common.get_currcat_items(c, p)
+    paginator = Paginator(i, settings.SHOP_ITEMS_PER_PAGE)
     return render_to_response('shop-category.html',
                               {'parent_cats': common.get_parent_cats(c),
                                'currentcat': c,
                                'categories': c.category_set.all(),
-                               'producers': [p],
-                               'items': common.get_currcat_items(c, p)},
+                               'producers': common.get_currcat_procs(c),
+                               'url': '/shop/producer/%s/%s/' % (producer, category),
+                               'items': paginator.page(page).object_list,
+                               'page': paginator.page(page), 'page_range': paginator.page_range},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
 def show_item_page(request, item):

@@ -14,7 +14,8 @@ TD { vertical-align: top; /*border: 1px dashed red;*/ }
 .show { display: block; }
 .hide { display: none; }
 
-.title { font-size: 18px; color: black; font-weight: bold; padding: 4px 0px 0.5em 0px;}
+.title { font-size: 18px; color: black; font-weight: bold; 
+   padding: 4px 0px 0.5em 0px; letter-spacing: -1px; fon-family: serif;}
 
 .header { background-color: #C2C2C2; }
 .caption { font-size: 24px; font-weight: bold; padding: 1em; width: 40%; }
@@ -45,7 +46,11 @@ TD { vertical-align: top; /*border: 1px dashed red;*/ }
 .itemlist .more { font-size: 12px; }
 .cat-widget { font-size: 14px; }
 
-.producers { border-top: 1px solid gray; border-bottom: 1px solid gray; }
+.producers { border-top: 1px solid gray; border-bottom: 1px solid gray; 
+   letter-spacing: -1px; font-family: serif;
+}
+
+.listitem { font-size: 12px; font-style: italic; }
 
 .itemlist {}
 .itemlist .title { font-size: 14px; color: black; font-weight: bold; margin: 4px 0px; }

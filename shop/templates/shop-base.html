@@ -6,7 +6,7 @@
     <td class="main" rowspan="2" width="60%">
       {% block content %}{% endblock %}
     </td>
-    <td rowspan="2" width="24">
+    <td rowspan="2" width="24"/>
     <td class="search">
       <div>
 	<span>Поиск</span>
@@ -17,14 +17,23 @@
   </tr>
   <tr>
     <td class="related">
+      {% if howtos %}
       <div class="title">Помощь</div>
-
       {% for el in howtos %}
-      <div>
-	<div class="howto"><a href="{{ el.get_absolute_url }}">{{ el.title }}</a></div>
+      <div class="howto">
+	<a href="{{ el.get_absolute_url }}">{{ el.title }}</a>
       </div>
       {% endfor %}
-
+      {% endif %}
+      
+      {% if producers %}
+      <div class="title">Производители</div>
+      {% for el in producers %}
+      <div class="listitem">
+	<a href="{{ el.get_absolute_url }}{{ currentcat.id }}/">{{ el.name }}</a>
+      </div>
+      {% endfor %}
+      {% endif %}
     </td>
   </tr>
 </table>
