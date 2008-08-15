@@ -15,7 +15,7 @@ TD { vertical-align: top; /*border: 1px dashed red;*/ }
 .hide { display: none; }
 
 .title { font-size: 18px; color: black; font-weight: bold; 
-   padding: 4px 0px 0.5em 0px; letter-spacing: -1px; fon-family: serif;}
+   padding: 0.5em 0px; letter-spacing: -1px; fon-family: serif;}
 
 .header { background-color: #C2C2C2; }
 .caption { font-size: 24px; font-weight: bold; padding: 1em; width: 40%; }
@@ -41,7 +41,16 @@ TD { vertical-align: top; /*border: 1px dashed red;*/ }
 
 .category { font-size: 14px; color: black; margin: 4px 0px;}
 .subcategories { font-size: 10px; color: black; margin: 4px 2em;}
-.itemlist .thumbnail { width: 100px; height: 100px; float: left; text-align: center; border:1px solid gray; }
+
+.price { font-weight: bold; }
+.image { width: 40%; float: left; text-align: center; }
+.clear { clear: both; }
+.info { margin-left: 1em; }
+.desc { font-size: 12px; padding: 2px 1em; }
+
+.itemlist .thumbnail { width: 100px; height: 100px; float: left; 
+   margin-right: 1em;
+   text-align: center; border: 1px solid gray; }
 .itemlist .info { margin-left: 1em; }
 .itemlist .more { font-size: 12px; }
 .cat-widget { font-size: 14px; }
@@ -56,12 +65,6 @@ TD { vertical-align: top; /*border: 1px dashed red;*/ }
 .itemlist .title { font-size: 14px; color: black; font-weight: bold; margin: 4px 0px; }
 
 .howto { font-size: 12px; font-style: italic; }
-
-.price { font-weight: bold; }
-.image { width: 40%; float: left; }
-.clear { clear: both; }
-.info { margin-left: 1em; }
-.desc { font-size: 12px; padding: 2px 1em; }
 
 .cart { padding: 1em; }
 .cart .title { font-size: 14px; color: black; font-weight: bold; margin: 4px 0px; }

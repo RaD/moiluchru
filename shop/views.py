@@ -73,6 +73,7 @@ def show_producer_page(request, producer, category, page=1):
     return render_to_response('shop-category.html',
                               {'parent_cats': common.get_parent_cats(c),
                                'currentcat': c,
+                               'currentproc': p,
                                'categories': c.category_set.all(),
                                'producers': common.get_currcat_procs(c),
                                'url': '/shop/producer/%s/%s/' % (producer, category),

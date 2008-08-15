@@ -29,8 +29,10 @@
       {% if producers %}
       <div class="title">Производители</div>
       {% for el in producers %}
-      <div class="listitem">
+      <div class="listitem" {% ifequal currentproc el %}style="background-color: orange;"{% endifequal %}>
 	<a href="{{ el.get_absolute_url }}{{ currentcat.id }}/">{{ el.name }}</a>
+	
+	{# <img src="http://cargo/pics/wizard.png" width="16" height="16" title="Текущий производитель" /> #}
       </div>
       {% endfor %}
       {% endif %}
