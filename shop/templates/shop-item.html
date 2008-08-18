@@ -1,5 +1,7 @@
 {% extends "shop-base.html" %}
 
+{% load thumbnail_filter %}
+
 {% block content %}
 <div class="content">
   <div class="item">
@@ -14,7 +16,10 @@
     
     <br/>
 
-    <div class="image"><img src="{{ item.get_image_url }}"/></div>
+    <div class="image">
+      <img src="{{ item.get_image_filename|thumbnail:"200x,itempics" }}"
+           border="0" title="{{ item.title }}" />
+    </div>
 
     <div class="info">
       <div id="add_widget" class="pointer" style="padding: 0.5em 0px;" onclick="show_form({{ item.id }}, '{{ item.title }}'); return false;">
