@@ -4,40 +4,47 @@ function get_xml_item(obj, tag_name) {
   return _elts(obj, tag_name)[0].firstChild.nodeValue;
 }
 
+function check_result(show_splash, code, success_func, failure_func) {
+  if (code == '200') {
+    if (success_func) { success_func(); }
+  } else {
+    if (failure_func) { failure_func(); }
+  }
+  switch (code) {
+  case '200': result = 'Успешно'; break;
+  case '201': result = 'Неудачно: Недостаточно товара на складе...'; break;
+  default: result = 'Неудачно: ['+code+'] '+get_xml_item(xml, 'desc');
+  }
+  if (show_splash) { splashwidget.init(result, 2000); }
+}
+  
 function show_form(item_id, item_title) {
+  var widget = $('widget_addtocart');
+  if (! widget) return;
 
+  var ajax_response = function(transport) {
+    var xml = transport.responseXML.firstChild;
+    check_result(true,
+		 get_xml_item(xml, 'code'),
+		 function() {
+		   update_cart(get_xml_item(xml, 'cart_count'),
+			       get_xml_item(xml, 'cart_price')); },
+		 null);
+  }
+  
   var apply_func = function() {
     new Ajax.Request('/shop/add/',
 		     { method: 'post',
 		       parameters: { item_id: item_id,
-				     item_count: form.item_quantity.value },
-		       onSuccess: function(transport) {
-			 var response = transport.responseText || "нет ответа";
-			 var xml = transport.responseXML.firstChild;
-			 var result = '';
-			 var code = get_xml_item(xml, 'code');
-			 if (code == '200') {
-			   update_cart(get_xml_item(xml, 'cart_count'),
-				       get_xml_item(xml, 'cart_price'));
-			   result = 'Успешно';
-			 } else {
-			   result = 'Неудачно: ['+code+'] '+get_xml_item(xml, 'desc');
-			 }
-			 splashwidget.init(result, 2000);
-		       },
-		       onFailure: function(transport) {
-			 window.status = 'Что-то сломалось :(';
-			 var response = transport.responseText || "нет ответа";
-			 splashwidget.init(get_xml_item(xml, 'desc'), 20000);
-		       }
-		     });
-    // уничтожаем объект
-    form.parentNode.removeChild(form);
+				     item_count: $('widget_item_quantity').value },
+		       onSuccess: ajax_response, onFailure: ajax_response });
+    // скрываем
+    widget.style.display = 'none';
   }
 
   var cancel_func = function() {
-    // уничтожаем объект
-    form.parentNode.removeChild(form);
+    // скрываем
+    widget.style.display = 'none';
   }
 
   var onkeypress = function(e) {
@@ -60,44 +67,25 @@ function show_form(item_id, item_title) {
       parent.document.onkeypress = null;
       cancel_func();
     }
+    if (pressed == 13) {
+      parent.document.onkeypress = null;
+      apply_func();
+    }
   }
 
   parent.document.onkeypress = function(e) { return onkeypress(e); }
 
-  var form = _dom('form',
-		  [ _dom('div', _txt('Добавить в корзину'), [['class', 'title']]),
-		    _table(null, 
-			   [ _tr(null,
-				 [ _td(_txt('Товар'), [['class', 'middle']]),
-				   _td(_dom('span', _txt(item_title)), [['class', 'middle']]) ],
-				 []),
-			     _tr(null,
-				 [ _td(_txt('Количество'), [['class', 'middle']]),
-				   _td(_dom('input', [], 
-					    [['class', 'middle'],
-					     ['type', 'text'],
-					     ['value', '1'], // добавить валидатор
-					     ['id', 'item_quantity'],
-					     ['maxlength', '2']])) ],
-				 []) ], 
-			   [['class', 'body']]),
-		    _dom('div',
-			 [ _dom('button', _txt('Отправить'), 
-				[['class', 'button'], ['onclick', apply_func]]),
-			   _dom('span', _txt(' '), []), // место между кнопками
-			   _dom('button', _txt('Отменить'),
-				[['class', 'button'], ['onclick', cancel_func]]) ],
-			 [['class', 'body center']]) ],
-		  [['class', 'widget']]);
-  document.getElementsByTagName('BODY')[0].appendChild(form);
+  document.getElementsByTagName('BODY')[0].appendChild(widget);
+  $('widget_apply').onclick = apply_func
+  $('widget_cancel').onclick = cancel_func;
+  widget.style.display = 'block';
   
   // позиционирование на середине экрана
-  var gForm = getGeometry(form);
-  form.style.top = (self.innerHeight / 2 - gForm.height / 2 + self.pageYOffset) + 'px';
-  form.style.left = (self.innerWidth / 2 - gForm.width / 2) + 'px';
+  var gWidget = getGeometry(widget);
+  widget.style.top = (self.innerHeight / 2 - gWidget.height / 2 + self.pageYOffset) + 'px';
+  widget.style.left = (self.innerWidth / 2 - gWidget.width / 2) + 'px';
 
-  form.item_quantity.focus();
-//  form.style.display = 'block';
+  $('widget_item_quantity').focus();
 }
 
 function update_cart(count, price) {
@@ -111,53 +99,36 @@ function update_cart(count, price) {
 }
 
 function clean_cart(url) {
-  new Ajax.Request('/shop/clean/',
+  var ajax_response = function(transport) {
+    var xml = transport.responseXML.firstChild;
+    check_result(true,
+		 get_xml_item(xml, 'code'),
+		 function() { update_cart("0", "0.00");
+			      if (url) 
+				window.setTimeout(function() { 
+						    document.location = url; }, 
+						  3000); },
+		 null);
+  }
+  new Ajax.Request('/shop/clean/', 
 		   { method: 'post',
-		     onSuccess: function(transport) {
-		       var response = transport.responseText || "нет ответа";
-		       update_cart("0", "0.00");
-		       splashwidget.init('Очистка: Успешно!', 2000);
-		       if (url) 
-			 window.setTimeout(function() { document.location = url; }, 3000);
-		     },
-		     onFailure: function(transport) {
-		       window.status = 'Что-то сломалось :(';
-		       var response = transport.responseText || "нет ответа";
-		       splashwidget.init('Очистка: Ошибка! ' + response, 20000);
-		     }
-		   });
+		     onSuccess: ajax_response, onFailure: ajax_response });
 }
 
 function show_item_count_info(item_id) {
-  var ajax_success = function(transport) {
-    var response = transport.responseText || "нет ответа";
+  var ajax_response = function(transport) {
     var xml = transport.responseXML.firstChild;
-    var result = '';
-    var code = get_xml_item(xml, 'code');
-    window.status = 'code = '+code;
-
-    if (code == '200') {
-      $('item_remains').innerHTML = get_xml_item(xml, 'remains');
-      result = 'Успешно';
-    } else {
-      result = 'Неудачно: ['+code+'] '+get_xml_item(xml, 'desc');
-    }
-  }
-
-  var ajax_failure = function(transport) {
-    window.status = 'Что-то сломалось :(';
-    var response = transport.responseText || "нет ответа";
-    var xml = transport.responseXML.firstChild;
-    var result = 'Неудачно: ['+code+'] '+get_xml_item(xml, 'desc');
-    splashwidget.init(result, 2000);
+    check_result(false,
+		 get_xml_item(xml, 'code'),
+		 function() { $('item_remains').innerHTML = get_xml_item(xml, 'remains');
+			      window.status = 'Проверка наличия товара: OK'; },
+		 function() { window.status = 'Проверка наличия товара: Ошибка'; });
   }
 
   var callback = function() {
     new Ajax.Request('/shop/count/',
-		     { method: 'get',
-		       parameters: { item_id: item_id },
-		       onSuccess: ajax_success,
-		       onFailure: ajax_failure });
+		     { method: 'get', parameters: { item_id: item_id },
+		       onSuccess: ajax_response, onFailure: ajax_response });
   }
 
   callback(); // для мгновенного обновления

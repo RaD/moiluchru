@@ -15,7 +15,7 @@ TD { vertical-align: top; /*border: 1px dashed red;*/ }
 .hide { display: none; }
 
 .title { font-size: 18px; color: black; font-weight: bold; 
-   padding: 0.5em 0px; letter-spacing: -1px; fon-family: serif;}
+   padding: 0.5em 0px; letter-spacing: -1px; font-family: sans-serif;}
 
 .header { background-color: #C2C2C2; }
 .caption { font-size: 24px; font-weight: bold; padding: 1em; width: 40%; }
@@ -102,3 +102,22 @@ TD { vertical-align: top; /*border: 1px dashed red;*/ }
 * html .wideitem { width: 96%; }
 * html .longitem { width: 96%; white-space: nowrap; overflow: hidden; text-overflow : ellipsis; }
 * html INPUT,TEXTAREA,SELECT { border: 1px solid gray; -moz-border-radius: 4px; padding: 2px 4px; margin: 2px 0px;}
+
+.abs { position: absolute; }
+.popup { top: 200px; left: 300px; z-index: 10; width: 360px; height: 140px;
+         background-color: yellow;
+         -moz-border-radius: 4px; }
+.popup .body { background-color: white; background-color: #EEEEEE;
+               margin: 1em; margin-top: 1em; height: 110px; }
+.popup .icon { position: absolute; width: 16px; height: 16px; padding: 4px; background-color: white;
+               top: 0.5em; left: 0.5em; width: 100px; height: 100px; z-index: 10; }
+.popup .itemtitle { font-weight: bold; margin: 3em 0.5em 0.7em 110px; }
+.popup .itemqnty { margin: 0.7em 0.5em 1.5em 110px; }
+.popup .itemqnty INPUT { width: 30px; }
+.popupbtn { position: absolute; width: 16px; height: 16px; padding: 4px; background-color: white; }
+.no { top: 0.5em; left: 328px; z-index: 2; }
+.ok { top: 108px; left: 328px; z-index: 2; }
+* html .ok { top: 116px; left: 328px; z-index: 2; }
+
+.popuphead { top: 0.5em; left: 130px; width: 160px; padding: 2px 8px; z-index: 2; background-color: white; }
+.border { border: 1px solid black; }

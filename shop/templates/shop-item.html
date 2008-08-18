@@ -17,7 +17,7 @@
     <div class="image"><img src="{{ item.get_image_url }}"/></div>
 
     <div class="info">
-      <div style="cursor: pointer; padding: 0.5em 0px;" onclick="show_form({{ item.id }}, '{{ item.title }}'); return false;">
+      <div id="add_widget" class="pointer" style="padding: 0.5em 0px;" onclick="show_form({{ item.id }}, '{{ item.title }}'); return false;">
 	<img src="http://cargo/pics/add.png" title="Добавить в корзину" width="32" height="32"/>
 	<u>Добавить в корзину</u>
       </div>
@@ -33,6 +33,8 @@
     </div>
 
     <br/>
+
+    {% include "shop-widget-addtocart.html" %}
     
   </div>
 </div>
