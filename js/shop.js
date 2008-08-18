@@ -68,6 +68,7 @@ function show_form(item_id, item_title) {
       cancel_func();
     }
     if (pressed == 13) {
+      // сделать правильную обработку для оперы
       parent.document.onkeypress = null;
       apply_func();
     }
