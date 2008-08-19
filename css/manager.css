@@ -5,6 +5,7 @@ BODY { padding: 1em; font: 14px arial, helvetica, sans-serif;
 .left { text-align: left; }
 .center { text-align: center; }
 .right { text-align: right; }
+.nowrap { white-space: nowrap; }
 
 .header { width: 100%; }
 .header .title { font: 24px arial; font-weight: bold; vertical-align: bottom; }

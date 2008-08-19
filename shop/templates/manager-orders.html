@@ -14,9 +14,11 @@
   {% for order in orders %}
   <tr onclick="document.location='{{ order.get_absolute_url }}';">
     <td class="right even">{{ order.id }}</td>
-    <td>{{ order.buyer.lastname }} {{ order.buyer.firstname }} {{ order.buyer.secondname }}</td>
-    <td class="center even">{{ order.count }} шт.</td>
-    <td class="right">{{ order.totalprice|floatformat:2 }} руб.</td>
+    <td class="" title="{{ order.buyer.lastname }} {{ order.buyer.firstname }} {{ order.buyer.secondname }}">
+      {{ order.buyer.lastname }} {{ order.buyer.firstname }} {{ order.buyer.secondname }}
+    </td>
+    <td class="center even nowrap">{{ order.count }} шт.</td>
+    <td class="right nowrap">{{ order.totalprice|floatformat:2 }} руб.</td>
     <td class="center even">{{ order.status }}</td>
     <td class="center">{{ order.reg_date }}</td>
     <td class="even">{{ order.courier.get_full_name }}</td>

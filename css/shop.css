@@ -8,11 +8,14 @@ TD { vertical-align: top; /*border: 1px dashed red;*/ }
 
 .pointer { cursor: pointer; }
 .left { text-align: left; }
+.lfloat { float; left; }
+.rfloat { float; right; }
 .center { text-align: center; }
 .right { text-align: right; }
 .middle { vertical-align: middle; }
 .show { display: block; }
 .hide { display: none; }
+.nowrap { white-space: nowrap; }
 
 .title { font-size: 18px; color: black; font-weight: bold; 
    padding: 0.5em 0px; letter-spacing: -1px; font-family: sans-serif;}
@@ -53,7 +56,7 @@ TD { vertical-align: top; /*border: 1px dashed red;*/ }
    margin-right: 1em;
    text-align: center; border: 1px solid gray; }
 .itemlist .info { margin-left: 1em; }
-.itemlist .more { font-size: 12px; }
+.itemlist .more { font-size: 12px; float: right;}
 .cat-widget { font-size: 14px; }
 
 .producers { border-top: 1px solid gray; border-bottom: 1px solid gray; 

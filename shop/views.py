@@ -164,12 +164,8 @@ def show_offer(request):
                 phone_type = clean['phonetype']
                 city = clean['city']
                 buyer, created = models.Buyer.objects.get_or_create(
-                    lastname = clean['fname'],
-                    firstname = clean['iname'],
-                    secondname = clean['oname'],
-                    address = clean['address'],
-                    email =  clean['email'],
-                    city = city
+                    lastname = clean['fname'], firstname = clean['iname'], secondname = clean['oname'],
+                    address = clean['address'], email =  clean['email'], city = city
                     )
                 phone, created = models.Phone.objects.get_or_create(
                     number = clean['phone'], type = phone_type, owner = buyer
@@ -184,15 +180,19 @@ def show_offer(request):
                 cart = request.session.get('cart_items', {})
                 for i in cart:
                     item = models.Item.objects.get(id=i)
-                    orderdetail = models.OrderDetail(order = order,
-                                                     item = item,
+                    orderdetail = models.OrderDetail(order = order, item = item,
                                                      count = cart[i]['count'],
                                                      price = cart[i]['price'])
                     orderdetail.save()
                     # убираем товар с витрины
                     item.count -= cart[i]['count']
                     item.reserved -= cart[i]['count']
+                    item.buys += 1
                     item.save()
+                    # учтём статистику
+                    producer = item.producer
+                    producer.buys += 1
+                    producer.save()
                 return HttpResponseRedirect('/shop/ordered/')
             except Exception, e:
                 return HttpResponse('bad form data: %s' % e)

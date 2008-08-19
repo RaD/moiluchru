@@ -48,6 +48,9 @@
 	</div>
 	<div class="info">
 	  <div class="title">{{ item.title }}</div>
+	  <div class="desc">
+	    Цена: <em>{{ item.price|floatformat:2 }} руб</em>
+	  </div>
 	  <div class="more"><a href="{{ item.get_absolute_url }}">Далее...</a></div>
 	</div>
 	<div class="clear"></div>
