@@ -3,7 +3,7 @@ TOP_DIR=..
 include $(TOP_DIR)/config.mk
 
 CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/shop
-SUBDIRS=sql templates templatetags
+SUBDIRS=sql templates templatetags patches
 FILES=$(wildcard *.py)
 
 all:
