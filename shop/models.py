@@ -91,10 +91,6 @@ class Category(models.Model):
     def get_absolute_url(self):
         return "/shop/category/%i/" % self.id
 
-    def subcats(self):
-        """ Этот метод возвращает список дочерних категорий. """
-        return self.categories_set.all()
-
 class Item(models.Model):
     title = models.CharField(ugettext('Title'), max_length=60)
     desc = models.TextField()

@@ -8,12 +8,13 @@
     </div>
   </div>
 
-  <div class="icon border">
+  <div class="icon border center">
     <img src="{{ item.get_image_filename|thumbnail:"100x,itempics" }}" border="0" title="{{ item.title }}" />
   </div>
   <div class="popuphead abs border">Добавить в корзину</div>
   <div class="popupbtn no border pointer" id="widget_cancel" title="Отменить"><img src="http://cargo/pics/no.png" width="16" height="16"/></div>
-  <div class="popupbtn ok border pointer" id="widget_apply" title="Добавить"><img src="http://cargo/pics/ok.png" width="16" height="16"/></div>
+  {# <div class="popupbtn ok border pointer" id="widget_apply" title="Добавить"><img src="http://cargo/pics/ok.png" width="16" height="16"/></div> #}
+  <div class="abs ok"><button class="pointer" id="widget_apply">Добавить</button></div>
 
 </div>
 

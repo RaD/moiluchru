@@ -44,7 +44,7 @@ TD { vertical-align: top; /*border: 1px dashed red;*/ }
 .sectioncontent { padding: 0.5em 1em; }
 
 .category { font-size: 14px; color: black; margin: 4px 0px;}
-.subcategories { font-size: 10px; color: black; margin: 4px 2em;}
+.subcategories { font-family: sans-serif; font-size: 10px; color: black; margin: 4px 2em;}
 
 .price { font-weight: bold; }
 .image { width: 40%; float: left; text-align: center; }
@@ -110,19 +110,19 @@ TD { vertical-align: top; /*border: 1px dashed red;*/ }
 
 .abs { position: absolute; }
 .popup { top: 200px; left: 300px; z-index: 10; width: 360px; height: 140px;
-         background-color: yellow;
-         -moz-border-radius: 4px; }
+         background-color: yellow; -moz-border-radius: 4px; }
 .popup .body { background-color: white; background-color: #EEEEEE;
                margin: 1em; margin-top: 1em; height: 110px; }
 .popup .icon { position: absolute; width: 16px; height: 16px; padding: 4px; background-color: white;
                top: 0.5em; left: 0.5em; width: 100px; height: 100px; z-index: 10; }
-.popup .itemtitle { font-weight: bold; margin: 3em 0.5em 0.7em 110px; }
+.popup .itemtitle { font-weight: bold; margin: 2em 0.5em 0.7em 110px; }
 .popup .itemqnty { margin: 0.7em 0.5em 1.5em 110px; }
 .popup .itemqnty INPUT { width: 30px; }
 .popupbtn { position: absolute; width: 16px; height: 16px; padding: 4px; background-color: white; }
 .no { top: 0.5em; left: 328px; z-index: 2; }
-.ok { top: 108px; left: 328px; z-index: 2; }
-* html .ok { top: 116px; left: 328px; z-index: 2; }
+.ok { top: 108px; left: 270px; z-index: 2; }
+* html .ok { top: 108px; left: 250px; z-index: 2; }
 
-.popuphead { top: 0.5em; left: 130px; width: 160px; padding: 2px 8px; z-index: 2; background-color: white; }
+.popuphead { top: 0.5em; left: 130px; width: 160px; padding: 2px 8px; z-index: 2; 
+   font-family: sans-serif; background-color: white; }
 .border { border: 1px solid black; }
