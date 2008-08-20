@@ -1,5 +1,14 @@
 Konqueror:
 Не работают кнопки отказа при оформлении заказа.
 
-Полнотекстовый поиск.
+Полнотекстовый поиск:
+1. Вручную создать потекстовый индекс.
+2. Использовать SEARCH (см. db-api).
 
+Популярное:
+>>> from cargo.shop import models, common
+>>>
+>>> models.Item.objects.order_by('-buys')[:3]
+[<Item: Nokia 6300>, <Item: Nokia 5310>, <Item: Siemens M50>]
+>>> models.Producer.objects.order_by('-buys')[:3]
+[<Producer: Nokia>, <Producer: Siemens>, <Producer: Samsung Corp.>]

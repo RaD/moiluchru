@@ -1,0 +1,21 @@
+{% if categories %}
+  <div class="sectioncontent">
+    {# получаем список категорий, см. shop/urls.py #}
+    {% for category in categories %}
+    <div class="category">
+      <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+      {% if category.category_set.count %}<span title="Есть подкатегории">(+)</span>{% endif %}
+      <span title="Количество наименований товаров, попадающих в категорию">()</span>
+      <div class="subcategories">
+	{# модель categories имеет метод subcats, получаем два подчинённых элемента #}
+	{% for subcat in category.subcats|slice:":2" %}
+	<span class="subcategory">
+	  {# устанавливаем запятую после каждого элемента, кроме последнего #}
+	  <a href="{{ subcat.get_absolute_url }}">{{ subcat.name }}</a>{% if not forloop.last %}, {% endif %}
+	</span>
+	{% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% endif %}

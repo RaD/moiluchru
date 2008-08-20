@@ -2,7 +2,8 @@
 
 from django.shortcuts import render_to_response
 from django.utils.translation import ugettext, gettext_lazy as _
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.db.models import Q
 from django.template import RequestContext
 from django.core.paginator import Paginator
 from django import newforms as forms
@@ -42,6 +43,28 @@ def show_howto_page(request, howto):
     h = models.Howto.objects.get(id=howto)
     return render_to_response('shop-howto.html', {'howto': h, 'back_to': last_page},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
+
+def search_results(request, page=1):
+    """
+    Функция для результатов поиска по магазину.
+    """
+    if request.method == 'POST':
+        # TODO: проверить ввод
+        userinput = request.POST.get('searchthis', None)
+        if userinput:
+            i = models.Item.objects.filter(Q(title__search=userinput) |
+                                           Q(desc__search=userinput))
+            common.does_cart_exist(request)
+            p = Paginator(i, settings.SHOP_ITEMS_PER_PAGE)
+            return render_to_response('shop-search.html',
+                                      {'items': p.page(page).object_list,
+                                       'search_query': userinput,
+                                       'page': p.page(page), 'page_range': p.page_range},
+                                      context_instance=RequestContext(request, processors=[cart_ctx_proc]))
+        else:
+            raise Http404()
+    else:
+        return HttpResponseRedirect('/shop/')
 
 def show_category_page(request, category, page=1):
     """

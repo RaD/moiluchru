@@ -8,11 +8,11 @@
     </td>
     <td rowspan="2" width="24"/>
     <td class="search">
-      <div>
+      <form method="post" action="/shop/search/">
 	<span>Поиск</span>
-	<span><input type="text" class=""/></span>
-	<span><button>Найти</button></span>
-      </div>
+	<span><input type="text" name="searchthis" value="{{ search_query }}"/></span>
+	<span><input type="submit" name="go" value="Найти"/></span>
+      </form>
     </td>
   </tr>
   <tr>

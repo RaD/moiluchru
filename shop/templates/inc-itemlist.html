@@ -1,0 +1,49 @@
+{% load thumbnail_filter %}
+
+{% if items %}
+  <div class="sectioncontent">
+    <div class="itemlist">
+      {% for item in items %}
+      <div class="itemshortinfo">
+	<div class="thumbnail">
+	  <a href="{{ item.get_absolute_url }}">
+	    <img src="{{ item.get_image_filename|thumbnail:"100x,itempics" }}"
+	         border="0" title="{{ item.title }}" />
+	  </a>
+	</div>
+	<div class="info">
+	  <div>
+	    <span class="title">{{ item.title }}</span>
+	    {% if search_query %}
+	    <span style="font-size: 10pt;"><a href="{{ item.category.get_absolute_url }}">{{ item.category.name }}</a></span>
+	    {% endif %}
+	  </div>
+	  <div class="desc">
+	    Цена: <em>{{ item.price|floatformat:2 }} руб</em>
+	  </div>
+	  <div class="more"><a href="{{ item.get_absolute_url }}">Далее...</a></div>
+	</div>
+	<div class="clear"></div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  {# странички #}
+  <div class="paginator">
+    {% if page.has_previous %}
+    <span title="Предыдущая страница"><a href="{{ url }}{{ page.previous_page_number }}/">&lt;&lt;&lt;</a></span>
+    {% endif %}
+    {% for page_number in page_range %}
+      {% ifnotequal page_number page.number %}
+      <span><a href="{{ url }}{{ page_number }}/">{{ page_number }}</a></span>{% if not forloop.last %}, {% endif %}
+      {% else %}
+      <span>{{ page_number }}</span>{% if not forloop.last %}, {% endif %}
+      {% endifnotequal %}
+    {% endfor %}
+    {% if page.has_next %}
+    <span title="Следующая страница"><a href="{{ url }}{{ page.next_page_number }}/">&gt;&gt;&gt;</a></span>
+    {% endif %}
+  </div>
+
+{% endif %}

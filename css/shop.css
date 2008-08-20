@@ -52,6 +52,7 @@ TD { vertical-align: top; /*border: 1px dashed red;*/ }
 .info { margin-left: 1em; }
 .desc { font-size: 12px; padding: 2px 1em; }
 
+.itemlist .itemshortinfo { margin: 2px 0px; }
 .itemlist .thumbnail { width: 100px; height: 100px; float: left; 
    margin-right: 1em;
    text-align: center; border: 1px solid gray; }
