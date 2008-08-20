@@ -14,7 +14,7 @@
 	<div class="info">
 	  <div>
 	    <span class="title">{{ item.title }}</span>
-	    {% if search_query %}
+	    {% if search_query or queryset or subitems %}
 	    <span style="font-size: 10pt;"><a href="{{ item.category.get_absolute_url }}">{{ item.category.name }}</a></span>
 	    {% endif %}
 	  </div>
@@ -30,6 +30,7 @@
   </div>
 
   {# странички #}
+  {% if page %}
   <div class="paginator">
     {% if page.has_previous %}
     <span title="Предыдущая страница"><a href="{{ url }}{{ page.previous_page_number }}/">&lt;&lt;&lt;</a></span>
@@ -45,5 +46,5 @@
     <span title="Следующая страница"><a href="{{ url }}{{ page.next_page_number }}/">&gt;&gt;&gt;</a></span>
     {% endif %}
   </div>
-
+  {% endif %}
 {% endif %}

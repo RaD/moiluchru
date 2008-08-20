@@ -31,7 +31,8 @@ def show_main_page(request):
     else:
         request.session.set_test_cookie()
     return render_to_response('shop-main.html',
-                              {'queryset': models.Category.objects.filter(parent__isnull=True)[:5]},
+                              {'queryset': models.Category.objects.filter(parent__isnull=True)[:5],
+                               'items': models.Item.objects.order_by('-buys')[:3]},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
     
 def show_howto_page(request, howto):
@@ -73,6 +74,11 @@ def show_category_page(request, category, page=1):
     common.does_cart_exist(request)
     i = common.get_currcat_items(category)
     c = models.Category.objects.get(id=category)
+    if not i:
+        i = common.get_sub_cats_items(c)
+        subitems = 'exist'
+    else:
+        subitems = None
     p = Paginator(i, settings.SHOP_ITEMS_PER_PAGE)
     return render_to_response('shop-category.html',
                               {'parent_cats': common.get_parent_cats(c),
@@ -81,6 +87,7 @@ def show_category_page(request, category, page=1):
                                'producers': common.get_currcat_procs(c),
                                'url': c.get_absolute_url(),
                                'items': p.page(page).object_list,
+                               'subitems': subitems,
                                'page': p.page(page), 'page_range': p.page_range},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 

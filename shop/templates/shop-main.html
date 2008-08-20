@@ -30,5 +30,10 @@
     </div>
     {% endfor %}
   </div>
+
+  {# Вывод популярных товаров #}
+  {% if items %}<div class="title">Хиты продаж</div>{% endif %}
+  {% include "inc-itemlist.html" %}
+
 </div>
 {% endblock %}
