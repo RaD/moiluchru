@@ -3,19 +3,9 @@
 {% block container %}
 <table class="container" cellpadding="0" cellspacing="0">
   <tr>
-    <td class="main" rowspan="2" width="60%">
+    <td class="main" width="60%">
       {% block content %}{% endblock %}
     </td>
-    <td rowspan="2" width="24"/>
-    <td class="search">
-      <form method="post" action="/shop/search/">
-	<span>Поиск</span>
-	<span><input type="text" name="searchthis" value="{{ search_query }}"/></span>
-	<span><input type="submit" name="go" value="Найти"/></span>
-      </form>
-    </td>
-  </tr>
-  <tr>
     <td class="related">
       {% if howtos %}
       <div class="title">Помощь</div>
