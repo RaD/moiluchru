@@ -1,29 +1,7 @@
-{% extends "shop-base.html" %}
+{% extends "shop-base3.html" %}
 
 {% block content %}
-<div class="content">
-  <div class="title">
-    Категории товаров
-  </div>
-
-  <div class="sectioncontent">
-    {% for category in queryset %}
-    <div class="category">
-      <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>
-      <div class="subcategories">
-	{% for subcat in category.category_set.all %}
-	<span class="subcategory"> {# устанавливаем запятую после каждого элемента, кроме последнего #}
-	  <a href="{{ subcat.get_absolute_url }}">{{ subcat.name }}</a>{% if not forloop.last %}, {% endif %}
-	</span>
-	{% endfor %}
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-
-  {# Вывод популярных товаров #}
-  <div class="title">Хиты продаж</div>
-  {% include "inc-itemlist.html" %}
-
-</div>
+{# Вывод популярных товаров #}
+<div><span class="title">Хиты продаж</span></div>
+{% include "inc-itemlist.html" %}
 {% endblock %}

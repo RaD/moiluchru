@@ -1,46 +1,42 @@
-{% extends "shop-base.html" %}
+{% extends "shop-base2.html" %}
 
 {% load thumbnail_filter %}
 
 {% block content %}
-<div class="content">
-  <div class="item">
-    <div class="title">{{ item.title }}</div>
-    
-    <div class="cat-widget">
-      <a href="/shop">Главная</a> /
-      {% for parcat in parent_cats %}
-      <a href="{{ parcat.get_absolute_url }}">{{ parcat.name }}</a>{% if not forloop.last %} / {% endif %}
-      {% endfor %}
-    </div>
-    
-    <br/>
+<div class="item">
 
-    <div class="image">
-      <img src="{{ item.get_image_filename|thumbnail:"200x,itempics" }}"
-           border="0" title="{{ item.title }}" />
-    </div>
-
-    <div class="info">
-      <div id="add_widget" class="pointer" style="padding: 0.5em 0px;" onclick="show_form({{ item.id }}, '{{ item.title }}'); return false;">
-	<img src="http://cargo/pics/add.png" title="Добавить в корзину" width="32" height="32"/>
-	<u>Добавить в корзину</u>
-      </div>
-      <div>Цена: <span class="price">{{ item.price|floatformat:2 }}</span> рублей.</div>
-      <div>В наличии: <span id="item_remains" item_id="{{ item.id }}">{{ item_remains }}</span></div>
-    </div>
-    
-    <br/>
-
-    <div class="clear">{# класс clear убирает "хитрое" поведение, определённое в image и info #}
-      <div>Описание:</div>
-      <div class="desc">{{ item.desc|escape|linebreaks }}</div>
-    </div>
-
-    <br/>
-
-    {% include "shop-widget-addtocart.html" %}
-    
+  <div class="title">{{ item.title }}</div>
+  
+  <div class="cat-widget">
+    <a href="/shop">Главная</a> /
+    {% for parcat in parent_cats %}
+    <a href="{{ parcat.get_absolute_url }}">{{ parcat.name }}</a>{% if not forloop.last %} / {% endif %}
+    {% endfor %}
   </div>
+    
+  <br/>
+  
+  <div class="image"><img src="{{ item.get_image_filename|thumbnail:"200x,itempics" }}" border="0" title="{{ item.title }}" /></div>
+
+  <div class="info">
+    <div id="add_widget" class="pointer" style="padding: 0.5em 0px;" onclick="show_form({{ item.id }}, '{{ item.title }}'); return false;">
+      <img src="http://cargo/pics/add.png" title="Добавить в корзину" width="32" height="32"/>
+      <u>Добавить в корзину</u>
+    </div>
+    <div>Цена: <span class="price">{{ item.price|floatformat:2 }}</span> рублей.</div>
+    <div>В наличии: <span id="item_remains" item_id="{{ item.id }}">{{ item_remains }}</span></div>
+  </div>
+    
+  <br/>
+
+  <div class="clear">
+    <div>Описание:</div>
+    <div class="desc">{{ item.desc|escape|linebreaks }}</div>
+  </div>
+
+  <br/>
+
+  {% include "shop-widget-addtocart.html" %}
+    
 </div>
 {% endblock %}

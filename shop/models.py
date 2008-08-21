@@ -51,7 +51,7 @@ class City(models.Model):
 class Producer(models.Model):
     name = models.CharField(ugettext('Company'), max_length=30)
     country = models.ForeignKey(Country, verbose_name=ugettext('Country'))
-    buys = models.IntegerField(ugettext('Buys'))
+    buys = models.IntegerField(ugettext('Buys'), default=0)
 #    website = models.URLField(verify_exists=False)
 
     class Meta:
@@ -102,7 +102,7 @@ class Item(models.Model):
     reserved = models.PositiveIntegerField(ugettext('Reserved'), default=0)
     reg_date = models.DateTimeField()
     image = models.ImageField(upload_to="itempics", blank=True)
-    buys = models.IntegerField(ugettext('Buys'))
+    buys = models.IntegerField(ugettext('Buys'), default=0)
     
     class Meta:
         verbose_name = _('Item')

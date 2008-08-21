@@ -1,11 +1,8 @@
-{% extends "shop-base.html" %}
+{% extends "shop-base3.html" %}
 
 {% block content %}
-<div class="content">
-  <div class="title">
-    Категории товаров
-  </div>
-
+<div><span class="title">Товары</span></div>
+<div class="sectioncontent">
   <div class="cat-widget">
     <a href="/shop">Главная</a> /
     {% for parcat in parent_cats %}
@@ -13,9 +10,6 @@
     {% endfor %}
   </div>
     
-  {% include "inc-category.html" %}
-  
   {% include "inc-itemlist.html" %}
-
 </div>
 {% endblock %}

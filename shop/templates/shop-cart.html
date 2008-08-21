@@ -1,39 +1,35 @@
-{% extends "shop-base.html" %}
+{% extends "shop-base2.html" %}
 
 {% block content %}
-<div>
-  <div class="cart">
-    <div class="title">
-      Корзина
-    </div>
+<div class="cart">
+  <div class="title">Корзина</div>
     
-    <table width="100%">
-      <tr class="header">
-	<th width="40%" class="left">Наименование</td>
-	<th width="20%" class="center">Цена</td>
-	<th width="20%" class="center">Кол-во</td>
-	<th width="20%" class="center">Стоимость</td>
-      </tr>
-      {% for i in cart_items %}
-      <tr>
-	<td class="longitem" title="{{ i.title }}">{{ i.title }}</td>
-	<td class="right"><span class="money">{{ i.price|floatformat:2 }}</span> руб</td>
-	<td class="center mono">{{ i.count }}</td>
-	<td class="right"><span class="money">{{ i.cost|floatformat:2 }}</span> руб.</td>
-      </tr>
-      {% endfor %}
-      <tr class="total">
-	<td colspan="3">Итого</td>
-	<td class="right"><span class="money">{{ cart_price|floatformat:2 }}</span> руб.</td>
-      </tr>
-    </table>
-    {% if cart %}
-    <div class="right">
-      <button id="offer_apply" onclick="document.location='/shop/offer/';">Оформить заказ</button>
-      <button id="offer_cancel" 
-	      onclick="clean_cart('/shop/'); $('offer_apply').disabled=$('offer_cancel').disabled=true;">Отменить заказ</button>
-    </div>
-    {% endif %}
+  <table width="100%">
+    <tr class="header">
+      <th width="40%" class="left">Наименование</td>
+      <th width="20%" class="center">Цена</td>
+      <th width="20%" class="center">Кол-во</td>
+      <th width="20%" class="center">Стоимость</td>
+    </tr>
+    {% for i in cart_items %}
+    <tr>
+      <td class="longitem" title="{{ i.title }}">{{ i.title }}</td>
+      <td class="right"><span class="money">{{ i.price|floatformat:2 }}</span> руб</td>
+      <td class="center mono">{{ i.count }}</td>
+      <td class="right"><span class="money">{{ i.cost|floatformat:2 }}</span> руб.</td>
+    </tr>
+    {% endfor %}
+    <tr class="total">
+      <td colspan="3">Итого</td>
+      <td class="right"><span class="money">{{ cart_price|floatformat:2 }}</span> руб.</td>
+    </tr>
+  </table>
+  {% if cart %}
+  <div class="right">
+    <button id="offer_apply" onclick="document.location='/shop/offer/';">Оформить заказ</button>
+    <button id="offer_cancel" 
+	    onclick="clean_cart('/shop/'); $('offer_apply').disabled=$('offer_cancel').disabled=true;">Отменить заказ</button>
   </div>
+  {% endif %}
 </div>
 {% endblock %}

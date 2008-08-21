@@ -1,50 +1,43 @@
 {% load thumbnail_filter %}
 
 {% if items %}
-  <div class="sectioncontent">
-    <div class="itemlist">
+
+{% include "inc-paginator.html" %}  
+
+<div class="sectioncontent">
+  <div class="itemlist">
+    <table>
       {% for item in items %}
-      <div class="itemshortinfo">
-	<div class="thumbnail">
+      <tr>
+	<td class="thumbnail">
 	  <a href="{{ item.get_absolute_url }}">
-	    <img src="{{ item.get_image_filename|thumbnail:"100x,itempics" }}"
-	         border="0" title="{{ item.title }}" />
-	  </a>
-	</div>
-	<div class="info">
+	  <img src="{{ item.get_image_filename|thumbnail:"100x,itempics" }}" border="0" title="{{ item.title }}"/></a>
+	</td>
+	<td class="info">
+	  <div style="margin: 0.5em 0em;">
+	    <span class="itemtitle">{{ item.title }}</span>
+	  </div>
+	  {% if search_query or subitems or not currentcat %}
 	  <div>
-	    <span class="title">{{ item.title }}</span>
-	    {% if search_query or queryset or subitems %}
-	    <span style="font-size: 10pt;"><a href="{{ item.category.get_absolute_url }}">{{ item.category.name }}</a></span>
-	    {% endif %}
+	    <span style="font-size: 10px;"><a href="{{ item.category.get_absolute_url }}">{{ item.category.name }}</a></span>
+	  </div>
+	  {% endif %}
 	  </div>
 	  <div class="desc">
-	    Цена: <em>{{ item.price|floatformat:2 }} руб</em>
+	    Цена: <span class="price">{{ item.price|floatformat:2 }}</span> руб.
 	  </div>
-	  <div class="more"><a href="{{ item.get_absolute_url }}">Далее...</a></div>
-	</div>
-	<div class="clear"></div>
-      </div>
+	  <div class="more">
+	    <a href="{{ item.get_absolute_url }}">Описание...</a>
+	  </div>
+	</td>
+      </tr>
       {% endfor %}
-    </div>
+    </table>
   </div>
+</div>
+  
+{% include "inc-paginator.html" %}  
 
-  {# странички #}
-  {% if page %}
-  <div class="paginator">
-    {% if page.has_previous %}
-    <span title="Предыдущая страница"><a href="{{ url }}{{ page.previous_page_number }}/">&lt;&lt;&lt;</a></span>
-    {% endif %}
-    {% for page_number in page_range %}
-      {% ifnotequal page_number page.number %}
-      <span><a href="{{ url }}{{ page_number }}/">{{ page_number }}</a></span>{% if not forloop.last %}, {% endif %}
-      {% else %}
-      <span>{{ page_number }}</span>{% if not forloop.last %}, {% endif %}
-      {% endifnotequal %}
-    {% endfor %}
-    {% if page.has_next %}
-    <span title="Следующая страница"><a href="{{ url }}{{ page.next_page_number }}/">&gt;&gt;&gt;</a></span>
-    {% endif %}
-  </div>
-  {% endif %}
+{% include "shop-widget-addtocart.html" %}
+
 {% endif %}

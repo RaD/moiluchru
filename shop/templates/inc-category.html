@@ -1,12 +1,18 @@
 {% if categories %}
-  <div class="sectioncontent">
+<div><span class="title">Категории товаров</span></div>
+<div class="sectioncontent">
+  <div class="category"><a href="/shop">Главная</a></div>
+  {% for category in categories %}
+  <div class="category">
+    <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>
     <div class="subcategories">
-      {% for category in categories %}
+      {% for subcat in category.category_set.all %}
       <span class="subcategory">
-      {# устанавливаем запятую после каждого элемента, кроме последнего #}
-      <a href="{{ category.get_absolute_url }}">{{ category.name }}</a>{% if not forloop.last %}, {% endif %}
+	<a href="{{ subcat.get_absolute_url }}">{{ subcat.name }}</a>{% if not forloop.last %}, {% endif %}
       </span>
       {% endfor %}
     </div>
   </div>
+  {% endfor %}
+</div>
 {% endif %}

@@ -24,6 +24,14 @@
 	    <tr>
 	      <td class="middle">Поиск</td>
 	      <td class="middle wideitem"><input type="text" class="wideitem" name="searchthis" value="{{ search_query }}"/></td>
+	      <td class="middle">
+		<select name="howmuch" title="Количество товаров на одной странице">
+		  <option id="1">4</option>
+		  <option id="2">10</option>
+		  <option id="3">25</option>
+		  <option id="4">50</option>
+		</select>
+	      </td>
 	      <td class="middle"><input type="submit" name="go" value="Найти"/></td>
 	    </tr>
 	  </table>
@@ -37,9 +45,9 @@
 		{% if not cart_show %}class="pointer" onclick="document.location='/shop/cart/';"{% endif %}/>
 	      </td>
 	      <td class="left cart_widget">
-		<div class="title">{% if not cart_show %}<a href="/shop/cart/">{% endif%}Корзина{% if not cart_show %}</a>{% endif%}</div>
+		<div class="cart_widget_title">{% if not cart_show %}<a href="/shop/cart/">{% endif%}Корзина{% if not cart_show %}</a>{% endif%}</div>
 		<div>
-		  Цена: <span id="cart_price">{{ cart_price|floatformat:2 }}</span> руб
+		  Цена: <span id="cart_price" class="price">{{ cart_price|floatformat:2 }}</span> руб
 		  Кол-во: <span id="cart_count">{{ cart_count }}</span>
 		</div>
 	      </td>

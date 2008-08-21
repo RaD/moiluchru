@@ -31,7 +31,7 @@ def show_main_page(request):
     else:
         request.session.set_test_cookie()
     return render_to_response('shop-main.html',
-                              {'queryset': models.Category.objects.filter(parent__isnull=True)[:5],
+                              {'categories': models.Category.objects.filter(parent__isnull=True),
                                'items': models.Item.objects.order_by('-buys')[:3]},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
     
@@ -52,14 +52,24 @@ def search_results(request, page=1):
     if request.method == 'POST':
         # TODO: проверить ввод
         userinput = request.POST.get('searchthis', None)
+        howmuch = request.POST.get('howmuch', settings.SHOP_ITEMS_PER_PAGE)
+        if howmuch == 2:
+            item_per_page = 10
+        elif howmuch == 3:
+            item_per_page = 25
+        elif howmuch == 4:
+            item_per_page = 50
+        else:
+            item_per_page = 4
         if userinput:
             i = models.Item.objects.filter(Q(title__search=userinput) |
                                            Q(desc__search=userinput))
             common.does_cart_exist(request)
-            p = Paginator(i, settings.SHOP_ITEMS_PER_PAGE)
+            p = Paginator(i, item_per_page)
             return render_to_response('shop-search.html',
                                       {'items': p.page(page).object_list,
                                        'search_query': userinput,
+                                       'categories': models.Category.objects.filter(parent__isnull=True),
                                        'page': p.page(page), 'page_range': p.page_range},
                                       context_instance=RequestContext(request, processors=[cart_ctx_proc]))
         else:
@@ -83,7 +93,7 @@ def show_category_page(request, category, page=1):
     return render_to_response('shop-category.html',
                               {'parent_cats': common.get_parent_cats(c),
                                'currentcat': c,
-                               'categories': c.category_set.all(),
+                               'categories': models.Category.objects.filter(parent__isnull=True),
                                'producers': common.get_currcat_procs(c),
                                'url': c.get_absolute_url(),
                                'items': p.page(page).object_list,
@@ -145,7 +155,8 @@ def show_cart(request):
     return render_to_response('shop-cart.html',
                               {'cart': cart, # для отключения кнопок
                                'cart_items': items,
-                               'cart_show' : 'yes'},
+                               'cart_show' : 'yes',
+                               'categories': models.Category.objects.filter(parent__isnull=True)},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
 def show_offer(request):
