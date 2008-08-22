@@ -1,0 +1,11 @@
+{% if producers %}
+<div><span class="title">Производители</span></div>
+<div class="sectioncontent">
+  {% for el in producers %}
+  <div class="listitem" {% ifequal currentproc el %}style="background-color: orange;"{% endifequal %}>
+    <a href="{{ el.get_absolute_url }}{{ currentcat.id }}/">{{ el.name }}</a>
+    {# <img src="http://cargo/pics/wizard.png" width="16" height="16" title="Текущий производитель" /> #}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}

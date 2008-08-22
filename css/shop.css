@@ -11,13 +11,15 @@ TABLE { width: 100%; border-collapse: collapse; }
 .rfloat { float; right; }
 .center { text-align: center; }
 .right { text-align: right; }
+.top { vertical-align: top; }
 .middle { vertical-align: middle; }
 .show { display: block; }
 .hide { display: none; }
 .nowrap { white-space: nowrap; }
 
 .title { font-size: 16px; color: black; font-weight: bold; 
-   padding: 0.2em 2em 0.2em 0em; letter-spacing: -1px; border-bottom: 2px solid orange; }
+   padding: 0.2em 2em 0.2em 0em; margin-bottom: 0.5em;
+   letter-spacing: -1px; border-bottom: 2px solid orange; }
 
 .header { background-color: #C2C2C2; }
 .caption { font-size: 16px; font-weight: bold; padding: 0.5em 1em; width: 20%; }
@@ -40,7 +42,7 @@ TABLE { width: 100%; border-collapse: collapse; }
 .footer-right { text-align: right; padding: 1em; }
 
 .content { padding: 0.5em 1em; }
-.sectioncontent { padding: 0.5em 1em; }
+.sectioncontent { padding: 0.5em 0.5em; }
 
 .category { font-size: 14px; color: black; margin: 4px 0px;}
 .subcategories { font-size: 10px; color: black; margin: 4px 2em;}
@@ -58,8 +60,10 @@ TABLE { width: 100%; border-collapse: collapse; }
 .itemlist .itemshortinfo { margin: 2px 0px; }
 .itemlist .thumbnail { width: 100px; height: 100px; text-align: center; vertical-align: middle; }
 .itemlist .info { margin-left: 1em; vertical-align: top; }
-.itemtitle { font-size: 14px; font-weight: bold; letter-spacing: -1px; }
 .itemlist .more { font-size: 10px; }
+
+.itemtitle { font-size: 14px; font-weight: bold; letter-spacing: -1px; }
+.itemdesc { font-size: 12px; }
 
 .producers { border-top: 1px solid gray; border-bottom: 1px solid gray; letter-spacing: -1px; 
 }
@@ -68,7 +72,7 @@ TABLE { width: 100%; border-collapse: collapse; }
 
 .howto { font-size: 12px; font-style: italic; }
 
-.cart { padding: 1em; }
+.cart { }
 .cart .title { font-size: 14px; color: black; font-weight: bold; margin: 4px 0px; }
 .cart TABLE { margin: 1em 4px; }
 .cart TABLE TD { white-space: nowrap; }

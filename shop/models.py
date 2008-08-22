@@ -159,7 +159,7 @@ class Order(models.Model):
     buyer = models.ForeignKey(Buyer)
     count = models.PositiveIntegerField()
     totalprice = models.FloatField()
-    comment = models.TextField(blank=True)
+    comment = models.TextField(blank=True, default='')
     reg_date = models.DateTimeField(auto_now_add=True)
     status = models.ForeignKey(OrderStatus)
     courier = models.ForeignKey(User, null=True)

@@ -17,6 +17,7 @@ def cart_ctx_proc(request):
     """
     return {'site_name': settings.SITE_NAME,
             'howtos': models.Howto.objects.all(),
+            'top_cats': models.Category.objects.filter(parent__isnull=True),
             'cart_count': request.session.get('cart_count', 0),
             'cart_price': request.session.get('cart_price', 0.00)}
 
@@ -31,8 +32,7 @@ def show_main_page(request):
     else:
         request.session.set_test_cookie()
     return render_to_response('shop-main.html',
-                              {'categories': models.Category.objects.filter(parent__isnull=True),
-                               'items': models.Item.objects.order_by('-buys')[:3]},
+                              {'items': models.Item.objects.order_by('-buys')[:3]},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
     
 def show_howto_page(request, howto):
@@ -69,7 +69,6 @@ def search_results(request, page=1):
             return render_to_response('shop-search.html',
                                       {'items': p.page(page).object_list,
                                        'search_query': userinput,
-                                       'categories': models.Category.objects.filter(parent__isnull=True),
                                        'page': p.page(page), 'page_range': p.page_range},
                                       context_instance=RequestContext(request, processors=[cart_ctx_proc]))
         else:
@@ -93,7 +92,6 @@ def show_category_page(request, category, page=1):
     return render_to_response('shop-category.html',
                               {'parent_cats': common.get_parent_cats(c),
                                'currentcat': c,
-                               'categories': models.Category.objects.filter(parent__isnull=True),
                                'producers': common.get_currcat_procs(c),
                                'url': c.get_absolute_url(),
                                'items': p.page(page).object_list,
@@ -193,7 +191,7 @@ def show_offer(request):
                                            widget=forms.Select(attrs={'class':'longitem'}))
         email = forms.EmailField(label=ugettext('E-mail'), max_length=75,
                                  widget=forms.TextInput(attrs={'class':'longitem'}))
-        comment = forms.CharField(label=ugettext('Comment'), 
+        comment = forms.CharField(label=ugettext('Comment'), required=False,
                                   widget=forms.Textarea(attrs={'class':'longitem'}))
         
     if request.method == 'POST':

@@ -3,13 +3,7 @@
 {% block content %}
 <div><span class="title">Товары</span></div>
 <div class="sectioncontent">
-  <div class="cat-widget">
-    <a href="/shop">Главная</a> /
-    {% for parcat in parent_cats %}
-    <a href="{{ parcat.get_absolute_url }}">{{ parcat.name }}</a>{% if not forloop.last %} / {% endif %}
-    {% endfor %}
-  </div>
-    
+  {% include "inc-catwidget.html" %}
   {% include "inc-itemlist.html" %}
 </div>
 {% endblock %}

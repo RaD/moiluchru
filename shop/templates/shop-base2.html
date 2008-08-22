@@ -8,22 +8,8 @@
     </td>
 
     <td class="content" width="30%" valign="top">
-      {% if howtos %}
-      <div class="title">Помощь</div>
-      {% for el in howtos %}<div class="howto"><a href="{{ el.get_absolute_url }}">{{ el.title }}</a></div>{% endfor %}
-      {% endif %}
-      
-      {% if producers %}
-      <div class="title">Производители</div>
-      {% for el in producers %}
-      <div class="listitem" {% ifequal currentproc el %}style="background-color: orange;"{% endifequal %}>
-	<a href="{{ el.get_absolute_url }}{{ currentcat.id }}/">{{ el.name }}</a>
-	
-	{# <img src="http://cargo/pics/wizard.png" width="16" height="16" title="Текущий производитель" /> #}
-      </div>
-      {% endfor %}
-      {% endif %}
-
+      {% include "inc-howtos.html" %}
+      {% include "inc-producers.html" %}
       {% include "inc-category.html" %}
     </td>
   </tr>

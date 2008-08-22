@@ -1,0 +1,6 @@
+{% if howtos %}
+<div><span class="title">Помощь</span></div>
+<div class="sectioncontent">
+  {% for el in howtos %}<div class="howto"><a href="{{ el.get_absolute_url }}">{{ el.title }}</a></div>{% endfor %}
+</div>
+{% endif %}

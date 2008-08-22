@@ -12,25 +12,9 @@
     </td>
 
     <td class="content" width="30%" valign="top">
-      {% if howtos %}
-      <div><span class="title">Помощь</span></div>
-      <div class="sectioncontent">
-	{% for el in howtos %}<div class="howto"><a href="{{ el.get_absolute_url }}">{{ el.title }}</a></div>{% endfor %}
-      </div>
-      {% endif %}
-      
-      {% if producers %}
-      <div><span class="title">Производители</span></div>
-      <div class="sectioncontent">
-	{% for el in producers %}
-	<div class="listitem" {% ifequal currentproc el %}style="background-color: orange;"{% endifequal %}>
-	  <a href="{{ el.get_absolute_url }}{{ currentcat.id }}/">{{ el.name }}</a>
-	  {# <img src="http://cargo/pics/wizard.png" width="16" height="16" title="Текущий производитель" /> #}
-	</div>
-	{% endfor %}
-      </div>
-      {% endif %}
-    </td>
+      {% include "inc-howtos.html" %}
+      {% include "inc-producers.html" %}
+      </td>
   </tr>
 </table>
 {% endblock %}
