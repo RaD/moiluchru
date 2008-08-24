@@ -53,12 +53,18 @@ def get_currcat_items(category, producer=None):
         i = i.filter(producer=producer)
     return i
 
-def get_currcat_procs(category):
-    """Функция возвращает производителей текущей категории."""
-    return set([l.producer for l in get_currcat_items(category)])
-    
 def get_sub_cats_items(category):
     """Функция возвращает элементы всех дочерних категорий,
     включая указанную."""
     cats = set(get_sub_cats(category))
     return models.Item.objects.filter(category__in=cats)
+
+def get_currcat_procs(category):
+    """Функция возвращает производителей текущей категории."""
+    return set([l.producer for l in get_currcat_items(category)])
+    
+def get_sub_cats_procs(category):
+    """
+    Возвращает производителей текущей и дочерних категорий.
+    """
+    return set([l.producer for l in get_sub_cats_items(category) | get_currcat_items(category)])

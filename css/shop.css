@@ -18,8 +18,8 @@ TABLE { width: 100%; border-collapse: collapse; }
 .nowrap { white-space: nowrap; }
 
 .title { font-size: 16px; color: black; font-weight: bold; 
-   padding: 0.2em 2em 0.2em 0em; margin-bottom: 0.5em;
-   letter-spacing: -1px; border-bottom: 2px solid orange; }
+   padding: 0.2em; margin-bottom: 0.5em; text-align: center;
+   letter-spacing: 0px; border-bottom: 2px solid orange; }
 
 .header { background-color: #C2C2C2; }
 .caption { font-size: 16px; font-weight: bold; padding: 0.5em 1em; width: 20%; }
@@ -45,11 +45,11 @@ TABLE { width: 100%; border-collapse: collapse; }
 .sectioncontent { padding: 0.5em 0.5em; }
 
 .category { font-size: 14px; color: black; margin: 4px 0px;}
-.subcategories { font-size: 10px; color: black; margin: 4px 2em;}
+.subcategories { font-size: 12px; color: black; margin: 4px 2em;}
 .cat-widget { font-size: 12px; margin: 0.5em 0em; }
 
 
-.price { font-family: monospace; letter-spacing: -1px; }
+.price { font-family: verdana; letter-spacing: 0px; }
 /*
 .image { width: 40%; float: left; text-align: center; }
 .clear { clear: both; }
@@ -62,15 +62,15 @@ TABLE { width: 100%; border-collapse: collapse; }
 .itemlist .info { margin-left: 1em; vertical-align: top; }
 .itemlist .more { font-size: 10px; }
 
-.itemtitle { font-size: 14px; font-weight: bold; letter-spacing: -1px; }
+.itemtitle { font-size: 14px; font-weight: bold; letter-spacing: 0px; }
 .itemdesc { font-size: 12px; }
 
 .producers { border-top: 1px solid gray; border-bottom: 1px solid gray; letter-spacing: -1px; 
 }
 
-.listitem { font-size: 12px; font-style: italic; }
+.listitem { font-size: 12px; /* font-style: italic; */ }
 
-.howto { font-size: 12px; font-style: italic; }
+.howto { font-size: 12px; /* font-style: italic; */ }
 
 .cart { }
 .cart .title { font-size: 14px; color: black; font-weight: bold; margin: 4px 0px; }

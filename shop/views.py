@@ -32,7 +32,9 @@ def show_main_page(request):
     else:
         request.session.set_test_cookie()
     return render_to_response('shop-main.html',
-                              {'items': models.Item.objects.order_by('-buys')[:3]},
+                              {'items': models.Item.objects.order_by('-buys')[:3],
+                               'mode': 'main',
+                               'producers': models.Producer.objects.all().order_by('name')},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
     
 def show_howto_page(request, howto):
@@ -92,7 +94,7 @@ def show_category_page(request, category, page=1):
     return render_to_response('shop-category.html',
                               {'parent_cats': common.get_parent_cats(c),
                                'currentcat': c,
-                               'producers': common.get_currcat_procs(c),
+                               'producers': common.get_sub_cats_procs(c),
                                'url': c.get_absolute_url(),
                                'items': p.page(page).object_list,
                                'subitems': subitems,
@@ -104,7 +106,10 @@ def show_producer_page(request, producer, category, page=1):
     Функция для отображения подчинённых категорий для данного производителя.
     """
     common.does_cart_exist(request)
-    c = models.Category.objects.get(id=category)
+    if category == 0:
+        c = models.Category.objects.all()
+    else:
+        c = models.Category.objects.get(id=category)
     p = models.Producer.objects.get(id=producer)
     i = common.get_currcat_items(c, p)
     paginator = Paginator(i, settings.SHOP_ITEMS_PER_PAGE)

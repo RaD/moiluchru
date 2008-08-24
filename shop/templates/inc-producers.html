@@ -1,11 +1,14 @@
 {% if producers %}
-<div><span class="title">Производители</span></div>
 <div class="sectioncontent">
-  {% for el in producers %}
-  <div class="listitem" {% ifequal currentproc el %}style="background-color: orange;"{% endifequal %}>
-    <a href="{{ el.get_absolute_url }}{{ currentcat.id }}/">{{ el.name }}</a>
-    {# <img src="http://cargo/pics/wizard.png" width="16" height="16" title="Текущий производитель" /> #}
+  <br/>
+  <div style="border: 1px solid gray; -moz-border-radius: 4px; padding: 2px 4px; text-align: center; vertical-align: middle;">
+    <div>Производители: {{ mode }}</div>
+    {% for el in producers %}
+    <span class="listitem nowrap" style="margin: 0.5em; line-height: 2; " {% ifequal currentproc el %}style="background-color: orange;"{% endifequal %}>
+      <a href="{{ el.get_absolute_url }}{% ifequal mode "main" %}0/{% endifequal %}{% ifequal mode "category" %}{{ currentcat.id }}/{% endifequal %}">{{ el.name }}</a>
+    </span>
+    {% endfor %}
   </div>
-  {% endfor %}
+  <br/>
 </div>
 {% endif %}

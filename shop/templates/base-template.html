@@ -48,7 +48,7 @@
 		<div class="cart_widget_title">{% if not cart_show %}<a href="/shop/cart/">{% endif%}Корзина{% if not cart_show %}</a>{% endif%}</div>
 		<div>
 		  Цена: <span id="cart_price" class="price">{{ cart_price|floatformat:2 }}</span> руб
-		  Кол-во: <span id="cart_count">{{ cart_count }}</span>
+		  Кол-во: <span id="cart_count" class="price">{{ cart_count }}</span>
 		</div>
 	      </td>
 	      {% if not cart_show %}
