@@ -17,7 +17,7 @@ def cart_ctx_proc(request):
     """
     return {'site_name': settings.SITE_NAME,
             'howtos': models.Howto.objects.all(),
-            'top_cats': models.Category.objects.filter(parent__isnull=True),
+            'top_cats': common.top_categories(),
             'cart_count': request.session.get('cart_count', 0),
             'cart_price': request.session.get('cart_price', 0.00)}
 
@@ -27,14 +27,12 @@ def show_main_page(request):
     Осуществляем проверку поддержки Cookie.
     """
     if request.session.test_cookie_worked():
-        #request.session.delete_test_cookie()
         common.does_cart_exist(request)
     else:
         request.session.set_test_cookie()
     return render_to_response('shop-main.html',
                               {'items': models.Item.objects.order_by('-buys')[:3],
-                               'mode': 'main',
-                               'producers': models.Producer.objects.all().order_by('name')},
+                               'producers': common.category_producers(0)},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
     
 def show_howto_page(request, howto):
@@ -47,7 +45,7 @@ def show_howto_page(request, howto):
     return render_to_response('shop-howto.html', {'howto': h, 'back_to': last_page},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
-def search_results(request, page=1):
+def search_results(request, pagenum=1):
     """
     Функция для результатов поиска по магазину.
     """
@@ -69,72 +67,66 @@ def search_results(request, page=1):
             common.does_cart_exist(request)
             p = Paginator(i, item_per_page)
             return render_to_response('shop-search.html',
-                                      {'items': p.page(page).object_list,
+                                      {'items': p.page(pagenum).object_list,
                                        'search_query': userinput,
-                                       'page': p.page(page), 'page_range': p.page_range},
+                                       'page': p.page(pagenum), 'page_range': p.page_range},
                                       context_instance=RequestContext(request, processors=[cart_ctx_proc]))
         else:
             raise Http404()
     else:
         return HttpResponseRedirect('/shop/')
 
-def show_category_page(request, category, page=1):
+def show_category_page(request, category_id, pagenum=1):
     """
     Функция для отображения подчинённых категорий.
     """
     common.does_cart_exist(request)
-    i = common.get_currcat_items(category)
-    c = models.Category.objects.get(id=category)
-    if not i:
-        i = common.get_sub_cats_items(c)
-        subitems = 'exist'
-    else:
-        subitems = None
-    p = Paginator(i, settings.SHOP_ITEMS_PER_PAGE)
+    i = common.category_items(category_id)
+    c = models.Category.objects.get(id=category_id)
+    p = Paginator(i.order_by('-buys', '-price'), settings.SHOP_ITEMS_PER_PAGE)
     return render_to_response('shop-category.html',
-                              {'parent_cats': common.get_parent_cats(c),
-                               'currentcat': c,
-                               'producers': common.get_sub_cats_procs(c),
-                               'url': c.get_absolute_url(),
-                               'items': p.page(page).object_list,
-                               'subitems': subitems,
-                               'page': p.page(page), 'page_range': p.page_range},
+                              {'parent_cats': common.parent_categories(category_id),
+                               'child_cats': common.child_categories(category_id),
+                               'category_id': category_id,
+                               'producers': common.category_producers(category_id),
+                               'url': c.get_absolute_url(), # для многостраничности
+                               'items': p.page(pagenum).object_list,
+                               'page': p.page(pagenum), 'page_range': p.page_range},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
-def show_producer_page(request, producer, category, page=1):
+def show_producer_page(request, producer_id, category_id=0, pagenum=1):
     """
-    Функция для отображения подчинённых категорий для данного производителя.
+    Функция для отображения товаром для указанного производителя из
+    всех подчинённых категорий.
     """
     common.does_cart_exist(request)
-    if category == 0:
-        c = models.Category.objects.all()
-    else:
-        c = models.Category.objects.get(id=category)
-    p = models.Producer.objects.get(id=producer)
-    i = common.get_currcat_items(c, p)
+    p = models.Producer.objects.get(id=producer_id)
+    i = common.category_items(category_id, producer_id)
     paginator = Paginator(i, settings.SHOP_ITEMS_PER_PAGE)
     return render_to_response('shop-category.html',
-                              {'parent_cats': common.get_parent_cats(c),
-                               'currentcat': c,
-                               'currentproc': p,
-                               'categories': c.category_set.all(),
-                               'producers': common.get_currcat_procs(c),
-                               'url': '/shop/producer/%s/%s/' % (producer, category),
-                               'items': paginator.page(page).object_list,
-                               'page': paginator.page(page), 'page_range': paginator.page_range},
+                              {'parent_cats': common.parent_categories(category_id),
+                               'child_cats': common.child_categories(category_id),
+                               'category_id': (category_id == 0) and None or category_id,
+                               #'currentproc': p,
+                               #'categories': child_cats,
+                               'producers': common.category_producers(category_id),
+                               'url': '/shop/producer/%s/%s/' % (producer_id, category_id),
+                               'items': paginator.page(pagenum).object_list,
+                               'page': paginator.page(pagenum), 'page_range': paginator.page_range
+                               },
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
-def show_item_page(request, item):
+def show_item_page(request, item_id):
     """
     Отображение информации о товаре.
     """
     common.does_cart_exist(request)
-    curr_item = models.Item.objects.get(id=item)
+    i = models.Item.objects.get(id=item_id)
     return render_to_response('shop-item.html',
-                              {'item': curr_item,
-                               'item_remains': curr_item.count - curr_item.reserved,
-                               'js_onload': 'show_item_count_info(%s);' % item,
-                               'parent_cats': common.get_parent_cats(curr_item.category)},
+                              {'item': i,
+                               'item_remains': i.count - i.reserved,
+                               'js_onload': 'show_item_count_info(%s);' % item_id,
+                               'parent_cats': common.parent_categories(i.category.id)},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
     
 def show_cart(request):

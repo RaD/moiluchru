@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.db.models.query import QuerySet
 from django.core import validators
 from cargo.shop import models
 
@@ -16,55 +17,65 @@ def does_cart_exist(request):
                                          "to have cookies enabled. " +
                                          "Cookies are required for logging in.")
 
-def get_parent_cats(category):
-    """
-    Выборка с помощью метода select_related() получает из БД все
-    связанные категории, но возвращается только указанная, которая
-    и помещается в массив. Далее вся работа идёт с кэшем, БД здесь
-    больше не используется. НО ЧТО-ТО НЕ ЗАХОТЕЛО РАБОТАТЬ :(
-    """
-    #a = [Category.objects.select_related().get(id=category)]
-    a = [category]
-    curcat = category
-    while True:
-        if curcat.parent:
-            a.insert(0, curcat.parent)
-            curcat = curcat.parent
-        else:
-            break
-    return a
+def top_categories():
+    return list(models.Category.objects.filter(parent__isnull=True))
 
-# def gg(c):
-#     a = [c]
-#     return a + [gg(c.parent) if c.parent]
+def parent_categories(category_id):
+    if category_id == 0:
+        return [];
+    else:
+        category = models.Category.objects.get(id=category_id)
+        a = [category]
+        while True:
+            if category.parent:
+                a.insert(0, category.parent)
+                category = category.parent
+            else:
+                break
+        return a
 
-def get_sub_cats(category):
+def subcategories(category_id=0):
     """Функция возвращает все дочерние категории,
     даже дочерние дочерних и так далее."""
-    result = list(category.category_set.all())
-    return reduce(lambda a,b: a + b,
-                  [get_sub_cats(l) for l in result],
-                  result)
+    if category_id == 0:
+        return child_categories()
+    else:
+        category = models.Category.objects.get(id=category_id)
+        result = list(category.category_set.all())
+        return reduce(lambda a,b: a + b,
+                      [subcategories(l.id) for l in result],
+                      result)
 
-def get_currcat_items(category, producer=None):
+def child_categories(category_id=0):
+    """ Функция возвращает дочерние категории для указанной."""
+    if category_id == 0:
+        return top_categories()
+    else:
+        category = models.Category.objects.get(id=category_id)
+        return list(category.category_set.all())
+        
+def category_items(category_id, producer_id=None):
     """Функция возвращает элементы текущей категории."""
-    i =  models.Item.objects.filter(category=category)
-    if producer:
-        i = i.filter(producer=producer)
+    if category_id == 0:
+        i = models.Item.objects.all() 
+    else:
+        i = models.Item.objects.filter(category=category_id)
+
+    # отображать товары из подкатегорий только в том случае,
+    # если нет товаров в текущей категории
+    if not i: i |= subcategories_items(category_id)
+
+    if producer_id:
+        i = i.filter(producer=producer_id)
     return i
 
-def get_sub_cats_items(category):
+def subcategories_items(category_id):
     """Функция возвращает элементы всех дочерних категорий,
     включая указанную."""
-    cats = set(get_sub_cats(category))
+    cats = set(subcategories(category_id))
     return models.Item.objects.filter(category__in=cats)
 
-def get_currcat_procs(category):
-    """Функция возвращает производителей текущей категории."""
-    return set([l.producer for l in get_currcat_items(category)])
+def category_producers(category_id):
+    """ Возвращает производителей текущей и дочерних категорий. """
+    return set([l.producer for l in category_items(category_id)])
     
-def get_sub_cats_procs(category):
-    """
-    Возвращает производителей текущей и дочерних категорий.
-    """
-    return set([l.producer for l in get_sub_cats_items(category) | get_currcat_items(category)])

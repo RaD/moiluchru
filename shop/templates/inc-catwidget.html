@@ -3,4 +3,10 @@
   {% for parcat in parent_cats %}
   <a href="{{ parcat.get_absolute_url }}">{{ parcat.name }}</a>{% if not forloop.last %} / {% endif %}
   {% endfor %}
+
+  <div class="subcategories">
+    {% for cat in child_cats %}
+    <a href="{{ cat.get_absolute_url }}">{{ cat.name }}</a>{% if not forloop.last %} / {% endif %}
+    {% endfor %}
+  </div>
 </div>

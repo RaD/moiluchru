@@ -6,13 +6,21 @@ from cargo.shop.models import Category
 
 urlpatterns = patterns('',
     (r'^$', 'cargo.shop.views.show_main_page'),
+    # страница результатов поиска может иметь продолжение (paginator)
+    (r'^search/(?P<pagenum>\d+)/', 'cargo.shop.views.search_results'),
     (r'^search/', 'cargo.shop.views.search_results'),
+    # информация
     (r'^howto/(?P<howto>\d+)/', 'cargo.shop.views.show_howto_page'),
-    (r'^category/(?P<category>\d+)/(?P<page>\d+)/', 'cargo.shop.views.show_category_page'),
-    (r'^category/(?P<category>\d+)/', 'cargo.shop.views.show_category_page'),
-    (r'^producer/(?P<producer>\d+)/(?P<category>\d+)/(?P<page>\d+)/', 'cargo.shop.views.show_producer_page'),
-    (r'^producer/(?P<producer>\d+)/(?P<category>\d+)/', 'cargo.shop.views.show_producer_page'),
-    (r'^item/(?P<item>\d+)/', 'cargo.shop.views.show_item_page'),
+    # категория
+    (r'^category/(?P<category_id>\d+)/(?P<pagenum>\d+)/', 'cargo.shop.views.show_category_page'),
+    (r'^category/(?P<category_id>\d+)/', 'cargo.shop.views.show_category_page'),
+    # производитель
+    (r'^producer/(?P<producer_id>\d+)/(?P<category_id>\d+)/(?P<pagenum>\d+)/', 'cargo.shop.views.show_producer_page'),
+    (r'^producer/(?P<producer_id>\d+)/(?P<category_id>\d+)/', 'cargo.shop.views.show_producer_page'),
+    (r'^producer/(?P<producer_id>\d+)/', 'cargo.shop.views.show_producer_page'),
+    # товар
+    (r'^item/(?P<item_id>\d+)/', 'cargo.shop.views.show_item_page'),
+    # процесс покупки
     (r'^cart', 'cargo.shop.views.show_cart'),
     (r'^offer', 'cargo.shop.views.show_offer'),
     (r'^ordered', 'cargo.shop.views.show_ordered'),
