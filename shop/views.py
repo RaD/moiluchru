@@ -49,6 +49,7 @@ def search_results(request, pagenum=1):
     """
     Функция для результатов поиска по магазину.
     """
+    common.does_cart_exist(request)
     if request.method == 'POST':
         # TODO: проверить ввод
         userinput = request.POST.get('searchthis', None)
@@ -64,17 +65,29 @@ def search_results(request, pagenum=1):
         if userinput:
             i = models.Item.objects.filter(Q(title__search=userinput) |
                                            Q(desc__search=userinput))
-            common.does_cart_exist(request)
             p = Paginator(i, item_per_page)
+            request.session['searchquery'] = userinput
+            request.session['item_per_page'] = item_per_page
             return render_to_response('shop-search.html',
                                       {'items': p.page(pagenum).object_list,
                                        'search_query': userinput,
+                                       'url': '/shop/search/',
                                        'page': p.page(pagenum), 'page_range': p.page_range},
                                       context_instance=RequestContext(request, processors=[cart_ctx_proc]))
         else:
-            raise Http404()
+            return HttpResponseRedirect('/shop/')
     else:
-        return HttpResponseRedirect('/shop/')
+        userinput = request.session.get('searchquery', '')
+        item_per_page = request.session.get('item_per_page', settings.SHOP_ITEMS_PER_PAGE)
+        i = models.Item.objects.filter(Q(title__search=userinput) |
+                                       Q(desc__search=userinput))
+        p = Paginator(i, item_per_page)
+        return render_to_response('shop-search.html',
+                                  {'items': p.page(pagenum).object_list,
+                                   'search_query': userinput,
+                                   'url': '/shop/search/',
+                                   'page': p.page(pagenum), 'page_range': p.page_range},
+                                  context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
 def show_category_page(request, category_id, pagenum=1):
     """
@@ -115,6 +128,7 @@ def show_producer_page(request, producer_id, category_id=0, pagenum=1):
                                'page': paginator.page(pagenum), 'page_range': paginator.page_range
                                },
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
+
 
 def show_item_page(request, item_id):
     """
