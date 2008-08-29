@@ -23,15 +23,9 @@
 	  <table cellspacing="4" cellpadding="2">
 	    <tr>
 	      <td class="middle">Поиск</td>
-	      <td class="middle wideitem"><input type="text" class="wideitem" name="searchthis" value="{{ search_query }}"/></td>
-	      <td class="middle">
-		<select name="howmuch" title="Количество товаров на одной странице">
-		  <option id="1">4</option>
-		  <option id="2">10</option>
-		  <option id="3">25</option>
-		  <option id="4">50</option>
-		</select>
-	      </td>
+	      {% for field in form %}
+	      <td class="middle">{{ field }}</td>
+	      {% endfor %}
 	      <td class="middle"><input type="submit" name="go" value="Найти"/></td>
 	    </tr>
 	  </table>

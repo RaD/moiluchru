@@ -11,11 +11,21 @@ from django.newforms.util import ErrorList
 from cargo import settings
 from cargo.shop import models, common
 
+class SearchForm(forms.Form):
+    userinput = forms.CharField(max_length=64,
+                                widget=forms.TextInput(attrs={'class':'longitem'}))
+    howmuch = forms.ChoiceField(choices=[(1, settings.SHOP_ITEMS_PER_PAGE), (2, '10'), (3, '25'), (4, '50')],
+                                widget=forms.Select(attrs={'class':'longitem'}))
+
 def cart_ctx_proc(request):
     """
     Контекстный процессор для заполнения данных о корзине.
     """
+    form = SearchForm(auto_id='field_%s',
+                      initial={'userinput': request.session.get('searchquery', ''),
+                               'howmuch': request.session.get('howmuch_id', 1)})
     return {'site_name': settings.SITE_NAME,
+            'form': form,
             'howtos': models.Howto.objects.all(),
             'top_cats': common.top_categories(),
             'cart_count': request.session.get('cart_count', 0),
@@ -51,26 +61,18 @@ def search_results(request, pagenum=1):
     """
     common.does_cart_exist(request)
     if request.method == 'POST':
-        # TODO: проверить ввод
-        userinput = request.POST.get('searchthis', None)
-        howmuch = request.POST.get('howmuch', settings.SHOP_ITEMS_PER_PAGE)
-        if howmuch == 2:
-            item_per_page = 10
-        elif howmuch == 3:
-            item_per_page = 25
-        elif howmuch == 4:
-            item_per_page = 50
-        else:
-            item_per_page = 4
-        if userinput:
-            i = models.Item.objects.filter(Q(title__search=userinput) |
-                                           Q(desc__search=userinput))
-            p = Paginator(i, item_per_page)
-            request.session['searchquery'] = userinput
-            request.session['item_per_page'] = item_per_page
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            clean = form.cleaned_data
+            i = models.Item.objects.filter(Q(title__search=clean['userinput']) |
+                                           Q(desc__search=clean['userinput']))
+            z = [settings.SHOP_ITEMS_PER_PAGE, 10, 25, 50];
+            p = Paginator(i, z[int(clean['howmuch'])-1])
+            request.session['searchquery'] = clean['userinput']
+            request.session['howmuch_id'] = clean['howmuch']
             return render_to_response('shop-search.html',
                                       {'items': p.page(pagenum).object_list,
-                                       'search_query': userinput,
+                                       'search_query': clean['userinput'],
                                        'url': '/shop/search/',
                                        'page': p.page(pagenum), 'page_range': p.page_range},
                                       context_instance=RequestContext(request, processors=[cart_ctx_proc]))
