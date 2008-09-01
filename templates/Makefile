@@ -11,7 +11,8 @@ all:
 zip: $(DJZIP)
 
 sendzip: $(DJZIP)
-	scp $(DJZIP) caml.ru:django/cargo/templates/
+	scp $(DJZIP) caml.ru:devel/cargo.git/templates/
+	echo "Go to site and make install"
 
 $(DJZIP): $(HTMLS_SRC)/*.html
 	set -x;
