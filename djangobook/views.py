@@ -1,15 +1,27 @@
 # -*- coding: utf-8 -*-
 
-from django.contrib.auth.decorators import login_required
+import django
+#from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.template import TemplateDoesNotExist
 from django.http import Http404
 from cargo import settings
-from cargo.djangobook.models import Claims
+from cargo.djangobook.models import Claims, News
 
 import zipfile
 from datetime import datetime
+
+news_info_extra = {
+    'spelling_error_count': lambda: Claims.objects.count(),
+    'django_version': django.get_version()
+}
+
+news_info = {
+    'queryset': News.objects.order_by('-datetime')[:5],
+    'template_name': 'news-list.html',
+    'extra_context': news_info_extra # дополнительный контекст
+}
 
 def show_db_page(request, chapter=None, section=None):
     """Show book's page."""
@@ -25,13 +37,17 @@ def show_db_page(request, chapter=None, section=None):
     try:
         z = zipfile.ZipFile(settings.DJANGOBOOK_PAGE_ZIP)
         content = z.read(page)
+	z.close()
     except (IOError, KeyError):
-        raise TemplateDoesNotExist(template_name)
-    z.close()
+	pass
+        #raise TemplateDoesNotExist(template_name)
     # get pending claims
     pending = Claims.objects.count();
-    return render_to_response('djangobook_page.html',
-                              {'page_content': content,
+    return render_to_response('page.html',
+                              {'page_title': 'DjangoBook v1.0',
+                               'news_list': News.objects.order_by('-datetime')[:5],
+                               'page_content': content,
+                               'django_version': django.get_version(),
                                'user': request.user,
                                'spelling_error_count': pending})
     

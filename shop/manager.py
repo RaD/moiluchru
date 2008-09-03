@@ -4,10 +4,10 @@ from django.shortcuts import render_to_response
 from django.utils.translation import ugettext, gettext_lazy as _
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
-from django.core import validators
+#from django.core import validators
 from django.core.paginator import Paginator
-from django import newforms as forms
-from django.newforms.util import ErrorList
+from django import forms
+from django.forms.util import ErrorList
 from django.contrib import auth
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.admin import models as admmodels

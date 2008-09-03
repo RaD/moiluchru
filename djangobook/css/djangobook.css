@@ -9,12 +9,50 @@ CODE.systemitem { color: brown; }
 A { color: #FFC757; }
 IMG { behavior: url("/css/png.htc"); }
 
-.navheader TD { font: 10px verdana; color: #9AEF3F; }
-.navheader TH { font: 12px arial; color: #9AEF3F; }
-.navheader TABLE { border: 0px; }
+.content { background-color: #487858; margin: 0.5em; padding: 0.5em; }
 
-.navfooter TD { font: 10px verdana; color: #9AEF3F; }
-.navfooter TH { font: 12px arial; color: #9AEF3F; }
+.topic { background-color: #94CE4A; }
+.footer { background-color: #94CE4A; }
+.footer .line{ color: #487858; text-align: center; }
+
+/* стили для поисковой формы */
+.search { padding: 2px 1em; font: 12px arial; vertical-align: middle; }
+.search .soon { position: absolute; top: 130px; left: 250px; }
+.search .field { width: 60%; }
+.search BUTTON { color: #9AEF3F; background: #487858; 
+   margin: 1px; padding: 1px 2px; border: 1px solid gray; 
+   -moz-border-radius: 4px; cursor: default; }
+
+/* стили для жалобного компонента */
+.spelling { border: 0px; background-color: #94CE4A; color: black;
+   font: 10px arial; text-align: center; padding: 4px; }
+.spelling .question { font: 12px arial; font-weight: bold; }
+.spelling .answer { }
+
+.rss-banner { border: 0px; background-color: #94CE4A;
+   font: 10px arial; padding: 0.5em 2px;
+   text-align: center; color: black; }
+.rss-banner A { color: blue; }
+
+.offline-download { border: 0px; background-color: #94CE4A;
+   font: 10px arial; padding: 0.5em 2px;
+   text-align: center; color: black; }
+.offline-download A { color: blue; }
+
+.yandex-money { border: 0px; background-color: #487858; text-align: center; }
+.yandex-money .webmoney { color: white; font-family: monospace; font-size: 12px; text-align: center; }
+
+.accesskeys { border: 0px; background-color: #94CE4A; color: black;
+   font: 10px arial; text-align: center; padding: 4px; }
+.accesskeys .title { font: 12px arial; font-weight: bold; margin-bottom: 0.5em; }
+
+/* стили для книги */
+.navheader { font-family: verdana; color: #9AEF3F; }
+.navheader TD { font-size: 10px; }
+.navheader TH { font-size: 12px; }
+.navheader TABLE { border: 0px; }
+.navfooter TD { font: 10px verdana; }
+.navfooter TH { font: 12px arial; }
 .navfooter TABLE { border: 0px; }
 
 .toc { font: 14px arial; color: white; }
@@ -35,9 +73,6 @@ dt { margin: 4px 0px;}
 .list-of-tables A { color: white; }
 
 .bibliography {}
-
-.titlepage { font: 12px helvetica, sans-serif; }
-.title { font: 18px helvetica, sans-serif; }
 
 .figure { text-align: center; }
 .figure .title { font: 12px verdana; color: #9AEF3F; text-align: center; }
@@ -82,8 +117,14 @@ dt { margin: 4px 0px;}
 .computeroutput { font: 14px courier small-caps; color: brown; }
 .screen { font-family: monospace; font-size: 12px; white-space: pre; color: #FFC757; padding-left: 4em; }
 
-TABLE { font: 12px arial; color: white; border: 1px solid black;border-collapse: collapse; }
+TABLE { font: 12px arial; color: white;border-collapse: collapse; }
 .table .title { font: 14px arial italic; color: #9AEF3F; }
+
+/*
+
+
+.titlepage { font: 12px helvetica, sans-serif; }
+.title { font: 18px helvetica, sans-serif; }
 
 .zsection {
 	font-family: helvetica, sans-serif;
@@ -91,40 +132,10 @@ TABLE { font: 12px arial; color: white; border: 1px solid black;border-collapse:
 }
 
 
-.topic { background-color: #94CE4A; padding: 20px 0px 0px 0px; margin: 0px 8em 0px 9em; }
-.topic .titleimage { position: relative; z-index: 10; top: 20px; left: 8em; }
-.topic .usergreeting { color: #487858; text-align: right; padding: 0px 1em; }
-.topic .usergreeting BUTTON { color: #9AEF3F; background: #487858; 
-   margin: 1px; padding: 1px 2px; border: 1px solid gray; 
-   -moz-border-radius: 4px; cursor: default; }
-.footer { background-color: #94CE4A; padding: 20px 0px; margin: 0px 8em 0px 9em; }
-.footer .line{ color: #487858; text-align: center; padding: 0px 1em; }
 
 .topic .sections { font: 10px arial; background-color: #487858; 
    padding: 2px 1em; }
 
-.search { padding: 2px 1em; font: 12px arial; vertical-align: middle; }
-.search .soon { position: absolute; top: 130px; left: 250px; }
-.search .field { width: 60%; }
-.search BUTTON { color: #9AEF3F; background: #487858; 
-   margin: 1px; padding: 1px 2px; border: 1px solid gray; 
-   -moz-border-radius: 4px; cursor: default; }
-
-.content { background-color: #487858; margin: 1em 8em 1em 9em; padding: 1em; }
-
-.rss-banner { border: 0px; background-color: #94CE4A;
-   font: 10px arial; padding: 0.5em 2px;
-   text-align: center; color: black;
-   position: absolute; top: 110px; left: 2px; width: 116px;  }
-.rss-banner .soon { position: absolute; top: -5px; left: 100px; }
-.rss-banner A { color: blue; }
-
-.offline-download { border: 0px; background-color: #94CE4A;
-   font: 10px arial; padding: 0.5em 2px;
-   text-align: center; color: black;
-   position: absolute; top: 160px; left: 2px; width: 116px; }
-.offline-download .soon { position: absolute; top: 4px; left: 100px; }
-.offline-download A { color: blue; }
 
 .news { margin: 0.5em 0em; }
 .news .title { background-color: #94CE4A; padding: 2px 0.5em; 
@@ -145,22 +156,9 @@ TABLE { font: 12px arial; color: white; border: 1px solid black;border-collapse:
 .claim-button { padding: 4px; text-align: right; }
 .claim-button BUTTON { cursor: pointer; }
 
-.spelling { position: absolute; top: 1em; left: 2px; width: 116px;
-   border: 0px; background-color: #94CE4A; color: black;
-   font: 10px arial; text-align: center; padding: 4px; }
-.spelling .question { font: 12px arial; font-weight: bold; }
-.spelling .answer { }
-
-.yandex-money { border: 0px; background-color: #487858; 
-   position: absolute; top: 225px; left: 2px; }
-.yandex-money .webmoney { color: white; font-family: monospace; font-size: 12px; text-align: center; }
-
 .splashwidget { position: absolute; top: 20px; left: 20px;
    font: 12px arial; padding: 1em;
    border: 1px solid red; background-color: gray; }
 
-.accesskeys { position: absolute; top: 460px; left: 2px; width: 116px;
-   border: 0px; background-color: #94CE4A; color: black;
-   font: 10px arial; text-align: center; padding: 4px; }
-.accesskeys .title { font: 12px arial; font-weight: bold; margin-bottom: 0.5em; }
 
+*/

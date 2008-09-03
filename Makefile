@@ -1,7 +1,7 @@
 include config.mk
 
 CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)
-SUBDIRS=css djangobook js locale pics shop templates
+SUBDIRS=css djangobook js locale pics shop
 FILES=$(wildcard *.py)
 
 all: locale subdirs

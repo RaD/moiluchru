@@ -1,8 +1,8 @@
 import os, Image
-from django.template import Library
+from django import template
 from cargo import settings
 
-register = Library()
+register = template.Library()
 
 THUMBNAILS = 'thumbnails'
 SCALE_WIDTH = 'w'
@@ -16,7 +16,9 @@ def scale(max_x, pair):
     
 # Thumbnail filter based on code from
 # http://batiste.dosimple.ch/blog/2007-05-13-1/
-def thumbnail(original_image_path, arg):  
+
+@register.filter
+def thumbnail(original_image_path, arg):
     if not original_image_path:  
         return ''  
         
@@ -73,4 +75,3 @@ def thumbnail(original_image_path, arg):
 
     return miniature_url  
 
-register.filter(thumbnail)

@@ -1,8 +1,8 @@
-TOP_DIR=..
+TOP_DIR=../..
 
 include $(TOP_DIR)/config.mk
 
-CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/templates
+CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/book/templates
 DJZIP=djangobook.html.zip
 FILES=$(wildcard *.html) $(DJZIP)
 
@@ -11,8 +11,8 @@ all:
 zip: $(DJZIP)
 
 sendzip: $(DJZIP)
-	scp $(DJZIP) caml.ru:devel/cargo.git/templates/
-	echo "Go to site and make install"
+	scp $(DJZIP) caml.ru:devel/djangobook.git/templates/
+	echo "Go to the site and make install"
 
 $(DJZIP): $(HTMLS_SRC)/*.html
 	set -x;

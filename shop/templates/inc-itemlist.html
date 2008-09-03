@@ -11,7 +11,8 @@
       <tr>
 	<td class="thumbnail">
 	  <a href="{{ item.get_absolute_url }}">
-	  <img src="{{ item.get_image_filename|thumbnail:"100x,itempics" }}" border="0" title="{{ item.title }}"/></a>
+	  <!-- img src="{{ item.get_image_filename|thumbnail:"100x,itempics" }}" border="0" title="{{ item.title }}"/></a //-->
+	  <img src="{{ item.image.path|thumbnail:"100x,itempics" }}" border="0" title="{{ item.title }}"/></a>
 	</td>
 	<td class="info">
 	  <div style="margin: 0.5em 0em;">
@@ -19,7 +20,9 @@
 	  </div>
 	  {% if search_query or subitems or not currentcat %}
 	  <div>
-	    <span style="font-size: 10px;"><a href="{{ item.category.get_absolute_url }}">{{ item.category.name }}</a></span>
+	    <span style="font-size: 10px;">Категория товара:
+	    <a href="{{ item.category.get_absolute_url }}">{{ item.category.name }}</a>
+	    </span>
 	  </div>
 	  {% endif %}
 	  </div>

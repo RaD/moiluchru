@@ -11,10 +11,6 @@ class Color(models.Model):
         verbose_name = _('Color')
         verbose_name_plural = _('Colors')
 
-    class Admin:
-        list_display = ('title',)
-        ordering = ('title',)
-
     def __unicode__(self):
         return self.title
     
@@ -24,10 +20,6 @@ class Country(models.Model):
     class Meta:
         verbose_name = _('Country')
         verbose_name_plural = _('Countries')
-
-    class Admin:
-        list_display = ('title',)
-        ordering = ('title',)
 
     def __unicode__(self):
         return self.title
@@ -39,11 +31,6 @@ class City(models.Model):
     class Meta:
         verbose_name = _('City')
         verbose_name_plural = _('Cities')
-
-    class Admin:
-        list_display = ('title', 'country')
-        ordering = ('title', 'country')
-        search_fields = ('title',)
 
     def __unicode__(self):
         return self.title
@@ -58,16 +45,11 @@ class Producer(models.Model):
         verbose_name = _('Producer')
         verbose_name_plural = _('Producers')
 
-    class Admin:
-        list_display = ('name', 'country', 'buys')
-        ordering = ('name', 'country')
-        search_fields = ('name')
-
     def __unicode__(self):
         return self.name
     
     def get_absolute_url(self):
-        return "/shop/producer/%i/" % self.id
+        return u'/shop/producer/%i/' % self.id
 
 class Category(models.Model):
     """ The categories of items. """
@@ -80,16 +62,11 @@ class Category(models.Model):
         verbose_name_plural = _('Categories')
         #order_with_respect_to = 'parent'
 
-    class Admin:
-        list_display = ('name', 'parent')
-        ordering = ('parent', 'name')
-        search_fields = ('name',)
-
     def __unicode__(self):
         return self.name
 
     def get_absolute_url(self):
-        return "/shop/category/%i/" % self.id
+        return u'/shop/category/%i/' % self.id
 
 class Item(models.Model):
     title = models.CharField(ugettext('Title'), max_length=60)
@@ -108,16 +85,11 @@ class Item(models.Model):
         verbose_name = _('Item')
         verbose_name_plural = _('Items')
 
-    class Admin:
-        list_display = ('title', 'category', 'producer', 'price', 'count', 'buys')
-        ordering = ('title', 'category')
-        search_fields = ('title', 'category')
-
     def __unicode__(self):
         return self.title
     
     def get_absolute_url(self):
-        return "/shop/item/%i/" % self.id
+        return u'/shop/item/%i/' % self.id
     
 class Buyer(models.Model):
     lastname = models.CharField(max_length=64)
@@ -132,11 +104,6 @@ class Buyer(models.Model):
         verbose_name = _('Buyer')
         verbose_name_plural = _('Buyers')
 
-    class Admin:
-        list_display = ('lastname', 'firstname', 'city')
-        ordering = ('lastname', 'firstname', 'city')
-        search_fields = ('lastname', 'firstname')
-
     def __unicode__(self):
         return self.lastname
     
@@ -147,11 +114,6 @@ class OrderStatus(models.Model):
         verbose_name = _('Order status')
         verbose_name_plural = _('Order statuses')
 
-    class Admin:
-        list_display = ('title',)
-	ordering = ('title',)
-	search_fields = ('title',)
-    
     def __unicode__(self):
         return self.title
     
@@ -168,17 +130,12 @@ class Order(models.Model):
         verbose_name = _('Order')
         verbose_name_plural = _('Orders')
 
-    class Admin:
-        list_display = ('buyer', 'count', 'totalprice', 'reg_date', 'status')
-        ordering = ('status', 'totalprice')
-        search_fields = ('buyer', 'status')
-
     def __unicode__(self):
         return self.buyer.lastname
     
     def get_absolute_url(self):
         """ This returns the absolute URL for a record. """
-        return '/shop/orderinfo/%i/' % self.id
+        return u'/shop/orderinfo/%i/' % self.id
     
 class OrderDetail(models.Model):
     order = models.ForeignKey(Order)
@@ -188,7 +145,6 @@ class OrderDetail(models.Model):
 
     def __unicode__(self):
         return self.item.title
-   
 
 class OrderStatusChange(models.Model):
     order = models.ForeignKey(Order)
@@ -230,7 +186,7 @@ class Howto(models.Model):
 
     def get_absolute_url(self):
         """ This returns the absolute URL for a record. """
-        return '/shop/howto/%i/' % self.id
+        return u'/shop/howto/%i/' % self.id
 
 class Profile(models.Model):
     # обязательная часть профайла

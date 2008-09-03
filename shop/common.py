@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db.models.query import QuerySet
-from django.core import validators
+#from django.core import validators
 from cargo.shop import models
 
 def init_cart(request):
@@ -13,9 +13,10 @@ def does_cart_exist(request):
         if not 'cart_items' in request.session:
             init_cart(request)
     else:
-        raise validators.ValidationError("Your Web browser doesn't appear " +
-                                         "to have cookies enabled. " +
-                                         "Cookies are required for logging in.")
+	pass
+#        raise validators.ValidationError("Your Web browser doesn't appear " +
+#                                         "to have cookies enabled. " +
+#                                         "Cookies are required for logging in.")
 
 def top_categories():
     return list(models.Category.objects.filter(parent__isnull=True))

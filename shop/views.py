@@ -6,8 +6,8 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.db.models import Q
 from django.template import RequestContext
 from django.core.paginator import Paginator
-from django import newforms as forms
-from django.newforms.util import ErrorList
+from django import forms
+from django.forms.util import ErrorList
 from cargo import settings
 from cargo.shop import models, common
 
@@ -251,12 +251,12 @@ def show_offer(request):
         else:
             form = OfferForm(request.POST, auto_id='field_%s', error_class=DivErrorList)
             return render_to_response('shop-offer.html',
-                                      {'form': form, 'cart_show' : 'yes'},
+                                      {'form_offer': form, 'cart_show' : 'yes'},
                                       context_instance=RequestContext(request, processors=[cart_ctx_proc]));
     else:
         form = OfferForm(auto_id='field_%s')
         return render_to_response('shop-offer.html',
-                                  {'form': form, 'cart_show' : 'yes'},
+                                  {'form_offer': form, 'cart_show' : 'yes'},
                                   context_instance=RequestContext(request, processors=[cart_ctx_proc]));
 
 def show_ordered(request):

@@ -11,37 +11,25 @@ class News(models.Model):
         verbose_name = _('News')
         verbose_name_plural = _('News')
 
-    class Admin:
-        list_display = ('title', 'datetime')
-        ordering = ('-datetime',)
-
     def __unicode__(self):
         return self.title
     
     def get_absolute_url(self):
         """ This returns the absolute URL for a record. """
-        return '/djangobook/news/'
+        return '/news/'
     
 class Claims(models.Model):
-    ctx_left = models.CharField(max_length=255)
+    ctx_left = models.CharField(max_length=255, blank=True)
     selected = models.CharField(max_length=255)
-    ctx_right = models.CharField(max_length=255)
+    ctx_right = models.CharField(max_length=255, blank=True)
     comment = models.TextField()
     url = models.URLField(verify_exists=False)
+    email = models.EmailField()
     datetime = models.DateTimeField()
 
     class Meta:
         verbose_name = _('Claim')
         verbose_name_plural = _('Claims')
 
-    class Admin:
-        list_display = ('selected', 'datetime')
-        ordering = ('-datetime',)
-
     def __unicode__(self):
         return self.selected
-    
-    #def display(self):
-    #    return '%s%s%s' % (self.ctx_left, self.selected, self.ctx_right)
-    #display.short_description = _('Claim\'s context')
-
