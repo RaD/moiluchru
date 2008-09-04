@@ -59,6 +59,7 @@ def user_claims(request):
         record = Claims(ctx_left=request.POST.get('ctx_left', ''),
                         selected=request.POST.get('selected', 'None'),
                         ctx_right=request.POST.get('ctx_right', ''),
+                        email=request.POST.get('email', ''),
                         comment=request.POST.get('comment', 'No comments...'),
                         url=request.META.get('HTTP_REFERER', ''),
                         datetime=datetime.now())

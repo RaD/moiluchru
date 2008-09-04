@@ -3,7 +3,7 @@ TOP_DIR=..
 include $(TOP_DIR)/config.mk
 
 CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/djangobook
-SUBDIRS=pics templates
+SUBDIRS=css js patches pics templates
 FILES=$(wildcard *.py)
 
 all:

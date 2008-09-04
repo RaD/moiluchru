@@ -23,6 +23,23 @@ IMG { behavior: url("/css/png.htc"); }
    margin: 1px; padding: 1px 2px; border: 1px solid gray; 
    -moz-border-radius: 4px; cursor: default; }
 
+.wide { width: 100%; }
+.claim { position: absolute; top: 100px; left: 100px; z-index: 20;
+   border: 1px solid red; width: 400px; 
+   background-color: gray; }
+.claim .padd { padding: 4px; }
+.claim .border { border: 1px solid black; }
+.claim-title { font: 12px arial; color: white; background: black; padding: 2px 4px; }
+.claim-context { font: 10px arial; background-color: white; }
+.claim-error { background-color: red; }
+.claim-comment { font-family: monospace; font-size: 10px; width: 100%; height: 100px; }
+.claim-button { text-align: right; }
+.claim-button BUTTON { cursor: pointer; }
+
+.splashwidget { position: absolute; top: 20px; left: 20px;
+   font: 12px arial; padding: 1em;
+   border: 1px solid red; background-color: gray; }
+
 /* стили для жалобного компонента */
 .spelling { border: 0px; background-color: #94CE4A; color: black;
    font: 10px arial; text-align: center; padding: 4px; }
@@ -142,23 +159,6 @@ TABLE { font: 12px arial; color: white;border-collapse: collapse; }
    font: 12px arial; }
 .news .body { padding: 0.5em; font: 10px arial; color: white; line-height: 1.5; }
 
-.claim { position: absolute; top: 100px; left: 100px; z-index: 20;
-   border: 1px solid red; width: 400px; 
-   background-color: gray; }
-.claim-title { font: 12px arial; color: white; background: black; padding: 2px 4px; }
-.claim-context { padding: 4px; }
-.claim-context-widget { font: 10px arial; padding: 4px;
-   background-color: white; border: 1px solid black; }
-.claim-error { background-color: red; }
-.claim-comment { padding: 4px; }
-.claim-comment TEXTAREA { font-family: monospace; font-size: 10px; 
-   width: 100%; height: 100px; }
-.claim-button { padding: 4px; text-align: right; }
-.claim-button BUTTON { cursor: pointer; }
-
-.splashwidget { position: absolute; top: 20px; left: 20px;
-   font: 12px arial; padding: 1em;
-   border: 1px solid red; background-color: gray; }
 
 
 */

@@ -2,7 +2,7 @@ TOP_DIR=../..
 
 include $(TOP_DIR)/config.mk
 
-CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/book/templates
+CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/djangobook/templates
 DJZIP=djangobook.html.zip
 FILES=$(wildcard *.html) $(DJZIP)
 

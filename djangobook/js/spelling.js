@@ -110,14 +110,20 @@ var spelling = {
 				    _dom('span', _txt(context_error), 
 					 [['class', 'claim-error']]),
 				    _dom('span', _txt(context_right), []) ],
-				  [['class', 'claim-context-widget']]) ],
-			   [['class', 'claim-context']]),
+				  [['class', 'padd border claim-context']]) ],
+			   [['class', 'padd']]),
+		      _dom('div',
+			   [ _txt('E-почта'),
+			     _dom('div',
+				  email = _dom('input', [], [['type', 'text'], ['class', 'wide border']]),
+				  [] ) ],
+			   [['class', 'padd']]),
 		      _dom('div',
 			   [ _txt('Комментарий'),
 			     _dom('div',
-				  textarea = _dom('textarea', _txt('Ваш комментарий'), []),
+				  textarea = _dom('textarea', _txt('Ваш комментарий'), [['class', 'border claim-comment']]),
 				  []) ],
-			   [['class', 'claim-comment']]),
+			   [['class', 'padd']]),
 		      _dom('div',
 			   [ _dom('button', _txt('Отправить'), 
 				  [['onclick', function() {
@@ -127,6 +133,7 @@ var spelling = {
 							 { ctx_left: context_left,
 							   selected: context_error,
 							   ctx_right: context_right,
+							   email: email.value,
 							   comment: textarea.value },
 							 onSuccess: function(transport) {
 							   var response = transport.responseText || "нет ответа";
@@ -147,7 +154,7 @@ var spelling = {
 				      // уничтожаем объект
 				      form.parentNode.removeChild(form);
 				    }]]) ],
-			   [['class', 'claim-button']]) ],
+			   [['class', 'padd claim-button']]) ],
 		    [['class', 'claim']]);
     document.getElementsByTagName('BODY')[0].appendChild(form);
 
