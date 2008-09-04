@@ -39,8 +39,7 @@ def show_db_page(request, chapter=None, section=None):
         content = z.read(page)
 	z.close()
     except (IOError, KeyError):
-	pass
-        #raise TemplateDoesNotExist(template_name)
+        raise TemplateDoesNotExist(template_name)
     # get pending claims
     pending = Claims.objects.count();
     return render_to_response('page.html',
