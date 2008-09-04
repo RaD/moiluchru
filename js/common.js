@@ -182,3 +182,4 @@ var splashwidget = {
 		      }, millisecs);
   }
 }
+

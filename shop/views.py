@@ -60,6 +60,8 @@ def search_results(request, pagenum=1):
     Функция для результатов поиска по магазину.
     """
     common.does_cart_exist(request)
+    sort_type = request.session.get('sort_type', 1)
+    sort = ['', '-buys', 'buys', '-price', 'price']
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
@@ -67,13 +69,14 @@ def search_results(request, pagenum=1):
             i = models.Item.objects.filter(Q(title__search=clean['userinput']) |
                                            Q(desc__search=clean['userinput']))
             z = [settings.SHOP_ITEMS_PER_PAGE, 10, 25, 50];
-            p = Paginator(i, z[int(clean['howmuch'])-1])
+            p = Paginator(i.order_by(sort[sort_type]), z[int(clean['howmuch'])-1])
             request.session['searchquery'] = clean['userinput']
             request.session['howmuch_id'] = clean['howmuch']
             return render_to_response('shop-search.html',
                                       {'items': p.page(pagenum).object_list,
                                        'search_query': clean['userinput'],
                                        'url': '/shop/search/',
+                                       'sort_type': sort_type, 
                                        'page': p.page(pagenum), 'page_range': p.page_range},
                                       context_instance=RequestContext(request, processors=[cart_ctx_proc]))
         else:
@@ -83,11 +86,12 @@ def search_results(request, pagenum=1):
         item_per_page = request.session.get('item_per_page', settings.SHOP_ITEMS_PER_PAGE)
         i = models.Item.objects.filter(Q(title__search=userinput) |
                                        Q(desc__search=userinput))
-        p = Paginator(i, item_per_page)
+        p = Paginator(i.order_by(sort[sort_type]), item_per_page)
         return render_to_response('shop-search.html',
                                   {'items': p.page(pagenum).object_list,
                                    'search_query': userinput,
                                    'url': '/shop/search/',
+                                   'sort_type': sort_type, 
                                    'page': p.page(pagenum), 'page_range': p.page_range},
                                   context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
@@ -95,16 +99,19 @@ def show_category_page(request, category_id, pagenum=1):
     """
     Функция для отображения подчинённых категорий.
     """
+    sort = ['', '-buys', 'buys', '-price', 'price']
+    sort_type = request.session.get('sort_type', 1)
     common.does_cart_exist(request)
     i = common.category_items(category_id)
     c = models.Category.objects.get(id=category_id)
-    p = Paginator(i.order_by('-buys', '-price'), settings.SHOP_ITEMS_PER_PAGE)
+    p = Paginator(i.order_by(sort[sort_type]), settings.SHOP_ITEMS_PER_PAGE)
     return render_to_response('shop-category.html',
                               {'parent_cats': common.parent_categories(category_id),
                                'child_cats': common.child_categories(category_id),
                                'category_id': category_id,
                                'producers': common.category_producers(category_id),
                                'url': c.get_absolute_url(), # для многостраничности
+                               'sort_type': sort_type, 
                                'items': p.page(pagenum).object_list,
                                'page': p.page(pagenum), 'page_range': p.page_range},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
@@ -264,3 +271,19 @@ def show_ordered(request):
     return render_to_response('shop-ordered.html',{},
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]));
     
+def set_sort_mode(request, mode=1):
+    if int(mode) in range(1,3):
+        sort_type = int(request.session.get('sort_type', 1))
+        if int(mode) == 1:
+            if sort_type == 1:
+                request.session['sort_type'] = 2
+            else:
+                request.session['sort_type'] = 1
+        else:
+            if sort_type == 3:
+                request.session['sort_type'] = 4
+            else:
+                request.session['sort_type'] = 3
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '#'))
+    else:
+        return HttpResponseRedirect('/shop/%s/' % mode)

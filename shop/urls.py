@@ -12,6 +12,8 @@ urlpatterns = patterns('',
     # категория
     (r'^category/(?P<category_id>\d+)/(?P<pagenum>\d+)/', 'cargo.shop.views.show_category_page'),
     (r'^category/(?P<category_id>\d+)/', 'cargo.shop.views.show_category_page'),
+    # сортировка
+    (r'^sort/(?P<mode>\d)/', 'cargo.shop.views.set_sort_mode'),
     # производитель
     (r'^producer/(?P<producer_id>\d+)/(?P<category_id>\d+)/(?P<pagenum>\d+)/', 'cargo.shop.views.show_producer_page'),
     (r'^producer/(?P<producer_id>\d+)/(?P<category_id>\d+)/', 'cargo.shop.views.show_producer_page'),
