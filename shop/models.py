@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from django.utils.translation import ugettext, gettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.contrib.admin.models import User
 from django.db import models
 
 class Color(models.Model):
-    title = models.CharField(ugettext('Title'), max_length=60)
+    title = models.CharField(_('Title'), max_length=60)
 
     class Meta:
         verbose_name = _('Color')
@@ -15,7 +15,7 @@ class Color(models.Model):
         return self.title
     
 class Country(models.Model):
-    title = models.CharField(ugettext('Title'), max_length=60)
+    title = models.CharField(_('Title'), max_length=60)
 
     class Meta:
         verbose_name = _('Country')
@@ -25,8 +25,8 @@ class Country(models.Model):
         return self.title
     
 class City(models.Model):
-    title = models.CharField(ugettext('Title'), max_length=60)
-    country = models.ForeignKey(Country, verbose_name=ugettext('Country'))
+    title = models.CharField(_('Title'), max_length=60)
+    country = models.ForeignKey(Country, verbose_name=_('Country'))
 
     class Meta:
         verbose_name = _('City')
@@ -36,9 +36,9 @@ class City(models.Model):
         return self.title
     
 class Producer(models.Model):
-    name = models.CharField(ugettext('Company'), max_length=30)
-    country = models.ForeignKey(Country, verbose_name=ugettext('Country'))
-    buys = models.IntegerField(ugettext('Buys'), default=0)
+    name = models.CharField(_('Company'), max_length=30)
+    country = models.ForeignKey(Country, verbose_name=_('Country'))
+    buys = models.IntegerField(_('Buys'), default=0)
 #    website = models.URLField(verify_exists=False)
 
     class Meta:
@@ -53,9 +53,9 @@ class Producer(models.Model):
 
 class Category(models.Model):
     """ The categories of items. """
-    name = models.CharField(ugettext('Title'), max_length=30)
+    name = models.CharField(_('Title'), max_length=30)
     parent = models.ForeignKey('self', blank=True, null=True,
-                               verbose_name=ugettext('Title'))
+                               verbose_name=_('Title'))
 
     class Meta:
         verbose_name = _('Category')
@@ -69,17 +69,17 @@ class Category(models.Model):
         return u'/shop/category/%i/' % self.id
 
 class Item(models.Model):
-    title = models.CharField(ugettext('Title'), max_length=60)
+    title = models.CharField(_('Title'), max_length=60)
     desc = models.TextField()
-    category = models.ForeignKey(Category, verbose_name=ugettext('Category'))
-    producer = models.ForeignKey(Producer, verbose_name=ugettext('Producer'))
-    price = models.FloatField(ugettext('Price'))
-    color = models.ForeignKey(Color, verbose_name=ugettext('Color'))
-    count = models.PositiveIntegerField(ugettext('Count'))
-    reserved = models.PositiveIntegerField(ugettext('Reserved'), default=0)
+    category = models.ForeignKey(Category, verbose_name=_('Category'))
+    producer = models.ForeignKey(Producer, verbose_name=_('Producer'))
+    price = models.FloatField(_('Price'))
+    color = models.ForeignKey(Color, verbose_name=_('Color'))
+    count = models.PositiveIntegerField(_('Count'))
+    reserved = models.PositiveIntegerField(_('Reserved'), default=0)
     reg_date = models.DateTimeField()
     image = models.ImageField(upload_to="itempics", blank=True)
-    buys = models.IntegerField(ugettext('Buys'), default=0)
+    buys = models.IntegerField(_('Buys'), default=0)
     
     class Meta:
         verbose_name = _('Item')
