@@ -105,7 +105,8 @@ class Buyer(models.Model):
         verbose_name_plural = _('Buyers')
 
     def __unicode__(self):
-        return self.lastname
+        return u'%s %s %s' %(self.lastname,
+                             self.firstname, self.secondname)
     
 class OrderStatus(models.Model):
     title = models.CharField(max_length=30)

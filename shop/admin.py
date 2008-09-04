@@ -32,25 +32,40 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 class ItemAdmin(admin.ModelAdmin):
-    fieldsets = ((None,{'fields':
-                        ('title', 'category', 'producer',
-                         'price', 'count', 'buys')}),)
+    fieldsets = (
+        ('Информация',
+         {'fields':('title', 'category', 'producer',
+                    'price', 'color', 'count')}),
+        ('Подробности',
+         {'fields': ('image', 'desc')}),
+        ('Служебное',
+         {'fields': ('reserved', 'buys', 'reg_date')})
+        )
     list_display = ('title', 'category', 'producer',
                     'price', 'count', 'buys')
     ordering = ('title', 'category')
     search_fields = ('title', 'category')
 
 class BuyerAdmin(admin.ModelAdmin):
-    fieldsets = ((None,{'fields':
-                        ('lastname', 'firstname', 'city')}),)
+    fieldsets = (
+        ('Основная информация',
+         {'fields': ('lastname', 'firstname', 'secondname')}),
+        ('Дополнительная информация',
+         {'fields': ('address', 'city', 'email')})
+        )
     list_display = ('lastname', 'firstname', 'city')
     ordering = ('lastname', 'firstname', 'city')
     search_fields = ('lastname', 'firstname')
 
 class OrderAdmin(admin.ModelAdmin):
-    fieldsets = ((None,{'fields':
-                        ('buyer', 'count', 'totalprice',
-                         'status')}),)
+    fieldsets = (
+        ('О покупателе',
+         {'fields': ('buyer', 'comment')}),
+        ('Заказ',
+         {'fields': ('count', 'totalprice')}),
+        ('Доставка',
+         {'fields': ('courier', 'status')})
+        )
     list_display = ('buyer', 'count', 'totalprice',
                     'reg_date', 'status')
     ordering = ('status', 'totalprice')
@@ -58,7 +73,7 @@ class OrderAdmin(admin.ModelAdmin):
 
 class HowtoAdmin(admin.ModelAdmin):
     fieldsets = ((None,{'fields':
-                        ('key', 'title')}),)
+                        ('key', 'title', 'text')}),)
     list_display = ('key', 'title')
     ordering = ('key',)
 
