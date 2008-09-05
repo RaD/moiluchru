@@ -21,4 +21,7 @@ urlpatterns = patterns('',
     # Пользователи сообщают об ошибках
     (r'^claim/', 'cargo.djangobook.views.user_claims'),
 
+    # ajax
+    (r'^pending/', 'cargo.djangobook.views.claims_penging'),
+
 )

@@ -50,11 +50,13 @@ IMG { behavior: url("/css/png.htc"); }
    font: 10px arial; padding: 0.5em 2px;
    text-align: center; color: black; }
 .rss-banner A { color: blue; }
+.rss-banner .title { font: 12px arial; font-weight: bold; margin-bottom: 0.5em; }
 
 .offline-download { border: 0px; background-color: #94CE4A;
    font: 10px arial; padding: 0.5em 2px;
    text-align: center; color: black; }
 .offline-download A { color: blue; }
+.offline-download .title { font: 12px arial; font-weight: bold; margin-bottom: 0.5em; }
 
 .yandex-money { border: 0px; background-color: #487858; text-align: center; }
 .yandex-money .webmoney { color: white; font-family: monospace; font-size: 12px; text-align: center; }

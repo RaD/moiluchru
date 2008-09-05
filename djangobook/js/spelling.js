@@ -6,7 +6,28 @@ var spelling = {
   init: function() {
     var it = this;
     parent.document.onkeypress = function(e) { return it.onkeypress(e); }
+    it.pending_informer();
     window.status = 'claim module initialized...';
+  },
+
+  pending_informer: function() {
+    var ajax_response = function(transport) {
+      var xml = transport.responseXML.firstChild;
+      check_result(false,
+		   get_xml_item(xml, 'code'),
+		   function() { $('spelling_error_count').innerHTML = get_xml_item(xml, 'pending');
+				window.status = 'Проверка очереди жалоб: OK'; },
+		   function() { window.status = 'Проверка очереди жалоб: Ошибка'; });
+    }
+    
+    var callback = function() {
+      new Ajax.Request('/djangobook/pending/',
+		       { method: 'post', 
+			 onSuccess: ajax_response, onFailure: ajax_response });
+    }
+    
+    callback(); // для мгновенного обновления
+    var pe = new PeriodicalExecuter(callback, 60);
   },
 
   onkeypress: function(e) {
@@ -38,6 +59,7 @@ var spelling = {
   },
   
   dosend: function(recurrent) {
+    var it = this;
     // проверка на древность браузера
     if (navigator.appName.indexOf("Netscape")!=-1 && 
 	eval(navigator.appVersion.substring(0,1))<5) {
@@ -138,6 +160,7 @@ var spelling = {
 							 onSuccess: function(transport) {
 							   var response = transport.responseText || "нет ответа";
 							   splashwidget.init('Успешно!', 2000);
+							   it.pending_informer();
 							 },
 							 onFailure: function(transport) {
 							   window.status = 'Что-то сломалось :(';
@@ -165,3 +188,4 @@ var spelling = {
 
   }
 }
+

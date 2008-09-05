@@ -1,23 +1,5 @@
 // Отображение формы подтверждения
 
-function get_xml_item(obj, tag_name) {
-  return _elts(obj, tag_name)[0].firstChild.nodeValue;
-}
-
-function check_result(show_splash, code, success_func, failure_func) {
-  if (code == '200') {
-    if (success_func) { success_func(); }
-  } else {
-    if (failure_func) { failure_func(); }
-  }
-  switch (code) {
-  case '200': result = 'Успешно'; break;
-  case '201': result = 'Неудачно: Недостаточно товара на складе...'; break;
-  default: result = 'Неудачно: ['+code+'] '+get_xml_item(xml, 'desc');
-  }
-  if (show_splash) { splashwidget.init(result, 2000); }
-}
-  
 function show_form(item_id, item_title) {
   var widget = $('widget_addtocart');
   if (! widget) return;

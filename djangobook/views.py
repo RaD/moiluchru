@@ -66,3 +66,13 @@ def user_claims(request):
         return HttpResponse('<result>ok</result>', mimetype="text/xml")
     else:
         return HttpResponse('<result>error</result>', mimetype="text/xml")
+
+def claims_penging(request):
+    """ Функция возвращает количество жалоб в очереди. """
+    if (request.is_ajax()):
+        pending = Claims.objects.count();
+        return HttpResponse('<result><code>200</code><desc>success</desc>' +
+                            '<pending>%i</pending></result>' % int(pending),
+                            mimetype="text/xml")
+    else:
+        return HttpResponse('<result><code>400</code><desc>it must be ajax call</desc></result>', mimetype="text/xml")
