@@ -106,7 +106,7 @@ TABLE { width: 100%; border-collapse: collapse; }
 /* IE6 */
 * html .wideitem { width: 96%; }
 * html .longitem { width: 96%; white-space: nowrap; overflow: hidden; text-overflow : ellipsis; }
-* html INPUT,TEXTAREA,SELECT { border: 1px solid gray; -moz-border-radius: 4px; padding: 2px 4px; margin: 2px 0px;}
+* html INPUT,TEXTAREA,SELECT { border: 1px solid gray; }
 
 .paginator { border-top: 1px solid gray; border-bottom: 1px solid gray; 
    font-size: 10px; padding: 0px 1em; }

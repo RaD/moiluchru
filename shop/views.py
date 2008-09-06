@@ -12,10 +12,8 @@ from cargo import settings
 from cargo.shop import models, common
 
 class SearchForm(forms.Form):
-    userinput = forms.CharField(max_length=64,
-                                widget=forms.TextInput(attrs={'class':'longitem'}))
-    howmuch = forms.ChoiceField(choices=[(1, settings.SHOP_ITEMS_PER_PAGE), (2, '10'), (3, '25'), (4, '50')],
-                                widget=forms.Select(attrs={'class':'longitem'}))
+    userinput = forms.CharField(max_length=64)
+    howmuch = forms.ChoiceField(choices=[(1, settings.SHOP_ITEMS_PER_PAGE), (2, '10'), (3, '25'), (4, '50')])
 
 def cart_ctx_proc(request):
     """
