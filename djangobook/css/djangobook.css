@@ -40,23 +40,12 @@ IMG { behavior: url("/css/png.htc"); }
    font: 12px arial; padding: 1em;
    border: 1px solid red; background-color: gray; }
 
-/* стили для жалобного компонента */
-.spelling { border: 0px; background-color: #94CE4A; color: black;
+.informer { border: 0px; background-color: #94CE4A; color: black;
    font: 10px arial; text-align: center; padding: 4px; }
-.spelling .question { font: 12px arial; font-weight: bold; }
-.spelling .answer { }
+.informer .title { font-size: 12px; font-weight: bold; text-align: center; }
+.informer A { color: blue; }
 
-.rss-banner { border: 0px; background-color: #94CE4A;
-   font: 10px arial; padding: 0.5em 2px;
-   text-align: center; color: black; }
-.rss-banner A { color: blue; }
-.rss-banner .title { font: 12px arial; font-weight: bold; margin-bottom: 0.5em; }
-
-.offline-download { border: 0px; background-color: #94CE4A;
-   font: 10px arial; padding: 0.5em 2px;
-   text-align: center; color: black; }
-.offline-download A { color: blue; }
-.offline-download .title { font: 12px arial; font-weight: bold; margin-bottom: 0.5em; }
+#spelling_error_count { border: 1px solid red; font-weight: bold; padding: 4px; }
 
 .yandex-money { border: 0px; background-color: #487858; text-align: center; }
 .yandex-money .webmoney { color: white; font-family: monospace; font-size: 12px; text-align: center; }
