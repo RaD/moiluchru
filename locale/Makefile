@@ -5,7 +5,7 @@ include $(TOP_DIR)/config.mk
 CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/locale
 SUBDIRS=ru
 
-all:
+all: subdirs
 
 install: create_dir install_subdirs
 

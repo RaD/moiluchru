@@ -6,19 +6,14 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.db.models import Q
 from django.template import RequestContext
 from django.core.paginator import Paginator
-from django import forms
-from django.forms.util import ErrorList
+
 from cargo import settings
 from cargo.shop import models, common
-
-class SearchForm(forms.Form):
-    userinput = forms.CharField(max_length=64)
-    howmuch = forms.ChoiceField(choices=[(1, settings.SHOP_ITEMS_PER_PAGE), (2, '10'), (3, '25'), (4, '50')])
+from cargo.shop.forms import DivErrorList, SearchForm, OfferForm
+from cargo.shop.classes import CartItem
 
 def cart_ctx_proc(request):
-    """
-    Контекстный процессор для заполнения данных о корзине.
-    """
+    """ Контекстный процессор для заполнения данных о корзине. """
     form = SearchForm(auto_id='field_%s',
                       initial={'userinput': request.session.get('searchquery', ''),
                                'howmuch': request.session.get('howmuch_id', 1)})
@@ -30,10 +25,8 @@ def cart_ctx_proc(request):
             'cart_price': request.session.get('cart_price', 0.00)}
 
 def show_main_page(request):
-    """
-    Функция для отображения главной страницы сайта.
-    Осуществляем проверку поддержки Cookie.
-    """
+    """ Функция для отображения главной страницы сайта.  Осуществляем
+    проверку поддержки Cookie. """
     if request.session.test_cookie_worked():
         common.does_cart_exist(request)
     else:
@@ -44,9 +37,7 @@ def show_main_page(request):
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
     
 def show_howto_page(request, howto):
-    """
-    Функция для отображения вспомогательной информации.
-    """
+    """ Функция для отображения вспомогательной информации. """
     common.does_cart_exist(request)
     last_page = request.META.get('HTTP_REFERER', '#')
     h = models.Howto.objects.get(id=howto)
@@ -54,9 +45,7 @@ def show_howto_page(request, howto):
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
 def search_results(request, pagenum=1):
-    """
-    Функция для результатов поиска по магазину.
-    """
+    """ Функция для результатов поиска по магазину. """
     common.does_cart_exist(request)
     sort_type = request.session.get('sort_type', 1)
     sort = ['', '-buys', 'buys', '-price', 'price']
@@ -94,9 +83,7 @@ def search_results(request, pagenum=1):
                                   context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
 def show_category_page(request, category_id, pagenum=1):
-    """
-    Функция для отображения подчинённых категорий.
-    """
+    """ Функция для отображения подчинённых категорий. """
     sort = ['', '-buys', 'buys', '-price', 'price']
     sort_type = request.session.get('sort_type', 1)
     common.does_cart_exist(request)
@@ -115,10 +102,8 @@ def show_category_page(request, category_id, pagenum=1):
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
 def show_producer_page(request, producer_id, category_id=0, pagenum=1):
-    """
-    Функция для отображения товаром для указанного производителя из
-    всех подчинённых категорий.
-    """
+    """ Функция для отображения товаром для указанного производителя
+    из всех подчинённых категорий. """
     common.does_cart_exist(request)
     p = models.Producer.objects.get(id=producer_id)
     i = common.category_items(category_id, producer_id)
@@ -136,11 +121,8 @@ def show_producer_page(request, producer_id, category_id=0, pagenum=1):
                                },
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
-
 def show_item_page(request, item_id):
-    """
-    Отображение информации о товаре.
-    """
+    """ Отображение информации о товаре. """
     common.does_cart_exist(request)
     i = models.Item.objects.get(id=item_id)
     return render_to_response('shop-item.html',
@@ -151,15 +133,7 @@ def show_item_page(request, item_id):
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
     
 def show_cart(request):
-    """
-    Отображение содержимого корзины.
-    """
-    class CartItem:
-        def __init__(self, title, count, price):
-            self.title = title
-            self.count = count
-            self.price = price
-            self.cost = count * price
+    """ Отображение содержимого корзины. """
     items = []
     cart = request.session.get('cart_items', {})
     if len(cart) == 0:
@@ -176,42 +150,11 @@ def show_cart(request):
                               context_instance=RequestContext(request, processors=[cart_ctx_proc]))
 
 def show_offer(request):
-    """
-    Отображение формы для ввода данных о покупателе.
-    Обработка пользовательского ввода.
-    """
+    """ Отображение формы для ввода данных о покупателе.  Обработка
+    пользовательского ввода. """
     if not 'cart_items' in request.session or request.session['cart_count'] == 0:
         return HttpResponseRedirect('/shop/')
-    # Определяем класс для отображения ошибок в пользовательском вводе
-    class DivErrorList(ErrorList):
-        def __unicode__(self):
-            return self.as_divs()
-        def as_divs(self):
-            if not self: return u''
-            return u'<div class="errorlist">%s</div>' % ''.join([u'<div class="error">%s</div>' % e for e in self])
-    # Определяем класс для отображения формы
-    class OfferForm(forms.Form):
-        fname = forms.CharField(label=ugettext('Last name'), max_length=64,
-                                widget=forms.TextInput(attrs={'class':'longitem'}))
-        iname = forms.CharField(label=ugettext('First name'), max_length=64,
-                                widget=forms.TextInput(attrs={'class':'longitem'}))
-        oname = forms.CharField(label=ugettext('Second name'), max_length=64,
-                                widget=forms.TextInput(attrs={'class':'longitem'}))
-        address = forms.CharField(label=ugettext('Address'), max_length=255,
-                                  widget=forms.TextInput(attrs={'class':'longitem'}))
-        city = forms.ModelChoiceField(queryset=models.City.objects.all(),
-                                      label=ugettext('City'),
-                                      widget=forms.Select(attrs={'class':'longitem'}))
-        phone = forms.CharField(label=ugettext('Contact phone'), max_length=20,
-                                widget=forms.TextInput(attrs={'class':'longitem'}))
-        phonetype = forms.ModelChoiceField(queryset=models.PhoneType.objects.all(),
-                                           label=ugettext('Phone type'),
-                                           widget=forms.Select(attrs={'class':'longitem'}))
-        email = forms.EmailField(label=ugettext('E-mail'), max_length=75,
-                                 widget=forms.TextInput(attrs={'class':'longitem'}))
-        comment = forms.CharField(label=ugettext('Comment'), required=False,
-                                  widget=forms.Textarea(attrs={'class':'longitem'}))
-        
+
     if request.method == 'POST':
         form = OfferForm(request.POST)
         if form.is_valid():

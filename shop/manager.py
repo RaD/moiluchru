@@ -4,15 +4,15 @@ from django.shortcuts import render_to_response
 from django.utils.translation import ugettext, gettext_lazy as _
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
-#from django.core import validators
 from django.core.paginator import Paginator
-from django import forms
-from django.forms.util import ErrorList
 from django.contrib import auth
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.admin import models as admmodels
+
 from cargo import settings
 from cargo.shop import models
+from cargo.shop.forms import DivErrorList, CourierSelect, LoginForm, OrderForm
+from cargo.shop.classes import CartItem
 
 def is_stuff(user):
     return user.is_authenticated()
@@ -23,18 +23,9 @@ def ctx_processor(request):
             'user': request.user}
 
 def login(request):
-    """
-    Функция для отображения страницы для ввода логина.
-    """
+    """ Функция для отображения страницы для ввода логина. """
     if is_stuff(request.user):
         return HttpResponseRedirect("/shop/orders/all/")
-
-    # Класс для формы логина
-    class LoginForm(forms.Form):
-        login = forms.CharField(label=ugettext('Login'), max_length=30,
-                                widget=forms.TextInput(attrs={'class':'longitem'}))
-        passwd = forms.CharField(label=ugettext('Password'), max_length=128,
-                                 widget=forms.PasswordInput(attrs={'class':'longitem'}))
 
     if request.session.test_cookie_worked():
         #request.session.delete_test_cookie()
@@ -43,6 +34,7 @@ def login(request):
             form = LoginForm(request.POST)
             if form.is_valid():
                 try:
+		    # TODO: это некошерно, надо использовать cleaned_data
                     login = request.POST['login']
                     passwd = request.POST['passwd']
                     user = auth.authenticate(username=login, password=passwd)
@@ -68,17 +60,13 @@ def login(request):
 
 @user_passes_test(is_stuff, login_url="/shop/manager/")
 def logout(request):
-    """
-    Представление для осуществления выхода из административной части.
-    """
+    """ Представление для осуществления выхода из административной части.  """
     auth.logout(request)
     return HttpResponseRedirect('/shop/')
     
 @user_passes_test(is_stuff, login_url="/shop/manager/")
 def orders(request, act, page=1):
-    """
-    Представление для отображения активных заказов.
-    """
+    """ Представление для отображения активных заказов. """
     if act == 'all':
         orders = models.Order.objects.all().order_by('-id')
     elif act == 'waiting': 
@@ -99,38 +87,7 @@ def orders(request, act, page=1):
 
 @user_passes_test(is_stuff, login_url="/shop/manager/")
 def order_info(request, order_id):
-    """
-    Представление для отображения полной информации о заказе.
-    """
-    # Класс предназначен для переопределения метода отображения списка курьеров
-    class CourierSelect(forms.ModelChoiceField):
-        def label_from_instance(self, obj):
-            return "%s" % obj.get_full_name()
-            
-    # класс формы
-    class OrderForm(forms.Form):
-        status = forms.ModelChoiceField(queryset=models.OrderStatus.objects.all(),
-                                        label=ugettext('Status'), 
-                                        widget=forms.Select(attrs={'class':'longitem'}))
-        courier = CourierSelect(queryset=admmodels.User.objects.filter(groups=1),
-                                label=ugettext('Courier'),
-                                widget=forms.Select(attrs={'class':'longitem'}))
-
-    # Определяем класс для отображения ошибок в пользовательском вводе
-    class DivErrorList(ErrorList):
-        def __unicode__(self):
-            return self.as_divs()
-        def as_divs(self):
-            if not self: return u''
-            return u'<div class="errorlist">%s</div>' % ''.join([u'<div class="error">%s</div>' % e for e in self])
-    # класс объекта
-    class CartItem:
-        def __init__(self, title, count, price):
-            self.title = title
-            self.count = count
-            self.price = price
-            self.cost = count * price
-
+    """ Представление для отображения полной информации о заказе.  """
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():

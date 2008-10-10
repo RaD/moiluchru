@@ -1,0 +1,95 @@
+<div class="informer">
+  <div class="title">
+    Увидели ошибку?
+  </div>
+  <br/>
+  <div>
+    Выделите её мышкой<br/>
+    и нажмите <span class="guibutton">Ctrl</span>-<span class="guibutton">Enter</span>!
+  </div>
+  <br/>
+  <div class="pending">
+    Ждут обработки:
+    <span id="spelling_error_count">{{ spelling_error_count }}</span>
+  </div>
+</div>
+
+<br/>
+
+<div class="line" style="font-family: arial; font-size:12px; text-decoration: none; text-align: center;">
+  Powered by <a href="http://djangoproject.com/">Django</a><br/>{{ django_version }}.
+</div>
+
+<br/>
+      
+<div class="informer">
+  <div class="title">RSS</div>
+  <a href="http://feeds.feedburner.com/djangobook-in-russian-latest/">Последние новости</a>
+</div>
+      
+<br/>
+
+<div class="informer">
+  <div class="title">Скачать в формате</div>
+  <a href="http://depositfiles.com/files/7652256">CHM от 2 сентября</a><br/>
+  <a href="http://r-a-d.livejournal.com/217556.html">А нужен ли PDF?</a>.
+</div>
+
+<br/>
+
+<div class="informer">
+  <div class="title">Мышка достала?</div>
+  <div>
+    [alt]+[h] - главная страница<br/>
+    [alt]+[p] - предыдущая страница<br/>
+    [alt]+[n] - следующая страница
+  </div>
+</div>
+
+<br/>
+      
+<div class="informer">
+  <div class="title">Русская группа</div>
+  <div>
+    <a href="http://groups.google.ru/group/django-russian?hl=ru">на Google</a>
+  </div>
+</div>
+
+<br/>
+
+<div class="yandex-money" align="center">
+{% if not debug %}
+  <table cellpadding="0" cellspacing="0" border="0" style="font: 0.8em Arial, sans-serif; border: 0px;">
+    <tr>
+      <td width="116" height="77" style="background:url(http://www.yandex.ru/redir?dtype=stred&pid=41&cid=132&url=https://img.yandex.net/i/money/top-1rub-default.gif) repeat-y; text-align:center" align="center" valign="bottom">
+	<form style="margin: 0; padding: 0 0 2px;" action="https://money.yandex.ru/donate.xml" method="post">
+	  <input type="hidden" name="to" value="41001223475816"/>
+	  <input type="hidden" name="s5" value="1rub"/>
+	  <input type="submit" value="Дай рубль"/>
+	</form>
+      </td>
+    </tr>
+    <tr>
+      <td width="116" height="38" style="background:url(https://img.yandex.net/i/money/bg-default.gif) repeat-y; text-align:center; padding: 5px 0; color: black;" align="center" valign="top">
+	<b>на поддержку перевода</b>
+      </td>
+    </tr>
+    <tr>
+      <td>
+	<img src="https://img.yandex.net/i/money/bottom-default.gif" width="116" height="40" alt="" usemap="#button" border="0" />
+	<map name="button">
+	  <area alt="Яндекс" coords="38,2,49,21" href="http://www.yandex.ru"/>
+	  <area alt="Яндекс.Деньги" coords="52,1,84,28" href="https://money.yandex.ru"/>
+	  <area alt="Хочу такую же кнопку" coords="17,29,100,40" href="https://money.yandex.ru/choose-banner.xml"/>
+	</map>
+      </td>
+    </tr>
+  </table>
+{% endif %}
+  <div class="webmoney">
+    R130494980980<br/>
+    Z425285133788<br/>
+    E112528079659<br/>
+    U327380922061
+  </div>
+</div>

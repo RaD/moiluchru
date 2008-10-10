@@ -48,6 +48,7 @@ def show_db_page(request, chapter=None, section=None):
                                'page_content': content,
                                'django_version': django.get_version(),
                                'user': request.user,
+                               'debug': settings.DEBUG,
                                'spelling_error_count': pending})
     
 def user_claims(request):
