@@ -25,4 +25,7 @@ translate:
 %.mo: %.po
 	django-admin.py compilemessages
 
+pushhome:
+	git push ssh://rad@nemo/~/development/git.repos/cargo.git/
+
 include targets.mk
