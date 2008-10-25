@@ -45,7 +45,9 @@ IMG { behavior: url("/css/png.htc"); }
 .informer .title { font-size: 12px; font-weight: bold; text-align: center; }
 .informer A { color: blue; }
 
-#spelling_error_count { border: 1px solid red; font-weight: bold; padding: 4px; }
+.pending { margin: 1em 2px; }
+#spelling_error_count { border: 1px solid red; font-weight: bold; padding: 2px; }
+#readers_count { border: 1px solid green; font-weight: bold; padding: 2px; }
 
 .yandex-money { border: 0px; background-color: #487858; text-align: center; }
 .yandex-money .webmoney { color: white; font-family: monospace; font-size: 12px; text-align: center; }

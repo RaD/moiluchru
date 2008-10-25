@@ -6,7 +6,8 @@ include $(APP_DIR)/config.mk
 
 CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/templates
 DJZIP=djangobook.html.zip
-FILES=$(wildcard *.html) $(DJZIP)
+TEMPLATES=$(wildcard *.html)
+FILES=$(DJZIP)
 
 all: 
 

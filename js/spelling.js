@@ -16,6 +16,7 @@ var spelling = {
       check_result(false,
 		   get_xml_item(xml, 'code'),
 		   function() { $('spelling_error_count').innerHTML = get_xml_item(xml, 'pending');
+				$('readers_count').innerHTML = get_xml_item(xml, 'readers');
 				window.status = 'Проверка очереди жалоб: OK'; },
 		   function() { window.status = 'Проверка очереди жалоб: Ошибка'; });
     }

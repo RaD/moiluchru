@@ -10,7 +10,7 @@ from cargo import settings
 from cargo.djangobook.models import Claims, News
 
 import zipfile
-from datetime import datetime
+from datetime import datetime, timedelta
 
 news_info_extra = {
     'spelling_error_count': lambda: Claims.objects.count(),
@@ -49,7 +49,8 @@ def show_db_page(request, chapter=None, section=None):
                                'django_version': django.get_version(),
                                'user': request.user,
                                'debug': settings.DEBUG,
-                               'spelling_error_count': pending})
+                               'spelling_error_count': pending,
+                               'readers_count': len(request.session.get('readers', {}))})
     
 def user_claims(request):
     """ This function handles users' claims on spelling error.
@@ -71,9 +72,27 @@ def user_claims(request):
 def claims_penging(request):
     """ Функция возвращает количество жалоб в очереди. """
     if (request.is_ajax()):
+        #import pdb; pdb.set_trace()
+        # подсчитаем читателей
+        ipaddr = request.META.get('REMOTE_ADDR', None)
+        if ipaddr:
+            readers = request.session.get('readers', {})
+            # добавляем или обновляем читателя
+            now = datetime.now()
+            if ipaddr in readers:
+                readers[ipaddr] = now
+            else:
+                readers.update({ipaddr: now})
+            # очистка ушедших
+            delta = timedelta(seconds=120)
+            for ip in readers:
+                if (now - delta > readers[ip]):
+                    del(readers[ip])
+            request.session['readers'] = readers
+        #
         pending = Claims.objects.count();
         return HttpResponse('<result><code>200</code><desc>success</desc>' +
-                            '<pending>%i</pending></result>' % int(pending),
+                            '<pending>%i</pending><readers>%i</readers</result>' % (int(pending), len(readers)),
                             mimetype="text/xml")
     else:
         return HttpResponse('<result><code>400</code><desc>it must be ajax call</desc></result>', mimetype="text/xml")
