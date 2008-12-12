@@ -72,24 +72,7 @@ def user_claims(request):
 def claims_penging(request):
     """ Функция возвращает количество жалоб в очереди. """
     if (request.is_ajax()):
-        #import pdb; pdb.set_trace()
-        # подсчитаем читателей
-        ipaddr = request.META.get('REMOTE_ADDR', None)
-        if ipaddr:
-            readers = request.session.get('readers', {})
-            # добавляем или обновляем читателя
-            now = datetime.now()
-            if ipaddr in readers:
-                readers[ipaddr] = now
-            else:
-                readers.update({ipaddr: now})
-            # очистка ушедших
-            delta = timedelta(seconds=120)
-            for ip in readers:
-                if (now - delta > readers[ip]):
-                    del(readers[ip])
-            request.session['readers'] = readers
-        #
+        readers = 1
         pending = Claims.objects.count();
         return HttpResponse('<result><code>200</code><desc>success</desc>' +
                             '<pending>%i</pending><readers>%i</readers</result>' % (int(pending), len(readers)),
