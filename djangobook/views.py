@@ -75,7 +75,7 @@ def claims_penging(request):
         readers = 1
         pending = Claims.objects.count();
         return HttpResponse('<result><code>200</code><desc>success</desc>' +
-                            '<pending>%i</pending><readers>%i</readers</result>' % (int(pending), len(readers)),
+                            '<pending>%i</pending><readers>%i</readers</result>' % (int(pending), readers),
                             mimetype="text/xml")
     else:
         return HttpResponse('<result><code>400</code><desc>it must be ajax call</desc></result>', mimetype="text/xml")
