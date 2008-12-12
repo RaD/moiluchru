@@ -32,7 +32,7 @@ def add_to_cart(request):
                                 mimetype="text/xml")
         # инициализация корзины
         if not 'cart_items' in request.session:
-            does_cart_exist(request)
+            common.does_cart_exist(request)
         item = models.Item.objects.get(id=id)
         if (int(item.count) - int(item.reserved)) < cnt:
             return HttpResponse('<result><code>201</code><desc>not enough items</desc>' +
