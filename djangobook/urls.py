@@ -2,16 +2,14 @@
 
 from django.conf.urls.defaults import *
 from cargo import settings
-#from cargo.djangobook.feeds import LatestNews
+from cargo.djangobook.feeds import LatestNews
 
-#feeds = {
-#    'latest': LatestNews,
-#}
+feeds = { 'latest': LatestNews, }
 
 urlpatterns = patterns('',
     # RSS
-    #(r'^feeds/(?P<url>.*)/$', 'django.contrib.syndication.views.feed',
-    # {'feed_dict': feeds}),
+    (r'^feeds/(?P<url>.*)/$', 'django.contrib.syndication.views.feed',
+     {'feed_dict': feeds}),
 
     (r'^$', 'cargo.djangobook.views.show_db_page'),
     (r'^index\.html$', 'cargo.djangobook.views.show_db_page'),
