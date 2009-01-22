@@ -28,7 +28,7 @@ var spelling = {
     }
     
     callback(); // для мгновенного обновления
-    var pe = new PeriodicalExecuter(callback, 60);
+    //var pe = new PeriodicalExecuter(callback, 60);
   },
 
   onkeypress: function(e) {

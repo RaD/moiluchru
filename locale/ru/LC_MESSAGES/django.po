@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-10 23:18+0400\n"
+"POT-Creation-Date: 2009-01-22 19:24+0300\n"
 "PO-Revision-Date: 2008-07-09 20:40+0400\n"
 "Last-Translator: Ruslan Popov <radz@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -15,22 +15,66 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: djangobook/models.py:6 shop/models.py:8 shop/models.py:18 shop/models.py:28
-#: shop/models.py:56 shop/models.py:58 shop/models.py:72
+#: djangobook/admin.py:11
+msgid "Contents"
+msgstr "Содержимое"
+
+#: djangobook/admin.py:49
+msgid "Meta"
+msgstr "Метаинформация"
+
+#: djangobook/admin.py:51
+msgid "Error"
+msgstr "Ошибка"
+
+#: djangobook/admin.py:53 shop/forms.py:44
+msgid "Comment"
+msgstr "Комментарий"
+
+#: djangobook/models.py:10 shop/models.py:8 shop/models.py:18
+#: shop/models.py:28 shop/models.py:56 shop/models.py:58 shop/models.py:72
 msgid "Title"
 msgstr "Название"
 
-#: djangobook/models.py:11 djangobook/models.py:12
+#: djangobook/models.py:15 djangobook/models.py:16
 msgid "News"
 msgstr "Новости"
 
-#: djangobook/models.py:31
+#: djangobook/models.py:35
 msgid "Claim"
 msgstr "Жалоба"
 
-#: djangobook/models.py:32
+#: djangobook/models.py:36
 msgid "Claims"
 msgstr "Жалобы"
+
+#: djangobook/models.py:45
+msgid "Unknown"
+msgstr "Неизвестно"
+
+#: djangobook/models.py:53
+msgid "New"
+msgstr "Новое"
+
+#: djangobook/models.py:53
+msgid "Assigned"
+msgstr "Принято"
+
+#: djangobook/models.py:54
+msgid "Fixed"
+msgstr "Исправлено"
+
+#: djangobook/models.py:54
+msgid "Invalid"
+msgstr "Неверное"
+
+#: djangobook/models.py:62
+msgid "Claim status"
+msgstr "Состояние жалобы"
+
+#: djangobook/models.py:63
+msgid "Claim statuses"
+msgstr "Состояния жалобы"
 
 #: shop/forms.py:28
 msgid "Last name"
@@ -63,10 +107,6 @@ msgstr "Тип телефона"
 #: shop/forms.py:42
 msgid "E-mail"
 msgstr "Е-почта"
-
-#: shop/forms.py:44
-msgid "Comment"
-msgstr "Комментарий"
 
 #: shop/forms.py:48
 msgid "Login"
