@@ -1,3 +1,4 @@
+{% load i18n %}
 <div class="informer">
   <div class="title">
     Увидели ошибку?
@@ -9,8 +10,11 @@
   </div>
   <br/>
   <div class="pending">
-    Жалобы:
-    <span id="spelling_error_count">{{ spelling_error_count }}</span>
+    Жалобы:<br/>
+    <span id="spelling_error_count_pending" title="{% trans 'New' %}">{{ spelling_error_count_pending }}</span>
+    <span id="spelling_error_count_assigned" title="{% trans 'Assigned' %}">{{ spelling_error_count_assigned }}</span>
+    <span id="spelling_error_count_fixed" title="{% trans 'Fixed' %}">{{ spelling_error_count_fixed }}</span>
+    <span id="spelling_error_count_invalid" title="{% trans 'Invalid' %}">{{ spelling_error_count_invalid }}</span>
   </div>
   <div class="pending">
     <nobr>Читают: <span id="readers_count">{{ readers_count }}</span></nobr>

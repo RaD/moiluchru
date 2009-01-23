@@ -45,7 +45,26 @@ def show_db_page(request, chapter=None, section=None):
     cursor = connection.cursor()
     cursor.execute('select id from djangobook_claimstatus where status=1 and \
     applied in (select max(applied) from djangobook_claimstatus group by claim_id)')
-    pending = cursor.rowcount
+    claim_pending = cursor.rowcount
+    # get assigned claims
+    from django.db import connection
+    cursor = connection.cursor()
+    cursor.execute('select id from djangobook_claimstatus where status=2 and \
+    applied in (select max(applied) from djangobook_claimstatus group by claim_id)')
+    claim_assigned = cursor.rowcount
+    # get fixed claims
+    from django.db import connection
+    cursor = connection.cursor()
+    cursor.execute('select id from djangobook_claimstatus where status=3 and \
+    applied in (select max(applied) from djangobook_claimstatus group by claim_id)')
+    claim_fixed = cursor.rowcount
+    # get invalid claims
+    from django.db import connection
+    cursor = connection.cursor()
+    cursor.execute('select id from djangobook_claimstatus where status=4 and \
+    applied in (select max(applied) from djangobook_claimstatus group by claim_id)')
+    claim_invalid = cursor.rowcount
+    
     return render_to_response('page.html',
                               {'page_title': 'DjangoBook v1.0',
                                'news_list': News.objects.order_by('-datetime')[:5],
@@ -53,7 +72,10 @@ def show_db_page(request, chapter=None, section=None):
                                'django_version': django.get_version(),
                                'user': request.user,
                                'debug': settings.DEBUG,
-                               'spelling_error_count': pending,
+                               'spelling_error_count_pending': claim_pending,
+                               'spelling_error_count_assigned': claim_assigned,
+                               'spelling_error_count_fixed': claim_fixed,
+                               'spelling_error_count_invalid': claim_invalid,
                                'readers_count': len(request.session.get('readers', {}))})
     
 def user_claims(request):
