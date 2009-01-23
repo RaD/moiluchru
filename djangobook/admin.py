@@ -13,11 +13,6 @@ class NewsAdmin(admin.ModelAdmin):
     ordered = ('-datetime')
 admin.site.register(News, NewsAdmin)
 
-#class ClaimStatusAdmin(admin.ModelAdmin):
-#     list_display = ('claim', 'status')
-#     ordered = ('-applied')
-#admin.site.register(ClaimStatus, ClaimStatusAdmin)
-
 class ClaimsAdminForm(forms.ModelForm):
     status = forms.ChoiceField(choices=CLAIM_STATUSES)
 
@@ -28,8 +23,10 @@ class ClaimsAdminForm(forms.ModelForm):
 
     def save(self, *args, **kwargs):
         d = self.cleaned_data
-        if self.instance and d.get('status'):
-            self.instance.set_status(d.get('status'))
+        m = super(ClaimsAdminForm, self).save(*args, **kwargs)
+        if m and d.get('status'):
+            m.set_status(d.get('status'))
+        return m
         
     class Meta:
         model = Claims
@@ -37,7 +34,10 @@ class ClaimsAdminForm(forms.ModelForm):
 # additional field: claim status
 def claim_status_field(claim):
     try:
-        return ClaimStatus.objects.filter(claim=claim).order_by('-applied')[0].status
+        code = ClaimStatus.objects.filter(claim=claim).order_by('-applied')[0].status
+        for i in CLAIM_STATUSES:
+            if int(i[0]) == int(code):
+                return i[1]
     except Exception:
         return _(u'Unknown')
 claim_status_field.short_description = _(u'Claim status')
