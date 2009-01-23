@@ -29,6 +29,7 @@ class Claims(models.Model):
     comment = models.TextField()
     url = models.URLField(verify_exists=False)
     email = models.EmailField()
+    notify = models.BooleanField(_(u'Notify'))
     datetime = models.DateTimeField()
 
     class Meta:
@@ -61,16 +62,19 @@ class Claims(models.Model):
         msgRoot['Content-type'] = 'text/plain; charset=utf-8'
         msgRoot['Content-transfer-encoding'] = '8bit'
         msgRoot.preamble = u'This is a multi-part message in MIME format.'.encode('utf-8')
-        msgAlternative = MIMEMultipart('alternative')
-        msgRoot.attach(msgAlternative)
         msgText = MIMEText(_(u'This is automatic generated message, you do not need to answer on it.'))
+        msgAlternative = MIMEMultipart('alternative')
         msgAlternative.attach(msgText)
+        msgRoot.attach(msgAlternative)
 
         import smtplib
         smtp = smtplib.SMTP()
-        smtp.connect('localhost')
-        smtp.sendmail(mail_from, mail_to, msgRoot.as_string())
-        smtp.quit()
+        try:
+            smtp.connect('localhost')
+            smtp.sendmail(mail_from, mail_to, msgRoot.as_string())
+            smtp.quit()
+        except:
+            pass # fixme
 
     def get_status(self):
         try:
@@ -89,7 +93,8 @@ class Claims(models.Model):
         # there is no previous status or there is but with different status code, then save it
         if not status_old or status_old and status_old.status != code:
             status.save()
-            self.sendemail(code)
+            if self.notify == 1:
+                self.sendemail(code)
 
 CLAIM_STATUSES = ((1, _(u'New')), (2, _(u'Assigned')),
                   (3, _(u'Fixed')), (4, _(u'Invalid')))

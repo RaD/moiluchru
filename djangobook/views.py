@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.template import TemplateDoesNotExist
 from django.http import Http404
 from cargo import settings
-from cargo.djangobook.models import Claims, News
+from cargo.djangobook.models import News, Claims, ClaimStatus
 
 import zipfile
 from datetime import datetime, timedelta
@@ -61,10 +61,13 @@ def user_claims(request):
                         selected=request.POST.get('selected', 'None'),
                         ctx_right=request.POST.get('ctx_right', ''),
                         email=request.POST.get('email', ''),
+                        notify='true'==request.POST.get('notify', None),
                         comment=request.POST.get('comment', 'No comments...'),
                         url=request.META.get('HTTP_REFERER', ''),
                         datetime=datetime.now())
         record.save()
+        status = ClaimStatus(claim=record, status=1, applied=datetime.now())
+        status.save()
         return HttpResponse('<result>ok</result>', mimetype="text/xml")
     else:
         return HttpResponse('<result>error</result>', mimetype="text/xml")

@@ -142,6 +142,10 @@ var spelling = {
 				  [] ) ],
 			   [['class', 'padd']]),
 		      _dom('div',
+			   [ notify = _dom('input', [], [['type', 'checkbox'], ['id', 'notify_id'], ['checked', 'true']]),
+			     _dom('label', _txt('Уведомлять об изменении состояния вашего сообщения'), [['for', 'notify_id']])],
+			   [['class', 'padd']]),
+		      _dom('div',
 			   [ _txt('Комментарий'),
 			     _dom('div',
 				  textarea = _dom('textarea', _txt('Ваш комментарий'), [['class', 'border claim-comment']]),
@@ -157,6 +161,7 @@ var spelling = {
 							   selected: context_error,
 							   ctx_right: context_right,
 							   email: email.value,
+							   notify: notify.checked,
 							   comment: textarea.value },
 							 onSuccess: function(transport) {
 							   var response = transport.responseText || "нет ответа";

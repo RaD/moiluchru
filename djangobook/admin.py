@@ -52,7 +52,7 @@ class ClaimsAdmin(admin.ModelAdmin):
         (_(u'Comment'),
          {'fields': ('email','comment')})
         )
-    list_display = ('url', 'comment', 'email', #'datetime')
+    list_display = ('url', 'comment', 'email', 'notify',
                     claim_status_field, 'datetime')
     ordered = ('-datetime')
 
