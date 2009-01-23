@@ -49,10 +49,10 @@ class Claims(models.Model):
         from email.MIMEText import MIMEText
         from email.MIMEMultipart import MIMEMultipart
 
+        claim_desc = self.get_description(code)
         mail_from = 'rad@caml.ru'
         mail_to = self.email
-        mail_subject = '%s %s' % (_(u'DjangoBook in russian: Claim\'s state was changed to'),
-                                  self.get_description(code))
+        mail_subject = '%s %s' % (_(u'DjangoBook in russian: Claim\'s state was changed to'), claim_desc)
         msgRoot = MIMEMultipart('related')
         msgRoot.set_charset('UTF-8')
         msgRoot['From'] = mail_from

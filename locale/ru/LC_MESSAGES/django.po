@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-23 14:40+0300\n"
+"POT-Creation-Date: 2009-01-24 01:30+0300\n"
 "PO-Revision-Date: 2008-07-09 20:40+0400\n"
 "Last-Translator: Ruslan Popov <radz@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -19,11 +19,11 @@ msgstr ""
 msgid "Contents"
 msgstr "Содержимое"
 
-#: djangobook/admin.py:42 djangobook/models.py:45
+#: djangobook/admin.py:42 djangobook/models.py:46
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: djangobook/admin.py:43 djangobook/models.py:103
+#: djangobook/admin.py:43 djangobook/models.py:108
 msgid "Claim status"
 msgstr "Состояние жалобы"
 
@@ -48,40 +48,44 @@ msgstr "Название"
 msgid "News"
 msgstr "Новости"
 
-#: djangobook/models.py:35
+#: djangobook/models.py:32
+msgid "Notify"
+msgstr "Уведомление"
+
+#: djangobook/models.py:36
 msgid "Claim"
 msgstr "Жалоба"
 
-#: djangobook/models.py:36
+#: djangobook/models.py:37
 msgid "Claims"
 msgstr "Жалобы"
 
-#: djangobook/models.py:53
+#: djangobook/models.py:54
 msgid "DjangoBook in russian: Claim's state was changed to"
 msgstr "ДжангоБук по-русски: Состояние жалобы изменено на"
 
-#: djangobook/models.py:66
+#: djangobook/models.py:65
 msgid "This is automatic generated message, you do not need to answer on it."
 msgstr ""
 "Это сообщение сгенерировано автоматически, вам не требуется отвечать на него."
 
-#: djangobook/models.py:94
+#: djangobook/models.py:99
 msgid "New"
 msgstr "Новое"
 
-#: djangobook/models.py:94
+#: djangobook/models.py:99
 msgid "Assigned"
 msgstr "Принято"
 
-#: djangobook/models.py:95
+#: djangobook/models.py:100
 msgid "Fixed"
 msgstr "Исправлено"
 
-#: djangobook/models.py:95
+#: djangobook/models.py:100
 msgid "Invalid"
 msgstr "Неверное"
 
-#: djangobook/models.py:104
+#: djangobook/models.py:109
 msgid "Claim statuses"
 msgstr "Состояния жалобы"
 

@@ -41,7 +41,11 @@ def show_db_page(request, chapter=None, section=None):
     except (IOError, KeyError):
         raise TemplateDoesNotExist(template_name)
     # get pending claims
-    pending = Claims.objects.count();
+    from django.db import connection
+    cursor = connection.cursor()
+    cursor.execute('select id from djangobook_claimstatus where status=1 and \
+    applied in (select max(applied) from djangobook_claimstatus group by claim_id)')
+    pending = cursor.rowcount
     return render_to_response('page.html',
                               {'page_title': 'DjangoBook v1.0',
                                'news_list': News.objects.order_by('-datetime')[:5],

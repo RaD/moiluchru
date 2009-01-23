@@ -27,7 +27,7 @@ class ClaimsAdminForm(forms.ModelForm):
         if m and d.get('status'):
             m.set_status(d.get('status'))
         return m
-        
+
     class Meta:
         model = Claims
 
