@@ -23,6 +23,13 @@ news_info = {
     'extra_context': news_info_extra # дополнительный контекст
 }
 
+def get_claims_count_by_status(code):
+    from django.db import connection
+    cursor = connection.cursor()
+    cursor.execute ('select id from djangobook_claimstatus where status=%i and \
+    applied in (select max(applied) from djangobook_claimstatus group by claim_id)' % int(code))
+    return int(cursor.rowcount)
+
 def show_db_page(request, chapter=None, section=None):
     """Show book's page."""
     if chapter == 'ap':
@@ -40,30 +47,6 @@ def show_db_page(request, chapter=None, section=None):
 	z.close()
     except (IOError, KeyError):
         raise TemplateDoesNotExist(template_name)
-    # get pending claims
-    from django.db import connection
-    cursor = connection.cursor()
-    cursor.execute('select id from djangobook_claimstatus where status=1 and \
-    applied in (select max(applied) from djangobook_claimstatus group by claim_id)')
-    claim_pending = cursor.rowcount
-    # get assigned claims
-    from django.db import connection
-    cursor = connection.cursor()
-    cursor.execute('select id from djangobook_claimstatus where status=2 and \
-    applied in (select max(applied) from djangobook_claimstatus group by claim_id)')
-    claim_assigned = cursor.rowcount
-    # get fixed claims
-    from django.db import connection
-    cursor = connection.cursor()
-    cursor.execute('select id from djangobook_claimstatus where status=3 and \
-    applied in (select max(applied) from djangobook_claimstatus group by claim_id)')
-    claim_fixed = cursor.rowcount
-    # get invalid claims
-    from django.db import connection
-    cursor = connection.cursor()
-    cursor.execute('select id from djangobook_claimstatus where status=4 and \
-    applied in (select max(applied) from djangobook_claimstatus group by claim_id)')
-    claim_invalid = cursor.rowcount
     
     return render_to_response('page.html',
                               {'page_title': 'DjangoBook v1.0',
@@ -72,10 +55,10 @@ def show_db_page(request, chapter=None, section=None):
                                'django_version': django.get_version(),
                                'user': request.user,
                                'debug': settings.DEBUG,
-                               'spelling_error_count_pending': claim_pending,
-                               'spelling_error_count_assigned': claim_assigned,
-                               'spelling_error_count_fixed': claim_fixed,
-                               'spelling_error_count_invalid': claim_invalid,
+                               'spelling_error_count_pending': get_claims_count_by_status(1),
+                               'spelling_error_count_assigned': get_claims_count_by_status(2),
+                               'spelling_error_count_fixed': get_claims_count_by_status(3),
+                               'spelling_error_count_invalid': get_claims_count_by_status(4),
                                'readers_count': len(request.session.get('readers', {}))})
     
 def user_claims(request):
@@ -100,11 +83,13 @@ def user_claims(request):
 
 def claims_penging(request):
     """ Функция возвращает количество жалоб в очереди. """
-    if (request.is_ajax()):
-        readers = 1
-        pending = Claims.objects.count();
-        return HttpResponse('<result><code>200</code><desc>success</desc>' +
-                            '<pending>%i</pending><readers>%i</readers</result>' % (int(pending), readers),
+    if 1: #request.is_ajax():
+        return HttpResponse(''.join(['<result><code>200</code><desc>success</desc>',
+                                     '<pending>%i</pending>' % get_claims_count_by_status(1),
+                                     '<assigned>%i</assigned>' % get_claims_count_by_status(2),
+                                     '<fixed>%i</fixed>' % get_claims_count_by_status(3),
+                                     '<invalid>%i</invalid>' % get_claims_count_by_status(4),
+                                     '<readers>%i</readers></result>' % 1]),
                             mimetype="text/xml")
     else:
         return HttpResponse('<result><code>400</code><desc>it must be ajax call</desc></result>', mimetype="text/xml")

@@ -15,7 +15,10 @@ var spelling = {
       var xml = transport.responseXML.firstChild;
       check_result(false,
 		   get_xml_item(xml, 'code'),
-		   function() { $('spelling_error_count').innerHTML = get_xml_item(xml, 'pending');
+		   function() { $('spelling_error_count_pending').innerHTML = get_xml_item(xml, 'pending');
+				$('spelling_error_count_assigned').innerHTML = get_xml_item(xml, 'assigned');
+				$('spelling_error_count_fixed').innerHTML = get_xml_item(xml, 'fixed');
+				$('spelling_error_count_invalid').innerHTML = get_xml_item(xml, 'invalid');
 				$('readers_count').innerHTML = get_xml_item(xml, 'readers');
 				window.status = 'Проверка очереди жалоб: OK'; },
 		   function() { window.status = 'Проверка очереди жалоб: Ошибка'; });
@@ -28,7 +31,7 @@ var spelling = {
     }
     
     callback(); // для мгновенного обновления
-    //var pe = new PeriodicalExecuter(callback, 60);
+    var pe = new PeriodicalExecuter(callback, 300);
   },
 
   onkeypress: function(e) {
