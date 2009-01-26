@@ -22,7 +22,7 @@ def top_categories():
     return list(models.Category.objects.filter(parent__isnull=True))
 
 def parent_categories(category_id):
-    if category_id == 0:
+    if int(category_id) == 0:
         return [];
     else:
         category = models.Category.objects.get(id=category_id)
@@ -38,7 +38,7 @@ def parent_categories(category_id):
 def subcategories(category_id=0):
     """Функция возвращает все дочерние категории,
     даже дочерние дочерних и так далее."""
-    if category_id == 0:
+    if int(category_id) == 0:
         return child_categories()
     else:
         category = models.Category.objects.get(id=category_id)
@@ -49,7 +49,7 @@ def subcategories(category_id=0):
 
 def child_categories(category_id=0):
     """ Функция возвращает дочерние категории для указанной."""
-    if category_id == 0:
+    if int(category_id) == 0:
         return top_categories()
     else:
         category = models.Category.objects.get(id=category_id)
@@ -57,14 +57,15 @@ def child_categories(category_id=0):
         
 def category_items(category_id, producer_id=None):
     """Функция возвращает элементы текущей категории."""
-    if category_id == 0:
+    if int(category_id) == 0:
         i = models.Item.objects.all() 
     else:
         i = models.Item.objects.filter(category=category_id)
 
     # отображать товары из подкатегорий только в том случае,
     # если нет товаров в текущей категории
-    if not i: i |= subcategories_items(category_id)
+    if not i:
+        i |= subcategories_items(category_id)
 
     if producer_id:
         i = i.filter(producer=producer_id)
