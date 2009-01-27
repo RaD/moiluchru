@@ -7,8 +7,8 @@ TABLE { width: 100%; border-collapse: collapse; }
 
 .pointer { cursor: pointer; }
 .left { text-align: left; }
-.lfloat { float; left; }
-.rfloat { float; right; }
+.lfloat { float: left; }
+.rfloat { float: right; }
 .center { text-align: center; }
 .right { text-align: right; }
 .top { vertical-align: top; }
