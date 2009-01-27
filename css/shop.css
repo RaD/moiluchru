@@ -26,7 +26,7 @@ TABLE { width: 100%; border-collapse: collapse; }
 .search { width: 35%; }
 .informer { font-size: 12px; padding: 2px; min-width: 30%; width: 30%; 
    vertical-align: bottom; }
-.informer .icon { width: 32px; height: 32px; text-align: padding: 2px; }
+.informer .icon { width: 32px; height: 32px; text-align: center; padding: 2px; }
 
 
 .errorlist { border: 1px dashed red; padding: 2px 4px; }
