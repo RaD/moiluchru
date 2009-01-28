@@ -1,6 +1,7 @@
 {% extends "shop-base2.html" %}
 
 {% load thumbnail_filter %}
+{% load markup %}
 
 {% block content %}
 <div class="item">
@@ -28,7 +29,7 @@
     <tr>
       <td colspan="2">
 	<div class="itemtitle">Описание:</div>
-	<div class="itemdesc">{{ item.desc|escape|linebreaks }}</div>
+	<div class="itemdesc">{{ item.desc|markdown }}</div>
       </td>
     </tr>
   </table>
