@@ -83,7 +83,7 @@ def user_claims(request):
 
 def claims_penging(request):
     """ Функция возвращает количество жалоб в очереди. """
-    if 1: #request.is_ajax():
+    if request.is_ajax():
         return HttpResponse(''.join(['<result><code>200</code><desc>success</desc>',
                                      '<pending>%i</pending>' % get_claims_count_by_status(1),
                                      '<assigned>%i</assigned>' % get_claims_count_by_status(2),
@@ -93,3 +93,12 @@ def claims_penging(request):
                             mimetype="text/xml")
     else:
         return HttpResponse('<result><code>400</code><desc>it must be ajax call</desc></result>', mimetype="text/xml")
+
+def show_news_page(request, news_id=None):
+    """Show news' page."""
+    return render_to_response('news.html',
+                              {'page_title': 'Новости: DjangoBook v1.0',
+                               'news_list': News.objects.order_by('-datetime'),
+                               'news_curr': News.objects.get(id=news_id),
+                               'django_version': django.get_version(),
+                               'debug': settings.DEBUG})
