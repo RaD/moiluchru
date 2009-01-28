@@ -1,7 +1,9 @@
 {% extends "shop-base3.html" %}
 
+{% load markup %}
+
 {% block content %}
 <div><span class="title">{{ howto.title }}</span></div>
-<div class="sectioncontent">{{ howto.text|escape|linebreaks }}</div>
+<div class="sectioncontent">{{ howto.text|markdown }}</div>
 <div><a href="{{ back_to }}">Назад</a></div>
 {% endblock %}
