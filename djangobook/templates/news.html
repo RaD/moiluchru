@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load markup %}
+{% load webdesign %}
+
+{% block structure %}
+<body onLoad="init(); spelling.init();">
+
+<div style="font-family: arial; font-size: 12px;">
+  <table width="100%" border="0">
+    <tr>
+      <td style="white-space: nowrap; padding: 4px 1em;">
+	<span><a href="/djangobook/">Main</a></span> |
+	<span>News</span> |
+	<span>Claims</span>
+      </td>
+      <td width="40%"></td>
+      <td width="40%"></td>
+      <td style="white-space: nowrap; padding: 4px 1em;">Login/Register</td>
+    </tr>
+  </table>
+</div>
+
+<div style="padding: 0.5em;" class="topic">
+  <table width="100%" border="0">
+    <tr>
+      <td>
+	<a href="/djangobook/">
+	  <img src="http://cargo/pics/djangobook-title.png" border="0"/>
+	</a>
+      </td>
+      <td style="color: #326342;">
+	<form name="web" method="get" action="http://www.yandex.ru/yandsearch">
+	  <span>Поиск по сайту:</span>
+	  <input type="text" name="text" size="40" value="" maxlength="160" class="field"/>
+	  <input type="submit" value="Найти" class="searchbutton"/>
+	  <input type="hidden" name="serverurl" value="http://cargo.caml.ru/djangobook/" />
+	  <input type="hidden" name="server_name" value="DjangoBook по-русски" />
+	  
+	  <input type="hidden" name="referrer1" value="http://cargo.caml.ru/djangobook/"/>
+	  <input type="hidden" name="referrer2" value="DjangoBook по-русски"/>
+	</form>
+	  
+	<div class="searchexamples">
+	  <b>Примеры запросов:</b>
+	  <font size="-1">
+	    <span class="item">render_to_response</span> |
+	    <span class="item">context_instance</span> |
+	    <span class="item">что это такое</span>
+	  </font>
+	</div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+  <tr>
+    <td width="25%" valign="top">
+      <div style="font-family: sans-serif; font-size: 14px; font-style: italic; font-weight: bold; margin-bottom: 0.5em;">RSS трансляция</div>
+      <div style="padding-left: 1em;"><a href="/djangobook/rss/">Получить новости в виде RSS.</a></div>
+      <br/>
+      <div style="font-family: sans-serif; font-size: 14px; font-style: italic; font-weight: bold; margin-bottom: 0.5em;">Архив новостей</div>
+      {% for n in news_list %}
+      <div style="padding-left: 1em;"><a href="{{ n.get_absolute_url }}">{{ n.title }}</a></div>
+      {% endfor %}
+    </td>
+    <td width="50%" valign="top" class="content">
+      <div style="font-family: sans-serif; font-size: 16px; font-style: italic; font-weight: bold;">{{ news_curr.title }}</div>
+      <div style="padding-left: 1em;">{{ news_curr.text|markdown }}</div>
+      <div style="padding-left: 1em;">{% lorem 6 p %}</div>
+    </td>
+    <td width="15%" valign="top">
+      {% include "djangobook_inc_adds.html"%}
+    </td>
+  </tr>
+</table>
+
+<div style="padding: 0.5em;" class="topic">
+  <table width="100%" border="0">
+    <tr>
+      <td style="color: #326342;">
+	&copy; 2008-2009 Ruslan Popov @ gmail.com
+      </td>
+    </tr>
+  </table>
+</div>
+</body>
+
+<div style="font-family: arial; font-size: 12px;">
+  <table width="100%" border="0">
+    <tr>
+      <td style="white-space: nowrap; padding: 4px 1em;">
+	<span>  Powered by <a href="http://djangoproject.com/">Django</a> {{ django_version }}</span>
+      </td>
+      <td width="40%"></td>
+      <td width="40%"></td>
+      <td style="white-space: nowrap; padding: 4px 1em;">Login/Register</td>
+    </tr>
+  </table>
+</div>
+
+{% endblock %}

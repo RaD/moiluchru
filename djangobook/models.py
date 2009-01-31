@@ -20,7 +20,7 @@ class News(models.Model):
     
     def get_absolute_url(self):
         """ This returns the absolute URL for a record. """
-        return '/news/'
+        return '/djangobook/news/%i/' % self.id # fixme: определять приложение автоматически
     
 class Claims(models.Model):
     ctx_left = models.CharField(max_length=255, blank=True)

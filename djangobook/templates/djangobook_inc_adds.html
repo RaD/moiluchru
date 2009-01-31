@@ -1,34 +1,29 @@
 {% load i18n %}
 <div class="informer">
-  <div class="title">
+  <div style="font-size: 10px; font-weight: bold; margin: 4px 0px;">
     Увидели ошибку?
   </div>
-  <br/>
   <div>
-    Выделите её мышкой<br/>
-    и нажмите <span class="guibutton">Ctrl</span>-<span class="guibutton">Enter</span>!
-  </div>
-  <br/>
-  <div class="pending">
-    Жалобы:<br/>
-    <span id="spelling_error_count_pending" title="{% trans 'New' %}">{{ spelling_error_count_pending }}</span>
-    <span id="spelling_error_count_assigned" title="{% trans 'Assigned' %}">{{ spelling_error_count_assigned }}</span>
-    <span id="spelling_error_count_fixed" title="{% trans 'Fixed' %}">{{ spelling_error_count_fixed }}</span>
-    <span id="spelling_error_count_invalid" title="{% trans 'Invalid' %}">{{ spelling_error_count_invalid }}</span>
+    Выделите её мышкой и нажмите
+    <div style="white-space: nowrap; margin: 4px; ">
+      <span class="guibutton">Ctrl</span>-<span class="guibutton">Enter</span>
+    </div>
   </div>
   <div class="pending">
-    <nobr>Читают: <span id="readers_count">{{ readers_count }}</span></nobr>
+    <div style="font-size: 10px; font-weight: bold; margin: 4px 0px;">
+      Обработано:
+    </div>
+    <div class="spelling">
+      <span id="spelling_error_count_pending" title="{% trans 'New' %}">{{ spelling_error_count_pending }}</span>
+      <span id="spelling_error_count_assigned" title="{% trans 'Assigned' %}">{{ spelling_error_count_assigned }}</span>
+      <span id="spelling_error_count_fixed" title="{% trans 'Fixed' %}">{{ spelling_error_count_fixed }}</span>
+      <span id="spelling_error_count_invalid" title="{% trans 'Invalid' %}">{{ spelling_error_count_invalid }}</span>
+    </div>
   </div>
 </div>
 
 <br/>
 
-<div class="line" style="font-family: arial; font-size:12px; text-decoration: none; text-align: center;">
-  Powered by <a href="http://djangoproject.com/">Django</a><br/>{{ django_version }}.
-</div>
-
-<br/>
-      
 <div class="informer">
   <div class="title">RSS</div>
   <a href="/djangobook/feeds/latest/">Последние новости</a>
@@ -44,17 +39,6 @@
 
 <br/>
 
-<div class="informer">
-  <div class="title">Мышка достала?</div>
-  <div>
-    [alt]+[h] - главная страница<br/>
-    [alt]+[p] - предыдущая страница<br/>
-    [alt]+[n] - следующая страница
-  </div>
-</div>
-
-<br/>
-      
 <div class="informer">
   <div class="title">Русская группа</div>
   <div>

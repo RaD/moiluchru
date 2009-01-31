@@ -4,7 +4,7 @@ import django
 #from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
-from django.template import TemplateDoesNotExist
+from django.template import TemplateDoesNotExist, RequestContext
 from django.http import Http404
 from cargo import settings
 from cargo.djangobook.models import News, Claims, ClaimStatus
@@ -22,6 +22,16 @@ news_info = {
     'template_name': 'news-list.html',
     'extra_context': news_info_extra # дополнительный контекст
 }
+
+def context_processor(request):
+    """ Контекст страницы. """
+    return {'user': request.user, 'debug': settings.DEBUG,
+            'django_version': django.get_version(),
+            'spelling_error_count_pending': get_claims_count_by_status(1),
+            'spelling_error_count_assigned': get_claims_count_by_status(2),
+            'spelling_error_count_fixed': get_claims_count_by_status(3),
+            'spelling_error_count_invalid': get_claims_count_by_status(4)
+            }
 
 def get_claims_count_by_status(code):
     from django.db import connection
@@ -52,14 +62,8 @@ def show_db_page(request, chapter=None, section=None):
                               {'page_title': 'DjangoBook v1.0',
                                'news_list': News.objects.order_by('-datetime')[:5],
                                'page_content': content,
-                               'django_version': django.get_version(),
-                               'user': request.user,
-                               'debug': settings.DEBUG,
-                               'spelling_error_count_pending': get_claims_count_by_status(1),
-                               'spelling_error_count_assigned': get_claims_count_by_status(2),
-                               'spelling_error_count_fixed': get_claims_count_by_status(3),
-                               'spelling_error_count_invalid': get_claims_count_by_status(4),
-                               'readers_count': len(request.session.get('readers', {}))})
+                               'readers_count': len(request.session.get('readers', {}))},
+                              context_instance=RequestContext(request, processors=[context_processor]))
     
 def user_claims(request):
     """ This function handles users' claims on spelling error.
@@ -99,6 +103,6 @@ def show_news_page(request, news_id=None):
     return render_to_response('news.html',
                               {'page_title': 'Новости: DjangoBook v1.0',
                                'news_list': News.objects.order_by('-datetime'),
-                               'news_curr': News.objects.get(id=news_id),
-                               'django_version': django.get_version(),
-                               'debug': settings.DEBUG})
+                               'news_curr': News.objects.get(id=news_id)
+                               },
+                              context_instance=RequestContext(request, processors=[context_processor]))

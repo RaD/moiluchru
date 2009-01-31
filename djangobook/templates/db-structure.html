@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block structure %}
+<body onLoad="init(); spelling.init();">
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="20%" valign="top">{% include "djangobook_inc_news.html" %}</td>
+    <td width="80%" valign="top">
+      <!--  //-->
+      <div class="topic" style="margin: 0px 0.5em 0.5em 0.5em; padding: 0.5em;">
+	<div>
+	  <a href="/djangobook/">
+	    <img src="http://cargo/pics/djangobook-title.png" border="0"/>
+	  </a>
+	</div>
+
+	<div class="sections">
+	  <table width="100%" style="border: 0px;">
+	    <tr>
+	      <td width="360">
+		{% if not debug %}
+		<a href="http://depositfiles.com/signup.php?ref=ruslanpopov">
+		  <img src="http://img2.depositfiles.com/img/banners/banner_360_rus.gif" border="0"/>
+		</a>
+		{% endif %}
+	      </td>
+	    </tr>
+	  </table>
+	</div>
+
+	<div class="search">
+	  {# надо использовать механизм форм Django #}
+	  <form name="web" method="get" action="http://www.yandex.ru/yandsearch">
+	    <span>Поиск по сайту:</span>
+	    <input type="text" name="text" size="40" value="" maxlength="160" class="field"/>
+	    <input type="submit" value="Найти" class="searchbutton"/>
+	    <input type="hidden" name="serverurl" value="http://cargo.caml.ru/djangobook/" />
+	    <input type="hidden" name="server_name" value="DjangoBook по-русски" />
+
+	    <input type="hidden" name="referrer1" value="http://cargo.caml.ru/djangobook/"/>
+	    <input type="hidden" name="referrer2" value="DjangoBook по-русски"/>
+	  </form>
+	    
+	  <div class="searchexamples">
+	    <b>Примеры запросов:</b>
+	    <font size="-1">
+	      <span class="item">render_to_response</span> |
+	      <span class="item">context_instance</span> |
+	      <span class="item">что это такое</span>
+	    </font>
+	  </div>
+	</div>
+      </div>
+
+      <div class="content">
+	{% block content %}{% endblock %}
+      </div>
+  
+      <div class="footer" style="margin: 0.5em 0.5em 0px 0.5em; padding: 0.5em;">
+	<div class="line">
+	  &copy; 2008 Руслан Попов &lt;radz &bull; yandex &bull; ru&gt;
+	</div>
+	<div class="line">
+	  Автор перевода указан в начале каждой главы.
+	</div>
+      </div>
+    </td>
+    <td width="116" valign="top">{% include "djangobook_inc_adds.html"%}</td>
+  </tr>
+</table>
+{% if not debug %}
+<form style="margin: 0; padding: 0;" action="https://money.yandex.ru/charity.xml" method="post"><input type="hidden" name="to" value="41001223475816"/><input type="hidden" name="CompanyName" value="DjangoBook по-русски"/><input type="hidden" name="CompanyLink" value="http://cargo.caml.ru/djangobook/"/><table border="0" cellspacing="0" cellpadding="0"><tr><td><div style="background: url(http://img.yandex.net/i/li-uncolorer-rt.gif) no-repeat right top #FFFFFF;"><div style="background: url(http://img.yandex.net/i/li-uncolorer-rb.gif) no-repeat right bottom;"><div style="background: url(http://img.yandex.net/i/li-uncolorer-lb.gif) no-repeat left bottom;"><div style="background: url(http://img.yandex.net/i/li-uncolorer-lt.gif) no-repeat left top; margin-right: 10px; padding: 10px 0 0 10px;"><table border="0" cellspacing="0" cellpadding="0"><tr><td><table border="0" cellspacing="0" cellpadding="0"><tr><td><input type="submit" value="Отправить" style="margin-right: 5px;"/></td><td><input type="text" id="CompanySum" name="CompanySum" value="100" size="4" style="margin-right: 5px;"/></td><td nowrap="nowrap" style="font: 70% Verdana, Arial, Geneva CY, Sans-Serif;" valign="bottom"><strong>рублей Яндекс.Деньгами</strong></td></tr></table></td><td width="90" rowspan="3" valign="bottom"><a href="http://money.yandex.ru/"><img src="http://www.yandex.ru/redir?dtype=stred&pid=41&cid=1253&url=http://img.yandex.net/i/ym-logo.gif" width="90" height="39" border="0" style="margin-left: 5px;"/></a></td></tr><tr><td nowrap="nowrap" style="font: 70% Verdana, Arial, Geneva CY, Sans-Serif;">на счёт <span style="color: #006600; font-weight: bold;">41001223475816</span>&nbsp;(<a href="http://cargo.caml.ru/djangobook/"><span style="color: #666666; text-decoration: underline;">DjangoBook по-русски</span></a>)</td></tr><tr><td><img src="http://img.yandex.net/i/x.gif" width="1" height="10" /></td></tr></table></div></div></div></div></td></tr></table></form>
+{% endif %}
+</body>
+{% endblock %}

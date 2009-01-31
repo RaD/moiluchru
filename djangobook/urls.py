@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     (r'^index\.html$', 'cargo.djangobook.views.show_db_page'),
     (r'^ch(\d+)s?(\d+)?\.html$', 'cargo.djangobook.views.show_db_page'),
     (r'^(ap)([a-z])\.html$', 'cargo.djangobook.views.show_db_page'),
+    (r'^news/(?P<news_id>\d+)/$', 'cargo.djangobook.views.show_news_page'),
     
     # Пользователи сообщают об ошибках
     (r'^claim/', 'cargo.djangobook.views.user_claims'),

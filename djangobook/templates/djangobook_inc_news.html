@@ -1,3 +1,4 @@
+{% load markup %}
 {% for news in news_list %}
   <div class="news">
     <div style="background-color: #94CE4A; font-family: arial; font-size: 12px; font-weight: bold; padding: 0px 4px; margin-bottom: 4px;">
@@ -7,7 +8,7 @@
       {{ news.title }}
     </div>
     <div style="font-family: arial; font-size: 12px; padding: 0px 4px; margin-bottom: 4px;">
-      {{ news.text|safe }}
+      {{ news.text|markdown }}
     </div>
     <br/>
   </div>

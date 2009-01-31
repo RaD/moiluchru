@@ -1,0 +1,98 @@
+Markdown
+From Wikipedia, the free encyclopedia
+Jump to: navigation, search
+
+Markdown is a lightweight markup language, originally created by John
+Gruber and Aaron Swartz to help maximum readability and
+"publishability" of both its input and output forms. The language
+takes many cues from existing conventions for marking up plain text in
+email. Markdown converts its marked-up text input to valid,
+well-formed XHTML and replaces left-pointing angle brackets ('<') and
+ampersands with their corresponding character entity
+references. Markdown was originally implemented in Perl by Gruber, but
+has since been re-implemented by others in a variety of programming
+languages. It is distributed under a BSD-style license and is included
+with, or available as a plugin for, several content-management
+systems.
+
+Syntax examples
+
+This is not an exhaustive listing of Markdown's syntax, and in many
+cases multiple styles of syntax are available to accomplish a
+particular effect. See the full Markdown syntax for more
+information. Characters which are ordinarily interpreted by Markdown
+as formatting commands will instead be interpreted literally if
+preceded by a backslash; for example, the sequence '\*' would output
+an asterisk rather than beginning a span of emphasized text. Markdown
+also does not transform any text within a "raw" block-level XHTML
+element; thus it is possible to include sections of XHTML within a
+Markdown source document by wrapping them in block-level XHTML tags.
+
+Paragraphs:
+
+A paragraph is one or more consecutive lines of text separated by one
+or more blank lines. Normal paragraphs should not be indented with
+spaces or tabs:
+
+This is a paragraph. It has two sentences.
+
+This is another paragraph. It also has two sentences.
+
+Emphasized text:
+
+*emphasis* (e.g., italics)
+
+**strong emphasis** (e.g., boldface)
+
+Code:
+
+`code`
+
+Lists:
+
+- An item in a bulleted (unordered) list
+- Another item in a bulleted list
+
+1. An item in an enumerated (ordered) list
+2. Another item in an enumerated list
+
+Headings:
+
+HTML headings are produced by placing a number of hashes before the
+header text corresponding to the level of heading desired (HTML offers
+six levels of headings), like so:
+
+# First-level heading
+
+#### Fourth-level heading
+
+The first two heading levels also have an alternate syntax:
+
+First-level heading
+===================
+
+Second-level heading
+--------------------
+
+Blockquotes:
+
+> This text will be enclosed in an HTML blockquote element.
+
+Links:
+
+[link text here](link.address.here "link title here")
+
+Images:
+
+![Alt text here](Image URL here "Image title here")
+
+Horizontal rules are created by placing three or more hyphens,
+asterisks, or underscores on a line by themselves. You may use spaces
+between the hyphens or asterisks. Each of the following lines will
+produce a horizontal rule:
+
+* * *
+***
+*****
+- - -
+---------------------------------------

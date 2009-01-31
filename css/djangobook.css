@@ -1,4 +1,4 @@
-BODY { font: 14px arial, helvetica, sans-serif; background-color: #326342; }
+BODY { font: 14px arial, helvetica, sans-serif; background-color: #326342; margin: 0px; }
 FORM { margin: 0px; }
 P { font: 12px arial; color: white; line-height: 1.5; }
 H1.title { font: 32px arial; font-weight: bold; color: #9AEF3F; }
@@ -19,7 +19,8 @@ IMG { behavior: url("/css/png.htc"); }
 .search { padding: 2px 1em; font: 12px arial; vertical-align: middle; }
 .search .soon { position: absolute; top: 130px; left: 250px; }
 .search .field { width: 60%; }
-.search BUTTON { color: #9AEF3F; background: #487858; 
+.searchbutton { color: #9AEF3F; background: #487858; 
+   font-size: 10px;
    margin: 1px; padding: 1px 2px; border: 1px solid gray; 
    -moz-border-radius: 4px; cursor: default; }
 
@@ -45,6 +46,7 @@ IMG { behavior: url("/css/png.htc"); }
 .informer .title { font-size: 12px; font-weight: bold; text-align: center; }
 .informer A { color: blue; }
 
+.informer .spelling { cursor: pointer; }
 .pending { margin: 1em 2px; }
 #spelling_error_count_pending { border: 1px solid yellow; font-weight: bold; padding: 0px 2px; }
 #spelling_error_count_assigned { border: 1px solid orange; font-weight: bold; padding: 0px 2px; }
@@ -121,9 +123,11 @@ dt { margin: 4px 0px;}
 .screenshot { }
 .screenshot IMG { border: 1px solid black; text-align: center }
 
-.guibutton { color: black; background:buttonface; margin:1px; padding:1px 2px; 
-   border-top:1px solid buttonhighlight;border-left:1px solid buttonhighlight; 
-   border-bottom:1px solid buttonshadow;border-right:1px solid buttonshadow; }
+.guibutton { color: #9AEF3F; background: #487858; 
+   font-size: 10px;
+   margin: 1px; padding: 1px 2px; border: 1px solid gray; 
+   -moz-border-radius: 4px; cursor: default; }
+
 .guilabel { color: brown; }
 .guimenu { }
 
