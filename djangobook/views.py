@@ -40,6 +40,15 @@ def get_claims_count_by_status(code):
     applied in (select max(applied) from djangobook_claimstatus group by claim_id)' % int(code))
     return int(cursor.rowcount)
 
+def get_news_statistics():
+    from django.db import connection
+    cursor = connection.cursor()
+    cursor.execute(' '.join(['select year(datetime) y, month(datetime) m,'
+                             'count(month(datetime)) q, min(id) id',
+                             'from djangobook_news group by month(datetime), year(datetime)',
+                             'order by 1 desc,2 desc']));
+    return cursor.fetchall()
+
 def show_db_page(request, chapter=None, section=None):
     """Show book's page."""
     if chapter == 'ap':
@@ -58,7 +67,7 @@ def show_db_page(request, chapter=None, section=None):
     except (IOError, KeyError):
         raise TemplateDoesNotExist(template_name)
     
-    return render_to_response('page.html',
+    return render_to_response('djangobook-page.html',
                               {'page_title': 'DjangoBook v1.0',
                                'news_list': News.objects.order_by('-datetime')[:5],
                                'page_content': content,
@@ -100,9 +109,34 @@ def claims_penging(request):
 
 def show_news_page(request, news_id=None):
     """Show news' page."""
+    month_names = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
+                   'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+    news = News.objects.order_by('-datetime')
+    news_statistics = get_news_statistics()
     return render_to_response('news.html',
                               {'page_title': 'Новости: DjangoBook v1.0',
-                               'news_list': News.objects.order_by('-datetime'),
-                               'news_curr': News.objects.get(id=news_id)
+                               'current_year': datetime.today().year,
+                               'news_curr': news.get(id=news_id),
+                               'year_list': set([n[0] for n in news_statistics]),
+                               'month_list': [(n[1], month_names[n[1]-1], n[2]) for n in news_statistics if n[0] == datetime.today().year]
+                               },
+                              context_instance=RequestContext(request, processors=[context_processor]))
+
+def show_archive_page(request, year=None, month=None):
+    """Show news' page."""
+    if not year: year = datetime.today().year
+    if not month: month = 1
+    month_names = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
+                   'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+    news = News.objects.order_by('-datetime')
+    news_statistics = get_news_statistics()
+    news_list = news.filter(datetime__year=int(year), datetime__month=int(month))
+    return render_to_response('djangobook-archive.html',
+                              {'page_title': 'Архив новостей: DjangoBook v1.0',
+                               'current_year': int(year),
+                               'current_month': int(month),
+                               'news_list': news_list,
+                               'year_list': set([n.datetime.year for n in news]),
+                               'month_list': [(n[1], month_names[n[1]-1], n[2]) for n in news_statistics if n[0] == int(year)]
                                },
                               context_instance=RequestContext(request, processors=[context_processor]))

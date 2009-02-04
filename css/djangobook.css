@@ -54,6 +54,15 @@ IMG { behavior: url("/css/png.htc"); }
 #spelling_error_count_invalid { border: 1px solid red; font-weight: bold; padding: 0px 2px; }
 #readers_count { border: 1px solid lightgreen; font-weight: bold; padding: 0px 2px; }
 
+.archive-block { border-top: 2px solid #94CE4A; border-bottom: 2px solid #94CE4A; margin-bottom: 0.5em; }
+.archive-block .title { margin: 0.5em; font-size: 1.5em; text-align: center; }
+.archive-block .year-list { margin: 0.5em; font-family: verdana; font-size: 1em; text-align: center; }
+.archive-block .current { font-weight: bold; }
+.archive-block .month-list { margin: 0.5em 1em; font-family: verdana; font-size: 1em; text-align: left; }
+
+.news-block { margin-bottom: 0.5em; }
+.news-block .title { margin: 0.5em; font-size: 1.5em; text-align: left; }
+
 .yandex-money { border: 0px; background-color: #487858; text-align: center; }
 .yandex-money .webmoney { color: white; font-family: monospace; font-size: 12px; text-align: center; }
 

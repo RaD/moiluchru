@@ -16,6 +16,8 @@
     
 Собрать и установить:
 
+    cp config.mk.template config.mk
+    vi config.mk
     make && make install
 
 Django-related:

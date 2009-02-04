@@ -189,6 +189,11 @@ class Howto(models.Model):
         """ This returns the absolute URL for a record. """
         return u'/shop/howto/%i/' % self.id
 
+
+class Support(models.Model):
+    title = models.CharField(max_length=64)
+    text = models.TextField()
+
 class Profile(models.Model):
     # обязательная часть профайла
     user = models.ForeignKey(User, unique=True)

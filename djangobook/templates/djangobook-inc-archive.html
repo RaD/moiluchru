@@ -1,0 +1,21 @@
+<div class="archive-block">
+  <div class="title">Архив новостей</div>
+  <div class="year-list">
+    {% for i in year_list %}
+      {% ifequal i current_year %}
+        <span class="current">{{ i }}</span>{% if not forloop.last %}, {% endif %}
+      {% else %}
+        <a href="/djangobook/archive/{{ i }}/">{{ i }}</a>{% if not forloop.last %}, {% endif %}
+      {% endifequal %}
+    {% endfor %}
+  </div>
+  <div class="month-list">
+    {% for i in month_list %}
+      {% ifequal i.0 current_month %}
+        <div>{{ i.1 }} ({{ i.2 }})</div>
+      {% else %}
+        <div><a href="/djangobook/archive/{{ current_year }}/{{ i.0 }}/">{{ i.1 }} ({{ i.2 }})</a></div>
+      {% endifequal %}
+    {% endfor %}
+</div>
+</div>
