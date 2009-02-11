@@ -4,20 +4,12 @@
       <td style="color: #326342;">
 	&copy; 2008-2009 Ruslan Popov @ gmail.com
       </td>
+      <td style="color: #326342; text-align: right;">
+	<span>Powered by <a href="http://djangoproject.com/">Django</a> {{ django_version }}</span>
+      </td>
     </tr>
   </table>
 </div>
 </body>
 
-<div style="font-family: arial; font-size: 12px;">
-  <table width="100%" border="0">
-    <tr>
-      <td style="white-space: nowrap; padding: 4px 1em;">
-	<span>  Powered by <a href="http://djangoproject.com/">Django</a> {{ django_version }}</span>
-      </td>
-      <td width="40%"></td>
-      <td width="40%"></td>
-      <td style="white-space: nowrap; padding: 4px 1em;">Login/Register</td>
-    </tr>
-  </table>
-</div>
+{% include "djangobook-inc-header.html" %}

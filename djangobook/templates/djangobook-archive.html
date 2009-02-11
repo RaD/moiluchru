@@ -14,7 +14,7 @@
       {# левая колонка #}
       {% include "djangobook-inc-archive.html" %}
     </td>
-    <td width="50%" valign="top" class="content">
+    <td width="*" valign="top" class="content">
       {% for n in news_list %}
       <div class="news-block">
 	<div><span class="title">{{ n.title }}</span> <span class="date">{{ n.datetime|date:"d m Y" }}</span></div>
@@ -24,7 +24,7 @@
       {% if not forloop.last %}<hr size="1" style="color: #94CE4A;"/>{% endif %}
       {% endfor %}
     </td>
-    <td width="15%" valign="top">
+    <td width="116" valign="top">
       {# правая колонка #}
       {% include "djangobook-inc-adds.html"%}
     </td>

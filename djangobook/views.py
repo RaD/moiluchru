@@ -113,7 +113,7 @@ def prepare_toc(toc, chapter=None, section=None):
         if not r: 
             print 'ERROR' # FIXME: сделать исключение!
         url = 'ap%s.html' % (r.group('letter'),)
-         curr_url = 'ap%s.html' % (section, )
+        curr_url = 'ap%s.html' % (section, )
         chapters.append([url, item[1]]) # id and title
     return {'chapters': chapters, 'sections': sections, 'url': url, 'chapter_url': 'ch%s.html' % (chapter,)}  
 
@@ -156,7 +156,7 @@ def show_news_page(request, news_id=None):
                    'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
     news = News.objects.order_by('-datetime')
     news_statistics = get_news_statistics()
-    return render_to_response('news.html',
+    return render_to_response('djangobook-news.html',
                               {'page_title': 'Новости: DjangoBook v1.0',
                                'current_year': datetime.today().year,
                                'news_curr': news.get(id=news_id),
