@@ -7,6 +7,7 @@ include $(APP_DIR)/config.mk
 CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/templates
 DJZIP=djangobook.html.zip
 TEMPLATES=$(wildcard *.html)
+SUBDIRS=feeds
 FILES=$(DJZIP)
 
 all: 
@@ -20,7 +21,7 @@ sendzip: $(DJZIP)
 $(DJZIP): $(HTMLS_SRC)/*.html
 	set -x;
 	mkdir ./zip;
-	for i in `ls $(HTMLS_SRC)/*.html`; do \
+	for i in `ls $(HTMLS_SRC)/*.html $(HTMLS_SRC)/toc.py`; do \
 	    echo `basename $$i`; \
 	    cat $$i | \
 	    sed 's/^.*<body[^>]*>//' | \
@@ -28,11 +29,11 @@ $(DJZIP): $(HTMLS_SRC)/*.html
 	    > ./zip/`basename $$i`; \
 	done;
 	cd ./zip; \
-	zip -m ../$(DJZIP) *.html; \
+	zip -m ../$(DJZIP) *.html *.py; \
 	cd -; \
 	rmdir ./zip; \
 
-install: create_dir install_templates
+install: create_dir install_templates install_subdirs
 
 clean:
 	rm -f *.zip *~
