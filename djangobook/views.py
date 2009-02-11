@@ -9,7 +9,7 @@ from django.http import Http404
 from cargo import settings
 from cargo.djangobook.models import News, Claims, ClaimStatus
 
-import zipfile
+import zipfile, re
 from datetime import datetime, timedelta
 
 news_info_extra = {
@@ -66,14 +66,57 @@ def show_db_page(request, chapter=None, section=None):
 	z.close()
     except (IOError, KeyError):
         raise TemplateDoesNotExist(template_name)
-    
-    return render_to_response('djangobook-page.html',
-                              {'page_title': 'DjangoBook v1.0',
-                               'news_list': News.objects.order_by('-datetime')[:5],
-                               'page_content': content,
-                               'readers_count': len(request.session.get('readers', {}))},
+
+    try:
+        z = zipfile.ZipFile(settings.DJANGOBOOK_PAGE_ZIP)
+        toc = eval("%s" % z.read('toc.py'))
+	z.close()
+    except (IOError, KeyError):
+        toc = {}
+
+    context = {'page_title': 'DjangoBook v1.0',
+               'page_content': content,
+               'readers_count': len(request.session.get('readers', {}))}
+    if page == 'index.html':
+        context.update({'news_list': News.objects.order_by('-datetime')[:5]})
+    else:
+        context.update({'toc': prepare_toc(toc, chapter, section)})
+    return render_to_response('djangobook-page.html', context,
                               context_instance=RequestContext(request, processors=[context_processor]))
     
+def prepare_toc(toc, chapter=None, section=None):
+    chapters = []
+    sections = []
+    for item in toc.get('chapters'):
+        # для каждой главы получаем её номер, её секции и генерируем url
+        r = re.match(r'^.*\.chap(?P<number>\d+)$', item[0])
+        url = '#'
+        if not r:
+            print 'ERROR' # FIXME: сделать исключение!
+        url = 'ch%s.html' % (r.group('number'),)
+        chapters.append([url, item[1]]) # id and title
+
+        if chapter:
+            if chapter != 'ap' and chapter == r.group('number'):
+                # если это глава и её номер совпадает с выбранной, то сохраняем список секций
+                for s in item[2]:
+                    index = item[2].index(s)+1
+                    if index == 1:
+                        sections.append(('ch%s.html#%s' % (chapter, s[0]), s[1]))
+                    else:
+                        sections.append(('ch%ss%02i.html' % (chapter, index), s[1]))
+
+    for item in toc.get('appendixes'):
+        # для каждого приложения получаем его букву и генерируем url
+        r = re.match(r'^.*\.appendix_(?P<letter>[a-z])$', item[0])
+        url = '#'
+        if not r: 
+            print 'ERROR' # FIXME: сделать исключение!
+        url = 'ap%s.html' % (r.group('letter'),)
+         curr_url = 'ap%s.html' % (section, )
+        chapters.append([url, item[1]]) # id and title
+    return {'chapters': chapters, 'sections': sections, 'url': url, 'chapter_url': 'ch%s.html' % (chapter,)}  
+
 def user_claims(request):
     """ This function handles users' claims on spelling error.
     It saves all information into Claims model. It doesn't check

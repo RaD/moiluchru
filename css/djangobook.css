@@ -86,6 +86,14 @@ IMG { behavior: url("/css/png.htc"); }
 .toc .appendix A { font: 14px arial; color: white; }
 dt { margin: 4px 0px;}
 
+.area-title { color: white; background-color: #94CE4A; 
+	      font: 14px arial; font-weight: bold; 
+	      padding: 4px; margin-bottom: 0.5em; }
+.tocmini-chapter { margin: 0.4em 0em; overflow: auto; }
+.tocmini-chapter A { font: 12px arial; color: white; }
+.tocmini-sections { padding-left: 1em; }
+.tocmini-section A { font: 12px arial; color: white; }
+
 .subtitle { font: 24px helvetica, sans-serif italic; }
 
 .list-of-figures P B { font: 16px arial; }
