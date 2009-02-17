@@ -28,4 +28,7 @@ translate:
 pushhome:
 	git push ssh://rad@nemo/~/development/git.repos/cargo.git/
 
+pushcargo:
+	git push ssh://rad@caml.ru/~/sites/cargo/repos/cargo.git/
+
 include targets.mk
