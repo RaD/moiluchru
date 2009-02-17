@@ -3,7 +3,7 @@
 import django
 #from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import TemplateDoesNotExist, RequestContext
 from django.http import Http404
 from cargo import settings
@@ -152,6 +152,8 @@ def claims_penging(request):
 
 def show_news_page(request, news_id=None):
     """Show news' page."""
+    if not news_id:
+        return HttpResponseRedirect('/djangobook/archive/')
     month_names = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
                    'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
     news = News.objects.order_by('-datetime')
@@ -168,7 +170,7 @@ def show_news_page(request, news_id=None):
 def show_archive_page(request, year=None, month=None):
     """Show news' page."""
     if not year: year = datetime.today().year
-    if not month: month = 1
+    if not month: month = datetime.today().month
     month_names = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
                    'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
     news = News.objects.order_by('-datetime')
