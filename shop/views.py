@@ -13,16 +13,18 @@ from cargo.shop.forms import DivErrorList, SearchForm, OfferForm
 from cargo.shop.classes import CartItem
 
 def cart_ctx_proc(request):
-    """ Контекстный процессор для заполнения данных о корзине. """
+    """ Контекстный процессор для заполнения данных о корзине и для
+    вывода поисковой формы на каждой странице. """
+    session = request.session
     form = SearchForm(auto_id='field_%s',
-                      initial={'userinput': request.session.get('searchquery', ''),
-                               'howmuch': request.session.get('howmuch_id', 1)})
+                      initial={'userinput': session.get('searchquery', ''),
+                               'howmuch': session.get('howmuch_id', 1)})
     return {'site_name': settings.SITE_NAME,
             'form': form,
             'howtos': models.Howto.objects.all(),
             'top_cats': common.top_categories(),
-            'cart_count': request.session.get('cart_count', 0),
-            'cart_price': request.session.get('cart_price', 0.00)}
+            'cart_count': session.get('cart_count', 0),
+            'cart_price': session.get('cart_price', 0.00)}
 
 def show_main_page(request):
     """ Функция для отображения главной страницы сайта.  Осуществляем
@@ -31,10 +33,11 @@ def show_main_page(request):
         common.does_cart_exist(request)
     else:
         request.session.set_test_cookie()
-    return render_to_response('shop-main.html',
-                              {'items': models.Item.objects.order_by('-buys')[:3],
-                               'producers': common.category_producers(0)},
-                              context_instance=RequestContext(request, processors=[cart_ctx_proc]))
+    return render_to_response(
+        'shop-main.html',
+        {'items': models.Item.objects.order_by('-buys')[:3],
+         'producers': common.category_producers(0)},
+        context_instance=RequestContext(request, processors=[cart_ctx_proc]))
     
 def show_howto_page(request, howto):
     """ Функция для отображения вспомогательной информации. """

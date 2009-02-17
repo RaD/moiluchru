@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 from django.db.models.query import QuerySet
-#from django.core import validators
+
 from cargo.shop import models
 
 def init_cart(request):
+    """ Инициализация корзины. """
     request.session['cart_items'] = {}
     request.session['cart_count'] = 0
     request.session['cart_price'] = 0.00
 
 def does_cart_exist(request):
+    """ Создание корзины в случае её отсутствия. Такое бывает при
+    первом посещении магазина. """
     if request.session.test_cookie_worked():
         if not 'cart_items' in request.session:
             init_cart(request)
@@ -19,9 +22,12 @@ def does_cart_exist(request):
 #                                         "Cookies are required for logging in.")
 
 def top_categories():
+    """ Возвращает список категорий верхнего уровня. """
     return list(models.Category.objects.filter(parent__isnull=True))
 
 def parent_categories(category_id):
+    """ Возвращает в виде списка все родительские категории до
+    верхнего уровня. """
     if int(category_id) == 0:
         return [];
     else:
@@ -36,8 +42,8 @@ def parent_categories(category_id):
         return a
 
 def subcategories(category_id=0):
-    """Функция возвращает все дочерние категории,
-    даже дочерние дочерних и так далее."""
+    """Функция возвращает все дочерние категории, даже дочерние
+    дочерних и так далее."""
     if int(category_id) == 0:
         return child_categories()
     else:

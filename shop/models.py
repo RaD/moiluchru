@@ -4,36 +4,39 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.admin.models import User
 from django.db import models
 
-class Color(models.Model):
+# Определяем абстрактный класс для Entity
+class CommonEntity(models.Model):
     title = models.CharField(_('Title'), max_length=60)
+
+    class Meta:
+        abstract = True
+
+    def __unicode__(self):
+        return self.title
+
+# Наследуем класс от entity
+class Color(CommonEntity):
+    pass
 
     class Meta:
         verbose_name = _('Color')
         verbose_name_plural = _('Colors')
 
-    def __unicode__(self):
-        return self.title
-    
-class Country(models.Model):
-    title = models.CharField(_('Title'), max_length=60)
+# Наследуем класс от entity
+class Country(CommonEntity):
+    pass
 
     class Meta:
         verbose_name = _('Country')
         verbose_name_plural = _('Countries')
 
-    def __unicode__(self):
-        return self.title
-    
-class City(models.Model):
-    title = models.CharField(_('Title'), max_length=60)
+# Наследуем класс от entity
+class City(CommonEntity):
     country = models.ForeignKey(Country, verbose_name=_('Country'))
 
     class Meta:
         verbose_name = _('City')
         verbose_name_plural = _('Cities')
-
-    def __unicode__(self):
-        return self.title
     
 class Producer(models.Model):
     name = models.CharField(_('Company'), max_length=30)
