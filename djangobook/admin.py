@@ -37,7 +37,7 @@ class ClaimsAdminForm(forms.ModelForm):
 def get_choice_desc(code):
     """ Функция возвращает описание по коду. См. CHOICES. """
     #logging.debug(filter(lambda x, c=code: x[0]==c, list(CLAIM_STATUSES)))
-    return CLAIM_STATUSES[int(code)][1]
+    return CLAIM_STATUSES[int(code)-1][1]
 
 # additional field: claim status
 def claim_status_field(claim):
