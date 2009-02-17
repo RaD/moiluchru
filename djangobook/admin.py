@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import logging
+
 from django.contrib import admin
 from django import forms
 from django.utils.translation import ugettext as _
@@ -14,6 +16,7 @@ class NewsAdmin(admin.ModelAdmin):
 admin.site.register(News, NewsAdmin)
 
 class ClaimsAdminForm(forms.ModelForm):
+    """ Класс отображения формы, расширяем функционал модели Claims. """
     status = forms.ChoiceField(choices=CLAIM_STATUSES)
 
     def __init__(self, *args, **kwargs):
@@ -31,16 +34,22 @@ class ClaimsAdminForm(forms.ModelForm):
     class Meta:
         model = Claims
 
+def get_choice_desc(code):
+    """ Функция возвращает описание по коду. См. CHOICES. """
+    #logging.debug(filter(lambda x, c=code: x[0]==c, list(CLAIM_STATUSES)))
+    return CLAIM_STATUSES[int(code)][1]
+
 # additional field: claim status
 def claim_status_field(claim):
     try:
         code = ClaimStatus.objects.filter(claim=claim).order_by('-applied')[0].status
-        for i in CLAIM_STATUSES:
-            if int(i[0]) == int(code):
-                return i[1]
     except Exception:
         return _(u'Unknown')
+    color = ['yellow', 'orange', 'green', 'red'][int(code)-1]
+    return '<div style="background-color: %s;">%s</div>' \
+        % (color, get_choice_desc(code))
 claim_status_field.short_description = _(u'Claim status')
+claim_status_field.allow_tags = True
     
 class ClaimsAdmin(admin.ModelAdmin):
     form = ClaimsAdminForm
