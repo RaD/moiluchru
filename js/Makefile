@@ -2,7 +2,7 @@ TOP_DIR=..
 
 include $(TOP_DIR)/config.mk
 
-CURRENT_INSTALL_DIR=$(INSTALL_APACHE_DIR)/js
+CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/js
 FILES=$(wildcard *.js)
 
 all:

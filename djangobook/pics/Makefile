@@ -4,7 +4,7 @@ APP_DIR=..
 include $(TOP_DIR)/config.mk
 include $(APP_DIR)/config.mk
 
-CURRENT_INSTALL_DIR=$(INSTALL_APACHE_DIR)/pics
+CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/$(APPNAME)/pics
 FILES=$(wildcard *.png)
 
 all:

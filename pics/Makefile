@@ -2,7 +2,7 @@ TOP_DIR=..
 
 include $(TOP_DIR)/config.mk
 
-CURRENT_INSTALL_DIR=$(INSTALL_APACHE_DIR)/pics
+CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/pics
 FILES=$(wildcard *.png)
 
 all:
