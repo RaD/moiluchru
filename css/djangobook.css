@@ -63,6 +63,12 @@ IMG { behavior: url("/css/png.htc"); }
 .news-block { margin-bottom: 0.5em; }
 .news-block .title { margin: 0.5em; font-size: 1.5em; text-align: left; }
 
+.news-inc .text {font-family: "trebuchet MS",sans-serif;
+		 font-size: 12px;
+		 letter-spacing: 0.2pt;
+		 word-spacing: 1pt;
+		 line-height: 1.5;
+		 padding: 0px 4px; margin-bottom: 4px;}
 .yandex-money { border: 0px; background-color: #487858; text-align: center; }
 .yandex-money .webmoney { color: white; font-family: monospace; font-size: 12px; text-align: center; }
 
