@@ -19,7 +19,7 @@
       <div class="news-block">
 	<div><span class="title">{{ n.title }}</span> <span class="date">{{ n.datetime|date:"d m Y" }}</span></div>
 	<div style="padding-left: 1em;">{{ n.text|truncatewords:20|markdown }}</div>
-	<div style="padding-left: 1em; text-align: right"><a href="/djangobook/news/{{ n.id }}/">Далее</a></div>
+	<div style="padding-left: 1em; text-align: right"><a href="{{ n.get_absolute_url }}">Далее</a></div>
       </div>
       {% if not forloop.last %}<hr size="1" style="color: #94CE4A;"/>{% endif %}
       {% endfor %}

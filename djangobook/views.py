@@ -9,6 +9,8 @@ from django.http import Http404
 from cargo import settings
 from cargo.djangobook.models import News, Claims, ClaimStatus
 
+from cargo.snippets import render_to, paged
+
 import zipfile, re
 from datetime import datetime, timedelta
 
@@ -49,41 +51,15 @@ def get_news_statistics():
                              'order by 1 desc,2 desc']));
     return cursor.fetchall()
 
-def show_db_page(request, chapter=None, section=None):
-    """Show book's page."""
-    if chapter == 'ap':
-        page = 'ap%s.html' % section
-    elif chapter is None and section is None:
-        page = 'index.html'
-    elif section is None:
-        page = 'ch%s.html' % chapter
-    else:
-        page = 'ch%ss%s.html' % (chapter, section)
-    # get the page from ZIP archive
-    try:
-        z = zipfile.ZipFile(settings.DJANGOBOOK_PAGE_ZIP)
-        content = z.read(page)
-	z.close()
-    except (IOError, KeyError):
-        raise TemplateDoesNotExist(template_name)
-
+def get_toc():
     try:
         z = zipfile.ZipFile(settings.DJANGOBOOK_PAGE_ZIP)
         toc = eval("%s" % z.read('toc.py'))
 	z.close()
     except (IOError, KeyError):
         toc = {}
+    return toc
 
-    context = {'page_title': 'DjangoBook v1.0',
-               'page_content': content,
-               'readers_count': len(request.session.get('readers', {}))}
-    if page == 'index.html':
-        context.update({'news_list': News.objects.order_by('-datetime')[:5]})
-    else:
-        context.update({'toc': prepare_toc(toc, chapter, section)})
-    return render_to_response('djangobook-page.html', context,
-                              context_instance=RequestContext(request, processors=[context_processor]))
-    
 def prepare_toc(toc, chapter=None, section=None):
     chapters = []
     sections = []
@@ -117,6 +93,39 @@ def prepare_toc(toc, chapter=None, section=None):
         chapters.append([url, item[1]]) # id and title
     return {'chapters': chapters, 'sections': sections, 'url': url, 'chapter_url': 'ch%s.html' % (chapter,)}  
 
+def get_page_from_zip(page):
+    try:
+        z = zipfile.ZipFile(settings.DJANGOBOOK_PAGE_ZIP)
+        content = z.read(page)
+	z.close()
+    except (IOError, KeyError):
+        raise TemplateDoesNotExist(template_name)
+    return content
+
+@render_to('djangobook-page.html', context_processor)
+def show_db_page(request, chapter=None, section=None):
+    """Show book's page."""
+    if chapter == 'ap':
+        page = 'ap%s.html' % section
+        title = u'Приложение %s' % section
+    elif chapter is None and section is None:
+        page = 'index.html'
+        title = u'Первая страница'
+    elif section is None:
+        page = 'ch%s.html' % chapter
+        title = u'Глава %i' % int(chapter)
+    else:
+        page = 'ch%ss%s.html' % (chapter, section)
+        title = u'Глава %i, раздел %i' % (int(chapter), int(section))
+    context = {'page_title': u'%s : DjangoBook v1.0' % title,
+               'page_content': get_page_from_zip(page),
+               'readers_count': len(request.session.get('readers', {}))}
+    if page == 'index.html':
+        context.update({'news_list': News.objects.order_by('-datetime')[:5]})
+    else:
+        context.update({'toc': prepare_toc(get_toc(), chapter, section)})
+    return context
+    
 def user_claims(request):
     """ This function handles users' claims on spelling error.
     It saves all information into Claims model. It doesn't check
@@ -150,38 +159,37 @@ def claims_penging(request):
     else:
         return HttpResponse('<result><code>400</code><desc>it must be ajax call</desc></result>', mimetype="text/xml")
 
+@render_to('djangobook-news.html', context_processor)
 def show_news_page(request, news_id=None):
     """Show news' page."""
     if not news_id:
         return HttpResponseRedirect('/djangobook/archive/')
-    month_names = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
-                   'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+    month_names = [u'Январь', u'Февраль', u'Март', u'Апрель', u'Май', u'Июнь', 
+                   u'Июль', u'Август', u'Сентябрь', u'Октябрь', u'Ноябрь', u'Декабрь']
     news = News.objects.order_by('-datetime')
     news_statistics = get_news_statistics()
-    return render_to_response('djangobook-news.html',
-                              {'page_title': 'Новости: DjangoBook v1.0',
-                               'current_year': datetime.today().year,
-                               'news_curr': news.get(id=news_id),
-                               'year_list': set([n[0] for n in news_statistics]),
-                               'month_list': [(n[1], month_names[n[1]-1], n[2]) for n in news_statistics if n[0] == datetime.today().year]
-                               },
-                              context_instance=RequestContext(request, processors=[context_processor]))
+    news_curr = news.get(id=news_id)
+    year_curr = datetime.today().year
+    return {'page_title': u'Новость: %s : DjangoBook v1.0' % (news_curr.title,),
+            'current_year': year_curr,
+            'news_curr': news_curr,
+            'year_list': set([n[0] for n in news_statistics]),
+            'month_list': [(n[1], month_names[n[1]-1], n[2]) \
+                               for n in news_statistics if n[0] == year_curr]}
 
+@render_to('djangobook-archive.html', context_processor)
 def show_archive_page(request, year=None, month=None):
     """Show news' page."""
     if not year: year = datetime.today().year
     if not month: month = datetime.today().month
-    month_names = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
-                   'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+    month_names = [u'Январь', u'Февраль', u'Март', u'Апрель', u'Май', u'Июнь', 
+                   u'Июль', u'Август', u'Сентябрь', u'Октябрь', u'Ноябрь', u'Декабрь']
     news = News.objects.order_by('-datetime')
     news_statistics = get_news_statistics()
     news_list = news.filter(datetime__year=int(year), datetime__month=int(month))
-    return render_to_response('djangobook-archive.html',
-                              {'page_title': 'Архив новостей: DjangoBook v1.0',
-                               'current_year': int(year),
-                               'current_month': int(month),
-                               'news_list': news_list,
-                               'year_list': set([n.datetime.year for n in news]),
-                               'month_list': [(n[1], month_names[n[1]-1], n[2]) for n in news_statistics if n[0] == int(year)]
-                               },
-                              context_instance=RequestContext(request, processors=[context_processor]))
+    return {'page_title': u'Архив: %s %s : DjangoBook v1.0' % (month_names[int(month)-1], year),
+            'current_year': int(year),
+            'current_month': int(month),
+            'news_list': news_list,
+            'year_list': set([n.datetime.year for n in news]),
+            'month_list': [(n[1], month_names[n[1]-1], n[2]) for n in news_statistics if n[0] == int(year)]}

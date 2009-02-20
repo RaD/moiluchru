@@ -12,6 +12,8 @@ from cargo.shop import models, common
 from cargo.shop.forms import DivErrorList, SearchForm, OfferForm
 from cargo.shop.classes import CartItem
 
+from cargo.snippets import render_to, paged
+
 def cart_ctx_proc(request):
     """ Контекстный процессор для заполнения данных о корзине и для
     вывода поисковой формы на каждой странице. """
@@ -26,6 +28,7 @@ def cart_ctx_proc(request):
             'cart_count': session.get('cart_count', 0),
             'cart_price': session.get('cart_price', 0.00)}
 
+@render_to('shop-main.html', cart_ctx_proc)
 def show_main_page(request):
     """ Функция для отображения главной страницы сайта.  Осуществляем
     проверку поддержки Cookie. """
@@ -33,21 +36,19 @@ def show_main_page(request):
         common.does_cart_exist(request)
     else:
         request.session.set_test_cookie()
-    return render_to_response(
-        'shop-main.html',
-        {'items': models.Item.objects.order_by('-buys')[:3],
-         'producers': common.category_producers(0)},
-        context_instance=RequestContext(request, processors=[cart_ctx_proc]))
-    
+    return {'items': models.Item.objects.order_by('-buys')[:3],
+            'producers': common.category_producers(0)}
+
+@render_to('shop-howto.html', cart_ctx_proc)
 def show_howto_page(request, howto):
     """ Функция для отображения вспомогательной информации. """
     common.does_cart_exist(request)
-    last_page = request.META.get('HTTP_REFERER', '#')
-    h = models.Howto.objects.get(id=howto)
-    return render_to_response('shop-howto.html', {'howto': h, 'back_to': last_page},
-                              context_instance=RequestContext(request, processors=[cart_ctx_proc]))
+    return {'howto': models.Howto.objects.get(id=howto), 
+            'back_to': request.META.get('HTTP_REFERER', '#')}
 
-def search_results(request, pagenum=1):
+@render_to('shop-search.html', cart_ctx_proc)
+@paged
+def search_results(request, page):
     """ Функция для результатов поиска по магазину. """
     common.does_cart_exist(request)
     sort_type = request.session.get('sort_type', 1)
@@ -62,13 +63,11 @@ def search_results(request, pagenum=1):
             p = Paginator(i.order_by(sort[sort_type]), z[int(clean['howmuch'])-1])
             request.session['searchquery'] = clean['userinput']
             request.session['howmuch_id'] = clean['howmuch']
-            return render_to_response('shop-search.html',
-                                      {'items': p.page(pagenum).object_list,
-                                       'search_query': clean['userinput'],
-                                       'url': '/shop/search/',
-                                       'sort_type': sort_type, 
-                                       'page': p.page(pagenum), 'page_range': p.page_range},
-                                      context_instance=RequestContext(request, processors=[cart_ctx_proc]))
+            return {'items': p.page(page).object_list,
+                    'search_query': clean['userinput'],
+                    'url': '/shop/search/',
+                    'sort_type': sort_type, 
+                    'page': p.page(page), 'page_range': p.page_range}
         else:
             return HttpResponseRedirect('/shop/')
     else:
@@ -77,15 +76,15 @@ def search_results(request, pagenum=1):
         i = models.Item.objects.filter(Q(title__search=userinput) |
                                        Q(desc__search=userinput))
         p = Paginator(i.order_by(sort[sort_type]), item_per_page)
-        return render_to_response('shop-search.html',
-                                  {'items': p.page(pagenum).object_list,
-                                   'search_query': userinput,
-                                   'url': '/shop/search/',
-                                   'sort_type': sort_type, 
-                                   'page': p.page(pagenum), 'page_range': p.page_range},
-                                  context_instance=RequestContext(request, processors=[cart_ctx_proc]))
+        return {'items': p.page(page).object_list,
+                'search_query': userinput,
+                'url': '/shop/search/',
+                'sort_type': sort_type, 
+                'page': p.page(page), 'page_range': p.page_range}
 
-def show_category_page(request, category_id, pagenum=1):
+@render_to('shop-category.html', cart_ctx_proc)
+@paged
+def show_category_page(request, category_id, page):
     """ Функция для отображения подчинённых категорий. """
     sort = ['', '-buys', 'buys', '-price', 'price']
     sort_type = request.session.get('sort_type', 1)
@@ -93,48 +92,45 @@ def show_category_page(request, category_id, pagenum=1):
     i = common.category_items(category_id)
     c = models.Category.objects.get(id=category_id)
     p = Paginator(i.order_by(sort[sort_type]), settings.SHOP_ITEMS_PER_PAGE)
-    return render_to_response('shop-category.html',
-                              {'parent_cats': common.parent_categories(category_id),
-                               'child_cats': common.child_categories(category_id),
-                               'category_id': category_id,
-                               'producers': common.category_producers(category_id),
-                               'url': c.get_absolute_url(), # для многостраничности
-                               'sort_type': sort_type, 
-                               'items': p.page(pagenum).object_list,
-                               'page': p.page(pagenum), 'page_range': p.page_range},
-                              context_instance=RequestContext(request, processors=[cart_ctx_proc]))
+    return {'parent_cats': common.parent_categories(category_id),
+            'child_cats': common.child_categories(category_id),
+            'category_id': category_id,
+            'producers': common.category_producers(category_id),
+            'url': c.get_absolute_url(), # для многостраничности
+            'sort_type': sort_type, 
+            'items': p.page(page).object_list,
+            'page': p.page(page), 'page_range': p.page_range}
 
-def show_producer_page(request, producer_id, category_id=0, pagenum=1):
+@render_to('shop-category.html', cart_ctx_proc)
+@paged
+def show_producer_page(request, producer_id, page, category_id=0):
     """ Функция для отображения товаром для указанного производителя
     из всех подчинённых категорий. """
     common.does_cart_exist(request)
     p = models.Producer.objects.get(id=producer_id)
     i = common.category_items(category_id, producer_id)
     paginator = Paginator(i, settings.SHOP_ITEMS_PER_PAGE)
-    return render_to_response('shop-category.html',
-                              {'parent_cats': common.parent_categories(category_id),
-                               'child_cats': common.child_categories(category_id),
-                               'category_id': (category_id == 0) and None or category_id,
-                               #'currentproc': p,
-                               #'categories': child_cats,
-                               'producers': common.category_producers(category_id),
-                               'url': '/shop/producer/%s/%s/' % (producer_id, category_id),
-                               'items': paginator.page(pagenum).object_list,
-                               'page': paginator.page(pagenum), 'page_range': paginator.page_range
-                               },
-                              context_instance=RequestContext(request, processors=[cart_ctx_proc]))
+    return {'parent_cats': common.parent_categories(category_id),
+            'child_cats': common.child_categories(category_id),
+            'category_id': (category_id == 0) and None or category_id,
+            #'currentproc': p,
+            #'categories': child_cats,
+            'producers': common.category_producers(category_id),
+            'url': '/shop/producer/%s/%s/' % (producer_id, category_id),
+            'items': paginator.page(page).object_list,
+            'page': paginator.page(page), 'page_range': paginator.page_range}
 
+@render_to('shop-item.html', cart_ctx_proc)
 def show_item_page(request, item_id):
     """ Отображение информации о товаре. """
     common.does_cart_exist(request)
     i = models.Item.objects.get(id=item_id)
-    return render_to_response('shop-item.html',
-                              {'item': i,
-                               'item_remains': i.count - i.reserved,
-                               'js_onload': 'show_item_count_info(%s);' % item_id,
-                               'parent_cats': common.parent_categories(i.category.id)},
-                              context_instance=RequestContext(request, processors=[cart_ctx_proc]))
+    return {'item': i,
+            'item_remains': i.count - i.reserved,
+            'js_onload': 'show_item_count_info(%s);' % item_id,
+            'parent_cats': common.parent_categories(i.category.id)}
     
+@render_to('shop-cart.html', cart_ctx_proc)
 def show_cart(request):
     """ Отображение содержимого корзины. """
     items = []
@@ -145,13 +141,12 @@ def show_cart(request):
         for i in cart:
             record = models.Item.objects.get(id=i)
             items.append(CartItem(record.title, cart[i]['count'], cart[i]['price']))
-    return render_to_response('shop-cart.html',
-                              {'cart': cart, # для отключения кнопок
-                               'cart_items': items,
-                               'cart_show' : 'yes',
-                               'categories': models.Category.objects.filter(parent__isnull=True)},
-                              context_instance=RequestContext(request, processors=[cart_ctx_proc]))
+    return {'cart': cart, # для отключения кнопок
+            'cart_items': items,
+            'cart_show' : 'yes',
+            'categories': models.Category.objects.filter(parent__isnull=True)}
 
+@render_to('shop-offer.html', cart_ctx_proc)
 def show_offer(request):
     """ Отображение формы для ввода данных о покупателе.  Обработка
     пользовательского ввода. """
@@ -201,19 +196,15 @@ def show_offer(request):
                 return HttpResponse('bad form data: %s' % e)
         else:
             form = OfferForm(request.POST, auto_id='field_%s', error_class=DivErrorList)
-            return render_to_response('shop-offer.html',
-                                      {'form_offer': form, 'cart_show' : 'yes'},
-                                      context_instance=RequestContext(request, processors=[cart_ctx_proc]));
+            return {'form_offer': form, 'cart_show' : 'yes'}
     else:
         form = OfferForm(auto_id='field_%s')
-        return render_to_response('shop-offer.html',
-                                  {'form_offer': form, 'cart_show' : 'yes'},
-                                  context_instance=RequestContext(request, processors=[cart_ctx_proc]));
+        return {'form_offer': form, 'cart_show' : 'yes'}
 
+@render_to('shop-ordered.html', cart_ctx_proc)
 def show_ordered(request):
     common.init_cart(request)
-    return render_to_response('shop-ordered.html',{},
-                              context_instance=RequestContext(request, processors=[cart_ctx_proc]));
+    return {}
     
 def set_sort_mode(request, mode=1):
     if int(mode) in range(1,3):

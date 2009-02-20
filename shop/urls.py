@@ -5,17 +5,17 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns('',
     (r'^$', 'cargo.shop.views.show_main_page'),
     # страница результатов поиска может иметь продолжение (paginator)
-    (r'^search/(?P<pagenum>\d+)/', 'cargo.shop.views.search_results'),
+    (r'^search/(?P<page>\d+)/', 'cargo.shop.views.search_results'),
     (r'^search/', 'cargo.shop.views.search_results'),
     # информация
     (r'^howto/(?P<howto>\d+)/', 'cargo.shop.views.show_howto_page'),
     # категория
-    (r'^category/(?P<category_id>\d+)/(?P<pagenum>\d+)/', 'cargo.shop.views.show_category_page'),
+    (r'^category/(?P<category_id>\d+)/(?P<page>\d+)/', 'cargo.shop.views.show_category_page'),
     (r'^category/(?P<category_id>\d+)/', 'cargo.shop.views.show_category_page'),
     # сортировка
     (r'^sort/(?P<mode>\d)/', 'cargo.shop.views.set_sort_mode'),
     # производитель
-    (r'^producer/(?P<producer_id>\d+)/(?P<category_id>\d+)/(?P<pagenum>\d+)/', 'cargo.shop.views.show_producer_page'),
+    (r'^producer/(?P<producer_id>\d+)/(?P<category_id>\d+)/(?P<page>\d+)/', 'cargo.shop.views.show_producer_page'),
     (r'^producer/(?P<producer_id>\d+)/(?P<category_id>\d+)/', 'cargo.shop.views.show_producer_page'),
     (r'^producer/(?P<producer_id>\d+)/', 'cargo.shop.views.show_producer_page'),
     # товар
