@@ -58,7 +58,7 @@ class Category(models.Model):
     """ The categories of items. """
     name = models.CharField(_('Title'), max_length=30)
     parent = models.ForeignKey('self', blank=True, null=True,
-                               verbose_name=_('Title'))
+                               verbose_name=_('Parent'))
 
     class Meta:
         verbose_name = _('Category')
