@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-24 02:53+0300\n"
+"POT-Creation-Date: 2009-02-21 00:31+0300\n"
 "PO-Revision-Date: 2008-07-09 20:40+0400\n"
 "Last-Translator: Ruslan Popov <radz@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -15,32 +15,32 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: djangobook/admin.py:11
+#: djangobook/admin.py:13
 msgid "Contents"
 msgstr "Содержимое"
 
-#: djangobook/admin.py:42 djangobook/models.py:46
+#: djangobook/admin.py:47 djangobook/models.py:46
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: djangobook/admin.py:43 djangobook/models.py:108
+#: djangobook/admin.py:51 djangobook/models.py:108
 msgid "Claim status"
 msgstr "Состояние жалобы"
 
-#: djangobook/admin.py:48
+#: djangobook/admin.py:57
 msgid "Meta"
 msgstr "Метаинформация"
 
-#: djangobook/admin.py:50
+#: djangobook/admin.py:59
 msgid "Error"
 msgstr "Ошибка"
 
-#: djangobook/admin.py:52 shop/forms.py:44
+#: djangobook/admin.py:61 shop/forms.py:44
 msgid "Comment"
 msgstr "Комментарий"
 
-#: djangobook/models.py:10 shop/models.py:8 shop/models.py:18
-#: shop/models.py:28 shop/models.py:56 shop/models.py:58 shop/models.py:72
+#: djangobook/models.py:10 shop/models.py:9 shop/models.py:59
+#: shop/models.py:75
 msgid "Title"
 msgstr "Название"
 
@@ -69,19 +69,19 @@ msgid "This is automatic generated message, you do not need to answer on it."
 msgstr ""
 "Это сообщение сгенерировано автоматически, вам не требуется отвечать на него."
 
-#: djangobook/models.py:99 djangobook/templates/djangobook_inc_adds.html:14
+#: djangobook/models.py:99 djangobook/templates/djangobook-inc-adds.html:17
 msgid "New"
 msgstr "Новое"
 
-#: djangobook/models.py:99 djangobook/templates/djangobook_inc_adds.html:15
+#: djangobook/models.py:99 djangobook/templates/djangobook-inc-adds.html:18
 msgid "Assigned"
 msgstr "Принято"
 
-#: djangobook/models.py:100 djangobook/templates/djangobook_inc_adds.html:16
+#: djangobook/models.py:100 djangobook/templates/djangobook-inc-adds.html:19
 msgid "Fixed"
 msgstr "Исправлено"
 
-#: djangobook/models.py:100 djangobook/templates/djangobook_inc_adds.html:17
+#: djangobook/models.py:100 djangobook/templates/djangobook-inc-adds.html:20
 msgid "Invalid"
 msgstr "Неверное"
 
@@ -105,7 +105,7 @@ msgstr "Отчество"
 msgid "Address"
 msgstr "Адрес"
 
-#: shop/forms.py:36 shop/models.py:32
+#: shop/forms.py:36 shop/models.py:38
 msgid "City"
 msgstr "Город"
 
@@ -113,7 +113,7 @@ msgstr "Город"
 msgid "Contact phone"
 msgstr "Контактный телефон"
 
-#: shop/forms.py:40 shop/models.py:161
+#: shop/forms.py:40 shop/models.py:164
 msgid "Phone type"
 msgstr "Тип телефона"
 
@@ -137,102 +137,106 @@ msgstr "Состояние"
 msgid "Courier"
 msgstr "Курьер"
 
-#: shop/models.py:11 shop/models.py:77
+#: shop/models.py:22 shop/models.py:80
 msgid "Color"
 msgstr "Цвет"
 
-#: shop/models.py:12
+#: shop/models.py:23
 msgid "Colors"
 msgstr "Цвета"
 
-#: shop/models.py:21 shop/models.py:29 shop/models.py:40
+#: shop/models.py:30 shop/models.py:35 shop/models.py:43
 msgid "Country"
 msgstr "Страна"
 
-#: shop/models.py:22
+#: shop/models.py:31
 msgid "Countries"
 msgstr "Страны"
 
-#: shop/models.py:33
+#: shop/models.py:39
 msgid "Cities"
 msgstr "Города"
 
-#: shop/models.py:39
+#: shop/models.py:42
 msgid "Company"
 msgstr "Компания"
 
-#: shop/models.py:41 shop/models.py:82
+#: shop/models.py:44 shop/models.py:85
 msgid "Buys"
 msgstr "Куплено"
 
-#: shop/models.py:45 shop/models.py:75
+#: shop/models.py:48 shop/models.py:78
 msgid "Producer"
 msgstr "Производитель"
 
-#: shop/models.py:46
+#: shop/models.py:49
 msgid "Producers"
 msgstr "Производители"
 
-#: shop/models.py:61 shop/models.py:74
+#: shop/models.py:61
+msgid "Parent"
+msgstr "Предок"
+
+#: shop/models.py:64 shop/models.py:77
 msgid "Category"
 msgstr "Категория"
 
-#: shop/models.py:62
+#: shop/models.py:65
 msgid "Categories"
 msgstr "Категории"
 
-#: shop/models.py:76
+#: shop/models.py:79
 msgid "Price"
 msgstr "Цена"
 
-#: shop/models.py:78
+#: shop/models.py:81
 msgid "Count"
 msgstr "Количество"
 
-#: shop/models.py:79
+#: shop/models.py:82
 msgid "Reserved"
 msgstr "Зарезервировано"
 
-#: shop/models.py:85
+#: shop/models.py:88
 msgid "Item"
 msgstr "Товар"
 
-#: shop/models.py:86
+#: shop/models.py:89
 msgid "Items"
 msgstr "Товары"
 
-#: shop/models.py:104
+#: shop/models.py:107
 msgid "Buyer"
 msgstr "Покупатель"
 
-#: shop/models.py:105
+#: shop/models.py:108
 msgid "Buyers"
 msgstr "Покупатели"
 
-#: shop/models.py:115
+#: shop/models.py:118
 msgid "Order status"
 msgstr "Статус заказа"
 
-#: shop/models.py:116
+#: shop/models.py:119
 msgid "Order statuses"
 msgstr "Статусы заказа"
 
-#: shop/models.py:131
+#: shop/models.py:134
 msgid "Order"
 msgstr "Заказ"
 
-#: shop/models.py:132
+#: shop/models.py:135
 msgid "Orders"
 msgstr "Заказы"
 
-#: shop/models.py:162
+#: shop/models.py:165
 msgid "Phone types"
 msgstr "Типы телефона"
 
-#: shop/models.py:178
+#: shop/models.py:181
 msgid "Text"
 msgstr "Текст"
 
-#: shop/models.py:179
+#: shop/models.py:182
 msgid "Texts"
 msgstr "Тексты"
