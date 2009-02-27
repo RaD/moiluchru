@@ -25,3 +25,10 @@ Django-related:
     svn update		- получить исходники
     svn log		- получить информацию о коммитах
     svn update -r N     - получить исходники до определённой ревизии
+
+Зависимости:
+
+    libapache2-mod-wsgi - подключение Django к Apache2
+    python-markdown	- text-to-HTML conversion library/tool
+    python-mysqldb	- A Python interface to MySQL
+    python-openid	- OpenID support for servers and consumers
