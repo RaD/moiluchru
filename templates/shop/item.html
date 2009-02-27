@@ -1,4 +1,4 @@
-{% extends "shop-base2.html" %}
+{% extends "shop/base2.html" %}
 
 {% load thumbnail_filter %}
 {% load markup %}
@@ -7,7 +7,7 @@
 <div class="item">
 
   <div><span class="title">{{ item.title }}</span></div>
-  {% include "inc-catwidget.html" %}
+  {% include "shop/inc-catwidget.html" %}
   
   <br/>
   
@@ -34,7 +34,7 @@
     </tr>
   </table>
 
-  {% include "shop-widget-addtocart.html" %}
+  {% include "shop/widget-addtocart.html" %}
     
 </div>
 {% endblock %}

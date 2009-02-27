@@ -28,7 +28,7 @@ def cart_ctx_proc(request):
             'cart_count': session.get('cart_count', 0),
             'cart_price': session.get('cart_price', 0.00)}
 
-@render_to('shop-main.html', cart_ctx_proc)
+@render_to('shop/main.html', cart_ctx_proc)
 def show_main_page(request):
     """ Функция для отображения главной страницы сайта.  Осуществляем
     проверку поддержки Cookie. """
@@ -39,14 +39,14 @@ def show_main_page(request):
     return {'items': models.Item.objects.order_by('-buys')[:3],
             'producers': common.category_producers(0)}
 
-@render_to('shop-howto.html', cart_ctx_proc)
+@render_to('shop/howto.html', cart_ctx_proc)
 def show_howto_page(request, howto):
     """ Функция для отображения вспомогательной информации. """
     common.does_cart_exist(request)
     return {'howto': models.Howto.objects.get(id=howto), 
             'back_to': request.META.get('HTTP_REFERER', '#')}
 
-@render_to('shop-search.html', cart_ctx_proc)
+@render_to('shop/search.html', cart_ctx_proc)
 @paged
 def search_results(request, page):
     """ Функция для результатов поиска по магазину. """
@@ -82,7 +82,7 @@ def search_results(request, page):
                 'sort_type': sort_type, 
                 'page': p.page(page), 'page_range': p.page_range}
 
-@render_to('shop-category.html', cart_ctx_proc)
+@render_to('shop/category.html', cart_ctx_proc)
 @paged
 def show_category_page(request, category_id, page):
     """ Функция для отображения подчинённых категорий. """
@@ -101,7 +101,7 @@ def show_category_page(request, category_id, page):
             'items': p.page(page).object_list,
             'page': p.page(page), 'page_range': p.page_range}
 
-@render_to('shop-category.html', cart_ctx_proc)
+@render_to('shop/category.html', cart_ctx_proc)
 @paged
 def show_producer_page(request, producer_id, page, category_id=0):
     """ Функция для отображения товаром для указанного производителя
@@ -120,7 +120,7 @@ def show_producer_page(request, producer_id, page, category_id=0):
             'items': paginator.page(page).object_list,
             'page': paginator.page(page), 'page_range': paginator.page_range}
 
-@render_to('shop-item.html', cart_ctx_proc)
+@render_to('shop/item.html', cart_ctx_proc)
 def show_item_page(request, item_id):
     """ Отображение информации о товаре. """
     common.does_cart_exist(request)
@@ -130,7 +130,7 @@ def show_item_page(request, item_id):
             'js_onload': 'show_item_count_info(%s);' % item_id,
             'parent_cats': common.parent_categories(i.category.id)}
     
-@render_to('shop-cart.html', cart_ctx_proc)
+@render_to('shop/cart.html', cart_ctx_proc)
 def show_cart(request):
     """ Отображение содержимого корзины. """
     items = []
@@ -146,7 +146,7 @@ def show_cart(request):
             'cart_show' : 'yes',
             'categories': models.Category.objects.filter(parent__isnull=True)}
 
-@render_to('shop-offer.html', cart_ctx_proc)
+@render_to('shop/offer.html', cart_ctx_proc)
 def show_offer(request):
     """ Отображение формы для ввода данных о покупателе.  Обработка
     пользовательского ввода. """
@@ -201,7 +201,7 @@ def show_offer(request):
         form = OfferForm(auto_id='field_%s')
         return {'form_offer': form, 'cart_show' : 'yes'}
 
-@render_to('shop-ordered.html', cart_ctx_proc)
+@render_to('shop/ordered.html', cart_ctx_proc)
 def show_ordered(request):
     common.init_cart(request)
     return {}

@@ -69,12 +69,10 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
+    'openidconsumer.middleware.OpenIDMiddleware'
 )
 
 ROOT_URLCONF = 'cargo.urls'
-
-DJANGOBOOK_PAGE_DIR = '/home/rad/django/djangobook-html'
-DJANGOBOOK_PAGE_ZIP = '/home/rad/django/cargo/templates/djangobook.html.zip'
 
 TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), 'templates'),
@@ -88,13 +86,17 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.comments',
     'django.contrib.markup',
-    'cargo',
+    'django.contrib.webdesign',
+    'cargo.openidconsumer',
     'cargo.djangobook',
     'cargo.shop',
 )
 
 AUTH_PROFILE_MODULE = "shop.profile"
 
+FILES = '/home/rad/django/cargo/files'
+DJANGOBOOK_PAGE_ZIP = '%s/djangobook.html.zip' % FILES
 SITE_NAME = "Шоп-На"
 SHOP_ITEMS_PER_PAGE = 2
 MANAGER_ORDERS_PER_PAGE = 5
+

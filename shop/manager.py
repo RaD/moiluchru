@@ -42,7 +42,7 @@ def login(request):
                         auth.login(request, user)
                         return HttpResponseRedirect("/shop/orders/all/")
                     else:
-                        return render_to_response('manager-login.html',
+                        return render_to_response('shop/manager/login.html',
                                                   {'form': form, 'panel_hide': 'yes',
                                                    'login_error': 'Возможно, вы неправильно указали данные.'})
                 except Exception:
@@ -51,7 +51,7 @@ def login(request):
                 return HttpResponse('bad form')
         else:
             form = LoginForm(auto_id='field_%s')
-            return render_to_response('manager-login.html',
+            return render_to_response('shop/manager/login.html',
                                       {'form': form, 'panel_hide': 'yes'},
                                       context_instance=RequestContext(request, processors=[ctx_processor]))
     else:
@@ -80,7 +80,7 @@ def orders(request, act, page=1):
     elif act == 'impossible': 
         orders = models.Order.objects.filter(status=5).order_by('-id')
     p = Paginator(orders, settings.MANAGER_ORDERS_PER_PAGE)
-    return render_to_response('manager-orders.html', {'orders': p.page(page).object_list,
+    return render_to_response('shop/manager/orders.html', {'orders': p.page(page).object_list,
                                                       'page': p.page(page), 'page_range': p.page_range,
                                                       'url': '/shop/orders/%s/' % act},
                               context_instance=RequestContext(request, processors=[ctx_processor]))
@@ -123,7 +123,7 @@ def order_info(request, order_id):
                 items.append(CartItem(i, i.count, i.price))
             # история
             history = models.OrderStatusChange.objects.filter(order=order_id).order_by('-reg_time')
-            return render_to_response('manager-orderinfo.html',
+            return render_to_response('shop/manager/orderinfo.html',
                                       {'form': form, 'order': o, 'phone': p, 'items': items, 'history': history },
                                       context_instance=RequestContext(request, processors=[ctx_processor]));
             return HttpResponse('bad form')
@@ -143,6 +143,6 @@ def order_info(request, order_id):
             items.append(CartItem(i, i.count, i.price))
         # история
         history = models.OrderStatusChange.objects.filter(order=order_id).order_by('-reg_time')
-        return render_to_response('manager-orderinfo.html',
+        return render_to_response('shop/manager/orderinfo.html',
                                   {'form': form, 'order': o, 'phone': p, 'items': items, 'history': history},
                                   context_instance=RequestContext(request, processors=[ctx_processor]))

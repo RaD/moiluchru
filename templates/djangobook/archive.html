@@ -1,18 +1,18 @@
-{% extends "base.html" %}
+{% extends "djangobook/base.html" %}
 {% load markup %}
 {% load webdesign %}
 
 {% block structure %}
 <body onLoad="init(); spelling.init();">
 
-{% include "djangobook-inc-header.html" %}
-{% include "djangobook-inc-search.html" %}
+{% include "djangobook/inc-header.html" %}
+{% include "djangobook/inc-search.html" %}
 
 <table width="100%" border="0" cellspacing="0" cellpadding="10">
   <tr>
     <td width="25%" valign="top">
       {# левая колонка #}
-      {% include "djangobook-inc-archive.html" %}
+      {% include "djangobook/inc-archive.html" %}
     </td>
     <td width="*" valign="top" class="content">
       {% for n in news_list %}
@@ -26,11 +26,11 @@
     </td>
     <td width="116" valign="top">
       {# правая колонка #}
-      {% include "djangobook-inc-adds.html"%}
+      {% include "djangobook/inc-adds.html"%}
     </td>
   </tr>
 </table>
 
-{% include "djangobook-inc-footer.html" %}
+{% include "djangobook/inc-footer.html" %}
 </body>
 {% endblock %}

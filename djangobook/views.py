@@ -21,7 +21,7 @@ news_info_extra = {
 
 news_info = {
     'queryset': News.objects.order_by('-datetime')[:5],
-    'template_name': 'news-list.html',
+    'template_name': 'djangobook/news-list.html',
     'extra_context': news_info_extra # дополнительный контекст
 }
 
@@ -102,7 +102,7 @@ def get_page_from_zip(page):
         raise TemplateDoesNotExist(template_name)
     return content
 
-@render_to('djangobook-page.html', context_processor)
+@render_to('djangobook/page.html', context_processor)
 def show_db_page(request, chapter=None, section=None):
     """Show book's page."""
     if chapter == 'ap':
@@ -159,7 +159,7 @@ def claims_penging(request):
     else:
         return HttpResponse('<result><code>400</code><desc>it must be ajax call</desc></result>', mimetype="text/xml")
 
-@render_to('djangobook-news.html', context_processor)
+@render_to('djangobook/news.html', context_processor)
 def show_news_page(request, news_id=None):
     """Show news' page."""
     if not news_id:
@@ -177,7 +177,7 @@ def show_news_page(request, news_id=None):
             'month_list': [(n[1], month_names[n[1]-1], n[2]) \
                                for n in news_statistics if n[0] == year_curr]}
 
-@render_to('djangobook-archive.html', context_processor)
+@render_to('djangobook/archive.html', context_processor)
 def show_archive_page(request, year=None, month=None):
     """Show news' page."""
     if not year: year = datetime.today().year

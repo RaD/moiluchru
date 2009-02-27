@@ -1,20 +1,17 @@
-{% extends "base-template.html" %}
+{% extends "shop/base.html" %}
 
 {% block container %}
 <table class="container" cellpadding="0" cellspacing="0">
   <tr>
-    <td class="content" width="30%" valign="top">
-      {% include "inc-category.html" %}
-    </td>
-
     <td class="content" width="40%" valign="top">
       {% block content %}{% endblock %}
     </td>
 
     <td class="content" width="30%" valign="top">
-      {% include "inc-howtos.html" %}
-      {% include "inc-producers.html" %}
-      </td>
+      {% include "shop/inc-howtos.html" %}
+      {% include "shop/inc-producers.html" %}
+      {% include "shop/inc-category.html" %}
+    </td>
   </tr>
 </table>
 {% endblock %}

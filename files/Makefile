@@ -1,13 +1,11 @@
-TOP_DIR=../..
-APP_DIR=..
+TOP_DIR=..
 
 include $(TOP_DIR)/config.mk
-include $(APP_DIR)/config.mk
 
-CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/templates
+CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/files
 DJZIP=djangobook.html.zip
 TEMPLATES=$(wildcard *.html)
-SUBDIRS=feeds
+SUBDIRS=
 FILES=$(DJZIP)
 
 all: 
@@ -33,7 +31,7 @@ $(DJZIP): $(HTMLS_SRC)/*.html
 	cd -; \
 	rmdir ./zip; \
 
-install: create_dir install_templates install_subdirs
+install: create_dir install_files install_subdirs
 
 clean:
 	rm -f *.zip *~
