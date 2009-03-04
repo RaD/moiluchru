@@ -69,7 +69,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
-    'cargo.openidconsumer.middleware.OpenIDMiddleware'
+    #'cargo.openidconsumer.middleware.OpenIDMiddleware'
 )
 
 ROOT_URLCONF = 'cargo.urls'
@@ -87,7 +87,7 @@ INSTALLED_APPS = (
     'django.contrib.comments',
     'django.contrib.markup',
     'django.contrib.webdesign',
-    'cargo.openidconsumer',
+    #'cargo.openidconsumer',
     'cargo.djangobook',
     'cargo.shop',
 )
