@@ -8,7 +8,7 @@ SUBDIRS=manager
 
 all:
 
-install: create_dir install_templates
+install: create_dir install_templates install_subdirs
 
 clean:
 	rm -f *.mo *~
