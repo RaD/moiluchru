@@ -81,7 +81,7 @@ class Item(models.Model):
     count = models.PositiveIntegerField(_('Count'))
     reserved = models.PositiveIntegerField(_('Reserved'), default=0)
     reg_date = models.DateTimeField()
-    image = models.ImageField(upload_to="itempics", blank=True)
+    image = models.ImageField(upload_to="itempics")
     buys = models.IntegerField(_('Buys'), default=0)
     
     class Meta:
