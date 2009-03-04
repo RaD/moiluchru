@@ -33,9 +33,7 @@ def render_to(template, processor):
 
 def paged(func):
     def wrapper(request, *args, **kwargs):
-        try:
-            page = int(request.GET.get('page',1))
-        except ValueError:
-            page = 1
-        return func(request, page=page, *args, **kwargs)
+        if not 'page' in kwargs:
+            kwargs['page'] = 1
+        return func(request, *args, **kwargs)
     return wrapper
