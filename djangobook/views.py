@@ -7,11 +7,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import TemplateDoesNotExist, RequestContext
 from django.http import Http404
 from cargo import settings
-from cargo.djangobook.models import News, Claims, ClaimStatus
+from cargo.djangobook.models import News, Text, Claims, ClaimStatus
 
 from cargo.snippets import render_to, paged
 
-import zipfile, re
+import zipfile, re, os
 from datetime import datetime, timedelta
 
 news_info_extra = {
@@ -94,6 +94,12 @@ def prepare_toc(toc, chapter=None, section=None):
     return {'chapters': chapters, 'sections': sections, 'url': url, 'chapter_url': 'ch%s.html' % (chapter,)}  
 
 def get_page_from_zip(page):
+    if not settings.DJANGOBOOK_PAGE_ZIP:
+        message = _(u'Did you forget to fill the `DJANGOBOOK_PAGE_ZIP` variable at `settings.py`?')
+        return None
+    if not os.access(settings.DJANGOBOOK_PAGE_ZIP, os.R_OK):
+        message = _(u'Tell to the site administrator that he has been forgot to grant access right on the archive file.')
+        return None
     try:
         z = zipfile.ZipFile(settings.DJANGOBOOK_PAGE_ZIP)
         content = z.read(page)
@@ -193,3 +199,10 @@ def show_archive_page(request, year=None, month=None):
             'news_list': news_list,
             'year_list': set([n.datetime.year for n in news]),
             'month_list': [(n[1], month_names[n[1]-1], n[2]) for n in news_statistics if n[0] == int(year)]}
+
+@render_to('djangobook/text.html', context_processor)
+def text(request, label=None):
+    o = Text.objects.get(label=label)
+    return {'page_title': u'Заметка с меткой: %s : DjangoBook v1.0' % (label,),
+            'news_list': News.objects.order_by('-datetime')[:5],
+            'page_content': o.text}

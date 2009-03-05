@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     (r'^archive/$', 'cargo.djangobook.views.show_archive_page'),
     (r'^archive/(?P<year>\d{4})/$', 'cargo.djangobook.views.show_archive_page'),
     (r'^archive/(?P<year>\d{4})/(?P<month>\d+)/$', 'cargo.djangobook.views.show_archive_page'),
+    (r'^text/?(?P<label>\w+)?/$', 'cargo.djangobook.views.text'),
     
     # Пользователи сообщают об ошибках
     (r'^claim/', 'cargo.djangobook.views.user_claims'),

@@ -4,10 +4,11 @@ include $(TOP_DIR)/config.mk
 
 CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/templates
 SUBDIRS=openidconsumer djangobook shop
+TEMPLATES=$(wildcard *.html)
 
 all: subdirs
 
-install: create_dir install_subdirs
+install: create_dir install_templates install_subdirs
 
 clean: clean_subdirs
 	rm -f *~

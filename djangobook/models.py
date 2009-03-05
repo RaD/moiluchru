@@ -110,3 +110,20 @@ class ClaimStatus(models.Model):
 
     def __unicode__(self):
         return self.status
+
+class Text(models.Model):
+    label = models.CharField(ugettext(u'Label'), max_length=32, unique=True)
+    text = models.TextField()
+    datetime = models.DateTimeField()
+
+    class Meta:
+        verbose_name = _(u'Text')
+        verbose_name_plural = _(u'Texts')
+
+    def __unicode__(self):
+        return self.label
+    
+    def get_absolute_url(self):
+        """ This returns the absolute URL for a record. """
+        return '/djangobook/text/%s/' % self.label # fixme: определять приложение автоматически
+    

@@ -5,7 +5,7 @@ import logging
 from django.contrib import admin
 from django import forms
 from django.utils.translation import ugettext as _
-from cargo.djangobook.models import News, Claims, ClaimStatus, CLAIM_STATUSES
+from cargo.djangobook.models import News, Text, Claims, ClaimStatus, CLAIM_STATUSES
 
 class NewsAdmin(admin.ModelAdmin):
     fieldsets = (
@@ -66,4 +66,12 @@ class ClaimsAdmin(admin.ModelAdmin):
     ordered = ('-datetime')
 
 admin.site.register(Claims, ClaimsAdmin)
+
+class TextAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None,{'fields': ('label', 'datetime')}),
+        (_(u'Contents'), {'fields': ('text',)}))
+    list_display = ('label', 'datetime')
+    ordered = ('-datetime')
+admin.site.register(Text, TextAdmin)
 
