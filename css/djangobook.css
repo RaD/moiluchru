@@ -5,6 +5,7 @@ H1.title { font: 32px arial; font-weight: bold; color: #9AEF3F; }
 H2.title { font: 24px arial; font-weight: bold; color: #9AEF3F; }
 H3.title { font: 20px arial; font-weight: bold; color: #9AEF3F; }
 H4.title { font: 18px arial; font-weight: bold; color: #9AEF3F; }
+HR { border: 1px dotted #9AEF3F; }
 CODE.systemitem { color: brown; }
 A { color: #FFC757; }
 IMG { behavior: url("/css/png.htc"); }
