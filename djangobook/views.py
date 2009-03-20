@@ -116,11 +116,11 @@ def show_db_page(request, chapter=None, section=None):
     """Show book's page."""
     if request.session.test_cookie_worked():
         if not 'version' in request.session:
-            request.session['version'] = 1
+            request.session['version'] = '1'
     else:
         request.session.set_test_cookie()
 
-    version = request.session.get('version', 1)
+    version = request.session.get('version', '1')
 
     if chapter == 'ap':
         page = 'ap%s.html' % section
@@ -180,7 +180,7 @@ def claims_penging(request):
 
 def version(request):
     if request.is_ajax():
-        request.session['version'] = request.POST.get('version', '1')
+        request.session['version'] = '%s' % request.POST.get('version', '1')
         return HttpResponse('<version>%s</version>' % request.session['version'],
                             mimetype="text/xml")
     else:
