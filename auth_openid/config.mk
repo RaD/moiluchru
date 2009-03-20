@@ -1,0 +1,2 @@
+
+APPNAME=auth_openid

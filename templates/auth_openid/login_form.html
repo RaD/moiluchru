@@ -1,0 +1,17 @@
+<form method="post" action="{% url auth_openid.views.login %}" class="openid-auth-form">
+    <div class="wide">{{ form.as_p }}</div>
+    <p>Или через <input type="button" name="auth_google" onclick="customAuth('google')" value="Google"/></p>
+    <p><input type="submit" value="Продолжить"/></p>
+</form>
+
+<script type="text/javascript">
+function customAuth(provider) {
+    var form = $('.openid-auth-form');
+    if (provider == 'google') {
+        $('#openid_url').val('https://www.google.com/accounts/o8/id')
+        form.submit();
+    } else {
+        alert('unknown provider');
+    }
+}
+</script>
