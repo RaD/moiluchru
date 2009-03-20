@@ -201,4 +201,3 @@ function check_result(show_splash, code, success_func, failure_func) {
   }
   if (show_splash) { splashwidget.init(result, 2000); }
 }
-  

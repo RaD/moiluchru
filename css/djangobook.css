@@ -48,6 +48,8 @@ IMG { behavior: url("/css/png.htc"); }
 .informer A { color: blue; }
 
 .informer .spelling { cursor: pointer; }
+.informer .current { border-color: orange; }
+
 .pending { margin: 1em 2px; }
 #spelling_error_count_pending { border: 1px solid yellow; font-weight: bold; padding: 0px 2px; }
 #spelling_error_count_assigned { border: 1px solid orange; font-weight: bold; padding: 0px 2px; }

@@ -20,6 +20,9 @@ urlpatterns = patterns(
 #     (r'^openid/$', 'cargo.openidconsumer.views.begin'),
 #     (r'^openid/complete/$', 'cargo.openidconsumer.views.complete'),
 #     (r'^openid/signout/$', 'cargo.openidconsumer.views.signout'),
+
+    (r'^openid/', include('cargo.auth_openid.urls')),
+
     (r'^djangobook/', include('cargo.djangobook.urls')),
     (r'^shop/', include('cargo.shop.urls')),
 )

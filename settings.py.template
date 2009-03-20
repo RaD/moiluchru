@@ -95,7 +95,8 @@ INSTALLED_APPS = (
 AUTH_PROFILE_MODULE = "shop.profile"
 
 FILES = '/home/rad/django/cargo/files'
-DJANGOBOOK_PAGE_ZIP = '%s/djangobook.html.zip' % FILES
+DJANGOBOOK_PAGE_ZIP = {'1': '%s/djangobook.html.v1.zip' % FILES,
+                       '2': '%s/djangobook.html.v2.zip' % FILES}
 SITE_NAME = "Шоп-На"
 SHOP_ITEMS_PER_PAGE = 2
 MANAGER_ORDERS_PER_PAGE = 5

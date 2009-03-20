@@ -1,7 +1,7 @@
 include config.mk
 
 CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)
-SUBDIRS=css djangobook files js locale openidconsumer pics shop templates
+SUBDIRS=auth_openid css djangobook files js locale pics shop templates
 FILES=$(wildcard *.py)
 LANGS=ru
 

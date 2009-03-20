@@ -6,6 +6,7 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import TemplateDoesNotExist, RequestContext
 from django.http import Http404
+from django.utils.translation import gettext_lazy as _
 from cargo import settings
 from cargo.djangobook.models import News, Text, Claims, ClaimStatus
 
@@ -51,9 +52,10 @@ def get_news_statistics():
                              'order by 1 desc,2 desc']));
     return cursor.fetchall()
 
-def get_toc():
+def get_toc(version):
+    zip = settings.DJANGOBOOK_PAGE_ZIP.get(version)
     try:
-        z = zipfile.ZipFile(settings.DJANGOBOOK_PAGE_ZIP)
+        z = zipfile.ZipFile(zip)
         toc = eval("%s" % z.read('toc.py'))
 	z.close()
     except (IOError, KeyError):
@@ -93,15 +95,16 @@ def prepare_toc(toc, chapter=None, section=None):
         chapters.append([url, item[1]]) # id and title
     return {'chapters': chapters, 'sections': sections, 'url': url, 'chapter_url': 'ch%s.html' % (chapter,)}  
 
-def get_page_from_zip(page):
+def get_page_from_zip(page, version):
     if not settings.DJANGOBOOK_PAGE_ZIP:
         message = _(u'Did you forget to fill the `DJANGOBOOK_PAGE_ZIP` variable at `settings.py`?')
         return None
-    if not os.access(settings.DJANGOBOOK_PAGE_ZIP, os.R_OK):
+    zip = settings.DJANGOBOOK_PAGE_ZIP.get(version)
+    if not os.access(zip, os.R_OK):
         message = _(u'Tell to the site administrator that he has been forgot to grant access right on the archive file.')
         return None
     try:
-        z = zipfile.ZipFile(settings.DJANGOBOOK_PAGE_ZIP)
+        z = zipfile.ZipFile(zip)
         content = z.read(page)
 	z.close()
     except (IOError, KeyError):
@@ -111,6 +114,14 @@ def get_page_from_zip(page):
 @render_to('djangobook/page.html', context_processor)
 def show_db_page(request, chapter=None, section=None):
     """Show book's page."""
+    if request.session.test_cookie_worked():
+        if not 'version' in request.session:
+            request.session['version'] = 1
+    else:
+        request.session.set_test_cookie()
+
+    version = request.session.get('version', 1)
+
     if chapter == 'ap':
         page = 'ap%s.html' % section
         title = u'Приложение %s' % section
@@ -123,13 +134,14 @@ def show_db_page(request, chapter=None, section=None):
     else:
         page = 'ch%ss%s.html' % (chapter, section)
         title = u'Глава %i, раздел %i' % (int(chapter), int(section))
-    context = {'page_title': u'%s : DjangoBook v1.0' % title,
-               'page_content': get_page_from_zip(page),
+    context = {'page_title': u'%s : DjangoBook v%s.0' % (title, version),
+               'version': version,
+               'page_content': get_page_from_zip(page, version),
                'readers_count': len(request.session.get('readers', {}))}
     if page == 'index.html':
         context.update({'news_list': News.objects.order_by('-datetime')[:5]})
     else:
-        context.update({'toc': prepare_toc(get_toc(), chapter, section)})
+        context.update({'toc': prepare_toc(get_toc(version), chapter, section)})
     return context
     
 def user_claims(request):
@@ -163,7 +175,17 @@ def claims_penging(request):
                                      '<readers>%i</readers></result>' % 1]),
                             mimetype="text/xml")
     else:
-        return HttpResponse('<result><code>400</code><desc>it must be ajax call</desc></result>', mimetype="text/xml")
+        return HttpResponse('<result><code>400</code><desc>it must be ajax call</desc></result>', 
+                            mimetype="text/xml")
+
+def version(request):
+    if request.is_ajax():
+        request.session['version'] = request.POST.get('version', '1')
+        return HttpResponse('<version>%s</version>' % request.session['version'],
+                            mimetype="text/xml")
+    else:
+        return HttpResponse('<result><code>400</code><desc>it must be ajax call</desc></result>', 
+                            mimetype="text/xml")
 
 @render_to('djangobook/news.html', context_processor)
 def show_news_page(request, news_id=None):

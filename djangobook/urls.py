@@ -25,5 +25,6 @@ urlpatterns = patterns('',
 
     # ajax
     (r'^pending/', 'cargo.djangobook.views.claims_penging'),
-
+    (r'^version/', 'cargo.djangobook.views.version'),
+                       
 )

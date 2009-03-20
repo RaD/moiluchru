@@ -37,3 +37,4 @@ def paged(func):
             kwargs['page'] = 1
         return func(request, *args, **kwargs)
     return wrapper
+

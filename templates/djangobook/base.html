@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="http://cargo/css/hl-idea.css" type="text/css"/>
   <link rel="shortcut icon" href="http://cargo/pics/favicon.png"/>
   <script type="text/javascript" src="http://cargo/js/prototype.js"></script>
+  <script type="text/javascript" src="http://cargo/js/jquery.js"></script>
   <script type="text/javascript" src="http://cargo/js/common.js"></script>
   <script type="text/javascript" src="http://cargo/js/djangobook.js"></script>
   <script type="text/javascript" src="http://cargo/js/spelling.js"></script>
@@ -20,7 +21,6 @@
   <script type="text/javascript" src="http://cargo/js/highlight.js"></script>
   <script type="text/javascript">hljs.initHighlightingOnLoad('python');</script>
   //-->
-
 </head>
 
 {% block structure %}{% endblock %}
@@ -35,4 +35,21 @@
   pageTracker._trackPageview();
 </script>
 {% endif %}
+  <script>
+    jQuery.noConflict();
+    jQuery('#ver1').bind('click', function(e) {
+	jQuery.post('/djangobook/version/', {version: '1'},
+		    function(data) { 
+			jQuery('#ver1').addClass('current');
+			jQuery('#ver2').removeClass('current');
+		    });
+    });
+    jQuery('#ver2').bind('click', function(e) {
+	jQuery.post('/djangobook/version/', {version: '2'},
+		    function(data) { 
+			jQuery('#ver1').removeClass('current');
+			jQuery('#ver2').addClass('current');
+		    });
+    });
+  </script>
 </html>
