@@ -1,0 +1,37 @@
+{% extends "djangobook/base.html" %}
+{% load markup %}
+{% load webdesign %}
+
+{% block structure %}
+<body onLoad="init(); spelling.init();">
+
+{% include "djangobook/inc-header.html" %}
+{% include "djangobook/inc-search.html" %}
+
+<table width="100%" border="0" cellspacing="0" cellpadding="10">
+  <tr>
+    <td width="25%" valign="top">
+      {# левая колонка #}
+      {% include "djangobook/inc-news.html" %}
+    </td>
+    <td width="*" valign="top" class="content">
+      <div id="cse-search-results"></div>
+      <script type="text/javascript">
+	var googleSearchIframeName = "cse-search-results";
+	var googleSearchFormName = "cse-search-box";
+	var googleSearchFrameWidth = 800;
+	var googleSearchDomain = "www.google.ru";
+	var googleSearchPath = "/cse";
+      </script>
+      <script type="text/javascript" src="http://www.google.com/afsonline/show_afs_search.js"></script>
+    </td>
+    <td width="116" valign="top">
+      {# правая колонка #}
+      {% include "djangobook/inc-adds.html"%}
+    </td>
+  </tr>
+</table>
+
+{% include "djangobook/inc-footer.html" %}
+</body>
+{% endblock %}
