@@ -230,6 +230,6 @@ def text(request, label=None):
             'page_content': o.text}
 
 @render_to('djangobook/search.html', context_processor)
-def search(request, label=None):
-    o = Text.objects.get(label=label)
-    return {'page_title': u'Результаты поиска: %s : DjangoBook v1.0' % (label,)}
+def search(request):
+    return {'page_title': u'Результаты поиска: %s : DjangoBook v1.0' % (label,),
+            'news_list': News.objects.order_by('-datetime')[:5]}

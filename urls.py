@@ -23,6 +23,8 @@ urlpatterns = patterns(
 
     (r'^openid/', include('cargo.auth_openid.urls')),
 
+    (r'^search/$', 'cargo.djangobook.views.search'),
+
     (r'^djangobook/', include('cargo.djangobook.urls')),
     (r'^shop/', include('cargo.shop.urls')),
 )
