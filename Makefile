@@ -2,7 +2,7 @@ include config.mk
 
 CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)
 SUBDIRS=auth_openid css djangobook files js locale pics shop templates
-FILES=$(wildcard *.py)
+FILES=$(wildcard *.py) django.wsgi
 LANGS=ru
 
 all: locale subdirs
