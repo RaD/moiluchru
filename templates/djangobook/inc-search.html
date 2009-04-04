@@ -7,6 +7,7 @@
 	</a>
       </td>
       <td style="color: #326342;">
+	{# Начало поиска от Google #}
 	<form action="http://cargo.caml.ru/search/" id="cse-search-box">
 	  <div>
 	    <input type="hidden" name="cx" value="partner-pub-2091160070233929:lcmx636actw" />
@@ -16,8 +17,9 @@
 	    <input type="submit" class="searchbutton" name="sa" value="&#x041f;&#x043e;&#x0438;&#x0441;&#x043a;" />
 	  </div>
 	</form>
-	
 	<script type="text/javascript" src="http://www.google.ru/coop/cse/brand?form=cse-search-box&amp;lang=ru"></script> 
+	{# Конец поиска от Google #}
+
 	{% comment %}
 	<form name="web" method="get" action="http://www.yandex.ru/yandsearch">
 	  <span>Поиск по сайту:</span>
@@ -42,20 +44,4 @@
       </td>
     </tr>
   </table>
-{% if not debug %}
-  <div style="text-align: center;">
-    <script type="text/javascript">
-      <!--
-	  google_ad_client = "pub-2091160070233929";
-	  /* 728x15, создано 18.03.09 */
-	  google_ad_slot = "9310198192";
-	  google_ad_width = 728;
-	  google_ad_height = 15;
-	  //-->
-    </script>
-    <script type="text/javascript"
-	    src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-    </script>
-  </div>
-{% endif %}
 </div>

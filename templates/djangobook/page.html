@@ -15,7 +15,11 @@
       {% include "djangobook/inc-news.html" %}
     </td>
     <td width="*" valign="top" class="content">
+      {% include "djangobook/inc-google.html" %}
+      <hr/>
       {{ page_content|safe }}
+      <hr/>
+      {% include "djangobook/inc-google.html" %}
     </td>
     <td width="116" valign="top">
       {# правая колонка #}
