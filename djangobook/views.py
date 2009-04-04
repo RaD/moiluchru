@@ -3,7 +3,7 @@
 import django
 #from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import TemplateDoesNotExist, RequestContext
 from django.http import Http404
 from django.utils.translation import gettext_lazy as _
@@ -14,17 +14,6 @@ from cargo.snippets import render_to, paged
 
 import zipfile, re, os
 from datetime import datetime, timedelta
-
-news_info_extra = {
-    'spelling_error_count': lambda: Claims.objects.count(),
-    'django_version': django.get_version()
-}
-
-news_info = {
-    'queryset': News.objects.order_by('-datetime')[:5],
-    'template_name': 'djangobook/news-list.html',
-    'extra_context': news_info_extra # дополнительный контекст
-}
 
 def context_processor(request):
     """ Контекст страницы. """
@@ -68,11 +57,11 @@ def prepare_toc(toc, chapter=None, section=None):
     for item in toc.get('chapters'):
         # для каждой главы получаем её номер, её секции и генерируем url
         r = re.match(r'^.*\.chap(?P<number>\d+)$', item[0])
-        url = '#'
-        if not r:
-            print 'ERROR' # FIXME: сделать исключение!
-        url = 'ch%s.html' % (r.group('number'),)
-        chapters.append([url, item[1]]) # id and title
+        try:
+            url = 'ch%s.html' % (r.group('number'),)
+            chapters.append([url, item[1]]) # id and title
+        except NoneType:
+            pass # пропускаем ошибочную главу
 
         if chapter:
             if chapter != 'ap' and chapter == r.group('number'):
@@ -87,12 +76,12 @@ def prepare_toc(toc, chapter=None, section=None):
     for item in toc.get('appendixes'):
         # для каждого приложения получаем его букву и генерируем url
         r = re.match(r'^.*\.appendix_(?P<letter>[a-z])$', item[0])
-        url = '#'
-        if not r: 
-            print 'ERROR' # FIXME: сделать исключение!
-        url = 'ap%s.html' % (r.group('letter'),)
-        curr_url = 'ap%s.html' % (section, )
-        chapters.append([url, item[1]]) # id and title
+        try:
+            url = 'ap%s.html' % (r.group('letter'),)
+            curr_url = 'ap%s.html' % (section, )
+            chapters.append([url, item[1]]) # id and title
+        except NoneType:
+            pass # пропускаем ошибочную главу
     return {'chapters': chapters, 'sections': sections, 'url': url, 'chapter_url': 'ch%s.html' % (chapter,)}  
 
 def get_page_from_zip(page, version):
@@ -108,7 +97,7 @@ def get_page_from_zip(page, version):
         content = z.read(page)
 	z.close()
     except (IOError, KeyError):
-        raise TemplateDoesNotExist(template_name)
+        raise Http404
     return content
 
 @render_to('djangobook/page.html', context_processor)
