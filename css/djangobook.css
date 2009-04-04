@@ -192,6 +192,10 @@ TABLE { font: 12px arial; color: white;border-collapse: collapse; }
 /* Стили для highlight.js - BEGIN */
 pre code {
     display: block;
+    background-color: #326342;
+    border: 1px solid #94CE4A;
+    padding: 4px;
+    white-space: wrap;
 }
 
 .subst, .title {
@@ -199,12 +203,12 @@ pre code {
 }
 
 .comment, .template_comment, .javadoc, .diff .header {
-    color: #808080;
+    color: lightgray;
     font-style: italic;
 }
 
 .annotation, .decorator, .preprocessor, .doctype, .pi, .chunk, .shebang, .apache .cbracket {
-    color: brown;
+    color: yellow;
 }
 
 .tag, .pi {
