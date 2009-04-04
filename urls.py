@@ -21,6 +21,8 @@ urlpatterns = patterns(
 #     (r'^openid/complete/$', 'cargo.openidconsumer.views.complete'),
 #     (r'^openid/signout/$', 'cargo.openidconsumer.views.signout'),
 
+    (r'^$', 'django.views.generic.simple.redirect_to', {'url': '/djangobook/'}),
+
     (r'^openid/', include('cargo.auth_openid.urls')),
 
     (r'^search/$', 'cargo.djangobook.views.search'),
