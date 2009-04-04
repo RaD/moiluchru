@@ -23,7 +23,7 @@ urlpatterns = patterns(
 
     (r'^$', 'django.views.generic.simple.redirect_to', {'url': '/djangobook/'}),
 
-    (r'^openid/', include('cargo.auth_openid.urls')),
+    #(r'^openid/', include('cargo.auth_openid.urls')),
 
     (r'^search/$', 'cargo.djangobook.views.search'),
 
