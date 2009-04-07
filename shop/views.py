@@ -22,6 +22,7 @@ def cart_ctx_proc(request):
                       initial={'userinput': session.get('searchquery', ''),
                                'howmuch': session.get('howmuch_id', 1)})
     return {'site_name': settings.SITE_NAME,
+            'google_analytics': settings.GOOGLE_ANALYTICS,
             'form': form,
             'howtos': models.Howto.objects.all(),
             'top_cats': common.top_categories(),

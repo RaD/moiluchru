@@ -78,4 +78,5 @@
     </table>
     
   </body>
+{% if not debug %}{{ google_analytics|safe }}{% endif %}
 </html>

@@ -12,4 +12,5 @@
 <body style="padding: 0px; margin: 0px;">
 {% block structure %}{% endblock %}
 </body>
+{% if not debug %}{{ google_analytics|safe }}{% endif %}
 </html>
