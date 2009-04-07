@@ -5,7 +5,7 @@ include $(TOP_DIR)/config.mk
 include $(APP_DIR)/config.mk
 
 CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/$(APPNAME)
-SUBDIRS=sql templatetags patches
+SUBDIRS=sql templates templatetags patches
 FILES=$(wildcard *.py)
 
 all:

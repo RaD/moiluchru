@@ -16,17 +16,6 @@ urlpatterns = patterns(
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout',
      {'next_page': '/accounts/login/'}),
     
-    # Подключение схем URL
-#     (r'^openid/$', 'cargo.openidconsumer.views.begin'),
-#     (r'^openid/complete/$', 'cargo.openidconsumer.views.complete'),
-#     (r'^openid/signout/$', 'cargo.openidconsumer.views.signout'),
-
-    (r'^$', 'django.views.generic.simple.redirect_to', {'url': '/djangobook/'}),
-
-    #(r'^openid/', include('cargo.auth_openid.urls')),
-
-    (r'^search/$', 'cargo.djangobook.views.search'),
-
-    (r'^djangobook/', include('cargo.djangobook.urls')),
-    (r'^shop/', include('cargo.shop.urls')),
+    (r'^$', 'django.views.generic.simple.redirect_to', {'url': '/shop/'}),
+    (r'^shop/', include('moiluchru.shop.urls')),
 )

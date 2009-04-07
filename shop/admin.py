@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
-from cargo.shop.models import Color, Country, City, Producer, Category, Item, Buyer, Order, Howto
+from moiluchru.shop.models import Color, Country, City, Producer, Category, Item, Buyer, Order, Howto
 
 class ColorAdmin(admin.ModelAdmin):
     fieldsets = ((None,{'fields': ('title',)}),)

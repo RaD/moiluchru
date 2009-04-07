@@ -1,7 +1,7 @@
 include config.mk
 
 CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)
-SUBDIRS=auth_openid css djangobook files js locale pics shop templates
+SUBDIRS=css js locale pics shop templates
 FILES=$(wildcard *.py) django.wsgi
 LANGS=ru
 
@@ -16,7 +16,7 @@ locale: $(MO)
 
 dump:
 	grep PASS settings.py
-	mysqldump -u cargo -p cargo > cargo.mysql.dump
+	mysqldump -u moiluchru -p moiluchru > moiluchru.mysql.dump
 
 translate:
 	for i in $(LANGS); do \
@@ -27,9 +27,9 @@ translate:
 	django-admin.py compilemessages
 
 pushhome:
-	git push ssh://rad@nemo/~/development/git.repos/cargo.git/
+	git push ssh://rad@nemo/~/development/git.repos/moiluchru.git/
 
-pushcargo:
-	git push ssh://rad@caml.ru/~/sites/cargo/repos/cargo.git/
+pushprod:
+	git push ssh://rad@caml.ru/~/sites/moiluchru/repos/moiluchru.git/
 
 include targets.mk

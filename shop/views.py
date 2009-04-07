@@ -7,12 +7,12 @@ from django.db.models import Q
 from django.template import RequestContext
 from django.core.paginator import Paginator
 
-from cargo import settings
-from cargo.shop import models, common
-from cargo.shop.forms import DivErrorList, SearchForm, OfferForm
-from cargo.shop.classes import CartItem
+from moiluchru import settings
+from moiluchru.shop import models, common
+from moiluchru.shop.forms import DivErrorList, SearchForm, OfferForm
+from moiluchru.shop.classes import CartItem
 
-from cargo.snippets import render_to, paged
+from moiluchru.snippets import render_to, paged
 
 def cart_ctx_proc(request):
     """ Контекстный процессор для заполнения данных о корзине и для

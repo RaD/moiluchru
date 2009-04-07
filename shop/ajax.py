@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.http import HttpResponse, HttpResponseRedirect
-from cargo.shop import models, common
+from moiluchru.shop import models, common
 
 def show_count(request):
     """

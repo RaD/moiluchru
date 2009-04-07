@@ -9,10 +9,10 @@ from django.contrib import auth
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.admin import models as admmodels
 
-from cargo import settings
-from cargo.shop import models
-from cargo.shop.forms import DivErrorList, CourierSelect, LoginForm, OrderForm
-from cargo.shop.classes import CartItem
+from moiluchru import settings
+from moiluchru.shop import models
+from moiluchru.shop.forms import DivErrorList, CourierSelect, LoginForm, OrderForm
+from moiluchru.shop.classes import CartItem
 
 def is_stuff(user):
     return user.is_authenticated()

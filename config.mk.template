@@ -2,14 +2,12 @@
 PROJECTNAME=cargo
 
 OWNER=rad
-GROUP=rad
+GROUP=users
 
 INSTALL_DJANGO_DIR=/home/rad/django
 INSTALL_APACHE_DIR=/var/www-$(PROJECTNAME)
 
 REGEXP_DEVEL_URL=http:\/\/cargo
-
-HTMLS_SRC=/home/rad/docbookxml/HTML/djangobook
 
 PO=$(wildcard ./locale/ru/LC_MESSAGES/*.po)
 MO=$(patsubst %.po,%.mo,$(PO))

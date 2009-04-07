@@ -1,6 +1,6 @@
 import os, Image
 from django import template
-from cargo import settings
+from moiluchru import settings
 
 register = template.Library()
 

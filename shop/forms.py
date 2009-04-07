@@ -4,8 +4,8 @@ from django import forms
 from django.utils.translation import ugettext as _
 from django.contrib.admin import models as admmodels
 
-from cargo import settings
-from cargo.shop import models
+from moiluchru import settings
+from moiluchru.shop import models
 
 # Определяем класс для отображения ошибок в пользовательском вводе
 class DivErrorList(forms.util.ErrorList):
