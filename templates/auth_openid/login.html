@@ -1,9 +1,0 @@
-{% extends 'base.html' %}
-
-{% block structure %}
-<h2>Авторизация через OpenID</h2>
-{% if error %}
-<div class="error">{{ error }}</div>
-{% endif %}
-{% include 'auth_openid/login_form.html' %}
-{% endblock %}
