@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
-from moiluchru.shop.models import Color, Country, City, Producer, Category, Item, Buyer, Order, Howto
+from moiluchru.shop.models import Color, Country, Producer, Category, Item, Buyer, Order
 
 class ColorAdmin(admin.ModelAdmin):
     fieldsets = ((None,{'fields': ('title',)}),)
@@ -13,12 +13,6 @@ class CountryAdmin(admin.ModelAdmin):
     list_display = ('title',)
     ordered = ('title',)
 
-class CityAdmin(admin.ModelAdmin):
-    fieldsets = ((None,{'fields': ('title','country')}),)
-    list_display = ('title', 'country')
-    ordered = ('title', 'country')
-    search_fields = ('title',)
-
 class ProducerAdmin(admin.ModelAdmin):
     fieldsets = ((None,{'fields': ('name','country', 'buys')}),)
     list_display = ('name', 'country', 'buys')
@@ -26,23 +20,21 @@ class ProducerAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 class CategoryAdmin(admin.ModelAdmin):
-    fieldsets = ((None,{'fields': ('name','parent')}),)
-    list_display = ('name', 'parent')
+    fieldsets = ((None,{'fields': ('title','parent')}),)
+    list_display = ('title', 'parent')
     ordered = ('parent', 'title')
-    search_fields = ('name',)
+    search_fields = ('title',)
 
 class ItemAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Информация',
-         {'fields':('title', 'category', 'producer',
-                    'price', 'color', 'count')}),
+         {'fields':('title', 'category', 'producer', 'color')}),
         ('Подробности',
          {'fields': ('image', 'desc')}),
         ('Служебное',
-         {'fields': ('reserved', 'buys', 'reg_date')})
+         {'fields': ('buys', 'reg_date')})
         )
-    list_display = ('title', 'category', 'producer',
-                    'price', 'count', 'buys')
+    list_display = ('title', 'category', 'producer', 'buys')
     ordering = ('title', 'category')
     search_fields = ('title', 'category')
 
@@ -51,10 +43,10 @@ class BuyerAdmin(admin.ModelAdmin):
         ('Основная информация',
          {'fields': ('lastname', 'firstname', 'secondname')}),
         ('Дополнительная информация',
-         {'fields': ('address', 'city', 'email')})
+         {'fields': ('address', 'email')})
         )
-    list_display = ('lastname', 'firstname', 'city')
-    ordering = ('lastname', 'firstname', 'city')
+    list_display = ('lastname', 'firstname')
+    ordering = ('lastname', 'firstname')
     search_fields = ('lastname', 'firstname')
 
 class OrderAdmin(admin.ModelAdmin):
@@ -71,19 +63,11 @@ class OrderAdmin(admin.ModelAdmin):
     ordering = ('status', 'totalprice')
     search_fields = ('buyer', 'status')
 
-class HowtoAdmin(admin.ModelAdmin):
-    fieldsets = ((None,{'fields':
-                        ('key', 'title', 'text')}),)
-    list_display = ('key', 'title')
-    ordering = ('key',)
-
 admin.site.register(Color, ColorAdmin)
 admin.site.register(Country, CountryAdmin)
-admin.site.register(City, CityAdmin)
 admin.site.register(Producer, ProducerAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Buyer, BuyerAdmin)
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Order, OrderAdmin)
-admin.site.register(Howto, HowtoAdmin)
 

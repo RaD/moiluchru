@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from django.conf import settings
 from django.shortcuts import render_to_response
 from django.utils.translation import ugettext, gettext_lazy as _
 from django.http import HttpResponse, HttpResponseRedirect, Http404
@@ -7,7 +8,6 @@ from django.db.models import Q
 from django.template import RequestContext
 from django.core.paginator import Paginator
 
-from moiluchru import settings
 from moiluchru.shop import models, common
 from moiluchru.shop.forms import DivErrorList, SearchForm, OfferForm
 from moiluchru.shop.classes import CartItem
@@ -24,7 +24,6 @@ def cart_ctx_proc(request):
     return {'site_name': settings.SITE_NAME,
             'google_analytics': settings.GOOGLE_ANALYTICS,
             'form': form,
-            'howtos': models.Howto.objects.all(),
             'top_cats': common.top_categories(),
             'cart_count': session.get('cart_count', 0),
             'cart_price': session.get('cart_price', 0.00)}
@@ -39,13 +38,6 @@ def show_main_page(request):
         request.session.set_test_cookie()
     return {'items': models.Item.objects.order_by('-buys')[:3],
             'producers': common.category_producers(0)}
-
-@render_to('shop/howto.html', cart_ctx_proc)
-def show_howto_page(request, howto):
-    """ Функция для отображения вспомогательной информации. """
-    common.does_cart_exist(request)
-    return {'howto': models.Howto.objects.get(id=howto), 
-            'back_to': request.META.get('HTTP_REFERER', '#')}
 
 @render_to('shop/search.html', cart_ctx_proc)
 @paged
@@ -161,10 +153,9 @@ def show_offer(request):
             try:
                 clean = form.cleaned_data
                 phone_type = clean['phonetype']
-                city = clean['city']
                 buyer, created = models.Buyer.objects.get_or_create(
                     lastname = clean['fname'], firstname = clean['iname'], secondname = clean['oname'],
-                    address = clean['address'], email =  clean['email'], city = city
+                    address = clean['address'], email =  clean['email']
                     )
                 phone, created = models.Phone.objects.get_or_create(
                     number = clean['phone'], type = phone_type, owner = buyer

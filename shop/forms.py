@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
+from django.conf import settings
 from django.utils.translation import ugettext as _
 from django.contrib.admin import models as admmodels
 
-from moiluchru import settings
 from moiluchru.shop import models
 
 # Определяем класс для отображения ошибок в пользовательском вводе
@@ -33,8 +33,6 @@ class OfferForm(forms.Form):
                             widget=forms.TextInput(attrs={'class':'longitem'}))
     address = forms.CharField(label=_(u'Address'), max_length=255,
                               widget=forms.TextInput(attrs={'class':'longitem'}))
-    city = forms.ModelChoiceField(label=_(u'City'), queryset=models.City.objects.all(),
-                                  widget=forms.Select(attrs={'class':'longitem'}))
     phone = forms.CharField(label=_(u'Contact phone'), max_length=20,
                             widget=forms.TextInput(attrs={'class':'longitem'}))
     phonetype = forms.ModelChoiceField(label=_(u'Phone type'), queryset=models.PhoneType.objects.all(),

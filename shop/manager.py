@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from django.conf import settings
 from django.shortcuts import render_to_response
 from django.utils.translation import ugettext, gettext_lazy as _
 from django.http import HttpResponse, HttpResponseRedirect
@@ -9,7 +10,6 @@ from django.contrib import auth
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.admin import models as admmodels
 
-from moiluchru import settings
 from moiluchru.shop import models
 from moiluchru.shop.forms import DivErrorList, CourierSelect, LoginForm, OrderForm
 from moiluchru.shop.classes import CartItem

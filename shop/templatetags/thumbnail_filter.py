@@ -1,6 +1,6 @@
 import os, Image
 from django import template
-from moiluchru import settings
+from django.conf import settings
 
 register = template.Library()
 
