@@ -22,8 +22,8 @@
 	  <img src="http://cargo/pics/add.png" title="Добавить в корзину" width="32" height="32"/>
 	  <u>Добавить в корзину</u>
 	</div>
-	<div>Цена: <span class="price">{{ item.price|floatformat:2 }}</span> рублей.</div>
-	<div>В наличии: <span id="item_remains" item_id="{{ item.id }}">{{ item_remains }}</span></div>
+	<div>Цена: <span class="price">{{ item.get_price.1|floatformat:2 }}</span> рублей.</div>
+	<div>В наличии: {% ifequal item.is_present 1 %}Да{% else %}Нет{% endifequal %}</div>
       </td>
     </tr>
     <tr>

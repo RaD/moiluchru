@@ -119,7 +119,6 @@ def show_item_page(request, item_id):
     common.does_cart_exist(request)
     i = models.Item.objects.get(id=item_id)
     return {'item': i,
-            'item_remains': i.count - i.reserved,
             'js_onload': 'show_item_count_info(%s);' % item_id,
             'parent_cats': common.parent_categories(i.category.id)}
     
