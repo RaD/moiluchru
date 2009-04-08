@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from django.utils.translation import gettext_lazy as _
-from django.contrib.admin.models import User
+from datetime import datetime
+
 from django.db import models
+from django.contrib.admin.models import User
+from django.utils.translation import gettext_lazy as _
 
 class Profile(models.Model):
     # обязательная часть профайла
@@ -15,7 +17,7 @@ class Profile(models.Model):
     
 # Определяем абстрактный класс для Entity
 class CommonEntity(models.Model):
-    title = models.CharField(_('Title'), max_length=64)
+    title = models.CharField(_(u'Title'), max_length=64)
 
     class Meta:
         abstract = True
@@ -46,8 +48,8 @@ class Producer(models.Model):
 #    website = models.URLField(verify_exists=False)
 
     class Meta:
-        verbose_name = _('Producer')
-        verbose_name_plural = _('Producers')
+        verbose_name = _(u'Producer')
+        verbose_name_plural = _(u'Producers')
 
     def __unicode__(self):
         return self.name
@@ -59,11 +61,11 @@ class Producer(models.Model):
 class Category(CommonEntity):
     """ The categories of items. """
     parent = models.ForeignKey('self', blank=True, null=True,
-                               verbose_name=_('Parent'))
+                               verbose_name=_(u'Parent'))
 
     class Meta:
-        verbose_name = _('Category')
-        verbose_name_plural = _('Categories')
+        verbose_name = _(u'Category')
+        verbose_name_plural = _(u'Categories')
 
     def get_absolute_url(self):
         return u'/shop/category/%i/' % self.id
@@ -74,8 +76,8 @@ class Collection(CommonEntity):
     pass
 
     class Meta:
-        verbose_name = _('Collection')
-        verbose_name_plural = _('Collections')
+        verbose_name = _(u'Collection')
+        verbose_name_plural = _(u'Collections')
 
     def get_absolute_url(self):
         return u'/shop/collection/%i/' % self.id
@@ -86,37 +88,51 @@ class ItemType(CommonEntity):
     model_name = models.CharField(_(u'Name of model'), max_length=64)
 
     class Meta:
-        verbose_name = _('Model name')
-        verbose_name_plural = _('Model name')
+        verbose_name = _(u'Item type')
+        verbose_name_plural = _(u'Item types')
 
 class Item(CommonEntity):
-    desc = models.TextField()
-    item_type = models.ForeignKey(ItemType, verbose_name=_('Item type'))
-    category = models.ForeignKey(Category, verbose_name=_('Category'))
-    collection = models.ForeignKey(Collection, verbose_name=_('Collection'), null=True)
-    producer = models.ForeignKey(Producer, verbose_name=_('Producer'))
-    color = models.ForeignKey(Color, verbose_name=_('Color'))
-    is_present = models.BooleanField(_('Is present'))
-    reg_date = models.DateTimeField()
-    image = models.ImageField(upload_to="itempics")
-    buys = models.IntegerField(_('Buys'), default=0)
+    desc = models.TextField(verbose_name=_(u'Description'))
+    item_type = models.ForeignKey(ItemType, verbose_name=_(u'Item type'))
+    category = models.ForeignKey(Category, verbose_name=_(u'Category'))
+    collection = models.ForeignKey(Collection, verbose_name=_(u'Collection'), null=True)
+    producer = models.ForeignKey(Producer, verbose_name=_(u'Producer'))
+    color = models.ForeignKey(Color, verbose_name=_(u'Color'))
+    is_present = models.BooleanField(verbose_name=_(u'Is present'))
+    reg_date = models.DateTimeField(verbose_name=_(u'Defined'))
+    image = models.ImageField(verbose_name=_(u'Image'), upload_to=u'itempics')
+    buys = models.IntegerField(verbose_name=_(u'Buys'), default=0)
     
     class Meta:
-        verbose_name = _('Item')
-        verbose_name_plural = _('Items')
+        verbose_name = _(u'Item')
+        verbose_name_plural = _(u'Items')
 
     def get_absolute_url(self):
         return u'/shop/item/%i/' % self.id
 
+    def get_price(self):
+        try:
+            price_store = Price.objects.filter(item=self).order_by('-applied')[0].price_store
+            price_shop = Price.objects.filter(item=self).order_by('-applied')[0].price_shop
+            return (price_store, price_shop)
+        except:
+            return (float(0.00), float(0.00))
+
+    def set_price(self, store, shop):
+        price = Price(item=self, price_store=store, price_shop=shop, 
+                      applied=datetime.now())
+        price.save()
+            
+
 class Price(models.Model):
     item = models.ForeignKey(Item)
-    price_shop = models.FloatField(_('Price (shop)'))
-    price_store = models.FloatField(_('Price (store)'))
+    price_store = models.FloatField(_(u'Price (store)'))
+    price_shop = models.FloatField(_(u'Price (shop)'))
     applied = models.DateTimeField()
     
     class Meta:
-        verbose_name = _('Price')
-        verbose_name_plural = _('Prices')
+        verbose_name = _(u'Price')
+        verbose_name_plural = _(u'Prices')
 
     def __unicode__(self):
         return '%s : %s' % (self.price_shop, self.price_store)
@@ -130,8 +146,8 @@ class Buyer(models.Model):
     join_date = models.DateTimeField(auto_now_add=True)
     
     class Meta:
-        verbose_name = _('Buyer')
-        verbose_name_plural = _('Buyers')
+        verbose_name = _(u'Buyer')
+        verbose_name_plural = _(u'Buyers')
 
     def __unicode__(self):
         return u'%s %s %s' %(self.lastname,
@@ -184,8 +200,8 @@ class PhoneType(CommonEntity):
     pass
 
     class Meta:
-        verbose_name = _('Phone type')
-        verbose_name_plural = _('Phone types')
+        verbose_name = _(u'Phone type')
+        verbose_name_plural = _(u'Phone types')
     
 class Phone(models.Model):
     number = models.CharField(max_length=20)
@@ -201,8 +217,8 @@ class Socle(CommonEntity):
     pass
 
     class Meta:
-        verbose_name = _('Socle')
-        verbose_name_plural = _('Socles')
+        verbose_name = _(u'Socle')
+        verbose_name_plural = _(u'Socles')
 
 class Lamp(models.Model):
     socle = models.ForeignKey(Socle)
