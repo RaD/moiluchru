@@ -16,9 +16,9 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'mysql'      # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'cargo'        # Or path to database file if using sqlite3.
-DATABASE_USER = 'cargo'        # Not used with sqlite3.
-DATABASE_PASSWORD = 'XmeY4qu$&Calo2Oj' # Not used with sqlite3.
+DATABASE_NAME = 'moiluchru'        # Or path to database file if using sqlite3.
+DATABASE_USER = 'moiluchru'        # Not used with sqlite3.
+DATABASE_PASSWORD = 'q1' # Not used with sqlite3.
 DATABASE_HOST = ''    # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''         # Set to empty string for default. Not used with sqlite3.
 
@@ -41,17 +41,17 @@ USE_I18N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = '/home/rad/django/cargo/media/'
+MEDIA_ROOT = '/home/rad/django/moiluchru/media/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = 'http://cargo/media/'
+MEDIA_URL = 'http://moiluchru/media/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = 'http://cargo/adminmedia/'
+ADMIN_MEDIA_PREFIX = 'http://moiluchru/adminmedia/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '+&oxu(m-yg6#0am-pdcxb%^#ok(*w&w6gtrh8grdc3m3$=s(#j'
@@ -60,8 +60,6 @@ SECRET_KEY = '+&oxu(m-yg6#0am-pdcxb%^#ok(*w&w6gtrh8grdc3m3$=s(#j'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.load_template_source',
     'django.template.loaders.app_directories.load_template_source',
-#    'cargo.djangobook.ziploader.load_template_source',
-#    'django.template.loaders.eggs.load_template_source',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -69,7 +67,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.doc.XViewMiddleware',
-    #'cargo.openidconsumer.middleware.OpenIDMiddleware'
 )
 
 ROOT_URLCONF = 'cargo.urls'
@@ -87,19 +84,14 @@ INSTALLED_APPS = (
     'django.contrib.comments',
     'django.contrib.markup',
     'django.contrib.webdesign',
-    #'cargo.openidconsumer',
-    'cargo.djangobook',
-    'cargo.shop',
+    'moiluchru.shop',
 )
 
-AUTH_PROFILE_MODULE = "shop.profile"
+AUTH_PROFILE_MODULE = "moiluchru.profile"
 
-FILES = '/home/rad/django/cargo/files'
-DJANGOBOOK_PAGE_ZIP = {'1': '%s/djangobook.html.v1.zip' % FILES,
-                       '2': '%s/djangobook.html.v2.zip' % FILES}
-SITE_NAME = "Шоп-На"
-SHOP_ITEMS_PER_PAGE = 2
-MANAGER_ORDERS_PER_PAGE = 5
+SITE_NAME = "Мой Луч"
+SHOP_ITEMS_PER_PAGE = 20
+MANAGER_ORDERS_PER_PAGE = 20
 
 GOOGLE_ANALYTICS = """
 <script type="text/javascript">
