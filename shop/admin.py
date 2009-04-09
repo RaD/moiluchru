@@ -8,7 +8,26 @@ from moiluchru.shop.models import Color, Country, Producer, Category, \
      Collection, Item, ItemType, Price, Buyer, Order
 from moiluchru.shop.models import Lamp, Socle
 
-admin.site.register(Color)
+class LampAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('Параметры',
+         {'fields': ('socle', 'watt', 'count', 'voltage')}),
+        )
+    list_display = ('socle', 'watt', 'count', 'voltage')
+
+admin.site.register(Lamp, LampAdmin)
+
+class SocleAdmin(admin.ModelAdmin):
+    fieldsets = (('Параметры', {'fields': ('title',)}),)
+    list_display = ('title',)
+
+admin.site.register(Socle, SocleAdmin)
+
+class ColorAdmin(admin.ModelAdmin):
+    fieldsets = ((None,{'fields': ('title',)}),)
+    list_display = ('title',)
+    ordered = ('title',)
+admin.site.register(Color, ColorAdmin)
 
 class CountryAdmin(admin.ModelAdmin):
     fieldsets = ((None,{'fields': ('title',)}),)
@@ -70,24 +89,17 @@ class ItemForm(forms.ModelForm):
             m.set_price(price_store, price_shop)
         return m
 
-def field_price_store(item):
+class LampInline(admin.TabularInline):
+    model = Lamp
+    max_num = 1
+
+def get_inline(item):
     try:
-        # берём самую свежую запись
-        return Price.objects.filter(item=item).order_by('-applied')[0].price_store
-    except Price.DoesNotExists:
-        return '0.00'
-
-field_price_store.short_description = _(u'Price of a store')
-
-def field_price_shop(item):
-    try:
-        # берём самую свежую запись
-        return Price.objects.filter(item=item).order_by('-applied')[0].price_shop
-    except Price.DoesNotExists:
-        return '0.00'
-
-field_price_shop.short_description = _(u'Price of the shop')
-
+        item_type = ItemType.objects.get(item=item).item_type
+        return eval('%sInline' % item_type)
+    except Exception, e:
+        return None
+        
 class ItemAdmin(admin.ModelAdmin):
     form = ItemForm
     fieldsets = (
@@ -99,10 +111,28 @@ class ItemAdmin(admin.ModelAdmin):
         ('Подробности',
          {'fields': ('image', 'desc')})
         )
-    list_display = ('title', 'category', 'producer', 
-                    field_price_store, field_price_shop, 'buys', 'reg_date')
+    list_display = ('title', 'category', 'field_price_shop', 
+                    'buys', 'reg_date')
     ordering = ('title', 'category')
     search_fields = ('title', 'category')
+    save_as = True
+    inlines = [LampInline]
+
+    def field_price_store(self, item):
+        try:
+            # берём самую свежую запись
+            return Price.objects.filter(item=item).order_by('-applied')[0].price_store
+        except Price.DoesNotExists:
+            return '0.00'
+    field_price_store.short_description = _(u'Price of a store')
+
+    def field_price_shop(self, item):
+        try:
+            # берём самую свежую запись
+            return Price.objects.filter(item=item).order_by('-applied')[0].price_shop
+        except Price.DoesNotExists:
+            return '0.00'
+    field_price_shop.short_description = _(u'Price of the shop')
 
 admin.site.register(Item, ItemAdmin)
 ###
@@ -135,19 +165,4 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = ('buyer', 'status')
 
 admin.site.register(Order, OrderAdmin)
-
-class LampAdmin(admin.ModelAdmin):
-    fieldsets = (
-        ('Параметры',
-         {'fields': ('socle', 'watt', 'count', 'voltage')}),
-        )
-    list_display = ('socle', 'watt', 'count', 'voltage')
-
-admin.site.register(Lamp, LampAdmin)
-
-class SocleAdmin(admin.ModelAdmin):
-    fieldsets = (('Параметры', {'fields': ('title',)}),)
-    list_display = ('title',)
-
-admin.site.register(Socle, SocleAdmin)
 
