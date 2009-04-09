@@ -30,21 +30,21 @@ class Color(CommonEntity):
     pass
 
     class Meta:
-        verbose_name = _('Color')
-        verbose_name_plural = _('Colors')
+        verbose_name = _(u'Color')
+        verbose_name_plural = _(u'Colors')
 
 # Наследуем класс от entity
 class Country(CommonEntity):
     pass
 
     class Meta:
-        verbose_name = _('Country')
-        verbose_name_plural = _('Countries')
+        verbose_name = _(u'Country')
+        verbose_name_plural = _(u'Countries')
 
 class Producer(models.Model):
-    name = models.CharField(_('Company'), max_length=30)
-    country = models.ForeignKey(Country, verbose_name=_('Country'))
-    buys = models.PositiveIntegerField(_('Buys'), default=0)
+    name = models.CharField(_(u'Company'), max_length=30)
+    country = models.ForeignKey(Country, verbose_name=_(u'Country'))
+    buys = models.PositiveIntegerField(_(u'Buys'), default=0)
 #    website = models.URLField(verify_exists=False)
 
     class Meta:
@@ -92,7 +92,7 @@ class ItemType(CommonEntity):
         verbose_name_plural = _(u'Item types')
 
 class Item(CommonEntity):
-    desc = models.TextField(verbose_name=_(u'Description'))
+    desc = models.TextField(verbose_name=_(u'Description'), null=True, blank=True)
     item_type = models.ForeignKey(ItemType, verbose_name=_(u'Item type'))
     category = models.ForeignKey(Category, verbose_name=_(u'Category'))
     collection = models.ForeignKey(Collection, verbose_name=_(u'Collection'), null=True, blank=True)
@@ -229,5 +229,10 @@ class Lamp(models.Model):
     socle = models.ForeignKey(Socle)
     watt = models.PositiveIntegerField(_(u'Power'), default=0)
     count = models.PositiveIntegerField(_(u'Count of lamps'), default=1)
-    voltage = models.PositiveIntegerField(_(u'Voltage'), default=0)
+    voltage = models.PositiveIntegerField(_(u'Voltage'), default=220)
+    diameter = models.PositiveIntegerField(_(u'Diameter'), null=True, blank=True)
+    height = models.PositiveIntegerField(_(u'Height'), null=True, blank=True)
+    length = models.PositiveIntegerField(_(u'Length'), null=True, blank=True)
+    width = models.PositiveIntegerField(_(u'Width'), null=True, blank=True)
+    brow = models.PositiveIntegerField(_(u'Brow'), null=True, blank=True)
 
