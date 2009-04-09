@@ -8,6 +8,9 @@ LANGS=ru
 all: locale subdirs
 
 install: create_dir install_files install_subdirs chown_all
+	mkdir -p $(CURRENT_INSTALL_DIR)/media/itempics/thumbnails
+	chmod o+w $(CURRENT_INSTALL_DIR)/media/itempics
+	chmod o+w $(CURRENT_INSTALL_DIR)/media/itempics/thumbnails
 
 clean: clean_subdirs
 	rm -f $(wildcard *.pyc) *~
