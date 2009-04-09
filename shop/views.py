@@ -40,7 +40,7 @@ def show_main_page(request):
     try:
         items = Item.objects.order_by('-buys')[:3] #FIXME: MAGIC NUMBER
         prods = common.category_producers(0)
-    except Item.DoesNotExists:
+    except Item.DoesNotExist:
         items, prods = 0, 0
     return {'items': items, 'producers': prods}
 
