@@ -4,14 +4,11 @@ from django.contrib import admin
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from moiluchru.shop.models import Color, Country, Producer, Category, Collection, \
-    Item, ItemType, Price, Buyer, Order
+from moiluchru.shop.models import Color, Country, Producer, Category, \
+     Collection, Item, ItemType, Price, Buyer, Order
+from moiluchru.shop.models import Lamp, Socle
 
-class ColorAdmin(admin.ModelAdmin):
-    fieldsets = ((None,{'fields': ('title',)}),)
-    list_display = ('title',)
-    ordered = ('title',)
-admin.site.register(Color, ColorAdmin)
+admin.site.register(Color)
 
 class CountryAdmin(admin.ModelAdmin):
     fieldsets = ((None,{'fields': ('title',)}),)
@@ -107,6 +104,7 @@ class ItemAdmin(admin.ModelAdmin):
     ordering = ('title', 'category')
     search_fields = ('title', 'category')
 
+admin.site.register(Item, ItemAdmin)
 ###
 
 class BuyerAdmin(admin.ModelAdmin):
@@ -119,6 +117,8 @@ class BuyerAdmin(admin.ModelAdmin):
     list_display = ('lastname', 'firstname')
     ordering = ('lastname', 'firstname')
     search_fields = ('lastname', 'firstname')
+
+admin.site.register(Buyer, BuyerAdmin)
 
 class OrderAdmin(admin.ModelAdmin):
     fieldsets = (
@@ -134,7 +134,20 @@ class OrderAdmin(admin.ModelAdmin):
     ordering = ('status', 'totalprice')
     search_fields = ('buyer', 'status')
 
-admin.site.register(Buyer, BuyerAdmin)
-admin.site.register(Item, ItemAdmin)
 admin.site.register(Order, OrderAdmin)
+
+class LampAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('Параметры',
+         {'fields': ('socle', 'watt', 'count', 'voltage')}),
+        )
+    list_display = ('socle', 'watt', 'count', 'voltage')
+
+admin.site.register(Lamp, LampAdmin)
+
+class SocleAdmin(admin.ModelAdmin):
+    fieldsets = (('Параметры', {'fields': ('title',)}),)
+    list_display = ('title',)
+
+admin.site.register(Socle, SocleAdmin)
 
