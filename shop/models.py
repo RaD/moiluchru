@@ -17,7 +17,7 @@ class Profile(models.Model):
     
 # Определяем абстрактный класс для Entity
 class CommonEntity(models.Model):
-    title = models.CharField(_(u'Title'), max_length=64)
+    title = models.CharField(verbose_name=_(u'Title'), max_length=64)
 
     class Meta:
         abstract = True
@@ -225,6 +225,7 @@ class Socle(CommonEntity):
         verbose_name_plural = _(u'Socles')
 
 class Lamp(models.Model):
+    item = models.ForeignKey(Item)
     socle = models.ForeignKey(Socle)
     watt = models.PositiveIntegerField(_(u'Power'), default=0)
     count = models.PositiveIntegerField(_(u'Count of lamps'), default=1)
