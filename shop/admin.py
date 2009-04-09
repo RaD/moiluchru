@@ -100,12 +100,10 @@ class ItemAdmin(admin.ModelAdmin):
                     ('price_shop', 'price_store'),
                     'item_type')}),
         ('Подробности',
-         {'fields': ('image', 'desc')}),
-        ('Служебное',
-         {'fields': ('buys', 'reg_date')})
+         {'fields': ('image', 'desc')})
         )
     list_display = ('title', 'category', 'producer', 
-                    field_price_store, field_price_shop, 'buys')
+                    field_price_store, field_price_shop, 'buys', 'reg_date')
     ordering = ('title', 'category')
     search_fields = ('title', 'category')
 
