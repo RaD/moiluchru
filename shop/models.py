@@ -95,11 +95,11 @@ class Item(CommonEntity):
     desc = models.TextField(verbose_name=_(u'Description'))
     item_type = models.ForeignKey(ItemType, verbose_name=_(u'Item type'))
     category = models.ForeignKey(Category, verbose_name=_(u'Category'))
-    collection = models.ForeignKey(Collection, verbose_name=_(u'Collection'), null=True)
+    collection = models.ForeignKey(Collection, verbose_name=_(u'Collection'), null=True, blank=True)
     producer = models.ForeignKey(Producer, verbose_name=_(u'Producer'))
     color = models.ForeignKey(Color, verbose_name=_(u'Color'))
     is_present = models.BooleanField(verbose_name=_(u'Is present'))
-    reg_date = models.DateTimeField(verbose_name=_(u'Defined'))
+    reg_date = models.DateTimeField(verbose_name=_(u'Defined'), auto_now_add=True)
     image = models.ImageField(verbose_name=_(u'Image'), upload_to=u'itempics')
     buys = models.IntegerField(verbose_name=_(u'Buys'), default=0)
     
@@ -119,6 +119,10 @@ class Item(CommonEntity):
             return (float(0.00), float(0.00))
 
     def set_price(self, store, shop):
+        # надо обязательно сохранить сам объект, только после этого
+        # можно сохранять зависимые объекты
+        self.save()
+        # сохраняем информацию о цене
         price = Price(item=self, price_store=store, price_shop=shop, 
                       applied=datetime.now())
         price.save()
