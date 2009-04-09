@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from django.conf import settings
-from django.shortcuts import render_to_response
-from django.utils.translation import ugettext, gettext_lazy as _
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.utils.translation import gettext_lazy as _
+from django.http import HttpResponse, HttpResponseRedirect
 from django.db.models import Q
 from django.template import RequestContext
 from django.core.paginator import Paginator
 
-from moiluchru.shop import models, common
+from moiluchru.shop import common
+from moiluchru.shop.models import Item, Category, Producer, Buyer, Phone, Order, OrderStatus, OrderDetail
 from moiluchru.shop.forms import DivErrorList, SearchForm, OfferForm
 from moiluchru.shop.classes import CartItem
 
@@ -36,8 +36,13 @@ def show_main_page(request):
         common.does_cart_exist(request)
     else:
         request.session.set_test_cookie()
-    return {'items': models.Item.objects.order_by('-buys')[:3],
-            'producers': common.category_producers(0)}
+
+    try:
+        items = Item.objects.order_by('-buys')[:3] #FIXME: MAGIC NUMBER
+        prods = common.category_producers(0)
+    except Item.DoesNotExists:
+        items, prods = 0, 0
+    return {'items': items, 'producers': prods}
 
 @render_to('shop/search.html', cart_ctx_proc)
 @paged
@@ -50,7 +55,7 @@ def search_results(request, page):
         form = SearchForm(request.POST)
         if form.is_valid():
             clean = form.cleaned_data
-            i = models.Item.objects.filter(Q(title__search=clean['userinput']) |
+            i = Item.objects.filter(Q(title__search=clean['userinput']) |
                                            Q(desc__search=clean['userinput']))
             z = [settings.SHOP_ITEMS_PER_PAGE, 10, 25, 50];
             p = Paginator(i.order_by(sort[sort_type]), z[int(clean['howmuch'])-1])
@@ -66,7 +71,7 @@ def search_results(request, page):
     else:
         userinput = request.session.get('searchquery', '')
         item_per_page = request.session.get('item_per_page', settings.SHOP_ITEMS_PER_PAGE)
-        i = models.Item.objects.filter(Q(title__search=userinput) |
+        i = Item.objects.filter(Q(title__search=userinput) |
                                        Q(desc__search=userinput))
         p = Paginator(i.order_by(sort[sort_type]), item_per_page)
         return {'items': p.page(page).object_list,
@@ -83,7 +88,7 @@ def show_category_page(request, category_id, page):
     sort_type = request.session.get('sort_type', 1)
     common.does_cart_exist(request)
     i = common.category_items(category_id)
-    c = models.Category.objects.get(id=category_id)
+    c = Category.objects.get(id=category_id)
     p = Paginator(i.order_by(sort[sort_type]), settings.SHOP_ITEMS_PER_PAGE)
     return {'parent_cats': common.parent_categories(category_id),
             'child_cats': common.child_categories(category_id),
@@ -100,7 +105,7 @@ def show_producer_page(request, producer_id, page, category_id=0):
     """ Функция для отображения товаром для указанного производителя
     из всех подчинённых категорий. """
     common.does_cart_exist(request)
-    p = models.Producer.objects.get(id=producer_id)
+    p = Producer.objects.get(id=producer_id)
     i = common.category_items(category_id, producer_id)
     paginator = Paginator(i, settings.SHOP_ITEMS_PER_PAGE)
     return {'parent_cats': common.parent_categories(category_id),
@@ -117,7 +122,7 @@ def show_producer_page(request, producer_id, page, category_id=0):
 def show_item_page(request, item_id):
     """ Отображение информации о товаре. """
     common.does_cart_exist(request)
-    i = models.Item.objects.get(id=item_id)
+    i = Item.objects.get(id=item_id)
     return {'item': i,
             'js_onload': 'show_item_count_info(%s);' % item_id,
             'parent_cats': common.parent_categories(i.category.id)}
@@ -131,12 +136,12 @@ def show_cart(request):
         items.append(CartItem("Нет товаров", 0, 0.00))
     else:
         for i in cart:
-            record = models.Item.objects.get(id=i)
+            record = Item.objects.get(id=i)
             items.append(CartItem(record.title, cart[i]['count'], cart[i]['price']))
     return {'cart': cart, # для отключения кнопок
             'cart_items': items,
             'cart_show' : 'yes',
-            'categories': models.Category.objects.filter(parent__isnull=True)}
+            'categories': Category.objects.filter(parent__isnull=True)}
 
 @render_to('shop/offer.html', cart_ctx_proc)
 def show_offer(request):
@@ -152,30 +157,28 @@ def show_offer(request):
             try:
                 clean = form.cleaned_data
                 phone_type = clean['phonetype']
-                buyer, created = models.Buyer.objects.get_or_create(
+                buyer, created = Buyer.objects.get_or_create(
                     lastname = clean['fname'], firstname = clean['iname'], secondname = clean['oname'],
                     address = clean['address'], email =  clean['email']
                     )
-                phone, created = models.Phone.objects.get_or_create(
+                phone, created = Phone.objects.get_or_create(
                     number = clean['phone'], type = phone_type, owner = buyer
                     )
-                order, created = models.Order.objects.get_or_create(
+                order, created = Order.objects.get_or_create(
                     buyer = buyer,
                     count = request.session.get('cart_count', 0),
                     totalprice = request.session.get('cart_price', 0.00),
                     comment = clean['comment'],
-                    status = models.OrderStatus.objects.get(id=1)
+                    status = OrderStatus.objects.get(id=1)
                     )
                 cart = request.session.get('cart_items', {})
                 for i in cart:
-                    item = models.Item.objects.get(id=i)
-                    orderdetail = models.OrderDetail(order = order, item = item,
+                    item = Item.objects.get(id=i)
+                    orderdetail = OrderDetail(order = order, item = item,
                                                      count = cart[i]['count'],
                                                      price = cart[i]['price'])
                     orderdetail.save()
                     # убираем товар с витрины
-                    item.count -= cart[i]['count']
-                    item.reserved -= cart[i]['count']
                     item.buys += 1
                     item.save()
                     # учтём статистику
@@ -184,7 +187,7 @@ def show_offer(request):
                     producer.save()
                 return HttpResponseRedirect('/shop/ordered/')
             except Exception, e:
-                return HttpResponse('bad form data: %s' % e)
+                return HttpResponse('bad form data: %s' % e)  #FIXME: DECORATOR
         else:
             form = OfferForm(request.POST, auto_id='field_%s', error_class=DivErrorList)
             return {'form_offer': form, 'cart_show' : 'yes'}
