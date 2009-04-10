@@ -8,7 +8,8 @@ from django.template import RequestContext
 from django.core.paginator import Paginator
 
 from moiluchru.shop import common
-from moiluchru.shop.models import Item, Category, Producer, Buyer, Phone, Order, OrderStatus, OrderDetail
+from moiluchru.shop.models import Item, Category, Producer, Buyer, Phone, Order, \
+    OrderStatus, OrderDetail, Lamp
 from moiluchru.shop.forms import DivErrorList, SearchForm, OfferForm
 from moiluchru.shop.classes import CartItem
 
@@ -122,10 +123,13 @@ def show_producer_page(request, producer_id, page, category_id=0):
 def show_item_page(request, item_id):
     """ Отображение информации о товаре. """
     common.does_cart_exist(request)
-    i = Item.objects.get(id=item_id)
-    return {'item': i,
-            'js_onload': 'show_item_count_info(%s);' % item_id,
-            'parent_cats': common.parent_categories(i.category.id)}
+    try:
+        item = Item.objects.get(id=item_id)
+        return {'item': item, 'addons': item.get_addons(),
+                'js_onload': 'show_item_count_info(%s);' % item_id,
+                'parent_cats': common.parent_categories(item.category.id)}
+    except Item.DoesNotExist:
+        pass
     
 @render_to('shop/cart.html', cart_ctx_proc)
 def show_cart(request):

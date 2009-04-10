@@ -109,6 +109,9 @@ class Item(CommonEntity):
     def get_absolute_url(self):
         return u'/shop/item/%i/' % self.id
 
+    def get_addons(self):
+        return Lamp.objects.get(item=self)
+
     def get_price(self):
         try:
             price_store = Price.objects.filter(item=self).order_by('-applied')[0].price_store
