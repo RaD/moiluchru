@@ -1,6 +1,6 @@
 import os, sys
-sys.path.append('/home/rad/devel/django-trunk/')
-sys.path.append('/home/rad/django/')
+sys.path.append('/home/rad/django.engine')
+sys.path.append('/home/rad/django.apps')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'moiluchru.settings'
 import django.core.handlers.wsgi
 application = django.core.handlers.wsgi.WSGIHandler()
