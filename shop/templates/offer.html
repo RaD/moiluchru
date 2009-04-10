@@ -11,7 +11,7 @@
     <div class="right">
       <input type="submit" id="order_submit" value="Подтвердить заказ"/>
       <input type="reset" id="order_cancel"
-	     onclick="clean_cart('/shop/'); $('order_submit').disabled=$('order_cancel').disabled=true;" 
+	     onclick="clean_cart('/shop/'); $('order_submit').disabled=$('order_cancel').disabled=true; document.location='/';" 
 	     value="Отменить заказ"/>
     </div>
   </form>

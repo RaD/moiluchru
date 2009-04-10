@@ -72,13 +72,6 @@ def clean_cart(request):
     Функция очистки корзины
     """
     if (request.is_ajax()):
-        items = request.session.get('cart_items', {})
-        for i in items:
-            dbitem = Item.objects.get(id=i)
-            count = items[i].get('count', 0)
-            if dbitem.reserved > 0:
-                dbitem.reserved -= count
-                dbitem.save()
         common.init_cart(request)
         return HttpResponse('<result><code>200</code><desc>done</desc></result>', mimetype="text/xml")
     else:
