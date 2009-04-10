@@ -6,7 +6,7 @@ include $(APP_DIR)/config.mk
 
 CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/templates/$(APPNAME)
 TEMPLATES=$(wildcard *.html)
-SUBDIRS=manager
+SUBDIRS=
 
 all:
 
