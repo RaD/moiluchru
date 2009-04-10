@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-10 22:09+0400\n"
+"POT-Creation-Date: 2009-04-10 23:21+0400\n"
 "PO-Revision-Date: 2008-07-09 20:40+0400\n"
 "Last-Translator: Ruslan Popov <radz@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -259,6 +259,18 @@ msgstr "Лампа"
 msgid "Lamps"
 msgstr "Лампы"
 
+#: shop/templates/inc-linkbar.html:4
+msgid "Main"
+msgstr "Главная"
+
+#: shop/templates/inc-linkbar.html:7
+msgid "Contact"
+msgstr "Контакт"
+
+#: shop/templates/inc-linkbar.html:10
+msgid "Shipping"
+msgstr "Доставка"
+
 #: templates/404.html:5 templates/500.html:5
 msgid "Forgotten page..."
 msgstr "Потерянная страница..."
@@ -286,9 +298,4 @@ msgstr "Текст"
 #: text/models.py:13
 msgid "Texts"
 msgstr "Тексты"
-
-#: text/views.py:12
-#, python-format
-msgid "No such text labelled by %s."
-msgstr "Нет текста с меткой %s."
 
