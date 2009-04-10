@@ -130,3 +130,6 @@ TABLE { width: 100%; border-collapse: collapse; }
 .popuphead { top: 0.5em; left: 130px; width: 160px; padding: 2px 8px; z-index: 2; 
    background-color: white; }
 .border { border: 1px solid black; }
+
+.linkbar { background-color: #C2C2C2;; padding: 0.2em 1em; }
+.linkbar .item { margin: 0em 0.5em; }

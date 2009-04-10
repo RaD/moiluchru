@@ -216,3 +216,9 @@ def set_sort_mode(request, mode=1):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '#'))
     else:
         return HttpResponseRedirect('/shop/%s/' % mode)
+
+@render_to('shop/text.html', cart_ctx_proc)
+def show_text_page(request, label):
+    """ Отображение страницы с текстом. """
+    from moiluchru.text.views import text
+    return {'text': text(request, label)}
