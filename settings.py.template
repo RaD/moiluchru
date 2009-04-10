@@ -85,6 +85,7 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     'django.contrib.webdesign',
     'moiluchru.shop',
+    'moiluchru.text',
 )
 
 AUTH_PROFILE_MODULE = "moiluchru.profile"
