@@ -1,0 +1,20 @@
+<VirtualHost *>
+        DocumentRoot /var/www/
+        ServerAdmin ruslan.popov@gmail.com
+        ServerName moiluchru
+
+        WSGIScriptAlias / /home/rad/django.apps/moiluchru/django.wsgi
+        WSGIDaemonProcess moiluchru processes=2 maximum-requests=1 threads=1
+        WSGIProcessGroup moiluchru
+
+        LogLevel debug
+        ErrorLog /var/log/apache2/error-moiluchru.log
+        CustomLog /var/log/apache2/access-moiluchru.log combined
+        ServerSignature On
+
+        Alias /css/             "/home/rad/django.apps/moiluchru/css/"
+        Alias /js/              "/home/rad/django.apps/moiluchru/js/"
+        Alias /pics/            "/home/rad/django.apps/moiluchru/pics/"
+        Alias /media/           "/home/rad/django.apps/moiluchru/media/"
+        Alias /adminmedia/      "/home/rad/django.engine/django/contrib/admin/media/"
+</VirtualHost>
