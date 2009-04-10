@@ -82,7 +82,6 @@ class Collection(CommonEntity):
     def get_absolute_url(self):
         return u'/shop/collection/%i/' % self.id
 
-# Наследуем класс от entity
 class ItemType(CommonEntity):
     """ The collection for items. """
     model_name = models.CharField(_(u'Name of model'), max_length=64)
@@ -127,7 +126,6 @@ class Item(CommonEntity):
                       applied=datetime.now())
         price.save()
             
-
 class Price(models.Model):
     item = models.ForeignKey(Item)
     price_store = models.FloatField(_(u'Price (store)'))
@@ -235,4 +233,8 @@ class Lamp(models.Model):
     length = models.PositiveIntegerField(_(u'Length'), null=True, blank=True)
     width = models.PositiveIntegerField(_(u'Width'), null=True, blank=True)
     brow = models.PositiveIntegerField(_(u'Brow'), null=True, blank=True)
+
+    class Meta:
+        verbose_name = _(u'Lamp')
+        verbose_name_plural = _(u'Lamps')
 
