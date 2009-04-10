@@ -59,10 +59,7 @@ admin.site.register(Collection, CollectionAdmin)
 ### ItemType
 
 class ItemTypeAdmin(admin.ModelAdmin):
-    fieldsets = ((None,{'fields': ('title', 'model_name')}),)
-    list_display = ('title',)
-    ordered = ('title',)
-    search_fields = ('title',)
+    pass
 admin.site.register(ItemType, ItemTypeAdmin)
 
 ### Item
@@ -92,14 +89,7 @@ class ItemForm(forms.ModelForm):
 class LampInline(admin.TabularInline):
     model = Lamp
     max_num = 1
-
-def get_inline(item):
-    try:
-        item_type = ItemType.objects.get(item=item).item_type
-        return eval('%sInline' % item_type)
-    except Exception, e:
-        return None
-        
+      
 class ItemAdmin(admin.ModelAdmin):
     form = ItemForm
     fieldsets = (
@@ -118,6 +108,23 @@ class ItemAdmin(admin.ModelAdmin):
     save_as = True
     inlines = [LampInline]
 
+    def __init__(self, *args, **kwargs):
+        super(ItemAdmin, self).__init__(*args, **kwargs)
+        """ Дмитрий Аникин: может быть стоит сделать у class ItemAdmin
+        функцию __init__() и в ней прописать это условие, которое будет
+        списку inlines присваивать нужный класс-наследний
+        admin.TabularInline?"""
+        try:
+            pass
+            #item_type = Item.objects.get(id=args[0].id)
+#             print item_type
+            #print args[0].item_type
+            #print args[0].item_type.field
+            #self.inline = eval('[%sInline]' % model_name)
+        except Exception, e:
+            print e
+            self.inline = []
+        
     def field_price_store(self, item):
         try:
             # берём самую свежую запись
