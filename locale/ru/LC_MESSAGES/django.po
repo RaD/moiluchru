@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-10 19:14+0400\n"
+"POT-Creation-Date: 2009-04-10 22:09+0400\n"
 "PO-Revision-Date: 2008-07-09 20:40+0400\n"
 "Last-Translator: Ruslan Popov <radz@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -19,23 +19,19 @@ msgstr ""
 msgid "Form has bad data."
 msgstr "Форма содержит плохие данные."
 
-#: shop/admin.py:72 shop/models.py:139
+#: shop/admin.py:68 shop/models.py:132
 msgid "Price (shop)"
 msgstr "Цена (продажа)"
 
-#: shop/admin.py:73 shop/models.py:138
+#: shop/admin.py:69 shop/models.py:131
 msgid "Price (store)"
 msgstr "Цена (склад)"
 
-#: shop/admin.py:74 shop/admin.py:157
-msgid "Type of item"
-msgstr "Тип товара"
-
-#: shop/admin.py:141
+#: shop/admin.py:134
 msgid "Price of a store"
 msgstr "Цена склада"
 
-#: shop/admin.py:149
+#: shop/admin.py:142
 msgid "Price of the shop"
 msgstr "Цена магазина"
 
@@ -59,7 +55,7 @@ msgstr "Адрес"
 msgid "Contact phone"
 msgstr "Контактный телефон"
 
-#: shop/forms.py:38 shop/models.py:212
+#: shop/forms.py:38 shop/models.py:205
 msgid "Phone type"
 msgstr "Тип телефона"
 
@@ -91,7 +87,7 @@ msgstr "Курьер"
 msgid "Title"
 msgstr "Название"
 
-#: shop/models.py:33 shop/models.py:90
+#: shop/models.py:33 shop/models.py:99
 msgid "Color"
 msgstr "Цвет"
 
@@ -111,11 +107,11 @@ msgstr "Страны"
 msgid "Company"
 msgstr "Компания"
 
-#: shop/models.py:47 shop/models.py:94
+#: shop/models.py:47 shop/models.py:103
 msgid "Buys"
 msgstr "Куплено"
 
-#: shop/models.py:51 shop/models.py:89
+#: shop/models.py:51 shop/models.py:98
 msgid "Producer"
 msgstr "Производитель"
 
@@ -127,7 +123,7 @@ msgstr "Производители"
 msgid "Parent"
 msgstr "Предок"
 
-#: shop/models.py:67 shop/models.py:87
+#: shop/models.py:67 shop/models.py:96
 msgid "Category"
 msgstr "Категория"
 
@@ -135,7 +131,7 @@ msgstr "Категория"
 msgid "Categories"
 msgstr "Категории"
 
-#: shop/models.py:79 shop/models.py:88
+#: shop/models.py:79 shop/models.py:97
 msgid "Collection"
 msgstr "Коллекция"
 
@@ -143,123 +139,123 @@ msgstr "Коллекция"
 msgid "Collections"
 msgstr "Коллекции"
 
-#: shop/models.py:86
-msgid "Description"
-msgstr "Описание"
-
-#: shop/models.py:91
-msgid "Is present"
-msgstr "В наличии"
-
-#: shop/models.py:92
-msgid "Defined"
-msgstr "Определено"
-
-#: shop/models.py:93
-msgid "Image"
-msgstr "Изображение"
-
-#: shop/models.py:97
-msgid "Item"
-msgstr "Товар"
-
-#: shop/models.py:98
-msgid "Items"
-msgstr "Товары"
-
-#: shop/models.py:130
+#: shop/models.py:87
 msgid "Name of model"
 msgstr "Имя модели"
 
-#: shop/models.py:133
+#: shop/models.py:90 shop/models.py:95
 msgid "Item type"
 msgstr "Тип товара"
 
-#: shop/models.py:134
+#: shop/models.py:91
 msgid "Item types"
 msgstr "Типы товара"
 
-#: shop/models.py:143
+#: shop/models.py:94
+msgid "Description"
+msgstr "Описание"
+
+#: shop/models.py:100
+msgid "Is present"
+msgstr "В наличии"
+
+#: shop/models.py:101 text/models.py:8
+msgid "Defined"
+msgstr "Определено"
+
+#: shop/models.py:102
+msgid "Image"
+msgstr "Изображение"
+
+#: shop/models.py:106
+msgid "Item"
+msgstr "Товар"
+
+#: shop/models.py:107
+msgid "Items"
+msgstr "Товары"
+
+#: shop/models.py:136
 msgid "Price"
 msgstr "Цена"
 
-#: shop/models.py:144
+#: shop/models.py:137
 msgid "Prices"
 msgstr "Цены"
 
-#: shop/models.py:158
+#: shop/models.py:151
 msgid "Buyer"
 msgstr "Покупатель"
 
-#: shop/models.py:159
+#: shop/models.py:152
 msgid "Buyers"
 msgstr "Покупатели"
 
-#: shop/models.py:169
+#: shop/models.py:162
 msgid "Order status"
 msgstr "Статус заказа"
 
-#: shop/models.py:170
+#: shop/models.py:163
 msgid "Order statuses"
 msgstr "Статусы заказа"
 
-#: shop/models.py:182
+#: shop/models.py:175
 msgid "Order"
 msgstr "Заказ"
 
-#: shop/models.py:183
+#: shop/models.py:176
 msgid "Orders"
 msgstr "Заказы"
 
-#: shop/models.py:213
+#: shop/models.py:206
 msgid "Phone types"
 msgstr "Типы телефона"
 
-#: shop/models.py:229
+#: shop/models.py:222
 msgid "Socle"
 msgstr "Цоколь"
 
-#: shop/models.py:230
+#: shop/models.py:223
 msgid "Socles"
 msgstr "Цоколи"
 
-#: shop/models.py:235
+#: shop/models.py:228
 msgid "Power"
 msgstr "Мощность"
 
-#: shop/models.py:236
+#: shop/models.py:229
 msgid "Count of lamps"
 msgstr "Количество ламп"
 
-#: shop/models.py:237
+#: shop/models.py:230
 msgid "Voltage"
 msgstr "Напряжение"
 
-#: shop/models.py:238
+#: shop/models.py:231
 msgid "Diameter"
 msgstr "Диаметр"
 
-#: shop/models.py:239
+#: shop/models.py:232
 msgid "Height"
 msgstr "Высота"
 
-#: shop/models.py:240
+#: shop/models.py:233
 msgid "Length"
 msgstr "Длина"
 
-#: shop/models.py:241
+#: shop/models.py:234
 msgid "Width"
 msgstr "Ширина"
 
-#: shop/models.py:242
+#: shop/models.py:235
 msgid "Brow"
 msgstr "Выступ"
 
-#: shop/models.py:245
+#: shop/models.py:238
 msgid "Lamp"
 msgstr "Лампа"
 
-#: shop/models.py:246
+#: shop/models.py:239
 msgid "Lamps"
 msgstr "Лампы"
 
@@ -278,3 +274,21 @@ msgstr "мой демо магазин"
 #: templates/404.html:14 templates/500.html:14
 msgid "my book"
 msgstr "мою книгу"
+
+#: text/models.py:7
+msgid "Label"
+msgstr "Метка"
+
+#: text/models.py:12
+msgid "Text"
+msgstr "Текст"
+
+#: text/models.py:13
+msgid "Texts"
+msgstr "Тексты"
+
+#: text/views.py:12
+#, python-format
+msgid "No such text labelled by %s."
+msgstr "Нет текста с меткой %s."
+
