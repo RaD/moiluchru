@@ -183,7 +183,7 @@ class Order(models.Model):
     
     def get_absolute_url(self):
         """ This returns the absolute URL for a record. """
-        return u'/shop/orderinfo/%i/' % self.id
+        return u'/manager/orderinfo/%i/' % self.id
     
 class OrderDetail(models.Model):
     order = models.ForeignKey(Order)
@@ -199,7 +199,7 @@ class OrderStatusChange(models.Model):
     courier = models.ForeignKey(User)
     old_status = models.ForeignKey(OrderStatus, related_name="old_status")
     new_status = models.ForeignKey(OrderStatus, related_name="new_status")
-    reg_time = models.DateTimeField(auto_now_add=True)
+    reg_date = models.DateTimeField(auto_now_add=True)
 
 class PhoneType(CommonEntity):
     pass

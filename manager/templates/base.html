@@ -6,11 +6,11 @@
   <meta name="generator" content="Django"/>
   <meta name="keywords" content=""/>
   <meta name="description" content=""/>
-  <link rel="stylesheet" href="http://cargo/css/manager.css" type="text/css"/>
-  <link rel="shortcut icon" href="http://cargo/pics/favicon.png"/>
-  <script type="text/javascript" src="http://cargo/js/prototype.js"></script>
-  <script type="text/javascript" src="http://cargo/js/common.js"></script>
-  <script type="text/javascript" src="http://cargo/js/shop.js"></script>
+  <link rel="stylesheet" href="http://moiluchru/css/manager.css" type="text/css"/>
+  <link rel="shortcut icon" href="http://moiluchru/pics/favicon.png"/>
+  <script type="text/javascript" src="http://moiluchru/js/prototype.js"></script>
+  <script type="text/javascript" src="http://moiluchru/js/common.js"></script>
+  <script type="text/javascript" src="http://moiluchru/js/shop.js"></script>
   <title>Магазин - Управление заказами</title>
 </head>
 <body onLoad="{{ js_onload }}">
@@ -22,7 +22,7 @@
     <td>
       {% if user.is_authenticated %}
       {{ user.get_full_name }}
-      <button onclick="document.location='/shop/logout';">Выйти</button>
+      <button onclick="document.location='/manager/logout';">Выйти</button>
       {% endif %}
     </td>
   </tr>
@@ -35,12 +35,12 @@
   <tr>
     <td>
       Заказы:
-      <span><a href="/shop/orders/all/">Все</a></span>
-      <span><a href="/shop/orders/waiting/">Ожидающие</a></span>
-      <span><a href="/shop/orders/confirmed/">Подтверждённые</a></span>
-      <span><a href="/shop/orders/delivered/">Выполненные</a></span>
-      <span><a href="/shop/orders/canceled/">Отменённые</a></span>
-      <span><a href="/shop/orders/impossible/">Не выполненные</a></span>
+      <span><a href="/manager/orders/all/">Все</a></span>
+      <span><a href="/manager/orders/waiting/">Ожидающие</a></span>
+      <span><a href="/manager/orders/confirmed/">Подтверждённые</a></span>
+      <span><a href="/manager/orders/delivered/">Выполненные</a></span>
+      <span><a href="/manager/orders/canceled/">Отменённые</a></span>
+      <span><a href="/manager/orders/impossible/">Не выполненные</a></span>
     </td>
   </tr>
 </table>

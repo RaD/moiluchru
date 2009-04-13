@@ -17,4 +17,7 @@ urlpatterns = patterns(
 
     # отображение текстов
     (r'^text/((?P<label>\w+)/)?', 'moiluchru.shop.views.show_text_page'),
+
+    # интерфейс менеджера
+    (r'^manager/', include('moiluchru.manager.urls')),
 )

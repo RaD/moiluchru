@@ -28,12 +28,5 @@ urlpatterns = patterns('',
     (r'^clean', 'moiluchru.shop.ajax.clean_cart'),
     (r'^count', 'moiluchru.shop.ajax.show_count'),
                        
-    # раздел менеджера
-    #(r'^manager/', 'moiluchru.shop.manager.login'),
-    #(r'^logout', 'moiluchru.shop.manager.logout'),
-    #(r'^orders/(?P<act>[a-z]+)/(?P<page>\d+)/', 'moiluchru.shop.manager.orders'),
-    #(r'^orders/(?P<act>[a-z]+)/', 'moiluchru.shop.manager.orders'),
-    #(r'^orderinfo/(?P<order_id>\d+)/', 'moiluchru.shop.manager.order_info'),
-                       
 )
 
