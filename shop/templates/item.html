@@ -15,16 +15,18 @@
     <tr>
       <td class="top">
 	<div>
-	  <div style="position: absolute; left: 160px; top: 140px; z-index: 100; 
-		      opacity: 0.3; filter: alpha(opacity=0.3);
+	  {# Виджет с информацией о лампах #}
+	  <div id="lamp_info"
+	       style="position: absolute; left: 160px; top: 140px; width: 80px; z-index: 100; 
+		      opacity: 0.3; filter: alpha(opacity=0.3); text-align: center;
 		      color: black; background-color: white;
 		      border: 2px solid gray; -moz-border-radius: 4px; padding: 4px;">
 	    <div style="font-size: 140%;">{{ addons.socle }}</div>
 	    <div style="font-size: 80%;">{{ addons.count }} x {{ addons.watt }} Вт</div>
 	  </div>
-	  <img src="{{ item.image.path|thumbnail:"200x,itempics" }}" 
-	    border="0" title="{{ item.title }}" />
-	  </div>
+	  {# Изображение товара #}
+	  <img src="{{ item.image.path|thumbnail:"200x,itempics" }}" id="item_pic" border="0" title="{{ item.title }}" />
+	</div>
       </td>
       <td class="top">
 	<div id="add_widget" class="pointer" style="padding: 0.5em 0px;" 
