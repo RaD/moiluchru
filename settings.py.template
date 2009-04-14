@@ -91,7 +91,8 @@ INSTALLED_APPS = (
 
 AUTH_PROFILE_MODULE = "moiluchru.profile"
 
-SITE_NAME = "Мой Луч"
+SITE_TITLE = "Мой Луч"
+SITE_SUBTITLE = "Многообразие света!"
 SHOP_ITEMS_PER_PAGE = 20
 MANAGER_ORDERS_PER_PAGE = 20
 ITEMS_ON_MAIN_PAGE = 8

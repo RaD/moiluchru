@@ -18,18 +18,15 @@
     <table width="100%">
       <tr>
 	<td width="200">
+	  {# Виджет с информацией о лампах #}
+	  <div id="item-info-widget">
+	    <div style="font-size: 140%;">{{ addons.socle }}</div>
+	    <div style="font-size: 80%;">{{ addons.count }} x {{ addons.watt }} Вт</div>
+	  </div>
 	  <div id="image-container">
-	    {# Виджет с информацией о лампах #}
-	    <div id="lamp_info"
-		 style="position: absolute; left: 20px; top: 140px; width: 80px; z-index: 100; 
-			opacity: 0.5; filter: alpha(opacity=0.5); text-align: center;
-			color: black; background-color: white;
-			border: 2px solid gray; -moz-border-radius: 4px; padding: 4px;">
-	      <div style="font-size: 140%;">{{ addons.socle }}</div>
-	      <div style="font-size: 80%;">{{ addons.count }} x {{ addons.watt }} Вт</div>
-	    </div>
 	    {# Изображение товара #}
-	    <img src="{{ item.image.path|thumbnail:"200x,itempics" }}" id="item_pic" border="0" title="{{ item.title }}" />
+	    <img src="{{ item.image.path|thumbnail:"200x,itempics" }}" 
+		 border="0" title="{{ item.title }}" />
 	  </div>
 	</td>
 	

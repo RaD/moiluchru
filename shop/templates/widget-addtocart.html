@@ -1,6 +1,6 @@
 {% load thumbnail_filter %}
 
-<div id="widget_addtocart" class="popup abs border hide">
+<div id="widget-addtocart" class="hide">
   <div class="body border">
     <div class="itemtitle">{{ item.title }}</div>
     <div class="itemqnty">Количество:
@@ -11,10 +11,9 @@
   <div class="icon border center" style="vertical-align: middle;">
     <img src="{{ item.image.path|thumbnail:"100x,itempics" }}" border="0" title="{{ item.title }}" />
   </div>
-  <div class="popuphead abs border">Добавить в корзину</div>
+  <div class="popuphead border" style="сolor: #b964d4;">Добавить в корзину</div>
   <div class="popupbtn no border pointer" id="widget_cancel" title="Отменить"><img src="http://cargo/pics/no.png" width="16" height="16"/></div>
-  {# <div class="popupbtn ok border pointer" id="widget_apply" title="Добавить"><img src="http://cargo/pics/ok.png" width="16" height="16"/></div> #}
-  <div class="abs ok"><button class="pointer" id="widget_apply">Добавить</button></div>
+  <div class="ok"><button class="pointer" id="widget_apply">Добавить</button></div>
 
 </div>
 

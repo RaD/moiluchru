@@ -1,74 +1,83 @@
+jQuery.noConflict();
+jQuery(document).ready(
+    function() {
+	var c_offset = jQuery("#image-container").offset()
+	var c_width = jQuery("#image-container").width()
+	var f_height = jQuery("#item-info-widget").height()
+	jQuery("#item-info-widget").css("top", c_offset.top + 180 - f_height).css("left", c_offset.left - 60).show();
+    }
+);
+
 // Отображение формы подтверждения
 
 function show_form(item_id, item_title) {
-  var widget = $('widget_addtocart');
-  if (! widget) return;
-
-  var ajax_response = function(transport) {
-    var xml = transport.responseXML.firstChild;
-    check_result(true,
-		 get_xml_item(xml, 'code'),
-		 function() {
-		   update_cart(get_xml_item(xml, 'cart_count'),
-			       get_xml_item(xml, 'cart_price')); },
-		 null);
-  }
-  
-  var apply_func = function() {
-    new Ajax.Request('/shop/add/',
-		     { method: 'post',
-		       parameters: { item_id: item_id,
-				     item_count: $('widget_item_quantity').value },
-		       onSuccess: ajax_response, onFailure: ajax_response });
-    // скрываем
-    widget.style.display = 'none';
-  }
-
-  var cancel_func = function() {
-    // скрываем
-    widget.style.display = 'none';
-  }
-
-  var onkeypress = function(e) {
-    var pressed = 0;
-    var we = null;
-    if (window.event) we = window.event;
-    else if (parent && parent.event) we = parent.event;
-    if (we) { // IE & Opera & Konqueror
-      //alert('pressed ' + we.keyCode);
-      pressed = we.keyCode;
-    } else if (e) { // NN
-//       alert('which ' + e.which + 
-// 	    ' modifiers ' + e.modifiers + 
-// 	    ' keycode ' + e.keyCode + 
-// 	    ' charCode ' + e.charCode + 
-// 	    ' ctrlKey ' + e.ctrlKey);
-      pressed = e.keyCode;
+    var widget = jQuery('#widget-addtocart');
+    if (! widget) return;
+    
+    var ajax_response = function(transport) {
+	var xml = transport.responseXML.firstChild;
+	check_result(true,
+		     get_xml_item(xml, 'code'),
+		     function() {
+			 update_cart(get_xml_item(xml, 'cart_count'),
+				     get_xml_item(xml, 'cart_price')); },
+		     null);
     }
-    if (pressed == 27) {
-      parent.document.onkeypress = null;
-      cancel_func();
+    
+    var cancel_func = function() {
+	// скрываем
+	widget.hide();
     }
-    if (pressed == 13) {
-      // сделать правильную обработку для оперы
-      parent.document.onkeypress = null;
-      apply_func();
+    
+    var onkeypress = function(e) {
+	var pressed = 0;
+	var we = null;
+	if (window.event) we = window.event;
+	else if (parent && parent.event) we = parent.event;
+	if (we) { // IE & Opera & Konqueror
+	    //alert('pressed ' + we.keyCode);
+	    pressed = we.keyCode;
+	} else if (e) { // NN
+	    //       alert('which ' + e.which + 
+			   // 	    ' modifiers ' + e.modifiers + 
+			   // 	    ' keycode ' + e.keyCode + 
+			   // 	    ' charCode ' + e.charCode + 
+			   // 	    ' ctrlKey ' + e.ctrlKey);
+	    pressed = e.keyCode;
+	}
+	if (pressed == 27) {
+	    parent.document.onkeypress = null;
+	    cancel_func();
+	}
+	if (pressed == 13) {
+	    // сделать правильную обработку для оперы
+	    parent.document.onkeypress = null;
+	    apply_func();
+	}
     }
-  }
-
-  parent.document.onkeypress = function(e) { return onkeypress(e); }
-
-  document.getElementsByTagName('BODY')[0].appendChild(widget);
-  $('widget_apply').onclick = apply_func
-  $('widget_cancel').onclick = cancel_func;
-  widget.style.display = 'block';
-  
-  // позиционирование на середине экрана
-  var gWidget = getGeometry(widget);
-  widget.style.top = (self.innerHeight / 2 - gWidget.height / 2 + self.pageYOffset) + 'px';
-  widget.style.left = (self.innerWidth / 2 - gWidget.width / 2) + 'px';
-
-  $('widget_item_quantity').focus();
+    
+    parent.document.onkeypress = function(e) { return onkeypress(e); }
+    
+    jQuery("body").append(widget);
+    jQuery("#widget_apply").click(function() {
+	new Ajax.Request('/shop/add/',
+			 { method: 'post',
+			   parameters: { item_id: item_id,
+					 item_count: $('widget_item_quantity').value },
+			   onSuccess: ajax_response, onFailure: ajax_response });
+	// скрываем
+	widget.hide();
+    });
+    jQuery("#widget_cancel").click(function() {
+	widget.hide();
+    });
+    widget.show();
+    
+    // позиционирование на середине экрана
+    widget.css("top", (self.innerHeight / 2 - widget.height() / 2 + self.pageYOffset) + 'px');
+    widget.css("left", (self.innerWidth / 2 - widget.width() / 2) + 'px');
+    
+    jQuery("widget_item_quantity").focus();
 }
 
 function update_cart(count, price) {
@@ -117,13 +126,4 @@ function show_item_count_info(item_id) {
   callback(); // для мгновенного обновления
   var pe = new PeriodicalExecuter(callback, 60);
 }
-
-jQuery.noConflict();
-jQuery(document).ready(
-  function() {
-    var offset = jQuery("#image-container").offset()
-    var width = jQuery("#image-container").width()
-    jQuery("#lamp_info").css("top", offset.top - 6).css("left", offset.left);
-  }
-);
 

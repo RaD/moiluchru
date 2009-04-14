@@ -1,21 +1,7 @@
-BODY { font-family: sans-serif; font-size: 14px; color: black; background-color: #E0E0E0; }
-BUTTON { border: 1px solid gray; -moz-border-radius: 4px; padding: 2px 4px; cursor: default; }
 INPUT,TEXTAREA,SELECT { border: 1px solid gray; -moz-border-radius: 4px; padding: 2px 4px; margin: 2px 0px;}
 FORM { margin: 0em; }
 TABLE { width: 100%; border-collapse: collapse; }
 #customer TH { text-align: left; font-weight: normal; width: 30%; }
-
-.pointer { cursor: pointer; }
-.left { text-align: left; }
-.lfloat { float: left; }
-.rfloat { float: right; }
-.center { text-align: center; }
-.right { text-align: right; }
-.top { vertical-align: top; }
-.middle { vertical-align: middle; }
-.show { display: block; }
-.hide { display: none; }
-.nowrap { white-space: nowrap; }
 
 .title { font-size: 16px; color: black; font-weight: bold; 
    padding: 0.2em; margin-bottom: 0.5em; text-align: center;
@@ -111,23 +97,6 @@ TABLE { width: 100%; border-collapse: collapse; }
    font-size: 10px; padding: 0px 1em; }
 .paginator A { font-family: monospace; text-decoration: none; color: blue; }
 
-.abs { position: absolute; }
-.popup { top: 200px; left: 300px; z-index: 10; width: 360px; height: 140px;
-         background-color: yellow; -moz-border-radius: 4px; }
-.popup .body { background-color: white; background-color: #EEEEEE;
-               margin: 1em; margin-top: 1em; height: 110px; }
-.popup .icon { position: absolute; width: 16px; height: 16px; padding: 4px; background-color: white;
-               top: 0.5em; left: 0.5em; width: 100px; height: 100px; z-index: 10; }
-.popup .itemtitle { font-weight: bold; margin: 2em 0.5em 0.7em 110px; }
-.popup .itemqnty { margin: 0.7em 0.5em 1.5em 110px; }
-.popup .itemqnty INPUT { width: 30px; }
-.popupbtn { position: absolute; width: 16px; height: 16px; padding: 4px; background-color: white; }
-.no { top: 0.5em; left: 328px; z-index: 2; }
-.ok { top: 108px; left: 270px; z-index: 2; }
-* html .ok { top: 108px; left: 250px; z-index: 2; }
-
-.popuphead { top: 0.5em; left: 130px; width: 160px; padding: 2px 8px; z-index: 2; 
-   background-color: white; }
 .border { border: 1px solid black; }
 
 .linkbar { background-color: #C2C2C2;; padding: 0.2em 1em; }
@@ -181,9 +150,10 @@ body {
 #header-box-4 { left: 270px; background-color: #ffeb73; }
 
 #header h1 {
-	position: absolute; top: 30px; left: 20px;
+	position: absolute; top: 40px; left: 20px;
 	margin: 0;
 	width: 8em;
+	font-family: comic sans ms;
 	font-size: 300%;
 	line-height: 1.33;
 	font-weight: bold;
@@ -192,10 +162,11 @@ body {
 	color: #a68f00;
 	}
 #header h2 {
-	position: absolute; top: 75px; left: 50px;
+	position: absolute; top: 70px; left: 70px;
 	margin: 0;
 	width: 20em;
-	font-size: 80%;
+	font-family: comic sans ms;
+	font-size: 100%;
 	line-height: 1.33;
 	font-weight: bold;
 	text-transform: uppercase;
@@ -383,6 +354,13 @@ body {
    vertical-align: middle;
 }
 
+#item-info-widget {
+    position: absolute; width: 80px; z-index: 1; display: none;
+    opacity: 0.5; filter: alpha(opacity=0.5); text-align: center;
+    color: black; background-color: white;
+    border: 2px solid gray; -moz-border-radius: 4px; padding: 4px;
+}
+
 #footer {
 	margin: 10px 0 10px 0;
 	padding: 5px 0;
@@ -398,5 +376,45 @@ body {
 	color: #54026e;
 	}
 
+.pointer { cursor: pointer; }
+.left { text-align: left; }
+.lfloat { float: left; }
+.rfloat { float: right; }
+.center { text-align: center; }
+.right { text-align: right; }
+.top { vertical-align: top; }
+.middle { vertical-align: middle; }
+.show { display: block; }
+.hide { display: none; }
+.nowrap { white-space: nowrap; }
 
+#widget-addtocart {
+    position: absolute; top: 200px; left: 300px; z-index: 10; width: 360px; height: 140px;
+    background-color: #b964d4;; -moz-border-radius: 4px; 
+}
+#widget-addtocart .body { 
+    background-color: #ffe440; margin: 1em; margin-top: 1em; height: 110px; 
+}
+#widget-addtocart .icon { 
+    position: absolute; width: 16px; height: 16px; padding: 4px; background-color: white;
+    top: 0.5em; left: 0.5em; width: 100px; height: 100px; z-index: 10; 
+    border: 1px solid black;
+}
+#widget-addtocart .itemtitle { font-weight: bold; margin: 2em 0.5em 0.7em 110px; }
+#widget-addtocart .itemqnty { margin: 0.7em 0.5em 1.5em 110px; }
+#widget-addtocart .itemqnty INPUT { width: 30px; }
+.popupbtn { width: 16px; height: 16px; padding: 4px; background-color: white; }
+.no { position: absolute; top: 0.5em; left: 328px; z-index: 2; }
+.ok { position: absolute; top: 108px; left: 270px; z-index: 2; }
+* html .ok { top: 108px; left: 250px; z-index: 2; }
 
+.popuphead { 
+    position: absolute; top: 0.5em; left: 130px; width: 160px; padding: 2px 8px; z-index: 2; 
+    color: #b964d4;
+    background-color: #54026e; 
+}
+
+BUTTON { 
+    border: 1px solid #54026e; background-color: #bfab30; color: #54026e; 
+    -moz-border-radius: 4px; padding: 2px 4px; cursor: default; 
+}
