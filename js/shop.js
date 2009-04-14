@@ -121,9 +121,9 @@ function show_item_count_info(item_id) {
 jQuery.noConflict();
 jQuery(document).ready(
   function() {
-    var offset = jQuery("#item_pic").offset()
-    var width = jQuery("#item_pic").width()
-    jQuery("#lamp_info").css("top", offset.top - 10).css("left", offset.left + width - 80);
+    var offset = jQuery("#image-container").offset()
+    var width = jQuery("#image-container").width()
+    jQuery("#lamp_info").css("top", offset.top - 6).css("left", offset.left);
   }
 );
 

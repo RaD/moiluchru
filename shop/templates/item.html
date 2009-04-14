@@ -1,58 +1,64 @@
-{% extends "shop/base2.html" %}
+{% extends "shop/base.html" %}
 
 {% load thumbnail_filter %}
 {% load markup %}
 
 {% block content %}
-<div class="item">
+  <div id="left">
+    <h3 class="ttl"><span></span>Категории</h3>
 
-  <div><span class="title">{{ item.title }}</span></div>
-  {% include "shop/inc-catwidget.html" %}
+    {% include "shop/inc-category.html" %}
+  </div>
+
+  <div id="right">
+    <h3 class="ttl"><span></span>{{ item.title }}</h3>
+
+    {% include "shop/inc-catwidget.html" %}
   
-  <br/>
-  
-  <table>
-    <tr>
-      <td class="top">
-	<div>
-	  {# Виджет с информацией о лампах #}
-	  <div id="lamp_info"
-	       style="position: absolute; left: 160px; top: 140px; width: 80px; z-index: 100; 
-		      opacity: 0.3; filter: alpha(opacity=0.3); text-align: center;
-		      color: black; background-color: white;
-		      border: 2px solid gray; -moz-border-radius: 4px; padding: 4px;">
-	    <div style="font-size: 140%;">{{ addons.socle }}</div>
-	    <div style="font-size: 80%;">{{ addons.count }} x {{ addons.watt }} Вт</div>
+    <table width="100%">
+      <tr>
+	<td width="200">
+	  <div id="image-container">
+	    {# Виджет с информацией о лампах #}
+	    <div id="lamp_info"
+		 style="position: absolute; left: 20px; top: 140px; width: 80px; z-index: 100; 
+			opacity: 0.5; filter: alpha(opacity=0.5); text-align: center;
+			color: black; background-color: white;
+			border: 2px solid gray; -moz-border-radius: 4px; padding: 4px;">
+	      <div style="font-size: 140%;">{{ addons.socle }}</div>
+	      <div style="font-size: 80%;">{{ addons.count }} x {{ addons.watt }} Вт</div>
+	    </div>
+	    {# Изображение товара #}
+	    <img src="{{ item.image.path|thumbnail:"200x,itempics" }}" id="item_pic" border="0" title="{{ item.title }}" />
 	  </div>
-	  {# Изображение товара #}
-	  <img src="{{ item.image.path|thumbnail:"200x,itempics" }}" id="item_pic" border="0" title="{{ item.title }}" />
-	</div>
-      </td>
-      <td class="top">
-	<div id="add_widget" class="pointer" style="padding: 0.5em 0px;" 
-	     onclick="show_form({{ item.id }}, '{{ item.title }}'); return false;">
-	  <img src="http://cargo/pics/add.png" title="Добавить в корзину" width="32" height="32"/>
-	  <u>Добавить в корзину</u>
-	</div>
-	<div>Цена: <span class="price">{{ item.get_price.1|floatformat:2 }}</span> рублей.</div>
-	<div>В наличии: {% ifequal item.is_present 1 %}Да{% else %}Нет{% endifequal %}</div>
-	<br/>
-	{% if addons.diameter %}<div>Диаметр: {{ addons.diameter }} мм.</div>{% endif %}
-	{% if addons.height %}<div>Высота: {{ addons.height }} мм.</div>{% endif %}
-	{% if addons.length %}<div>Длина: {{ addons.length }} мм.</div>{% endif %}
-	{% if addons.width %}<div>Ширина: {{ addons.width }} мм.</div>{% endif %}
-	{% if addons.brow %}<div>Выступ: {{ addons.brow }} мм.</div>{% endif %}
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-	<div class="itemtitle">Описание:</div>
-	<div class="itemdesc">{{ item.desc|markdown }}</div>
-      </td>
-    </tr>
-  </table>
+	</td>
+	
+	<td>
+	  <div id="add_widget" class="pointer" style="padding: 0.5em 0px;" 
+	       onclick="show_form({{ item.id }}, '{{ item.title }}'); return false;">
+	    <img src="http://cargo/pics/add.png" title="Добавить в корзину" width="32" height="32"/>
+	    <u>Добавить в корзину</u>
+	  </div>
+	  <div>Цена: <span class="price">{{ item.get_price.1|floatformat:2 }}</span> рублей.</div>
+	  <div>В наличии: {% ifequal item.is_present 1 %}Да{% else %}Нет{% endifequal %}</div>
+	  <br/>
+	  <div>
+	    {% if addons.diameter %}<div>Диаметр: {{ addons.diameter }} мм.</div>{% endif %}
+	    {% if addons.height %}<div>Высота: {{ addons.height }} мм.</div>{% endif %}
+	    {% if addons.length %}<div>Длина: {{ addons.length }} мм.</div>{% endif %}
+	    {% if addons.width %}<div>Ширина: {{ addons.width }} мм.</div>{% endif %}
+	    {% if addons.brow %}<div>Выступ: {{ addons.brow }} мм.</div>{% endif %}
+	  </div>
+	</td>
+      </tr>
+    </table>
+
+    <div>
+      <div class="itemtitle">Описание:</div>
+      <div class="itemdesc">{{ item.desc|markdown }}</div>
+    </div>
 
   {% include "shop/widget-addtocart.html" %}
     
-</div>
+  </div>
 {% endblock %}

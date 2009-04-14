@@ -22,7 +22,8 @@ def cart_ctx_proc(request):
     form = SearchForm(auto_id='field_%s',
                       initial={'userinput': session.get('searchquery', ''),
                                'howmuch': session.get('howmuch_id', 1)})
-    return {'site_title': settings.SITE_TITLE,
+    return {'debug': settings.DEBUG,
+            'site_title': settings.SITE_TITLE,
             'site_subtitle': settings.SITE_SUBTITLE,
             'google_analytics': settings.GOOGLE_ANALYTICS,
             'form': form,
@@ -40,11 +41,13 @@ def show_main_page(request):
         request.session.set_test_cookie()
 
     try:
-        items = Item.objects.order_by('-buys')[:8] #FIXME: MAGIC NUMBER
+        items = Item.objects.order_by('-buys')[:settings.ITEMS_ON_MAIN_PAGE]
         prods = common.category_producers(0)
     except Item.DoesNotExist:
         items, prods = 0, 0
-    return {'items_col1': items[:4], 'items_col2': items[4:], 'producers': prods}
+    return {'items_col1': items[:settings.ITEMS_ON_MAIN_PAGE/2],
+            'items_col2': items[settings.ITEMS_ON_MAIN_PAGE/2:],
+            'producers': prods}
 
 @render_to('shop/search.html', cart_ctx_proc)
 @paged
