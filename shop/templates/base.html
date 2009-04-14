@@ -1,31 +1,31 @@
-<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01//EN' 'http://www.w3.org/TR/html4/strict.dtd'>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta http-equiv="Content-Language" content="ru"/>
-    <meta name="generator" content="Django"/>
-    <meta name="keywords" content=""/>
-    <meta name="description" content=""/>
-    <link rel="stylesheet" href="http://moiluchru/css/shop.css" type="text/css"/>
-    <link rel="shortcut icon" href="http://moiluchru/pics/favicon.png"/>
-    <script type="text/javascript" src="http://moiluchru/js/prototype.js"></script>
-    <script type="text/javascript" src="http://moiluchru/js/jquery.js"></script>
-    <script type="text/javascript" src="http://moiluchru/js/common.js"></script>
-    <script type="text/javascript" src="http://moiluchru/js/shop.js"></script>
-    <title>{{ site_name }}</title>
-  </head>
-  <body onload="{{ js_onload }}">{# необязательная инициализация JS #}
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <title>{{ page_title }}</title>
+  <link rel="stylesheet" href="http://moiluchru/css/shop.css" type="text/css"/>
+  <link rel="shortcut icon" href="http://moiluchru/pics/favicon.png"/>
+  <script type="text/javascript" src="http://moiluchru/js/prototype.js"></script>
+  <script type="text/javascript" src="http://moiluchru/js/jquery.js"></script>
+  <script type="text/javascript" src="http://moiluchru/js/common.js"></script>
+  <script type="text/javascript" src="http://moiluchru/js/shop.js"></script>
+</head>
 
-    <table border="0" cellpadding="0" cellspacing="0">
-      <tr class="header">
-        <td class="caption middle">
-          <div><a href="/shop/">{{ site_name }}</a></div>
-	  <div style="font-family: sans serif; font-size: 10px; font-weight: normal;">
-            Многообразие света!
-          </div>
-        </td>
-	<td class="search middle">
-	  <form method="post" action="/shop/search/">
+<body>
+  <div id="topbg"></div>
+  
+  <div id="main">
+    
+    <div id="header">
+      <div id="header-overlay"></div>
+      <div id="header-box-1" class="box bg-pri-1"></div>
+      <div id="header-box-2" class="box bg-pri-2"></div>
+      <div id="header-box-3" class="box bg-pri-3"></div>
+      <div id="header-box-4" class="box bg-pri-4"></div>
+      <div id="search">
+	<form method="post" action="/shop/search/">
 	  <table cellspacing="4" cellpadding="2">
 	    <tr>
 	      <td class="middle">Поиск</td>
@@ -35,49 +35,36 @@
 	      <td class="middle"><input type="submit" name="go" value="Найти"/></td>
 	    </tr>
 	  </table>
-	  </form>
-	</td>
-	<td class="informer" valign="middle">
-	  <table>
-	    <tr>
-	      <td width="48" style="padding-left: 10px;">
-		<img src="http://moiluchru/pics/cart.png" class="icon" title="Корзина" align="left"
-		{% if not cart_show %}class="pointer" onclick="document.location='/shop/cart/';"{% endif %}/>
-	      </td>
-	      <td class="left cart_widget">
-		<div class="cart_widget_title">{% if not cart_show %}<a href="/shop/cart/">{% endif%}Корзина{% if not cart_show %}</a>{% endif%}</div>
-		<div>
-		  Цена: <span id="cart_price" class="price">{{ cart_price|floatformat:2 }}</span> руб
-		  Кол-во: <span id="cart_count" class="price">{{ cart_count }}</span>
-		</div>
-	      </td>
-	      {% if not cart_show %}
-	      <td class="center">
-		<span id="clean_button" class="{% ifequal cart_count 0 %}hide{% else %}show{% endifequal %}">
-		  <button onclick="clean_cart(); return false;" style="cursor: pointer;">Очистить</button>
-		</span>
-	      </td>
-	      {% endif %}
-	    </tr>
-	  </table>
-	</td>
-      </tr>
-    </table>
+	</form>
+      </div>
+      <h1>{{ site_title }}</h1>
+      <h2>{{ site_subtitle }}</h2>
+    </div>
     
-    <br/>
+    <ul id="menu">
+      <li><a class="sel" href="/"><span></span>Главная</a></li>
+      <li><a href="#"><span></span>Новости</a></li>
+      <li><a href="#"><span></span>Товары</a></li>
+      <li><a href="#"><span></span>Доставка</a></li>
+      <li><a href="#"><span></span>Контакт</a></li>
+    </ul>
     
-    {% block container %}{% endblock %}
+    <div id="content">
+      {% block content %}{% endblock %}
+
+      <div class="cleaner"></div>
     
-    <br/>
-    
-    <table border="0" cellpadding="0" cellspacing="0">
-      <tr class="footer">
-	<td class="footer-left">Разработка &copy; 2008-2009 <a href="mailto:ruslan-точка-popov-на-гмейле">Руслан Попов</a></td>
-	<td class="footer-center">&nbsp;</td>
-	<td class="footer-right">Этот сайт создан для <a href="http://www.mozilla.com/">Firefox 3!</a></td>
-      </tr>
-    </table>
-    
-  </body>
+      <div id="footer">
+	<a href="/">Главная</a> |
+	<a href="#">Новости</a> |
+	<a href="#">Товары</a> |
+	<a href="/text/shipping/">Доставка</a> |
+	<a href="/text/contact/">Контакт</a>
+      </div>
+    </div>
+
+  </div>
+  
+</body>
 {% if not debug %}{{ google_analytics|safe }}{% endif %}
 </html>

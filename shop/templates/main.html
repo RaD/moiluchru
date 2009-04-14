@@ -1,7 +1,87 @@
-{% extends "shop/base3.html" %}
+{% extends "shop/base.html" %}
+{% load thumbnail_filter %}
 
 {% block content %}
-{# Вывод популярных товаров #}
-<div><span class="title">Хиты продаж</span></div>
-{% include "shop/inc-itemlist.html" %}
+  <div id="left">
+    <h3 class="ttl">Свет в доме</h3>
+    <p>
+      Современный человек не мыслит своё существование без
+      освещения. За более чем 150 летнюю историю электрического
+      освещения было создано множество устройств для использования
+      света. На нашем сайте вы сможете ознакомиться и купить бытовые
+      электроосветительные приборы для всех комнат вашего дома и дачи.
+    </p>
+
+    <dl>
+      <dt class="ttl">Связь</dt>
+      <dd>ICQ: 391317683</dd>
+      
+      <dt class="ttl">Зона</dt>
+      <dd>Москва и Московская область &mdash; курьерская доставка.</dd>
+      <dd>Российская Федерация &mdash; почтовая доставка по предоплате.</dd>
+    </dl>
+			
+    <img id="ico" src="l.png"/>
+    
+    <h4>Новости</h4>
+
+    <ul>
+      <li><a href="#">Дерево в освещении</a></li>
+      <li><a href="#">Светодиодные споты</a></li>
+      <li><a href="#">Мы открылись!</a></li>
+    </ul>
+
+    <h3>Консультация</h3>
+
+    <p>
+      Вы сможете задать свой вопрос и оперативно получить на него
+      ответ.
+    </p>
+
+    <div id="jabber-chat">
+      <div id="jabber-chat-window"></div>
+      <div>
+	<input type="text" id="jabber-input" name=""/>
+      </div>
+    </div>
+  </div>
+
+  <div id="right">
+    <h3 class="ttl"><span></span>Самые популярные</h3>
+
+    <table width="100%">
+      <tr>
+	<td>
+	  {% for i in items_col1 %}
+	  <div class="thumbnail-containter">
+	    <a href="{{ i.get_absolute_url }}">
+	      <img src="{{ i.image.path|thumbnail:"100x,itempics" }}" border="0" title="{{ i.title }}"/>
+	    </a>
+	  </div>
+	  <div>Категория: {{ i.category.title }}</div>
+	  <div>Цена: <span>{{ i.get_price.1|floatformat:2 }}</span> руб.</div>
+	  <a href="{{ item.get_absolute_url }}">Описание...</a>
+	  {% empty %}
+	  К сожалению база товаров на данный момент пуста.
+	  {% endfor %}
+	</td>
+
+	<td>
+	  {% for i in items_col2 %}
+	  <div class="thumbnail-containter">
+	    <a href="{{ i.get_absolute_url }}">
+	      <img src="{{ i.image.path|thumbnail:"100x,itempics" }}" border="0" title="{{ i.title }}"/>
+	    </a>
+	  </div>
+	  <div>Категория: {{ i.category.title }}</div>
+	  <div>Цена: <span>{{ i.get_price.1|floatformat:2 }}</span> руб.</div>
+	  <a href="{{ item.get_absolute_url }}">Описание...</a>
+	  {% empty %}
+	  К сожалению база товаров на данный момент пуста.
+	  {% endfor %}
+	</td>
+      </tr>
+    </table>
+    
+  </div>
 {% endblock %}
