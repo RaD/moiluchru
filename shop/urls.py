@@ -26,7 +26,6 @@ urlpatterns = patterns('',
     # AJAX
     (r'^add', 'moiluchru.shop.ajax.add_to_cart'),
     (r'^clean', 'moiluchru.shop.ajax.clean_cart'),
-    (r'^count', 'moiluchru.shop.ajax.show_count'),
                        
 )
 
