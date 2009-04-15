@@ -60,7 +60,7 @@ class Producer(models.Model):
 # Наследуем класс от entity
 class Category(CommonEntity):
     """ The categories of items. """
-    parent = models.ForeignKey('self', blank=True, null=True,
+    parent = models.ForeignKey(u'self', blank=True, null=True,
                                verbose_name=_(u'Parent'))
 
     class Meta:
@@ -86,9 +86,9 @@ class ItemType(CommonEntity):
     """ The collection for items. """
     model_name = models.CharField(_(u'Name of model'), max_length=64)
 
-    class Meta:
-        verbose_name = _(u'Item type')
-        verbose_name_plural = _(u'Item types')
+    #class Meta:
+    #    verbose_name = _(u'Item type')
+    #    verbose_name_plural = _(u'Item types')
 
 class Item(CommonEntity):
     desc = models.TextField(verbose_name=_(u'Description'), null=True, blank=True)
@@ -162,21 +162,21 @@ class OrderStatus(CommonEntity):
     pass
 
     class Meta:
-        verbose_name = _('Order status')
-        verbose_name_plural = _('Order statuses')
+        verbose_name = _(u'Order status')
+        verbose_name_plural = _(u'Order statuses')
 
 class Order(models.Model):
     buyer = models.ForeignKey(Buyer)
     count = models.PositiveIntegerField(default=0)
     totalprice = models.FloatField()
-    comment = models.TextField(blank=True, default='')
+    comment = models.TextField(blank=True, default=u'')
     reg_date = models.DateTimeField(auto_now_add=True)
     status = models.ForeignKey(OrderStatus)
     courier = models.ForeignKey(User, null=True)
 
     class Meta:
-        verbose_name = _('Order')
-        verbose_name_plural = _('Orders')
+        verbose_name = _(u'Order')
+        verbose_name_plural = _(u'Orders')
 
     def __unicode__(self):
         return self.buyer.lastname
@@ -197,8 +197,8 @@ class OrderDetail(models.Model):
 class OrderStatusChange(models.Model):
     order = models.ForeignKey(Order)
     courier = models.ForeignKey(User)
-    old_status = models.ForeignKey(OrderStatus, related_name="old_status")
-    new_status = models.ForeignKey(OrderStatus, related_name="new_status")
+    old_status = models.ForeignKey(OrderStatus, related_name=_(u'Old status'))
+    new_status = models.ForeignKey(OrderStatus, related_name=_(u'New status'))
     reg_date = models.DateTimeField(auto_now_add=True)
 
 class PhoneType(CommonEntity):

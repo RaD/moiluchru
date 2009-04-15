@@ -88,7 +88,7 @@ class ItemForm(forms.ModelForm):
 
 class LampInline(admin.TabularInline):
     model = Lamp
-    max_num = 1
+    extra = 1
       
 class ItemAdmin(admin.ModelAdmin):
     form = ItemForm
