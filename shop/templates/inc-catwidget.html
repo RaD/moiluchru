@@ -1,5 +1,5 @@
 <div class="cat-widget">
-  <a href="/shop">Главная</a> /
+  <a href="/">Главная</a> /
   {% for parcat in parent_cats %}
   <a href="{{ parcat.get_absolute_url }}">{{ parcat.title }}</a>{% if not forloop.last %} / {% endif %}
   {% endfor %}

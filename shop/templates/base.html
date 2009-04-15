@@ -65,7 +65,7 @@
     
     <ul id="menu">
       {% for m in menu %}
-      <li><a class="sel" href="{{ m.0 }}"><span></span>{{ m.1 }}</a></li>
+      <li><a {% ifequal path m.0 %}class="sel" {% endifequal %}href="{{ m.0 }}"><span></span>{{ m.1 }}</a></li>
       {% endfor %}
     </ul>
     
@@ -76,7 +76,7 @@
     
       <div id="footer">
 	{% for m in menu %}
-	<a href="{{ m.0 }}">{{ m.1 }}</a> |
+	{% ifequal path m.0 %}{{ m.1 }}{% else %}<a href="{{ m.0 }}">{{ m.1 }}</a>{% if not forloop.last %} |{% endif %}{% endifequal %}
 	{% endfor %}
       </div>
     </div>

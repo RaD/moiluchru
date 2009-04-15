@@ -14,6 +14,7 @@ urlpatterns = patterns(
 
     #(r'^$', 'django.views.generic.simple.redirect_to', {'url': '/shop/'}),
     (r'^$', 'moiluchru.shop.views.show_main_page'),
+    (r'^items/((?P<page>\d+)/)?', 'moiluchru.shop.views.show_items'),
 
     # магазин
     (r'^shop/', include('moiluchru.shop.urls')),

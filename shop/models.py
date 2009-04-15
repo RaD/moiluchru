@@ -101,6 +101,7 @@ class Item(CommonEntity):
     reg_date = models.DateTimeField(verbose_name=_(u'Defined'), auto_now_add=True)
     image = models.ImageField(verbose_name=_(u'Image'), upload_to=u'itempics')
     buys = models.IntegerField(verbose_name=_(u'Buys'), default=0)
+    sort_price = models.FloatField(_(u'Price'))
     
     class Meta:
         verbose_name = _(u'Item')
@@ -123,6 +124,7 @@ class Item(CommonEntity):
     def set_price(self, store, shop):
         # надо обязательно сохранить сам объект, только после этого
         # можно сохранять зависимые объекты
+        self.sort_price = shop # эта цена используется при сортировке
         self.save()
         # сохраняем информацию о цене
         price = Price(item=self, price_store=store, price_shop=shop, 
@@ -197,8 +199,8 @@ class OrderDetail(models.Model):
 class OrderStatusChange(models.Model):
     order = models.ForeignKey(Order)
     courier = models.ForeignKey(User)
-    old_status = models.ForeignKey(OrderStatus, related_name=_(u'Old status'))
-    new_status = models.ForeignKey(OrderStatus, related_name=_(u'New status'))
+    old_status = models.ForeignKey(OrderStatus, related_name=u'old_status')
+    new_status = models.ForeignKey(OrderStatus, related_name=u'new_status')
     reg_date = models.DateTimeField(auto_now_add=True)
 
 class PhoneType(CommonEntity):

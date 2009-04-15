@@ -34,7 +34,7 @@ def render_to(template, processor):
 
 def paged(func):
     def wrapper(request, *args, **kwargs):
-        if not 'page' in kwargs:
+        if not 'page' in kwargs or kwargs['page'] is None:
             kwargs['page'] = 1
         return func(request, *args, **kwargs)
     return wrapper

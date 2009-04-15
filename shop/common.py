@@ -28,7 +28,7 @@ def top_categories():
 def parent_categories(category_id):
     """ Возвращает в виде списка все родительские категории до
     верхнего уровня. """
-    if int(category_id) == 0:
+    if category_id is None:
         return [];
     else:
         category = models.Category.objects.get(id=category_id)
@@ -41,10 +41,10 @@ def parent_categories(category_id):
                 break
         return a
 
-def subcategories(category_id=0):
+def subcategories(category_id=None):
     """Функция возвращает все дочерние категории, даже дочерние
     дочерних и так далее."""
-    if int(category_id) == 0:
+    if category_id is None:
         return child_categories()
     else:
         category = models.Category.objects.get(id=category_id)
@@ -53,17 +53,17 @@ def subcategories(category_id=0):
                       [subcategories(l.id) for l in result],
                       result)
 
-def child_categories(category_id=0):
+def child_categories(category_id=None):
     """ Функция возвращает дочерние категории для указанной."""
-    if int(category_id) == 0:
+    if category_id is None:
         return top_categories()
     else:
         category = models.Category.objects.get(id=category_id)
         return list(category.category_set.all())
         
-def category_items(category_id, producer_id=None):
+def category_items(category_id=None, producer_id=None):
     """Функция возвращает элементы текущей категории."""
-    if int(category_id) == 0:
+    if category_id is None:
         i = models.Item.objects.all() 
     else:
         i = models.Item.objects.filter(category=category_id)

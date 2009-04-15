@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from django.conf import settings
-from django.utils.translation import gettext_lazy as _
-from django.http import HttpResponse, HttpResponseRedirect
-from django.db.models import Q
-from django.template import RequestContext
 from django.core.paginator import Paginator
+from django.core.urlresolvers import reverse
+from django.db.models import Q
+from django.http import HttpResponse, HttpResponseRedirect
+from django.utils.translation import gettext_lazy as _
 
 from moiluchru.shop import common
 from moiluchru.shop.models import Item, Category, Producer, Buyer, Phone, Order, \
@@ -28,7 +28,7 @@ def cart_ctx_proc(request):
             'site_title': settings.SITE_TITLE,
             'site_subtitle': settings.SITE_SUBTITLE,
             'google_analytics': settings.GOOGLE_ANALYTICS,
-            'menu': menu,
+            'menu': menu, 'path': request.path,
             'form': form,
             'top_cats': common.top_categories(),
             'cart_count': session.get('cart_count', 0),
@@ -45,9 +45,8 @@ def show_main_page(request):
 
     try:
         items = Item.objects.order_by('-buys')[:settings.ITEMS_ON_MAIN_PAGE]
-        prods = common.category_producers(0)
     except Item.DoesNotExist:
-        items, prods = 0, 0
+        items = 0
     return {'items_col1': items[:settings.ITEMS_ON_MAIN_PAGE/2],
             'items_col2': items[settings.ITEMS_ON_MAIN_PAGE/2:]}
 
@@ -89,13 +88,35 @@ def search_results(request, page):
 
 @render_to('shop/category.html', cart_ctx_proc)
 @paged
-def show_category_page(request, category_id, page):
+def show_items(request, page):
+    """ Представление для отображения общей страницы с новинками. """
+    common.does_cart_exist(request)
+    i = common.category_items() # получаем товары всех категорий
+
+    sort = ['', '-buys', 'buys', '-sort_price', 'sort_price']
+    sort_type = request.session.get('sort_type', 1)
+    p = Paginator(i.order_by(sort[sort_type]), settings.SHOP_ITEMS_PER_PAGE)
+    items = p.page(page).object_list
+    
+    return {'child_cats': common.child_categories(),
+            'sort_type': sort_type, 
+            'url': reverse(show_items), # для многостраничности
+            'items_col1': items[:len(items)/2],
+            'items_col2': items[len(items)/2:],
+            'page': p.page(page), 'page_range': p.page_range}
+
+@render_to('shop/category.html', cart_ctx_proc)
+@paged
+def show_category_page(request, category_id=None, page=None):
     """ Функция для отображения подчинённых категорий. """
     sort = ['', '-buys', 'buys', '-price', 'price']
     sort_type = request.session.get('sort_type', 1)
     common.does_cart_exist(request)
     i = common.category_items(category_id)
-    c = Category.objects.get(id=category_id)
+    try:
+        c = Category.objects.get(id=category_id)
+    except Category.DoesNotExist:
+        return HttpResponseRedirect(u'/items/')
 
     p = Paginator(i.order_by(sort[sort_type]), settings.SHOP_ITEMS_PER_PAGE)
     items = p.page(page).object_list
