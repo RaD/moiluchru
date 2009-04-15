@@ -138,7 +138,7 @@ body {
 #header-overlay {
 	position: relative; top: -15px; left: 14px;
 	width: 780px; height: 145px;
-	background: url('header2.png') top right no-repeat;
+	background: url('/pics/header2.png') top right no-repeat;
 	}
 #header .box {
 	position: absolute; top: 6px;
@@ -387,6 +387,13 @@ body {
 .show { display: block; }
 .hide { display: none; }
 .nowrap { white-space: nowrap; }
+
+#widget-cart {
+   position: absolute; top: 70px; right: 50px; z-index: 1; width: 300px;
+}
+#widget-cart a {
+   color: black;
+}
 
 #widget-addtocart {
     position: absolute; top: 200px; left: 300px; z-index: 10; width: 360px; height: 140px;
