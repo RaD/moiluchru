@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-15 11:13+0400\n"
+"POT-Creation-Date: 2009-04-15 15:47+0400\n"
 "PO-Revision-Date: 2008-07-09 20:40+0400\n"
 "Last-Translator: Ruslan Popov <radz@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -151,17 +151,13 @@ msgstr "Коллекции"
 msgid "Name of model"
 msgstr "Имя модели"
 
-#: shop/models.py:90 shop/models.py:95
-msgid "Item type"
-msgstr "Тип товара"
-
-#: shop/models.py:91
-msgid "Item types"
-msgstr "Типы товара"
-
 #: shop/models.py:94
 msgid "Description"
 msgstr "Описание"
+
+#: shop/models.py:95
+msgid "Item type"
+msgstr "Тип товара"
 
 #: shop/models.py:100
 msgid "Is present"
@@ -214,6 +210,14 @@ msgstr "Заказ"
 #: shop/models.py:179
 msgid "Orders"
 msgstr "Заказы"
+
+#: shop/models.py:200
+msgid "Old status"
+msgstr "Старый статус"
+
+#: shop/models.py:201
+msgid "New status"
+msgstr "Новый статус"
 
 #: shop/models.py:209
 msgid "Phone types"
@@ -306,3 +310,4 @@ msgstr "Текст"
 #: text/models.py:13
 msgid "Texts"
 msgstr "Тексты"
+
