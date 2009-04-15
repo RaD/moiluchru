@@ -12,7 +12,10 @@ urlpatterns = patterns(
     (r'^admin/doc/', include('django.contrib.admindocs/urls')),
     (r'^admin/(.*)', admin.site.root),
 
-    (r'^$', 'django.views.generic.simple.redirect_to', {'url': '/shop/'}),
+    #(r'^$', 'django.views.generic.simple.redirect_to', {'url': '/shop/'}),
+    (r'^$', 'moiluchru.shop.views.show_main_page'),
+
+    # магазин
     (r'^shop/', include('moiluchru.shop.urls')),
 
     # отображение текстов

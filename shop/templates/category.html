@@ -1,9 +1,27 @@
-{% extends "shop/base3.html" %}
+{% extends "shop/base.html" %}
 
 {% block content %}
-<div><span class="title">Товары</span></div>
-<div class="sectioncontent">
-  {% include "shop/inc-catwidget.html" %}
-  {% include "shop/inc-itemlist.html" %}
-</div>
+{# <div><span class="title">Товары</span></div> #}
+{% include "shop/inc-catwidget.html" %}
+{% include "shop/inc-paginator.html" %}  
+<table width="100%">
+  <tr>
+    <td valign="top">
+      {% for i in items_col1 %}
+        {% include "shop/inc-column-items-wide.html" %}
+      {% empty %}
+        К сожалению база товаров на данный момент пуста.
+      {% endfor %}
+    </td>
+    <td width="8em">&nbsp;</td>
+    <td valign="top">
+      {% for i in items_col2 %}
+        {% include "shop/inc-column-items-wide.html" %}
+      {% empty %}
+        К сожалению база товаров на данный момент пуста.
+      {% endfor %}
+    </td>
+  </tr>
+</table>
+{% include "shop/inc-paginator.html" %}  
 {% endblock %}

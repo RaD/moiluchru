@@ -22,10 +22,13 @@ def cart_ctx_proc(request):
     form = SearchForm(auto_id='field_%s',
                       initial={'userinput': session.get('searchquery', ''),
                                'howmuch': session.get('howmuch_id', 1)})
+    menu = [(u'/', _(u'Main')), (u'/news/', _(u'News')), (u'/items/', _(u'Items')),
+            (u'/text/shipping/', _(u'Shipping')), (u'/text/contact/', _(u'Contact'))]
     return {'debug': settings.DEBUG,
             'site_title': settings.SITE_TITLE,
             'site_subtitle': settings.SITE_SUBTITLE,
             'google_analytics': settings.GOOGLE_ANALYTICS,
+            'menu': menu,
             'form': form,
             'top_cats': common.top_categories(),
             'cart_count': session.get('cart_count', 0),
@@ -46,8 +49,7 @@ def show_main_page(request):
     except Item.DoesNotExist:
         items, prods = 0, 0
     return {'items_col1': items[:settings.ITEMS_ON_MAIN_PAGE/2],
-            'items_col2': items[settings.ITEMS_ON_MAIN_PAGE/2:],
-            'producers': prods}
+            'items_col2': items[settings.ITEMS_ON_MAIN_PAGE/2:]}
 
 @render_to('shop/search.html', cart_ctx_proc)
 @paged
@@ -94,14 +96,17 @@ def show_category_page(request, category_id, page):
     common.does_cart_exist(request)
     i = common.category_items(category_id)
     c = Category.objects.get(id=category_id)
+
     p = Paginator(i.order_by(sort[sort_type]), settings.SHOP_ITEMS_PER_PAGE)
+    items = p.page(page).object_list
+
     return {'parent_cats': common.parent_categories(category_id),
             'child_cats': common.child_categories(category_id),
             'category_id': category_id,
-            'producers': common.category_producers(category_id),
             'url': c.get_absolute_url(), # для многостраничности
             'sort_type': sort_type, 
-            'items': p.page(page).object_list,
+            'items_col1': items[:len(items)/2],
+            'items_col2': items[len(items)/2:],
             'page': p.page(page), 'page_range': p.page_range}
 
 @render_to('shop/category.html', cart_ctx_proc)

@@ -64,11 +64,9 @@
     </div>
     
     <ul id="menu">
-      <li><a class="sel" href="/"><span></span>Главная</a></li>
-      <li><a href="#"><span></span>Новости</a></li>
-      <li><a href="#"><span></span>Товары</a></li>
-      <li><a href="/text/shipping/"><span></span>Доставка</a></li>
-      <li><a href="/text/contact/"><span></span>Контакт</a></li>
+      {% for m in menu %}
+      <li><a class="sel" href="{{ m.0 }}"><span></span>{{ m.1 }}</a></li>
+      {% endfor %}
     </ul>
     
     <div id="content">
@@ -77,11 +75,9 @@
       <div class="cleaner"></div>
     
       <div id="footer">
-	<a href="/">Главная</a> |
-	<a href="#">Новости</a> |
-	<a href="#">Товары</a> |
-	<a href="/text/shipping/">Доставка</a> |
-	<a href="/text/contact/">Контакт</a>
+	{% for m in menu %}
+	<a href="{{ m.0 }}">{{ m.1 }}</a> |
+	{% endfor %}
       </div>
     </div>
 

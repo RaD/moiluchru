@@ -19,7 +19,7 @@ def is_stuff(user):
 
 def ctx_processor(request):
     """ Контекстный процессор. """
-    return {'site_name': settings.SITE_NAME,
+    return {'site_name': settings.SITE_TITLE,
             'user': request.user}
 
 @render_to('manager/login.html', ctx_processor)
