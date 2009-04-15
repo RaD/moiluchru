@@ -85,19 +85,17 @@ function update_cart(count, price) {
 }
 
 function clean_cart(url) {
-  var ajax_response = function(transport) {
-    var xml = transport.responseXML.firstChild;
-    check_result(true,
-		 get_xml_item(xml, 'code'),
-		 function() { update_cart("0", "0.00");
-			      if (url) 
-				window.setTimeout(function() { 
-						    document.location = url; }, 
-						  3000); },
-		 null);
-  }
-  new Ajax.Request('/shop/clean/', 
-		   { method: 'post',
-		     onSuccess: ajax_response, onFailure: ajax_response });
+  jQuery.post('/shop/clean/', {},
+	      function(json) {
+		if (json['code'] == 200) {
+		  update_cart("0", "0.00");
+		  if (url) 
+		    window.setTimeout(function() { 
+					document.location = url; }, 
+				      3000); 
+		} else {
+		  alert(json['code'] + ': ' + json['desc']);
+		}
+	      }, 'json' );
 }
 

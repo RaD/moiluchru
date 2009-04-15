@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from moiluchru.snippets import ajax_processor
 from moiluchru.shop import common
-from moiluchru.shop.forms import CartAdd
+from moiluchru.shop.forms import CartAdd, CartClean
 from moiluchru.shop.models import Item
 
 @ajax_processor(CartAdd)
@@ -40,13 +40,9 @@ def add_to_cart(request, form):
     except Item.DoesNotExists:
         return {'code': '300', 'desc': 'Can\'t get object'}
 
-def clean_cart(request):
-    """
-    Функция очистки корзины
-    """
-    if (request.is_ajax()):
-        common.init_cart(request)
-        return HttpResponse('<result><code>200</code><desc>done</desc></result>', mimetype="text/xml")
-    else:
-        return HttpResponse('<result><code>400</code><desc>it must be ajax call</desc></result>', mimetype="text/xml")
+@ajax_processor(CartClean)
+def clean_cart(request, form):
+    """ Функция очистки корзины  """
+    common.init_cart(request)
+    return {'code': '200', 'desc': 'success'}
 
