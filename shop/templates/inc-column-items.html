@@ -1,0 +1,10 @@
+{% load thumbnail_filter %}
+
+<div class="thumbnail-containter">
+  <a href="{{ i.get_absolute_url }}">
+    <img src="{{ i.image.path|thumbnail:"100x,itempics" }}" border="0" title="{{ i.title }}"/>
+  </a>
+</div>
+<div>Категория: {{ i.category.title }}</div>
+<div>Цена: <span>{{ i.get_price.1|floatformat:2 }}</span> руб.</div>
+<a href="{{ i.get_absolute_url }}">Описание...</a>
