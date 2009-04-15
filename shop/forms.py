@@ -54,3 +54,6 @@ class OrderForm(forms.Form):
     courier = CourierSelect(label=_(u'Courier'), queryset=admmodels.User.objects.filter(groups=1),
                             widget=forms.Select(attrs={'class':'longitem'}))
 
+class CartAdd(forms.Form):
+    item = forms.CharField(label=_(u'Item id'), max_length=8)
+    count = forms.CharField(label=_(u'Item count'), max_length=8)

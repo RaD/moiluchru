@@ -14,16 +14,21 @@ function show_form(item_id, item_title) {
     var widget = jQuery('#widget-addtocart');
     if (! widget) return;
     
-    var ajax_response = function(transport) {
-	var xml = transport.responseXML.firstChild;
-	check_result(true,
-		     get_xml_item(xml, 'code'),
-		     function() {
-			 update_cart(get_xml_item(xml, 'cart_count'),
-				     get_xml_item(xml, 'cart_price')); },
-		     null);
-    }
-    
+  var apply_func = function() {
+    jQuery.post('/shop/add/',
+		{ item: item_id,
+		  count: jQuery("#widget_item_quantity").val() },
+		function(json) {
+		  if (json['code'] == 200) {
+		    update_cart(json['cart_count'], json['cart_price']);
+		  } else {
+		    alert(json['code'] + ': ' + json['desc']);
+		  }
+		}, 'json' );
+    // скрываем
+    widget.hide();
+  }
+
     var cancel_func = function() {
 	// скрываем
 	widget.hide();
@@ -59,19 +64,9 @@ function show_form(item_id, item_title) {
     parent.document.onkeypress = function(e) { return onkeypress(e); }
     
     jQuery("body").append(widget);
-    jQuery("#widget_apply").click(function() {
-	new Ajax.Request('/shop/add/',
-			 { method: 'post',
-			   parameters: { item_id: item_id,
-					 item_count: $('widget_item_quantity').value },
-			   onSuccess: ajax_response, onFailure: ajax_response });
-	// скрываем
-	widget.hide();
-    });
-    jQuery("#widget_cancel").click(function() {
-	widget.hide();
-    });
-    widget.show();
+  jQuery("#widget_apply").click(apply_func);
+  jQuery("#widget_cancel").click(cancel_func);
+  widget.show();
     
     // позиционирование на середине экрана
     widget.css("top", (self.innerHeight / 2 - widget.height() / 2 + self.pageYOffset) + 'px');
@@ -81,13 +76,12 @@ function show_form(item_id, item_title) {
 }
 
 function update_cart(count, price) {
-  $('cart_count').innerHTML = count;
-  $('cart_price').innerHTML = price;
-  $('clean_button').className = (count == 0) ? 'hide' : 'show';
-  if ($('item_remains')) {
-    // обновляем информацию о товаре, если находимся на соответствующей странице
-    show_item_count_info(_attr($('item_remains'), 'item_id'));
-  }
+  jQuery("#cart_count").html(count);
+  jQuery("#cart_price").html(price);
+  if (count == 0)
+    jQuery("#clean_button").hide();
+  else
+    jQuery("#clean_button").show();
 }
 
 function clean_cart(url) {
@@ -105,25 +99,5 @@ function clean_cart(url) {
   new Ajax.Request('/shop/clean/', 
 		   { method: 'post',
 		     onSuccess: ajax_response, onFailure: ajax_response });
-}
-
-function show_item_count_info(item_id) {
-  var ajax_response = function(transport) {
-    var xml = transport.responseXML.firstChild;
-    check_result(false,
-		 get_xml_item(xml, 'code'),
-		 function() { $('item_remains').innerHTML = get_xml_item(xml, 'remains');
-			      window.status = 'Проверка наличия товара: OK'; },
-		 function() { window.status = 'Проверка наличия товара: Ошибка'; });
-  }
-
-  var callback = function() {
-    new Ajax.Request('/shop/count/',
-		     { method: 'get', parameters: { item_id: item_id },
-		       onSuccess: ajax_response, onFailure: ajax_response });
-  }
-
-  callback(); // для мгновенного обновления
-  var pe = new PeriodicalExecuter(callback, 60);
 }
 
