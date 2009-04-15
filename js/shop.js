@@ -1,10 +1,11 @@
 jQuery.noConflict();
 jQuery(document).ready(
     function() {
-	var c_offset = jQuery("#image-container").offset()
-	var c_width = jQuery("#image-container").width()
-	var f_height = jQuery("#item-info-widget").height()
-	jQuery("#item-info-widget").css("top", c_offset.top + 180 - f_height).css("left", c_offset.left - 60).show();
+	var t_offset = jQuery("#thumbnail").offset()
+	var t_height = jQuery("#thumbnail").height()
+	jQuery("#item-info-widget").css("top", t_offset.top + t_height - 50)
+                                   .css("left", t_offset.left - 10)
+                                   .show();
     }
 );
 
