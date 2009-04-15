@@ -39,6 +39,30 @@
       </div>
       <h1>{{ site_title }}</h1>
       <h2>{{ site_subtitle }}</h2>
+      <div id="widget-cart">
+	<table>
+	  <tr>
+	    <td width="48" style="padding-left: 10px;">
+	      <img src="http://moiluchru/pics/cart.png" class="icon" title="Корзина" align="left"
+		   {% if not cart_show %}class="pointer" onclick="document.location='/shop/cart/';"{% endif %}/>
+	    </td>
+	    <td class="left cart_widget">
+	      <div class="cart_widget_title">{% if not cart_show %}<a href="/shop/cart/">{% endif%}Корзина{% if not cart_show %}</a>{% endif%}</div>
+	      <div>
+		<div>Цена: <span id="cart_price" class="price">{{ cart_price|floatformat:2 }}</span> руб</div>
+		<div>Кол-во: <span id="cart_count" class="price">{{ cart_count }}</span></div>
+	      </div>
+	    </td>
+	    {% if not cart_show %}
+	    <td class="center">
+	      <span id="clean_button" class="{% ifequal cart_count 0 %}hide{% else %}show{% endifequal %}">
+		<button onclick="clean_cart(); return false;" style="cursor: pointer;">Очистить</button>
+	      </span>
+	    </td>
+	    {% endif %}
+	  </tr>
+	</table>
+      </div>
     </div>
     
     <ul id="menu">
