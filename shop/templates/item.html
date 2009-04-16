@@ -31,7 +31,7 @@
 	    <img src="http://moiluchru/pics/add.png" title="Добавить в корзину" width="32" height="32"/>
 	    <u>Добавить в корзину</u>
 	  </div>
-	  <div style="position: relative; top: -60px; left: 40px; line-height: 1.4em;">
+	  <div style="position: relative; top: -55px; left: 40px; line-height: 1.4em;">
 	    <div style="color: #2c3d82;">Цена:</div>
 	    <span style="font-size: 200%; font-weight: bold; color: #071c71;">{{ item.get_price.1|floatformat:2 }}</span>
 	    <span style="color: #2c3d82;">руб.</span>
@@ -52,7 +52,7 @@
 	    <span style="font-size: 80%;">{{ l.count }} x {{ l.watt }} Вт</span>
 	  </div>
 	  {% endfor %}
-	  <div>Есть лампы в поставке: {% ifequal item.has_lamp 1 %}Да{% else %}Нет{% endifequal %}</div>
+	  <div>{% ifequal item.has_lamp 1 %}Лампочки идут в поставке{% else %}Лампочек в поставке нет{% endifequal %}.</div>
 	</td>
 	<td valign="top">
 	  <h4 class="ttl"><span></span>Характеристики</h4>
