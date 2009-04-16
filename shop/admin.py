@@ -98,7 +98,7 @@ class ItemAdmin(admin.ModelAdmin):
     form = ItemForm
     fieldsets = (
         ('Информация',
-         {'fields':(('title', 'color', 'is_present'),
+         {'fields':(('title', 'color'), ('is_present', 'has_lamp'),
                     ('category', 'producer', 'collection'),
                     ('price_shop', 'price_store'),
                     'item_type')}),

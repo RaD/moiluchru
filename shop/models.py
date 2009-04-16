@@ -98,6 +98,7 @@ class Item(CommonEntity):
     producer = models.ForeignKey(Producer, verbose_name=_(u'Producer'))
     color = models.ForeignKey(Color, verbose_name=_(u'Color'))
     is_present = models.BooleanField(verbose_name=_(u'Is present'))
+    has_lamp = models.BooleanField(verbose_name=_(u'Has lamp'))
     reg_date = models.DateTimeField(verbose_name=_(u'Defined'), auto_now_add=True)
     image = models.ImageField(verbose_name=_(u'Image'), upload_to=u'itempics')
     buys = models.IntegerField(verbose_name=_(u'Buys'), default=0)
