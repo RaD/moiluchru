@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from moiluchru.shop.models import Color, Country, Producer, Category, \
      Collection, Item, ItemType, Price, Buyer, Order
-from moiluchru.shop.models import Lamp, Socle
+from moiluchru.shop.models import Lamp, Size, Socle
 
 class LampAdmin(admin.ModelAdmin):
     fieldsets = (
@@ -90,6 +90,10 @@ class LampInline(admin.TabularInline):
     model = Lamp
     extra = 1
       
+class SizeInline(admin.TabularInline):
+    model = Size
+    max_num = 1
+      
 class ItemAdmin(admin.ModelAdmin):
     form = ItemForm
     fieldsets = (
@@ -106,7 +110,7 @@ class ItemAdmin(admin.ModelAdmin):
     ordering = ('title', 'category')
     search_fields = ('title', 'category')
     save_as = True
-    inlines = [LampInline]
+    inlines = [SizeInline, LampInline]
 
     def __init__(self, *args, **kwargs):
         super(ItemAdmin, self).__init__(*args, **kwargs)
