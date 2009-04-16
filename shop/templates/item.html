@@ -17,12 +17,7 @@
   
     <table width="100%">
       <tr>
-	<td width="200">
-	  {# Виджет с информацией о лампах #}
-	  <div id="item-info-widget">
-	    <div style="font-size: 140%;">{{ addons.socle }}</div>
-	    <div style="font-size: 80%;">{{ addons.count }} x {{ addons.watt }} Вт</div>
-	  </div>
+	<td width="200" valign="top">
 	  <div id="image-container">
 	    {# Изображение товара #}
 	    <img src="{{ item.image.path|thumbnail:"200x,itempics" }}" 
@@ -30,25 +25,37 @@
 	  </div>
 	</td>
 	
-	<td>
+	<td valign="top">
 	  <div id="add_widget" class="pointer" style="padding: 0.5em 0px;" 
 	       onclick="show_form({{ item.id }}, '{{ item.title }}'); return false;">
 	    <img src="http://moiluchru/pics/add.png" title="Добавить в корзину" width="32" height="32"/>
 	    <u>Добавить в корзину</u>
 	  </div>
-	  <div>Цена: <span class="price">{{ item.get_price.1|floatformat:2 }}</span> рублей.</div>
+	  <div style="position: relative; top: -60px; left: 40px; line-height: 1.4em;">
+	    <div style="color: #2c3d82;">Цена:</div>
+	    <span style="font-size: 200%; font-weight: bold; color: #071c71;">{{ item.get_price.1|floatformat:2 }}</span>
+	    <span style="color: #2c3d82;">руб.</span>
+	  </div>
 	  <div>Есть в наличии: <span>{% ifequal item.is_present 1 %}Да{% else %}Нет{% endifequal %}</span ></div>
 	  <div>Цвет: <span>{{ item.color }}</span></div>
-	  <br/>
-	  Требует лампы:
+	</td>
+      </tr>
+    </table>
+
+    <table width="100%">
+      <tr>
+	<td valign="top">
+	  <h4 class="ttl"><span></span>Лампочки</h4>
 	  {% for l in lamp %}
 	  <div>
-	    <span style="font-size: 140%;">{{ l.socle }}</span>
+	    <span style="font-size: 150%; font-weight: bold;">{{ l.socle }}</span>
 	    <span style="font-size: 80%;">{{ l.count }} x {{ l.watt }} Вт</span>
 	  </div>
 	  {% endfor %}
 	  <div>Есть лампы в поставке: {% ifequal item.has_lamp 1 %}Да{% else %}Нет{% endifequal %}</div>
-	  <br/>
+	</td>
+	<td valign="top">
+	  <h4 class="ttl"><span></span>Характеристики</h4>
 	  <div>
 	    {% if addons.diameter %}<div>Диаметр: {{ addons.diameter }} мм.</div>{% endif %}
 	    {% if addons.height %}<div>Высота: {{ addons.height }} мм.</div>{% endif %}
@@ -61,7 +68,7 @@
     </table>
 
     <div>
-      <div class="itemtitle">Описание:</div>
+      <h3 class="ttl"><span></span>Описание</h3>
       <div class="itemdesc">{{ item.desc|markdown }}</div>
     </div>
 

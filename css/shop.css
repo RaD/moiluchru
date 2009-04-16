@@ -236,7 +236,7 @@ body {
 	}
 #left {
 	float: left;
-	width: 300px;
+	width: 250px;
 	padding: 10px 20px;
 	border-right: 1px dotted white;
 	}
@@ -274,7 +274,7 @@ body {
 
 #right {
 	float: right;
-	width: 390px;
+	width: 440px;
 	margin: 0 20px 0 0;
 	padding: 10px 0;
 	}
@@ -284,6 +284,14 @@ body {
 	font-size: 12px;
 	}
 #right h3 span {
+   display: inline-block;
+   width: 9px; height: 9px;
+   margin-right: 1em;
+   border: 1px solid #071C71;
+   vertical-align: middle;
+   background: #6F83D6;
+}
+#right h4 span {
    display: inline-block;
    width: 9px; height: 9px;
    margin-right: 1em;
@@ -354,6 +362,9 @@ body {
    vertical-align: middle;
 }
 
+#image-container {
+   /* border: 2px solid #6f83d6; -moz-border-radius: 4px; */
+}
 #item-info-widget {
     position: absolute; width: 80px; z-index: 1; display: none;
     opacity: 0.5; filter: alpha(opacity=0.5); text-align: center;
