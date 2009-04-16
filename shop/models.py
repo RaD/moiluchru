@@ -112,10 +112,16 @@ class Item(CommonEntity):
         return u'/shop/item/%i/' % self.id
 
     def get_lamp(self):
-        return Lamp.objects.filter(item=self)
+        try:
+            return Lamp.objects.filter(item=self)
+        except Lamp.DoesNotExist:
+            return None
 
     def get_size(self):
-        return Size.objects.get(item=self)
+        try:
+            return Size.objects.get(item=self)
+        except Size.DoesNotExist:
+            return None
 
     def get_price(self):
         try:
