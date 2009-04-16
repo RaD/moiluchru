@@ -1,13 +1,13 @@
-jQuery.noConflict();
-jQuery(document).ready(
-    function() {
-	var t_offset = jQuery("#thumbnail").offset()
-	var t_height = jQuery("#thumbnail").height()
-	jQuery("#item-info-widget").css("top", t_offset.top + t_height - 50)
-                                   .css("left", t_offset.left - 10)
-                                   .show();
-    }
-);
+// jQuery.noConflict();
+// jQuery(document).ready(
+//     function() {
+// 	var t_offset = jQuery("#thumbnail").offset()
+// 	var t_height = jQuery("#thumbnail").height()
+// 	jQuery("#item-info-widget").css("top", t_offset.top + t_height - 50)
+//                                    .css("left", t_offset.left - 10)
+//                                    .show();
+//     }
+// );
 
 // Отображение формы подтверждения
 
