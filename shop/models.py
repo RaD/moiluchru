@@ -110,8 +110,11 @@ class Item(CommonEntity):
     def get_absolute_url(self):
         return u'/shop/item/%i/' % self.id
 
-    def get_addons(self):
-        return Lamp.objects.get(item=self)
+    def get_lamp(self):
+        return Lamp.objects.filter(item=self)
+
+    def get_size(self):
+        return Size.objects.get(item=self)
 
     def get_price(self):
         try:

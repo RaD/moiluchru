@@ -155,7 +155,7 @@ def show_item_page(request, item_id):
     common.does_cart_exist(request)
     try:
         item = Item.objects.get(id=item_id)
-        return {'item': item, 'addons': item.get_addons(),
+        return {'item': item, 'lamp': item.get_lamp(), 'addons': item.get_size(),
                 'js_onload': 'show_item_count_info(%s);' % item_id,
                 'parent_cats': common.parent_categories(item.category.id)}
     except Item.DoesNotExist:

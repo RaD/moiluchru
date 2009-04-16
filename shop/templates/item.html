@@ -37,7 +37,17 @@
 	    <u>Добавить в корзину</u>
 	  </div>
 	  <div>Цена: <span class="price">{{ item.get_price.1|floatformat:2 }}</span> рублей.</div>
+	  <div>Есть в наличии: <span>{% ifequal item.is_present 1 %}Да{% else %}Нет{% endifequal %}</span ></div>
+	  <div>Цвет: <span>{{ item.color }}</span></div>
 	  <div>В наличии: {% ifequal item.is_present 1 %}Да{% else %}Нет{% endifequal %}</div>
+	  <br/>
+	  Требует лампы:
+	  {% for l in lamp %}
+	  <div>
+	    <span style="font-size: 140%;">{{ l.socle }}</span>
+	    <span style="font-size: 80%;">{{ l.count }} x {{ l.watt }} Вт</span>
+	  </div>
+	  {% endfor %}
 	  <br/>
 	  <div>
 	    {% if addons.diameter %}<div>Диаметр: {{ addons.diameter }} мм.</div>{% endif %}
