@@ -29,6 +29,11 @@ translate:
 %.mo: %.po
 	django-admin.py compilemessages
 
+show:
+	ssh rad@caml.ru ls -l ~/django/moiluchru/dumps
+	echo "scp rad@caml.ru:django/moiluchru/dumps/TS.dump.bz2 ./dumps/"
+	echo "scp rad@caml.ru:django/moiluchru/dumps/TS.tar ./dumps/"
+
 pushhome:
 	git push ssh://rad@nemo/~/development/git.repos/moiluchru.git/
 
