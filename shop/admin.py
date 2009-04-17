@@ -8,15 +8,6 @@ from moiluchru.shop.models import Color, Country, Producer, Category, \
      Collection, Item, ItemType, Price, Buyer, Order
 from moiluchru.shop.models import Lamp, Size, Socle
 
-class LampAdmin(admin.ModelAdmin):
-    fieldsets = (
-        ('Параметры',
-         {'fields': ('socle', 'watt', 'count', 'voltage')}),
-        )
-    list_display = ('socle', 'watt', 'count', 'voltage')
-
-admin.site.register(Lamp, LampAdmin)
-
 class SocleAdmin(admin.ModelAdmin):
     fieldsets = (('Параметры', {'fields': ('title',)}),)
     list_display = ('title',)
@@ -55,12 +46,6 @@ class CollectionAdmin(admin.ModelAdmin):
     ordered = ('title',)
     search_fields = ('title',)
 admin.site.register(Collection, CollectionAdmin)
-
-### ItemType
-
-class ItemTypeAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(ItemType, ItemTypeAdmin)
 
 ### Item
 
