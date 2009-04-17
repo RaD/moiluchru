@@ -100,3 +100,24 @@ function clean_cart(url) {
 	      }, 'json' );
 }
 
+$.fn.alignCenter = function() {
+  var marginLeft = - $(this).width()/2 + 'px';
+  var marginTop = - $(this).height()/2 + 'px';
+  return $(this).css({'margin-left':marginLeft, 'margin-top':marginTop});
+};
+
+$.fn.toggleZoom = function() {
+  if ($('#zoom').hasClass('hide')) {
+    $('#zoom').remove();
+    $('#opaco').remove();
+  } else {
+    //$('<div id="opaco" class="hide"/>').appendTo('body');
+    $('#opaco').height($(document).height()).toggleClass('hide');
+    if(! $.browser.msie) {
+      $('#opaco').fadeTo('slow', 0.7);
+    }
+    //$('<div id="zoom" class="hide"/>').appendTo('body');
+    $('#zoom').html($(this).html()).alignCenter().toggleClass('hide');
+  }
+};
+

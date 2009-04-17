@@ -23,6 +23,7 @@
 	    <img src="{{ item.image.path|thumbnail:"200x,itempics" }}" 
 		 id="thumbnail" border="0" title="{{ item.title }}" />
 	  </div>
+	  <a href="#" onclick="jQuery('#zoom').toggleZoom(); return false;">Посмотреть...</a>
 	</td>
 	
 	<td valign="top">
@@ -72,7 +73,9 @@
       <div class="itemdesc">{{ item.desc|markdown }}</div>
     </div>
 
+    <div id="opaco" class="hide"/>
+    <div id="zoom" class="hide"/>
   {% include "shop/widget-addtocart.html" %}
-    
+  
   </div>
 {% endblock %}
