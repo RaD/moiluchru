@@ -51,8 +51,9 @@ def show_main_page(request):
             'items_col2': items[settings.ITEMS_ON_MAIN_PAGE/2:]}
 
 @render_to('shop/search.html', cart_ctx_proc)
-#@paged
-def search_results(request, page):
+@columns('items', 1)
+@paginate_by('items', 'page', settings.SHOP_ITEMS_PER_PAGE)
+def search_results(request):
     """ Функция для результатов поиска по магазину. """
     common.does_cart_exist(request)
     sort_type = request.session.get('sort_type', 1)
@@ -61,17 +62,15 @@ def search_results(request, page):
         form = SearchForm(request.POST)
         if form.is_valid():
             clean = form.cleaned_data
-            i = Item.objects.filter(Q(title__search=clean['userinput']) |
-                                    Q(desc__search=clean['userinput']))
+            items = Item.objects.filter(Q(title__search='*%s*' % clean['userinput']) |
+                                        Q(desc__search='*%s*' % clean['userinput'])).order_by(sort[sort_type])
             z = [settings.SHOP_ITEMS_PER_PAGE, 10, 25, 50];
-            p = Paginator(i.order_by(sort[sort_type]), z[int(clean['howmuch'])-1])
             request.session['searchquery'] = clean['userinput']
             request.session['howmuch_id'] = clean['howmuch']
-            return {'items': p.page(page).object_list,
+            return {'items': items,
                     'search_query': clean['userinput'],
                     'url': '/shop/search/',
-                    'sort_type': sort_type, 
-                    'page': p.page(page), 'page_range': p.page_range}
+                    'sort_type': sort_type}
         else:
             return HttpResponseRedirect('/shop/')
     else:
