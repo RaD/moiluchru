@@ -244,10 +244,6 @@ class Lamp(models.Model):
     count = models.PositiveIntegerField(_(u'Count of lamps'), default=1)
     voltage = models.PositiveIntegerField(_(u'Voltage'), default=220)
 
-    class Meta:
-        verbose_name = _(u'Lamp')
-        verbose_name_plural = _(u'Lamps')
-
 class Size(models.Model):
     item = models.ForeignKey(Item)
     diameter = models.PositiveIntegerField(_(u'Diameter'), null=True, blank=True)
@@ -255,8 +251,3 @@ class Size(models.Model):
     length = models.PositiveIntegerField(_(u'Length'), null=True, blank=True)
     width = models.PositiveIntegerField(_(u'Width'), null=True, blank=True)
     brow = models.PositiveIntegerField(_(u'Brow'), null=True, blank=True)
-
-    class Meta:
-        verbose_name = _(u'Size')
-        verbose_name_plural = _(u'Sizes')
-

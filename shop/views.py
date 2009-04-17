@@ -63,7 +63,7 @@ def search_results(request, page):
         if form.is_valid():
             clean = form.cleaned_data
             i = Item.objects.filter(Q(title__search=clean['userinput']) |
-                                           Q(desc__search=clean['userinput']))
+                                    Q(desc__search=clean['userinput']))
             z = [settings.SHOP_ITEMS_PER_PAGE, 10, 25, 50];
             p = Paginator(i.order_by(sort[sort_type]), z[int(clean['howmuch'])-1])
             request.session['searchquery'] = clean['userinput']
