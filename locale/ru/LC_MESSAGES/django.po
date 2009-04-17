@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-17 12:17+0400\n"
+"POT-Creation-Date: 2009-04-17 13:49+0400\n"
 "PO-Revision-Date: 2008-07-09 20:40+0400\n"
 "Last-Translator: Ruslan Popov <radz@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -239,41 +239,25 @@ msgstr "Количество ламп"
 msgid "Voltage"
 msgstr "Напряжение"
 
-#: shop/models.py:248
-msgid "Lamp"
-msgstr "Лампа"
-
 #: shop/models.py:249
-msgid "Lamps"
-msgstr "Лампы"
-
-#: shop/models.py:253
 msgid "Diameter"
 msgstr "Диаметр"
 
-#: shop/models.py:254
+#: shop/models.py:250
 msgid "Height"
 msgstr "Высота"
 
-#: shop/models.py:255
+#: shop/models.py:251
 msgid "Length"
 msgstr "Длина"
 
-#: shop/models.py:256
+#: shop/models.py:252
 msgid "Width"
 msgstr "Ширина"
 
-#: shop/models.py:257
+#: shop/models.py:253
 msgid "Brow"
 msgstr "Выступ"
-
-#: shop/models.py:260
-msgid "Size"
-msgstr "Размер"
-
-#: shop/models.py:261
-msgid "Sizes"
-msgstr "Размеры"
 
 #: shop/views.py:25 shop/templates/inc-linkbar.html:4
 msgid "Main"
