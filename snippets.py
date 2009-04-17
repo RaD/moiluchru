@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # http://markeev.labwr.ru/2008/07/django.html
 
+from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -32,12 +33,48 @@ def render_to(template, processor):
         return wrapper
     return renderer
 
-def paged(func):
-    def wrapper(request, *args, **kwargs):
-        if not 'page' in kwargs or kwargs['page'] is None:
-            kwargs['page'] = 1
-        return func(request, *args, **kwargs)
-    return wrapper
+def columns(param, count):
+    def cols(func):
+        def wrapper(request, *args, **kwargs):
+            context =  func(request, *args, **kwargs)
+            if param in context:
+                object_list = context.get(param, None)
+                length = len(object_list)
+                per_page = length/count
+                column_list = []
+                for i in range(count):
+                    column_list.append(object_list[i*per_page:(i+1)*per_page])
+                context['column_list'] = column_list
+            return context
+        return wrapper
+    return cols
+
+def paginate_by(param_name, get_name, count=10):
+    def paged(func):
+        def wrapper(request, *args, **kwargs):
+            try:
+                pagenum = kwargs.get(get_name, '1')
+                del(kwargs[get_name])
+            except ValueError:
+                pagenum = 1
+            except KeyError:
+                pass
+            if pagenum is None:
+                pagenum = 1
+            # получаем контекст
+            context =  func(request, *args, **kwargs)
+            if param_name in context:
+                objects = context.get(param_name)
+                paginator = Paginator(objects, count)
+                context['page'] = paginator.page(int(pagenum))
+                context['page_range'] = paginator.page_range
+                try:
+                    context[param_name] = paginator.page(int(pagenum)).object_list
+                except (EmptyPage, InvalidPage):
+                    context[param_name] = paginator.page(paginator.num_pages).object_list
+            return context
+        return wrapper
+    return paged
 
 def ajax_processor(form_object):
     def processor(func):
