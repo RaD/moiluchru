@@ -76,7 +76,8 @@
     
       <div id="footer">
 	{% for m in menu %}
-	{% ifequal menu_current m.0 %}{{ m.2 }}{% else %}<a href="{{ m.1 }}">{{ m.2 }}</a>{% if not forloop.last %} |{% endif %}{% endifequal %}
+	  {% ifequal menu_current m.0 %}{{ m.2 }}{% else %}<a href="{{ m.1 }}">{{ m.2 }}</a>{% endifequal %}
+	  {% if not forloop.last %}|{% endif %}
 	{% endfor %}
       </div>
     </div>
