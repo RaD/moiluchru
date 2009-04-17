@@ -22,8 +22,8 @@ def cart_ctx_proc(request):
     form = SearchForm(auto_id='field_%s',
                       initial={'userinput': session.get('searchquery', ''),
                                'howmuch': session.get('howmuch_id', 1)})
-    menu = [(u'/', _(u'Main')), (u'/news/', _(u'News')), (u'/items/', _(u'Items')),
-            (u'/text/shipping/', _(u'Shipping')), (u'/text/contact/', _(u'Contact'))]
+    menu = [(1, u'/', _(u'Main')), (2, u'/news/', _(u'News')), (3, u'/items/', _(u'Items')),
+            (4, u'/text/shipping/', _(u'Shipping')), (5, u'/text/contact/', _(u'Contact'))]
     return {'debug': settings.DEBUG,
             'site_title': settings.SITE_TITLE,
             'site_subtitle': settings.SITE_SUBTITLE,
@@ -47,7 +47,8 @@ def show_main_page(request):
         items = Item.objects.order_by('-buys')[:settings.ITEMS_ON_MAIN_PAGE]
     except Item.DoesNotExist:
         items = 0
-    return {'items_col1': items[:settings.ITEMS_ON_MAIN_PAGE/2],
+    return {'menu_current': 1,
+            'items_col1': items[:settings.ITEMS_ON_MAIN_PAGE/2],
             'items_col2': items[settings.ITEMS_ON_MAIN_PAGE/2:]}
 
 @render_to('shop/search.html', cart_ctx_proc)
@@ -80,7 +81,8 @@ def search_results(request, page):
         i = Item.objects.filter(Q(title__search=userinput) |
                                        Q(desc__search=userinput))
         p = Paginator(i.order_by(sort[sort_type]), item_per_page)
-        return {'items': p.page(page).object_list,
+        return {'menu_current': 3,
+                'items': p.page(page).object_list,
                 'search_query': userinput,
                 'url': '/shop/search/',
                 'sort_type': sort_type, 
@@ -98,7 +100,8 @@ def show_items(request, page):
     p = Paginator(i.order_by(sort[sort_type]), settings.SHOP_ITEMS_PER_PAGE)
     items = p.page(page).object_list
     
-    return {'child_cats': common.child_categories(),
+    return {'menu_current': 3,
+            'child_cats': common.child_categories(),
             'sort_type': sort_type, 
             'url': reverse(show_items), # для многостраничности
             'items_col1': items[:len(items)/2],
@@ -121,7 +124,8 @@ def show_category_page(request, category_id=None, page=None):
     p = Paginator(i.order_by(sort[sort_type]), settings.SHOP_ITEMS_PER_PAGE)
     items = p.page(page).object_list
 
-    return {'parent_cats': common.parent_categories(category_id),
+    return {'menu_current': 3,
+            'parent_cats': common.parent_categories(category_id),
             'child_cats': common.child_categories(category_id),
             'category_id': category_id,
             'url': c.get_absolute_url(), # для многостраничности
@@ -155,11 +159,12 @@ def show_item_page(request, item_id):
     common.does_cart_exist(request)
     try:
         item = Item.objects.get(id=item_id)
-        return {'item': item, 'lamp': item.get_lamp(), 'addons': item.get_size(),
+        return {'menu_current': 3,
+                'item': item, 'lamp': item.get_lamp(), 'addons': item.get_size(),
                 'js_onload': 'show_item_count_info(%s);' % item_id,
                 'parent_cats': common.parent_categories(item.category.id)}
     except Item.DoesNotExist:
-        pass
+        pass # FIXME
     
 @render_to('shop/cart.html', cart_ctx_proc)
 def show_cart(request):
@@ -254,5 +259,7 @@ def set_sort_mode(request, mode=1):
 @render_to('shop/text.html', cart_ctx_proc)
 def show_text_page(request, label):
     """ Отображение страницы с текстом. """
+    modes = {'shipping': 4, 'contact': 5}
     from moiluchru.text.views import text
-    return {'text': text(request, label)}
+    return {'menu_current': modes.get(label, 0),
+            'text': text(request, label)}
