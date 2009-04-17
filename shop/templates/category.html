@@ -6,21 +6,18 @@
 {% include "shop/inc-paginator.html" %}  
 <table width="100%">
   <tr>
-    <td valign="top">
-      {% for i in items_col1 %}
-        {% include "shop/inc-column-items-wide.html" %}
-      {% empty %}
-        К сожалению база товаров на данный момент пуста.
-      {% endfor %}
-    </td>
-    <td width="8em">&nbsp;</td>
-    <td valign="top">
-      {% for i in items_col2 %}
-        {% include "shop/inc-column-items-wide.html" %}
-      {% empty %}
-        К сожалению база товаров на данный момент пуста.
-      {% endfor %}
-    </td>
+    {% for column in column_list %}
+      <td valign="top">
+        {% for i in column %}
+          {% include "shop/inc-column-items-wide.html" %}
+        {% empty %}
+          К сожалению база товаров на данный момент пуста.
+        {% endfor %}
+      </td>
+      {% if not forloop.last %}
+        <td width="8em">&nbsp;</td>
+      {% endif %}
+    {% endfor %}
   </tr>
 </table>
 {% include "shop/inc-paginator.html" %}  

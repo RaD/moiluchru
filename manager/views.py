@@ -9,7 +9,7 @@ from django.forms import ValidationError
 from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.translation import gettext_lazy as _
 
-from moiluchru.snippets import render_to, paged
+from moiluchru.snippets import render_to
 from moiluchru.shop.models import Order, OrderDetail, OrderStatus, OrderStatusChange, Phone
 from moiluchru.shop.forms import DivErrorList, CourierSelect, LoginForm, OrderForm
 from moiluchru.shop.classes import CartItem
