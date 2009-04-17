@@ -23,7 +23,10 @@
 	    <img src="{{ item.image.path|thumbnail:"200x,itempics" }}" 
 		 id="thumbnail" border="0" title="{{ item.title }}" />
 	  </div>
-	  <a href="#" onclick="jQuery('#zoom').toggleZoom(); return false;">Посмотреть...</a>
+	  <div>
+	  <span style="border: 1px dashed gray; padding: 2px; cursor: pointer;" 
+		onclick="$('#zoom').toggleZoom(); return false;">Увеличить</span>
+	  </div>
 	</td>
 	
 	<td valign="top">
@@ -73,8 +76,11 @@
       <div class="itemdesc">{{ item.desc|markdown }}</div>
     </div>
 
-    <div id="opaco" class="hide"/>
-    <div id="zoom" class="hide"/>
+    <div id="zoom" class="hide">
+      <h3 class="ttl"><span></span>{{ item.title }}</h3>
+      <img src="{{ item.image.path|thumbnail:"400x,itempics" }}" id="thumbnail" border="0" title="{{ item.title }}"/>
+      <div class="center">Нажмите на любое место окна, чтобы закрыть просмотр.</div>
+    </div>
   {% include "shop/widget-addtocart.html" %}
   
   </div>

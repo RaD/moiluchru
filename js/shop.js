@@ -101,23 +101,28 @@ function clean_cart(url) {
 }
 
 $.fn.alignCenter = function() {
-  var marginLeft = - $(this).width()/2 + 'px';
-  var marginTop = - $(this).height()/2 + 'px';
-  return $(this).css({'margin-left':marginLeft, 'margin-top':marginTop});
+    var marginLeft = - $(this).width()/2 + 'px';
+    var marginTop = - $(this).height()/2 + 'px';
+    return $(this).css({'margin-left':marginLeft, 'margin-top':marginTop});
 };
 
 $.fn.toggleZoom = function() {
-  if ($('#zoom').hasClass('hide')) {
-    $('#zoom').remove();
-    $('#opaco').remove();
-  } else {
-    //$('<div id="opaco" class="hide"/>').appendTo('body');
-    $('#opaco').height($(document).height()).toggleClass('hide');
-    if(! $.browser.msie) {
-      $('#opaco').fadeTo('slow', 0.7);
+    if ($('#zoom').hasClass('hide')) {
+	// создаём объекты
+	$('<div id="opaco" class="hide"></div>').appendTo('body');
+	$('<div id="popup" class="hide"></div>').appendTo('body');
+	// затеняем окно
+	if(! $.browser.msie) {
+	    $('#opaco').height($(document).height()).toggleClass('hide').fadeTo('slow', 0.7);
+	} else {
+	    $('#opaco').height($(document).height()).toggleClass('hide');
+	}
+	// выводим изображение и вешаем обработчик
+	$('#popup').html($(this).html()).alignCenter().toggleClass('hide');
+	$('#popup').bind('click', function(e) {$(this).toggleZoom();});
+    } else {
+	$('#popup').remove();
+	$('#opaco').remove();
     }
-    //$('<div id="zoom" class="hide"/>').appendTo('body');
-    $('#zoom').html($(this).html()).alignCenter().toggleClass('hide');
-  }
 };
 

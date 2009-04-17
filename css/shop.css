@@ -436,3 +436,25 @@ BUTTON {
     border: 1px solid #54026e; background-color: #bfab30; color: #54026e; 
     -moz-border-radius: 4px; padding: 2px 4px; cursor: default; 
 }
+
+#opaco { 
+    background-color: black; opacity: 0.0;
+    position: absolute; top: 0px; left: 0px; width: 100%; z-index: 10;
+}
+#popup {
+    font-size: 12px; cursor: pointer;
+    background-color: white; border: 2px solid black; -moz-border-radius: 8px; padding: 0px 1em;
+    position: fixed; min-width: 300px; top: 50%; left: 50%; z-index: 11;
+}
+
+#popup h3 {
+    z-index: 12; position: relative; top: 0px; left: 14px;
+}
+#popup h3 span {
+   display: inline-block;
+   width: 9px; height: 9px;
+   margin-right: 1em;
+   border: 1px solid #071C71;
+   vertical-align: middle;
+   background: #6F83D6;
+}
