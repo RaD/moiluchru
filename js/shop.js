@@ -108,18 +108,18 @@ $.fn.alignCenter = function() {
 };
 
 $.fn.toggleZoom = function() {
-    if ($('#popup').hasClass('hide')) {
-	  // затеняем окно
-	  if(! $.browser.msie) {
-	    $('#opaco').height($(document).height()).toggleClass('hide').fadeTo('slow', 0.7);
-	  }
-	  // выводим изображение и вешаем обработчик
-	  $('#popup').html($(this).html()).alignCenter().toggleClass('hide');
+  if ($('#popup').hasClass('hide')) {
+    // затеняем окно
+    if(! $.browser.msie) {
+      $('#opaco').height($(document).height()).toggleClass('hide').fadeTo('slow', 0.7);
     } else {
-	  $('#popup').toggleClass('hide');
-	  if(! $.browser.msie) {
-		$('#opaco').toggleClass('hide');
-	  }
+      $('#opaco').height($(document).height()).toggleClass('hide');
     }
+    // выводим изображение и вешаем обработчик
+    $('#popup').html($(this).html()).alignCenter().toggleClass('hide');
+  } else {
+    $('#popup').toggleClass('hide');
+    $('#opaco').toggleClass('hide');
+  }
 };
 
