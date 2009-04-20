@@ -17,9 +17,9 @@
   
     <table width="100%">
       <tr>
-	<td width="200" valign="top">
-	  <div id="image-container" 
+	<td width="200" valign="middle" 
 	       onclick="$('#zoom').toggleZoom(); return false;">
+	  <div id="image-container">
 	    {# Изображение товара #}
 	    <img src="{{ item.image.path|thumbnail:"200x,itempics" }}" id="thumbnail" border="0" 
 		 title="{{ item.title }} : Нажмите, чтобы увеличить" />

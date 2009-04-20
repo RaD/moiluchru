@@ -104,7 +104,20 @@ TABLE { width: 100%; border-collapse: collapse; }
 
 
 
-
+h3 {
+    margin: 0.5em 0 0.3em 1em;
+    font-size: 18px;
+    font-weight: normal;
+    color: #1533AD;
+}
+h3 span {
+   display: inline-block;
+   width: 9px; height: 9px;
+   margin-right: 1em;
+   border: 1px solid #071C71;
+   vertical-align: middle;
+   background: #6F83D6;
+}
 
 body {
 	margin: 0; padding: 0;

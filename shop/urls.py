@@ -7,9 +7,6 @@ urlpatterns = patterns('',
     # страница результатов поиска может иметь продолжение (paginator)
     (r'^search/(?P<page>\d+)/', 'moiluchru.shop.views.search_results'),
     (r'^search/', 'moiluchru.shop.views.search_results'),
-    # категория
-    (r'^category/(?P<category_id>\d+)/(?P<page>\d+)/', 'moiluchru.shop.views.show_category_page'),
-    (r'^category/(?P<category_id>\d+)/', 'moiluchru.shop.views.show_category_page'),
     # сортировка
     (r'^sort/(?P<mode>\d)/', 'moiluchru.shop.views.set_sort_mode'),
     # производитель

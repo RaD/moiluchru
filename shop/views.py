@@ -123,14 +123,12 @@ def show_category_page(request, category_id=None):
     except Category.DoesNotExist:
         return HttpResponseRedirect(u'/items/')
 
-
     return {'menu_current': 3,
             'parent_cats': common.parent_categories(category_id),
             'child_cats': common.child_categories(category_id),
             'category_id': category_id,
             'url': c.get_absolute_url(), # для многостраничности
             'sort_type': sort_type, 
-            'url': reverse(show_items), # для многостраничности
             'items': items}
 
 @render_to('shop/category.html', cart_ctx_proc)

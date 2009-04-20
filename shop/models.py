@@ -70,7 +70,7 @@ class Category(CommonEntity):
         verbose_name_plural = _(u'Categories')
 
     def get_absolute_url(self):
-        return u'/shop/category/%i/' % self.id
+        return u'/category/%i/' % self.id
 
 # Наследуем класс от entity
 class Collection(CommonEntity):

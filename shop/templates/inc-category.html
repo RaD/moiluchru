@@ -1,6 +1,5 @@
 {% if top_cats %}
 <div class="sectioncontent">
-  <div class="category"><a href="/shop">Главная</a></div>
   {% for category in top_cats %}
   <div class="category">
     <a href="{{ category.get_absolute_url }}">{{ category.title }}</a>
