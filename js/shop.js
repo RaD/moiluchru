@@ -97,10 +97,7 @@ $.fn.alignCenter = function() {
 };
 
 $.fn.toggleZoom = function() {
-    if ($('#zoom').hasClass('hide')) {
-	// создаём объекты
-	$('<div id="opaco" class="hide"></div>').appendTo('body');
-	$('<div id="popup" class="hide"></div>').appendTo('body');
+    if ($('#popup').hasClass('hide')) {
 	// затеняем окно
 	if(! $.browser.msie) {
 	    $('#opaco').height($(document).height()).toggleClass('hide').fadeTo('slow', 0.7);
@@ -108,11 +105,10 @@ $.fn.toggleZoom = function() {
 	    $('#opaco').height($(document).height()).toggleClass('hide');
 	}
 	// выводим изображение и вешаем обработчик
-	$('#popup').html($(this).html()).alignCenter().toggleClass('hide');
-	$('#popup').bind('click', function(e) {$(this).toggleZoom();});
+	$('#popup').alignCenter().toggleClass('hide').bind('click', function(e) {$(this).toggleZoom();});
     } else {
-	$('#popup').remove();
-	$('#opaco').remove();
+	$('#popup').toggleClass('hide');
+	$('#opaco').toggleClass('hide');
     }
 };
 
