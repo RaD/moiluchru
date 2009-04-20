@@ -63,7 +63,9 @@ def search_results(request):
         if form.is_valid():
             clean = form.cleaned_data
             items = Item.objects.filter(Q(title__search='*%s*' % clean['userinput']) |
-                                        Q(desc__search='*%s*' % clean['userinput'])).order_by(sort[sort_type])
+                                        Q(desc__search='*%s*' % clean['userinput']) |
+                                        Q(tags__search='*%s*' % clean['userinput'])
+                                        ).order_by(sort[sort_type])
             z = [settings.SHOP_ITEMS_PER_PAGE, 10, 25, 50];
             request.session['searchquery'] = clean['userinput']
             request.session['howmuch_id'] = clean['howmuch']

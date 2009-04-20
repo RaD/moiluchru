@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
-
 from django.db import models
 from django.contrib.admin.models import User
 from django.utils.translation import gettext_lazy as _
+
+from datetime import datetime
+from tagging.fields import TagField
+from tagging.utils import parse_tag_input
 
 class Profile(models.Model):
     # обязательная часть профайла
@@ -103,6 +105,7 @@ class Item(CommonEntity):
     image = models.ImageField(verbose_name=_(u'Image'), upload_to=u'itempics')
     buys = models.IntegerField(verbose_name=_(u'Buys'), default=0)
     sort_price = models.FloatField(_(u'Price'))
+    tags = TagField()
     
     class Meta:
         verbose_name = _(u'Item')
@@ -140,7 +143,10 @@ class Item(CommonEntity):
         price = Price(item=self, price_store=store, price_shop=shop, 
                       applied=datetime.now())
         price.save()
-            
+
+    def get_tag_list(self):
+        return parse_tag_input(self.tags)
+
 class Price(models.Model):
     item = models.ForeignKey(Item)
     price_store = models.FloatField(_(u'Price (store)'))

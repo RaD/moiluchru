@@ -87,6 +87,7 @@ INSTALLED_APPS = (
     'moiluchru.shop',
     'moiluchru.text',
     'moiluchru.manager',
+    'tagging',
 )
 
 AUTH_PROFILE_MODULE = "moiluchru.profile"

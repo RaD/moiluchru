@@ -88,7 +88,7 @@ class ItemAdmin(admin.ModelAdmin):
                     ('price_shop', 'price_store'),
                     'item_type')}),
         ('Подробности',
-         {'fields': ('image', 'desc')})
+         {'fields': ('image', 'desc', 'tags')})
         )
     list_display = ('title', 'category', 'field_price_shop', 
                     'buys', 'reg_date')
