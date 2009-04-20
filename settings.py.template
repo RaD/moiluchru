@@ -98,6 +98,10 @@ SHOP_ITEMS_PER_PAGE = 20
 MANAGER_ORDERS_PER_PAGE = 20
 ITEMS_ON_MAIN_PAGE = 8
 
+# tagging begin
+FORCE_LOWERCASE_TAGS = True
+# tagging end
+
 GOOGLE_ANALYTICS = """
 <script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
