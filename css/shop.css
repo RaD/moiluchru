@@ -353,6 +353,15 @@ body {
 	line-height: 25px;
 	}
 
+.category-current {
+   display: inline-block;
+   width: 9px; height: 9px;
+   margin-right: 1em;
+   border: 1px solid #071C71;
+   vertical-align: middle;
+   background: #FFDB00;
+}
+
 #jabber-chat {
    position: relative;
    width: 280px; left: 10px;
@@ -378,7 +387,6 @@ body {
 #image-container {
    height: 200px; width: 200px; vertical-align: middle; text-align: center;
    cursor: pointer;
-   /* border: 2px solid #6f83d6; -moz-border-radius: 4px; */
 }
 #item-info-widget {
     position: absolute; width: 80px; z-index: 1; display: none;

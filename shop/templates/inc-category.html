@@ -3,10 +3,12 @@
   {% for category in top_cats %}
   <div class="category">
     <a href="{{ category.get_absolute_url }}">{{ category.title }}</a>
+    {% ifequal category item.category %}<span class="category-current"></span>{% endifequal %}
     <div class="subcategories">
       {% for subcat in category.category_set.all %}
       <span class="subcategory">
 	<a href="{{ subcat.get_absolute_url }}">{{ subcat.title }}</a>{% if not forloop.last %}, {% endif %}
+	{% ifequal subcat item.category %}<span class="category-current">*</span>{% endifequal %}
       </span>
       {% endfor %}
     </div>

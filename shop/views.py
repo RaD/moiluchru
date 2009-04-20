@@ -157,7 +157,6 @@ def show_item_page(request, item_id):
         item = Item.objects.get(id=item_id)
         return {'menu_current': 3,
                 'item': item, 'lamp': item.get_lamp(), 'addons': item.get_size(),
-                'js_onload': 'show_item_count_info(%s);' % item_id,
                 'parent_cats': common.parent_categories(item.category.id)}
     except Item.DoesNotExist:
         pass # FIXME

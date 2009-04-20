@@ -13,18 +13,14 @@
   <div id="right">
     <h3 class="ttl"><span></span>{{ item.title }}</h3>
 
-    {% include "shop/inc-catwidget.html" %}
-  
     <table width="100%">
       <tr>
-	<td width="200" valign="middle" 
+	<td width="200" valign="middle" id="image-container"
 	       onclick="$('#zoom').toggleZoom(); return false;">
-	  <div id="image-container">
 	    {# Изображение товара #}
-	    <img src="{{ item.image.path|thumbnail:"200x,itempics" }}" id="thumbnail" border="0" 
+	    <img src="{{ item.image.path|thumbnail:"200x,itempics" }}" 
+		 id="thumbnail" border="0"
 		 title="{{ item.title }} : Нажмите, чтобы увеличить" />
-	  </div>
-	  <div style="position: relative; top: -200px; cursor: pointer;" title="{{ item.title }} : Нажмите, чтобы увеличить"><img src="/pics/viewmag.png"/></div>
 	</td>
 	
 	<td valign="top">
