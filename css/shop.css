@@ -363,6 +363,8 @@ body {
 }
 
 #image-container {
+   height: 200px; width: 200px; vertical-align: middle; text-align: center;
+   cursor: pointer;
    /* border: 2px solid #6f83d6; -moz-border-radius: 4px; */
 }
 #item-info-widget {

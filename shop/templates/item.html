@@ -18,15 +18,13 @@
     <table width="100%">
       <tr>
 	<td width="200" valign="top">
-	  <div id="image-container">
+	  <div id="image-container" 
+	       onclick="$('#zoom').toggleZoom(); return false;">
 	    {# Изображение товара #}
-	    <img src="{{ item.image.path|thumbnail:"200x,itempics" }}" 
-		 id="thumbnail" border="0" title="{{ item.title }}" />
+	    <img src="{{ item.image.path|thumbnail:"200x,itempics" }}" id="thumbnail" border="0" 
+		 title="{{ item.title }} : Нажмите, чтобы увеличить" />
 	  </div>
-	  <div>
-	  <span style="border: 1px dashed gray; padding: 2px; cursor: pointer;" 
-		onclick="$('#zoom').toggleZoom(); return false;">Увеличить</span>
-	  </div>
+	  <div style="position: relative; top: -200px; cursor: pointer;" title="{{ item.title }} : Нажмите, чтобы увеличить"><img src="/pics/viewmag.png"/></div>
 	</td>
 	
 	<td valign="top">
