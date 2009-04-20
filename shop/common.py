@@ -46,12 +46,15 @@ def subcategories(category_id=None):
     дочерних и так далее."""
     if category_id is None:
         return child_categories()
-    else:
+
+    try:
         category = models.Category.objects.get(id=category_id)
         result = list(category.category_set.all())
         return reduce(lambda a,b: a + b,
                       [subcategories(l.id) for l in result],
                       result)
+    except models.Category.DoesNotExist:
+        return []
 
 def child_categories(category_id=None):
     """ Функция возвращает дочерние категории для указанной."""

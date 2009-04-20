@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from moiluchru.snippets import ajax_processor
 from moiluchru.shop import common
-from moiluchru.shop.forms import CartAdd, CartClean
+from moiluchru.shop.forms import CartAdd, CartClean, CartRecalculate, CartRemoveItem
 from moiluchru.shop.models import Item
 
 @ajax_processor(CartAdd)
@@ -44,5 +44,13 @@ def add_to_cart(request, form):
 def clean_cart(request, form):
     """ Функция очистки корзины  """
     common.init_cart(request)
+    return {'code': '200', 'desc': 'success'}
+
+@ajax_processor(CartRecalculate)
+def cart_recalculate(request, form):
+    """ Функция пересчёта корзины  """
+    common.init_cart(request)
+
+    
     return {'code': '200', 'desc': 'success'}
 

@@ -49,7 +49,7 @@
 		   {% if not cart_show %}class="pointer" onclick="document.location='/shop/cart/';"{% endif %}/>
 	    </td>
 	    <td class="left cart_widget">
-	      <div class="cart_widget_title">{% if not cart_show %}<a href="/shop/cart/">{% endif%}Корзина{% if not cart_show %}</a>{% endif%}</div>
+	      <div class="cart_widget_title">{% if not cart_show %}<a href="/cart/">{% endif%}Корзина{% if not cart_show %}</a>{% endif%}</div>
 	      <div>
 		<div>Цена: <span id="cart_price" class="price">{{ cart_price|floatformat:2 }}</span> руб</div>
 		<div>Кол-во: <span id="cart_count" class="price">{{ cart_count }}</span></div>

@@ -14,10 +14,19 @@ urlpatterns = patterns(
 
     #(r'^$', 'django.views.generic.simple.redirect_to', {'url': '/shop/'}),
     (r'^$', 'moiluchru.shop.views.show_main_page'),
+    # список товаров
     (r'^items/((?P<page>\d+)/)?', 
      'moiluchru.shop.views.show_items'),
+    # категории товаров
     (r'^category/(?P<category_id>\d+)/((?P<page>\d+)/)?', 
      'moiluchru.shop.views.show_category_page'),
+    # товар
+    (r'^item/(?P<item_id>\d+)/', 'moiluchru.shop.views.show_item_page'),
+
+    # процесс покупки
+    (r'^cart', 'moiluchru.shop.views.show_cart'),
+    (r'^offer', 'moiluchru.shop.views.show_offer'),
+    (r'^ordered', 'moiluchru.shop.views.show_ordered'),
 
     # магазин
     (r'^shop/', include('moiluchru.shop.urls')),

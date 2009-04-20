@@ -61,3 +61,8 @@ class CartAdd(forms.Form):
 class CartClean(forms.Form):
     pass
 
+class CartRecalculate(forms.Form):
+    pass
+
+class CartRemoveItem(forms.Form):
+    pass

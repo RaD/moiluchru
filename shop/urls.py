@@ -13,12 +13,6 @@ urlpatterns = patterns('',
     (r'^producer/(?P<producer_id>\d+)/(?P<category_id>\d+)/(?P<page>\d+)/', 'moiluchru.shop.views.show_producer_page'),
     (r'^producer/(?P<producer_id>\d+)/(?P<category_id>\d+)/', 'moiluchru.shop.views.show_producer_page'),
     (r'^producer/(?P<producer_id>\d+)/', 'moiluchru.shop.views.show_producer_page'),
-    # товар
-    (r'^item/(?P<item_id>\d+)/', 'moiluchru.shop.views.show_item_page'),
-    # процесс покупки
-    (r'^cart', 'moiluchru.shop.views.show_cart'),
-    (r'^offer', 'moiluchru.shop.views.show_offer'),
-    (r'^ordered', 'moiluchru.shop.views.show_ordered'),
 
     # AJAX
     (r'^add', 'moiluchru.shop.ajax.add_to_cart'),

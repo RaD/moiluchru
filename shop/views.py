@@ -171,7 +171,7 @@ def show_cart(request):
     else:
         for i in cart:
             record = Item.objects.get(id=i)
-            items.append(CartItem(record.title, cart[i]['count'], cart[i]['price']))
+            items.append(CartItem(record, cart[i]['count'], cart[i]['price']))
     return {'cart': cart, # для отключения кнопок
             'cart_items': items,
             'cart_show' : 'yes',

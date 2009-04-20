@@ -112,7 +112,7 @@ class Item(CommonEntity):
         verbose_name_plural = _(u'Items')
 
     def get_absolute_url(self):
-        return u'/shop/item/%i/' % self.id
+        return u'/item/%i/' % self.id
 
     def get_lamp(self):
         try:

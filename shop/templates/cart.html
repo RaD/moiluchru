@@ -1,37 +1,59 @@
-{% extends "shop/base2.html" %}
+{% extends "shop/base.html" %}
+{% load thumbnail_filter %}
 
 {% block content %}
-<div><span class="title">Корзина</span></div>
-<div class="sectioncontent">
-  <div class="cart">
-    
-    <table width="100%">
-      <tr class="header">
-	<th width="40%" class="left">Наименование</td>
-	<th width="20%" class="center">Цена</td>
-	<th width="20%" class="center">Кол-во</td>
-	<th width="20%" class="center">Стоимость</td>
-      </tr>
-      {% for i in cart_items %}
-      <tr>
-	<td class="longitem" title="{{ i.title }}">{{ i.title }}</td>
-	<td class="right"><span class="money">{{ i.price|floatformat:2 }}</span> руб</td>
-	<td class="center mono">{{ i.count }}</td>
-	<td class="right"><span class="money">{{ i.cost|floatformat:2 }}</span> руб.</td>
-      </tr>
-      {% endfor %}
-      <tr class="total">
-	<td colspan="3">Итого</td>
-	<td class="right"><span class="money">{{ cart_price|floatformat:2 }}</span> руб.</td>
-      </tr>
-    </table>
-    {% if cart %}
-    <div class="right">
-      <button id="offer_apply" onclick="document.location='/shop/offer/';">Оформить заказ</button>
-      <button id="offer_cancel" 
-	      onclick="clean_cart('/shop/'); $('offer_apply').disabled=$('offer_cancel').disabled=true; document.location='/';">Отменить заказ</button>
-    </div>
-    {% endif %}
-  </div>
+<script>
+  function cart_recalculate() {
+      list = $('#cart-list > input')
+      debugger;
+      alert(list);
+  }
+</script>
+
+<h3><span></span>Корзина</h3>
+
+<table id="cart-list" width="100%" class="cart" cellpadding="4">
+  <tr class="header">
+    <th width="100" class="left">Товар</td>
+    <th width="30%" class="left">Наименование</td>
+    <th width="20%" class="center">Цена</td>
+    <th width="20%" class="center">Кол-во</td>
+    <th width="20%" class="center">Стоимость</td>
+    <th width="50"></td>
+  </tr>
+  
+  {% for i in cart_items %}
+  <tr>
+    <td width="100" class="thumbnail-containter">
+      <a href="{{ i.get_absolute_url }}">
+	<img src="{{ i.record.image.path|thumbnail:"100x,itempics" }}" border="0" title="{{ i.record.title }}"/>
+      </a>
+    </td>
+    <td class="longitem" title="{{ i.title }}">
+      <div>{{ i.record.title }}</div>
+      <div>Категория: {{ i.record.category }}</div>
+    </td>
+    <td class="right nowrap"><span class="money">{{ i.price|floatformat:2 }}</span> руб</td>
+    <td class="center mono"><input type="text" name="count_{{ i.record.id }}" 
+    value="{{ i.count }}" style="width: 30px; text-align: right;"/></td>
+    <td class="right nowrap"><span class="money">{{ i.cost|floatformat:2 }}</span> руб.</td>
+    <td class="right"><button id="offer_apply" disabled="true">Удалить</button></td>
+  </tr>
+  {% endfor %}
+  
+  <tr class="total">
+    <td colspan="5">Итого</td>
+    <td class="right"><span class="money">{{ cart_price|floatformat:2 }}</span> руб.</td>
+  </tr>
+</table>
+
+{% if cart %}
+<div class="right">
+  <button id="offer_apply" nonclick="cart_recalculate();" disabled="true">Пересчитать</button>
+  <span style="margin:0px 2em;">&nbsp;</span>
+  <button id="offer_apply" onclick="document.location='/offer/';">Оформить заказ</button>
+  <button id="offer_cancel" 
+	  onclick="clean_cart('/shop/'); $('offer_apply').disabled=$('offer_cancel').disabled=true; document.location='/';">Отменить заказ</button>
 </div>
+{% endif %}
 {% endblock %}

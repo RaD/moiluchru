@@ -1,13 +1,11 @@
 {% load thumbnail_filter %}
 
-<table width="100%" border="0">
+<table width="100%" height="100" border="0">
   <tr>
-    <td width="100" height="100">
-      <div class="thumbnail-containter">
-	<a href="{{ i.get_absolute_url }}">
-	  <img src="{{ i.image.path|thumbnail:"100x,itempics" }}" border="0" title="{{ i.title }}"/>
-	</a>
-      </div>
+    <td width="100" class="thumbnail-containter">
+      <a href="{{ i.get_absolute_url }}">
+	<img src="{{ i.image.path|thumbnail:"100x,itempics" }}" border="0" title="{{ i.title }}"/>
+      </a>
     </td>
     <td align="left">
       <div>Категория: {{ i.category.title }}</div>
