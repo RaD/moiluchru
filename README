@@ -32,3 +32,4 @@ Django-related:
     python-markdown	- text-to-HTML conversion library/tool
     python-mysqldb	- A Python interface to MySQL
     python-openid	- OpenID support for servers and consumers
+    svn co http://django-tagging.googlecode.com/svn/trunk django-tagging
