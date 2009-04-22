@@ -457,7 +457,7 @@ body {
 
 BUTTON { 
     border: 1px solid #54026e; background-color: #bfab30; color: #54026e; 
-    -moz-border-radius: 4px; padding: 2px 4px; cursor: default; 
+    -moz-border-radius: 4px; padding: 2px 4px; cursor: pointer; 
 }
 
 #opaco { 

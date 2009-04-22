@@ -17,16 +17,29 @@
 		     // обновить общую сумму
 		     $('#cart_total').html(json['cart_price']);
 		     // удалить строку с товаром с интерфейса
-		     $('#item_'+item_id).remove();
+		     $('tr[item=' + item_id + ']').remove();
 		 } else {
 		     alert(json['code'] + ': ' + json['desc']);
 		 }
 	     }, 'json');
   }
   function cart_recalculate() {
-      list = $('#cart-list > input')
-      debugger;
-      alert(list);
+      items = {}
+      $('tr[item]').each( 
+	  function(el) {
+	      items[$(this).attr('item')] = $('input', $(this)).attr('value');
+	  });
+      $.post('/ajax/cart/recalculate/', { items: JSON.stringify(items) },
+ 	     function(json) {
+		 if (json['code'] == 200) {
+		     // обновить корзину
+		     update_cart(json['cart_count'], json['cart_price']);
+		     // обновить общую сумму
+		     $('#cart_total').html(json['cart_price']);
+		 } else {
+		     alert(json['code'] + ': ' + json['desc']);
+		 }
+	     }, 'json');
   }
 </script>
 
@@ -43,7 +56,7 @@
   </tr>
   
   {% for i in cart_items %}
-  <tr id="item_{{ i.record.id }}">
+  <tr>
     <td width="100" class="thumbnail-containter">
       <a href="{{ i.get_absolute_url }}">
 	<img id="th_{{ i.record.id }}" src="{{ i.record.image.path|thumbnail:"100x,itempics" }}" 
@@ -55,8 +68,11 @@
       <div>Категория: {{ i.record.category }}</div>
     </td>
     <td class="right nowrap"><span class="money">{{ i.price|floatformat:2 }}</span> руб</td>
-    <td class="center mono"><input type="text" name="count_{{ i.record.id }}" 
-    value="{{ i.count }}" style="width: 30px; text-align: right;"/></td>
+    <td class="center mono">
+      <input type="text" name="count_{{ i.record.id }}"
+	     onchange="cart_recalculate(this);" item="{{ i.record.id }}"
+	     value="{{ i.count }}" style="width: 30px; text-align: right;"/>
+    </td>
     <td class="right nowrap"><span class="money">{{ i.cost|floatformat:2 }}</span> руб.</td>
     <td class="right"><button class="pointer" onclick="cart_remove_item({{ i.record.id }});">Удалить</button></td>
   </tr>
@@ -70,7 +86,7 @@
 
 {% if cart %}
 <div class="right">
-  <button id="offer_apply" nonclick="cart_recalculate();" disabled="true">Пересчитать</button>
+  <button onclick="cart_recalculate();" >Пересчитать</button>
   <span style="margin:0px 2em;">&nbsp;</span>
   <button id="offer_apply" onclick="document.location='/offer/';">Оформить заказ</button>
   <button id="offer_cancel" 

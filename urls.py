@@ -39,4 +39,5 @@ urlpatterns = patterns(
 
     # ajax
     (r'^ajax/cart/remove/', 'moiluchru.shop.ajax.cart_remove_item'),
+    (r'^ajax/cart/recalculate/', 'moiluchru.shop.ajax.cart_recalculate'),
 )

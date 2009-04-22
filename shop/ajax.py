@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 
 from moiluchru.snippets import ajax_processor
@@ -46,13 +47,33 @@ def clean_cart(request, form):
     common.init_cart(request)
     return {'code': '200', 'desc': 'success'}
 
-@ajax_processor(CartRecalculate)
-def cart_recalculate(request, form):
+#@ajax_processor(None)
+def cart_recalculate(request, form=None):
     """ Функция пересчёта корзины  """
-    common.init_cart(request)
+    from django.utils import simplejson
+    import pdb; pdb.set_trace()
+    items = request.POST.get('items')
+    print type(items)
+    print items
+    print simplejson.loads(items, encoding=settings.DEFAULT_CHARSET)
+    return {'code': '200', 'desc': 'success'}
+#             try:
+#                 item = Item.objects.get(id=id)
+#                 price = item.get_price()[1]
+#                 if not id in items:
+#                     items[id] = {}
+#                 items[id]['count'] = int(items[id].get('count', 0)) + cnt
+#                 items[id]['price'] = price
+
+
+#             items = 
+#         request.session['cart_items'] = items
+#         return {'code': '200', 'desc': 'success'}
+#     else:
+    
+    
 
     
-    return {'code': '200', 'desc': 'success'}
 
 @ajax_processor(CartRemoveItem)
 def cart_remove_item(request, form):

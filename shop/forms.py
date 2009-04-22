@@ -62,7 +62,8 @@ class CartClean(forms.Form):
     pass
 
 class CartRecalculate(forms.Form):
-    pass
+    item = forms.CharField(label=_(u'Item id'), max_length=8)
+    count = forms.CharField(label=_(u'Item count'), max_length=8)
 
 class CartRemoveItem(forms.Form):
     item = forms.CharField(label=_(u'Item id'), max_length=8)

@@ -76,15 +76,18 @@ def paginate_by(param_name, get_name, count=10):
         return wrapper
     return paged
 
-def ajax_processor(form_object):
+def ajax_processor(form_object=None):
     def processor(func):
         def wrapper(request, *args, **kwargs):
             if request.method == 'POST':
-                form = form_object(request.POST)
-                if form.is_valid():
-                    result = func(request, form, *args, **kwargs)
+                if form_object is not None:
+                    form = form_object(request.POST)
+                    if form.is_valid():
+                        result = func(request, form, *args, **kwargs)
+                    else:
+                        result = {'code': '301', 'desc': 'form is not valid'}
                 else:
-                    result = {'code': '301', 'desc': 'form is not valid'}
+                    result = func(request, *args, **kwargs)
             else:
                 result = {'code': '401', 'desc': 'it must be POST'}
             json = simplejson.dumps(result)
