@@ -23,19 +23,17 @@
 		 }
 	     }, 'json');
   }
-  function cart_recalculate() {
-      items = {}
-      $('tr[item]').each( 
-	  function(el) {
-	      items[$(this).attr('item')] = $('input', $(this)).attr('value');
-	  });
-      $.post('/ajax/cart/recalculate/', { items: JSON.stringify(items) },
+  function cart_recalculate(input) {
+      id = $(input).attr('item')
+      $.post('/ajax/cart/recalculate/', 
+	     { item: id, count: $(input).attr('value') }, 
  	     function(json) {
 		 if (json['code'] == 200) {
 		     // обновить корзину
 		     update_cart(json['cart_count'], json['cart_price']);
 		     // обновить общую сумму
 		     $('#cart_total').html(json['cart_price']);
+		     $('#total_' + id).html(json['item_total']);
 		 } else {
 		     alert(json['code'] + ': ' + json['desc']);
 		 }
@@ -56,7 +54,7 @@
   </tr>
   
   {% for i in cart_items %}
-  <tr>
+  <tr item="{{ i.record.id }}">
     <td width="100" class="thumbnail-containter">
       <a href="{{ i.get_absolute_url }}">
 	<img id="th_{{ i.record.id }}" src="{{ i.record.image.path|thumbnail:"100x,itempics" }}" 
@@ -70,10 +68,10 @@
     <td class="right nowrap"><span class="money">{{ i.price|floatformat:2 }}</span> руб</td>
     <td class="center mono">
       <input type="text" name="count_{{ i.record.id }}"
-	     onchange="cart_recalculate(this);" item="{{ i.record.id }}"
+             onchange="cart_recalculate(this);" item="{{ i.record.id }}"
 	     value="{{ i.count }}" style="width: 30px; text-align: right;"/>
     </td>
-    <td class="right nowrap"><span class="money">{{ i.cost|floatformat:2 }}</span> руб.</td>
+    <td class="right nowrap"><span id="total_{{ i.record.id }}" class="money">{{ i.cost|floatformat:2 }}</span> руб.</td>
     <td class="right"><button class="pointer" onclick="cart_remove_item({{ i.record.id }});">Удалить</button></td>
   </tr>
   {% endfor %}
@@ -86,8 +84,6 @@
 
 {% if cart %}
 <div class="right">
-  <button onclick="cart_recalculate();" >Пересчитать</button>
-  <span style="margin:0px 2em;">&nbsp;</span>
   <button id="offer_apply" onclick="document.location='/offer/';">Оформить заказ</button>
   <button id="offer_cancel" 
 	  onclick="clean_cart('/shop/'); $('offer_apply').disabled=$('offer_cancel').disabled=true; document.location='/';">Отменить заказ</button>

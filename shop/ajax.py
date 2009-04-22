@@ -47,33 +47,25 @@ def clean_cart(request, form):
     common.init_cart(request)
     return {'code': '200', 'desc': 'success'}
 
-#@ajax_processor(None)
-def cart_recalculate(request, form=None):
+@ajax_processor(CartRecalculate)
+def cart_recalculate(request, form):
     """ Функция пересчёта корзины  """
-    from django.utils import simplejson
-    import pdb; pdb.set_trace()
-    items = request.POST.get('items')
-    print type(items)
-    print items
-    print simplejson.loads(items, encoding=settings.DEFAULT_CHARSET)
-    return {'code': '200', 'desc': 'success'}
-#             try:
-#                 item = Item.objects.get(id=id)
-#                 price = item.get_price()[1]
-#                 if not id in items:
-#                     items[id] = {}
-#                 items[id]['count'] = int(items[id].get('count', 0)) + cnt
-#                 items[id]['price'] = price
+    id = int(form.cleaned_data['item'])
+    count = int(form.cleaned_data['count'])
+    item_total = count * float(Item.objects.get(id=id).get_price()[1])
 
+    items = request.session.get('cart_items', {})
+    items[id]['count'] = count
 
-#             items = 
-#         request.session['cart_items'] = items
-#         return {'code': '200', 'desc': 'success'}
-#     else:
-    
-    
-
-    
+    request.session['cart_count'] = 0
+    request.session['cart_price'] = 0.00
+    for i in request.session.get('cart_items', {}):
+        request.session['cart_count'] += int(items[i]['count'])
+        request.session['cart_price'] += int(items[i]['count']) * float(Item.objects.get(id=i).get_price()[1])
+    return {'code': '200', 'desc': 'success',
+            'cart_count': request.session['cart_count'],
+            'cart_price': '%.2f' % (request.session['cart_price'],),
+            'item_total': '%.2f' % (item_total,)}
 
 @ajax_processor(CartRemoveItem)
 def cart_remove_item(request, form):
