@@ -25,14 +25,14 @@ def add_to_cart(request, form):
             items[id] = {}
         items[id]['count'] = int(items[id].get('count', 0)) + cnt
         items[id]['price'] = price
-        # пересчитываем корзину
-        request.session['cart_count'] = 0
-        request.session['cart_price'] = 0.00
-        for i in items:
-            request.session['cart_count'] += int(items[i]['count'])
-            request.session['cart_price'] += int(items[i]['count']) * float(Item.objects.get(id=i).get_price()[1])
         # поместить в сессию
         request.session['cart_items'] = items
+        
+        request.session['cart_count'] = 0
+        request.session['cart_price'] = 0.00
+        for i in request.session.get('cart_items', {}):
+            request.session['cart_count'] += int(items[i]['count'])
+            request.session['cart_price'] += int(items[i]['count']) * float(Item.objects.get(id=i).get_price()[1])
         return {'code': '200', 'desc': 'success',
                 'cart_count': request.session['cart_count'],
                 'cart_price': request.session['cart_price']}
@@ -54,3 +54,17 @@ def cart_recalculate(request, form):
     
     return {'code': '200', 'desc': 'success'}
 
+@ajax_processor(CartRemoveItem)
+def cart_remove_item(request, form):
+    id = int(form.cleaned_data['item'])
+    items = request.session['cart_items']
+    del(items[id])
+    request.session['cart_items'] = items
+    request.session['cart_count'] = 0
+    request.session['cart_price'] = 0.00
+    for i in request.session.get('cart_items', {}):
+        request.session['cart_count'] += int(items[i]['count'])
+        request.session['cart_price'] += int(items[i]['count']) * float(Item.objects.get(id=i).get_price()[1])
+    return {'code': '200', 'desc': 'success',
+            'cart_count': request.session['cart_count'],
+            'cart_price': request.session['cart_price']}

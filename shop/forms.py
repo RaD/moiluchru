@@ -65,4 +65,4 @@ class CartRecalculate(forms.Form):
     pass
 
 class CartRemoveItem(forms.Form):
-    pass
+    item = forms.CharField(label=_(u'Item id'), max_length=8)

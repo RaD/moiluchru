@@ -36,4 +36,7 @@ urlpatterns = patterns(
 
     # интерфейс менеджера
     (r'^manager/', include('moiluchru.manager.urls')),
+
+    # ajax
+    (r'^ajax/cart/remove/', 'moiluchru.shop.ajax.cart_remove_item'),
 )

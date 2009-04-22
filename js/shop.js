@@ -91,14 +91,14 @@ function clean_cart(url) {
 }
 
 function windowSize() {
-  var w, h;
-  w = (window.innerWidth ? window.innerWidth 
-	   : (document.documentElement.clientWidth ? document.documentElement.clientWidth 
-		  : document.body.offsetWidth));
-  h = (window.innerHeight ? window.innerHeight 
-	   : (document.documentElement.clientHeight ? document.documentElement.clientHeight
-		  : document.body.offsetHeight));
-  return {w:w, h:h};
+    var w, h;
+    w = (window.innerWidth ? window.innerWidth 
+	 : (document.documentElement.clientWidth ? document.documentElement.clientWidth 
+	    : document.body.offsetWidth));
+    h = (window.innerHeight ? window.innerHeight 
+	 : (document.documentElement.clientHeight ? document.documentElement.clientHeight
+	    : document.body.offsetHeight));
+    return {w:w, h:h};
 }
 
 $.fn.alignCenter = function() {
@@ -108,18 +108,18 @@ $.fn.alignCenter = function() {
 };
 
 $.fn.toggleZoom = function() {
-  if ($('#popup').hasClass('hide')) {
-    // затеняем окно
-    if(! $.browser.msie) {
-      $('#opaco').height($(document).height()).toggleClass('hide').fadeTo('slow', 0.7);
-    } else {
-      $('#opaco').height($(document).height()).toggleClass('hide');
-    }
-    // выводим изображение и вешаем обработчик
+    if ($('#popup').hasClass('hide')) {
+	// затеняем окно
+	if(! $.browser.msie) {
+	    $('#opaco').height($(document).height()).toggleClass('hide').fadeTo('slow', 0.7);
+	} else {
+	    $('#opaco').height($(document).height()).toggleClass('hide');
+	}
+	// выводим изображение и вешаем обработчик
     $('#popup').html($(this).html()).alignCenter().toggleClass('hide');
-  } else {
-    $('#popup').toggleClass('hide');
-    $('#opaco').toggleClass('hide');
-  }
+    } else {
+	$('#popup').toggleClass('hide');
+	$('#opaco').toggleClass('hide');
+    }
 };
 
