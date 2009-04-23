@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 
+import os
+
+from django.conf import settings
 from django.contrib import admin
 from django import forms
 from django.utils.translation import gettext_lazy as _
+
+from moiluchru.snippets import thumbnail
 
 from moiluchru.shop.models import Color, Country, Producer, Category, \
      Collection, Item, ItemType, Price, Buyer, Order
@@ -90,8 +95,8 @@ class ItemAdmin(admin.ModelAdmin):
         ('Подробности',
          {'fields': ('image', 'desc', 'tags')})
         )
-    list_display = ('title', 'category', 'field_price_shop', 
-                    'buys', 'reg_date')
+    list_display = ('title', 'field_image_preview', 'category',
+                    'field_price_shop', 'buys', 'reg_date')
     ordering = ('title', 'category')
     search_fields = ('title', 'category')
     save_as = True
@@ -114,6 +119,12 @@ class ItemAdmin(admin.ModelAdmin):
             print e
             self.inline = []
         
+    def field_image_preview(self, item):
+        url = thumbnail(item.image.path, '100x,itempics')
+        return '<img src="%s"/>' % url
+    field_image_preview.short_description = _(u'Preview')
+    field_image_preview.allow_tags = True
+    
     def field_price_store(self, item):
         try:
             # берём самую свежую запись
