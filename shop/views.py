@@ -6,6 +6,9 @@ from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 
+from tagging.models import Tag
+from tagging.utils import calculate_cloud
+
 from moiluchru.shop import common
 from moiluchru.shop.models import Item, Category, Producer, Buyer, Phone, Order, \
     OrderStatus, OrderDetail, Lamp
@@ -14,6 +17,7 @@ from moiluchru.shop.classes import CartItem
 
 from moiluchru.snippets import render_to, columns, paginate_by
 
+### Контекст
 def cart_ctx_proc(request):
     """ Контекстный процессор для заполнения данных о корзине и для
     вывода поисковой формы на каждой странице. """
@@ -21,17 +25,57 @@ def cart_ctx_proc(request):
     form = SearchForm(auto_id='field_%s',
                       initial={'userinput': session.get('searchquery', ''),
                                'howmuch': session.get('howmuch_id', 1)})
-    menu = [(1, u'/', _(u'Main')), (2, u'/news/', _(u'News')), (3, u'/items/', _(u'Items')),
+    menu = [(1, u'/', _(u'Main')), (2, u'/search/', _(u'Search')), (3, u'/items/', _(u'Items')),
             (4, u'/text/shipping/', _(u'Shipping')), (5, u'/text/contact/', _(u'Contact'))]
+    cloud = calculate_cloud(Tag.objects.usage_for_model(Item, counts=True))
+    cp = {'min_pct': 75, 'max_pct': 150, 'steps': 4}
+    step_pct = int((cp['max_pct'] - cp['min_pct'])/(cp['steps'] - 1))
+    for i in cloud:
+        i.font_size = (i.font_size - 1) * step_pct + cp['min_pct']
     return {'debug': settings.DEBUG,
             'site_title': settings.SITE_TITLE,
             'site_subtitle': settings.SITE_SUBTITLE,
             'google_analytics': settings.GOOGLE_ANALYTICS,
             'menu': menu, 'path': request.path,
             'form': form,
+            'tags': cloud,
             'top_cats': common.top_categories(),
             'cart_count': session.get('cart_count', 0),
             'cart_price': session.get('cart_price', 0.00)}
+
+### Страница с поисковым запросом
+@render_to('shop/search.html', cart_ctx_proc)
+def search_query(request):
+    context = {'searchform': SearchForm()}
+    return context
+
+### Страница с результатами поиска
+@render_to('shop/result.html', cart_ctx_proc)
+@columns('items', 1)
+@paginate_by('items', 'page', settings.SHOP_ITEMS_PER_PAGE)
+def search_results(request):
+    """ Функция для результатов поиска по магазину. """
+    common.does_cart_exist(request)
+    sort_type = request.session.get('sort_type', 1)
+    sort = ['', '-buys', 'buys', '-price', 'price']
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            clean = form.cleaned_data
+            items = Item.objects.filter(Q(title__search='*%s*' % clean['userinput']) |
+                                        Q(desc__search='*%s*' % clean['userinput']) |
+                                        Q(tags__search='*%s*' % clean['userinput'])
+                                        ).order_by(sort[sort_type])
+            request.session['searchquery'] = clean['userinput']
+            request.session['howmuch_id'] = clean['howmuch']
+            return {'items': items,
+                    'search_query': clean['userinput'],
+                    'url': '/shop/search/',
+                    'sort_type': sort_type}
+    return HttpResponseRedirect('/')
+
+
+
 
 @render_to('shop/main.html', cart_ctx_proc)
 def show_main_page(request):
@@ -49,44 +93,6 @@ def show_main_page(request):
     return {'menu_current': 1,
             'items_col1': items[:settings.ITEMS_ON_MAIN_PAGE/2],
             'items_col2': items[settings.ITEMS_ON_MAIN_PAGE/2:]}
-
-@render_to('shop/search.html', cart_ctx_proc)
-@columns('items', 1)
-@paginate_by('items', 'page', settings.SHOP_ITEMS_PER_PAGE)
-def search_results(request):
-    """ Функция для результатов поиска по магазину. """
-    common.does_cart_exist(request)
-    sort_type = request.session.get('sort_type', 1)
-    sort = ['', '-buys', 'buys', '-price', 'price']
-    if request.method == 'POST':
-        form = SearchForm(request.POST)
-        if form.is_valid():
-            clean = form.cleaned_data
-            items = Item.objects.filter(Q(title__search='*%s*' % clean['userinput']) |
-                                        Q(desc__search='*%s*' % clean['userinput']) |
-                                        Q(tags__search='*%s*' % clean['userinput'])
-                                        ).order_by(sort[sort_type])
-            z = [settings.SHOP_ITEMS_PER_PAGE, 10, 25, 50];
-            request.session['searchquery'] = clean['userinput']
-            request.session['howmuch_id'] = clean['howmuch']
-            return {'items': items,
-                    'search_query': clean['userinput'],
-                    'url': '/shop/search/',
-                    'sort_type': sort_type}
-        else:
-            return HttpResponseRedirect('/shop/')
-    else:
-        userinput = request.session.get('searchquery', '')
-        item_per_page = request.session.get('item_per_page', settings.SHOP_ITEMS_PER_PAGE)
-        i = Item.objects.filter(Q(title__search=userinput) |
-                                       Q(desc__search=userinput))
-        p = Paginator(i.order_by(sort[sort_type]), item_per_page)
-        return {'menu_current': 3,
-                'items': p.page(page).object_list,
-                'search_query': userinput,
-                'url': '/shop/search/',
-                'sort_type': sort_type, 
-                'page': p.page(page), 'page_range': p.page_range}
 
 @render_to('shop/category.html', cart_ctx_proc)
 @columns('items', 2)

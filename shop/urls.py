@@ -4,9 +4,6 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     (r'^$', 'moiluchru.shop.views.show_main_page'),
-    # страница результатов поиска может иметь продолжение (paginator)
-    (r'^search/(?P<page>\d+)/', 'moiluchru.shop.views.search_results'),
-    (r'^search/', 'moiluchru.shop.views.search_results'),
     # сортировка
     (r'^sort/(?P<mode>\d)/', 'moiluchru.shop.views.set_sort_mode'),
     # производитель

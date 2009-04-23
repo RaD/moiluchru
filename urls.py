@@ -14,12 +14,19 @@ urlpatterns = patterns(
 
     #(r'^$', 'django.views.generic.simple.redirect_to', {'url': '/shop/'}),
     (r'^$', 'moiluchru.shop.views.show_main_page'),
+
+    # страница результатов поиска
+    (r'^search/', 'moiluchru.shop.views.search_query'),
+    (r'^result/((?P<page>\d+)/)?', 'moiluchru.shop.views.search_results'),
+
     # список товаров
     (r'^items/((?P<page>\d+)/)?', 
      'moiluchru.shop.views.show_items'),
+
     # категории товаров
     (r'^category/(?P<category_id>\d+)/((?P<page>\d+)/)?', 
      'moiluchru.shop.views.show_category_page'),
+
     # товар
     (r'^item/(?P<item_id>\d+)/', 'moiluchru.shop.views.show_item_page'),
 
@@ -28,11 +35,11 @@ urlpatterns = patterns(
     (r'^offer', 'moiluchru.shop.views.show_offer'),
     (r'^ordered', 'moiluchru.shop.views.show_ordered'),
 
-    # магазин
-    (r'^shop/', include('moiluchru.shop.urls')),
-
     # отображение текстов
     (r'^text/((?P<label>\w+)/)?', 'moiluchru.shop.views.show_text_page'),
+
+    # магазин
+    (r'^shop/', include('moiluchru.shop.urls')),
 
     # интерфейс менеджера
     (r'^manager/', include('moiluchru.manager.urls')),

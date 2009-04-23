@@ -30,8 +30,8 @@
 	    Цена: <span class="price">{{ item.get_price.1|floatformat:2 }}</span> руб.
 	  </div>
 	  <div class="more">
-	    <div>{{ item.get_addons.socle }}: 
-	      {{ item.get_addons.count }} x {{ item.get_addons.watt }} Вт</div>
+	    <div>{{ item.get_lamp.count }}: 
+	      {{ item.get_lamp.count }} x {{ item.get_lamp.watt }} Вт</div>
 	    <a href="{{ item.get_absolute_url }}">Описание...</a>
 	  </div>
 	</td>

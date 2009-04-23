@@ -1,10 +1,25 @@
-{% extends "shop/base2.html" %}
-
-{% load thumbnail_filter %}
+{% extends "shop/base.html" %}
 
 {% block content %}
-<div><span class="title">Результаты поиска</span></div>
-<div class="sectioncontent">
-  {% include "shop/inc-itemlist.html" %}
-</div>
+  <div id="left">
+    <h3 class="ttl">Облако тегов</h3>
+    <p>
+      {% for tag in tags %}
+      <span style="font-size: {{ tag.font_size }}%;">{{ tag }}</span>
+      {% endfor %}
+    </p>
+  </div>
+
+  <div id="right">
+    <h3 class="ttl"><span></span>Поиск</h3>
+
+    <form method="post" action="/result/">
+      <table width="100%">
+	<tr>
+	  {{ searchform }}
+	</tr>
+      </table>
+    </form>
+    
+  </div>
 {% endblock %}
