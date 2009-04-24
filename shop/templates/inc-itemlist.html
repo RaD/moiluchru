@@ -30,8 +30,11 @@
 	    Цена: <span class="price">{{ item.get_price.1|floatformat:2 }}</span> руб.
 	  </div>
 	  <div class="more">
-	    <div>{{ item.get_lamp.count }}: 
-	      {{ item.get_lamp.count }} x {{ item.get_lamp.watt }} Вт</div>
+	    {% for l in item.get_lamp %}
+	    <span>{{ l.socle }}: <span style="font-size: 80%;">{{ l.count }} x {{ l.watt }} 
+	    Вт</span></span>{% if not forloop.last %},{% endif %}
+	    {% endfor %}
+	    </div>
 	    <a href="{{ item.get_absolute_url }}">Описание...</a>
 	  </div>
 	</td>
