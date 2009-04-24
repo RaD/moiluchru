@@ -3,8 +3,23 @@
 {% load thumbnail_filter %}
 
 {% block content %}
-<div><span class="title">Результаты поиска</span></div>
-<div class="sectioncontent">
-  {% include "shop/inc-itemlist.html" %}
-</div>
+  <div id="left">
+    <h3 class="ttl"><span></span>Категории</h3>
+
+    {% include "shop/inc-category.html" %}
+
+    <h3 class="ttl"><span></span>Облако тегов</h3>
+    <p>
+    {% for tag in tags %}
+    <span style="font-size: {{ tag.font_size }}%;">{{ tag }}</span>
+    {% endfor %}
+    </p>
+
+  </div>
+
+  <div id="right">
+    <h3 class="ttl"><span></span>Результаты поиска</h3>
+
+    {% include "shop/inc-itemlist.html" %}
+  </div>
 {% endblock %}

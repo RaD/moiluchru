@@ -17,6 +17,8 @@ from moiluchru.shop.classes import CartItem
 
 from moiluchru.snippets import render_to, columns, paginate_by
 
+sort = ['', '-buys', 'buys', '-sort_price', 'sort_price']
+
 ### Контекст
 def cart_ctx_proc(request):
     """ Контекстный процессор для заполнения данных о корзине и для
@@ -57,7 +59,6 @@ def search_results(request):
     """ Функция для результатов поиска по магазину. """
     common.does_cart_exist(request)
     sort_type = request.session.get('sort_type', 1)
-    sort = ['', '-buys', 'buys', '-price', 'price']
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
@@ -65,16 +66,20 @@ def search_results(request):
             items = Item.objects.filter(Q(title__search='*%s*' % clean['userinput']) |
                                         Q(desc__search='*%s*' % clean['userinput']) |
                                         Q(tags__search='*%s*' % clean['userinput'])
-                                        ).order_by(sort[sort_type])
+                                        )
             request.session['searchquery'] = clean['userinput']
             request.session['howmuch_id'] = clean['howmuch']
-            request.session['cached_search'] = items
-            return {'items': items,
+            request.session['cached_search'] = items # кэшируем для paginator
+            return {'items': items.order_by(sort[sort_type]),
                     'search_query': clean['userinput'],
                     'url': '/result/',
                     'sort_type': sort_type}
     else: # обращение через paginator
-        return {'items': request.session.get('cached_search', []),
+        try:
+            items = request.session.get('cached_search').order_by(sort[sort_type])
+        except KeyError:
+            items = [] # FIXME: видать прошли по ссылке напрямую, надо решить, что делать в таком случае
+        return {'items': items,
                 'search_query': request.session.get('searchquery', ''),
                 'url': '/result/',
                 'sort_type': sort_type}
@@ -101,7 +106,6 @@ def show_main_page(request):
 @paginate_by('items', 'page', settings.SHOP_ITEMS_PER_PAGE)
 def show_items(request):
     """ Представление для отображения общей страницы с новинками. """
-    sort = ['', '-buys', 'buys', '-sort_price', 'sort_price']
     sort_type = request.session.get('sort_type', 1)
 
     common.does_cart_exist(request)
@@ -120,7 +124,6 @@ def show_items(request):
 @paginate_by('items', 'page', settings.SHOP_ITEMS_PER_PAGE)
 def show_category_page(request, category_id=None):
     """ Функция для отображения подчинённых категорий. """
-    sort = ['', '-buys', 'buys', '-price', 'price']
     sort_type = request.session.get('sort_type', 1)
 
     common.does_cart_exist(request)
