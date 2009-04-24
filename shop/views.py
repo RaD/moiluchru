@@ -68,14 +68,16 @@ def search_results(request):
                                         ).order_by(sort[sort_type])
             request.session['searchquery'] = clean['userinput']
             request.session['howmuch_id'] = clean['howmuch']
+            request.session['cached_search'] = items
             return {'items': items,
                     'search_query': clean['userinput'],
-                    'url': '/shop/search/',
+                    'url': '/result/',
                     'sort_type': sort_type}
-    return HttpResponseRedirect('/')
-
-
-
+    else: # обращение через paginator
+        return {'items': request.session.get('items', None),
+                'search_query': request.session.get('searchquery', ''),
+                'url': '/result/',
+                'sort_type': sort_type}
 
 @render_to('shop/main.html', cart_ctx_proc)
 def show_main_page(request):
