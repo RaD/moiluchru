@@ -41,7 +41,7 @@
   }
 </script>
 
-<h3><span></span>Корзина</h3>
+<h3 class="ttl"><span></span>Корзина</h3>
 
 <table id="cart-list" width="100%" class="cart" cellpadding="4">
   <tr class="header">
@@ -83,6 +83,7 @@
 </table>
 
 {% if cart %}
+<br/>
 <div class="right">
   <button id="offer_apply" onclick="document.location='/offer/';">Оформить заказ</button>
   <button id="offer_cancel" 
