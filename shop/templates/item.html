@@ -73,10 +73,12 @@
       </tr>
     </table>
 
+    {% if item.desc %}
     <div>
       <h3 class="ttl"><span></span>Описание</h3>
       <div class="itemdesc">{{ item.desc|markdown }}</div>
     </div>
+    {% endif %}
 
     <div id="zoom" class="hide">
       <h3 class="ttl"><span></span>{{ item.title }}</h3>
