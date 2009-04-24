@@ -58,3 +58,20 @@ function buy(id, count) {
 	       }
 	   }, 'json' );
 }
+
+function jabber_send(input) {
+    var chat = $('#chat-window');
+    var loading = $('#loading');
+    loading.toggleClass('hide');
+    $.post('/ajax/jabber/send/',
+	   { message: input.val() },
+	   function(json) {
+	       if (json['code'] == 200) {
+		   chat.html(chat.html() + '<div style="color: red;">Клиент: ' + input.val() + '</div>');
+		   input.val('');
+		   loading.toggleClass('hide');
+	       } else {
+		   alert(json['code'] + ': ' + json['desc']);
+	       }
+	   }, 'json' );
+}

@@ -31,7 +31,8 @@
 	  </div>
 	  <div class="more">
 	    {% for l in item.get_lamp %}
-	    <span>{{ l.socle }}: <span style="font-size: 80%;">{{ l.count }} x {{ l.watt }} 
+	    <span><span class="has_preview">{{ l.socle }}</span>: 
+	    <span style="font-size: 80%;">{{ l.count }} x {{ l.watt }} 
 	    Вт</span></span>{% if not forloop.last %},{% endif %}
 	    {% endfor %}
 	    </div>

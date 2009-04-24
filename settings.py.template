@@ -113,3 +113,8 @@ var pageTracker = _gat._getTracker("UA-3919032-7");
 pageTracker._trackPageview();
 } catch(err) {}</script>
 """
+
+JABBER_ID = 'moiluchru@jabber.ru'
+JABBER_PASSWORD = 'alexsizov'
+JABBER_TITLE = 'http://moiluch.ru/ : web client'
+JABBER_RECIPIENTS = ('ruslan.popov@gmail.com',)

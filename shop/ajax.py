@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from moiluchru.snippets import ajax_processor
 from moiluchru.shop import common
-from moiluchru.shop.forms import CartAdd, CartClean, CartRecalculate, CartRemoveItem
+from moiluchru.shop.forms import CartAdd, CartClean, CartRecalculate, CartRemoveItem, JabberSend
 from moiluchru.shop.models import Item
 
 @ajax_processor(CartAdd)
@@ -81,3 +81,18 @@ def cart_remove_item(request, form):
     return {'code': '200', 'desc': 'success',
             'cart_count': request.session['cart_count'],
             'cart_price': request.session['cart_price']}
+
+# Отправка сообщения на джаббер
+@ajax_processor(JabberSend)
+def jabber_send(request, form):
+    from pyxmpp.jid import JID
+    from pyxmpp.jabber.simple import send_message
+
+    message = form.cleaned_data['message']
+    jid = JID(settings.JABBER_ID)
+    if not jid.resource:
+        jid = JID(jid.node, jid.domain, 'send_message')
+    recipient = JID(settings.JABBER_RECIPIENTS[0])
+    send_message(jid, settings.JABBER_PASSWORD, recipient, message, settings.JABBER_TITLE)
+    return {'code': '200', 'desc': 'success'}
+

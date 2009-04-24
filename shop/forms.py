@@ -67,3 +67,6 @@ class CartRecalculate(forms.Form):
 
 class CartRemoveItem(forms.Form):
     item = forms.CharField(label=_(u'Item id'), max_length=8)
+
+class JabberSend(forms.Form):
+    message = forms.CharField(label=_(u'Message'), max_length=1024)

@@ -362,17 +362,21 @@ body {
    background: #FFDB00;
 }
 
-#jabber-chat {
-   position: relative;
-   width: 280px; left: 10px;
+#widget-jabber {
+   position: absolute; top: 0px; right: 0px; z-index: 1; width: 120px; height: 1.5em; 
+   color: #54026e; background-color: #bfab30; font-weight: bold; padding: 4px;
+   text-align: center; vertical-align: bottom; -moz-border-radius: 0px 0px 0px 4px; 
+   cursor: pointer;
 }
 
-#jabber-chat-window {
-   height: 150px;
-   width: 270;
+#jabber-client {
+   height: 400px;
+   width: 400px;
    background-color: white;
    border: 1px solid gray;
+   padding: 4px;
 }
+
 .thumbnail-containter {
    background-color: white;
    width: 100px; height: 100px;
@@ -460,4 +464,12 @@ BUTTON {
    border: 1px solid #071C71;
    vertical-align: middle;
    background: #6F83D6;
+}
+
+.has_preview {
+   border-bottom: 1px dashed #2c3d82; color: #68237f;
+}
+
+.acronym {
+   border-bottom: 1px dashed #071c71; color: #54026e;
 }
