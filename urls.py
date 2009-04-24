@@ -45,6 +45,7 @@ urlpatterns = patterns(
     (r'^manager/', include('moiluchru.manager.urls')),
 
     # ajax
+    (r'^ajax/cart/add', 'moiluchru.shop.ajax.add_to_cart'),
     (r'^ajax/cart/remove/', 'moiluchru.shop.ajax.cart_remove_item'),
     (r'^ajax/cart/recalculate/', 'moiluchru.shop.ajax.cart_recalculate'),
 )

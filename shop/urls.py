@@ -12,7 +12,6 @@ urlpatterns = patterns('',
     (r'^producer/(?P<producer_id>\d+)/', 'moiluchru.shop.views.show_producer_page'),
 
     # AJAX
-    (r'^add', 'moiluchru.shop.ajax.add_to_cart'),
     (r'^clean', 'moiluchru.shop.ajax.clean_cart'),
                        
 )

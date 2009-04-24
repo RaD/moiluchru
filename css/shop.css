@@ -429,26 +429,6 @@ body {
    color: black;
 }
 
-#widget-addtocart {
-    position: absolute; top: 200px; left: 300px; z-index: 10; width: 360px; height: 140px;
-    background-color: #b964d4;; -moz-border-radius: 4px; 
-}
-#widget-addtocart .body { 
-    background-color: #ffe440; margin: 1em; margin-top: 1em; height: 110px; 
-}
-#widget-addtocart .icon { 
-    position: absolute; width: 16px; height: 16px; padding: 4px; background-color: white;
-    top: 0.5em; left: 0.5em; width: 100px; height: 100px; z-index: 10; 
-    border: 1px solid black;
-}
-#widget-addtocart .itemtitle { font-weight: bold; margin: 2em 0.5em 0.7em 110px; }
-#widget-addtocart .itemqnty { margin: 0.7em 0.5em 1.5em 110px; }
-#widget-addtocart .itemqnty INPUT { width: 30px; }
-.popupbtn { width: 16px; height: 16px; padding: 4px; background-color: white; }
-.no { position: absolute; top: 0.5em; left: 328px; z-index: 2; }
-.ok { position: absolute; top: 108px; left: 270px; z-index: 2; }
-* html .ok { top: 108px; left: 250px; z-index: 2; }
-
 .popuphead { 
     position: absolute; top: 0.5em; left: 130px; width: 160px; padding: 2px 8px; z-index: 2; 
     color: #b964d4;
@@ -465,7 +445,7 @@ BUTTON {
     position: absolute; top: 0px; left: 0px; width: 100%; z-index: 10;
 }
 #popup {
-    font-size: 12px; cursor: pointer;
+    font-size: 12px; 
     background-color: white; border: 2px solid black; -moz-border-radius: 8px; padding: 0px 1em;
     position: fixed; min-width: 300px; top: 50%; left: 50%; z-index: 11;
 }
