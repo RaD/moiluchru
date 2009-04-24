@@ -74,7 +74,7 @@ def search_results(request):
                     'url': '/result/',
                     'sort_type': sort_type}
     else: # обращение через paginator
-        return {'items': request.session.get('items', None),
+        return {'items': request.session.get('cached_search', []),
                 'search_query': request.session.get('searchquery', ''),
                 'url': '/result/',
                 'sort_type': sort_type}

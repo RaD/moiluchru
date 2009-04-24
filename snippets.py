@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # http://markeev.labwr.ru/2008/07/django.html
 
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -64,14 +64,18 @@ def paginate_by(param_name, get_name, count=10):
             # получаем контекст
             context =  func(request, *args, **kwargs)
             if param_name in context:
-                objects = context.get(param_name)
-                paginator = Paginator(objects, count)
-                context['page'] = paginator.page(int(pagenum))
-                context['page_range'] = paginator.page_range
+                THRESHOLD1 = 10
+                THRESHOLD2 = 20
                 try:
+                    objects = context.get(param_name)
+                    paginator = Paginator(objects, count)
+                    context['page'] = paginator.page(int(pagenum))
+                    context['page_range'] = paginator.page_range
                     context[param_name] = paginator.page(int(pagenum)).object_list
                 except (EmptyPage, InvalidPage):
                     context[param_name] = paginator.page(paginator.num_pages).object_list
+                except EmptyPage:
+                    pass
             return context
         return wrapper
     return paged
