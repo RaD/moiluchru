@@ -84,6 +84,14 @@ def search_results(request):
                 'url': '/result/',
                 'sort_type': sort_type}
 
+### Страница с результатами поиска по тегу
+def tag_results(request, tag):
+    """ Функция для результатов поиска по тегу. """
+    items = Item.objects.filter(Q(tags__search='%s' % tag))
+    request.session['searchquery'] = tag
+    request.session['cached_search'] = items # кэшируем для paginator
+    return HttpResponseRedirect(u'/result/')
+
 @render_to('shop/main.html', cart_ctx_proc)
 def show_main_page(request):
     """ Функция для отображения главной страницы сайта.  Осуществляем

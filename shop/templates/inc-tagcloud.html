@@ -1,0 +1,7 @@
+<p class="center">
+  {% for tag in tags %}
+  <span class="nowrap" style="font-size: {{ tag.font_size }}%;">
+    <span style="color: lightblue;">[</span><a href="/tag/{{ tag }}/">{{ tag }}</a><span style="color: lightblue;">]</span>
+  </span>
+  {% endfor %}
+</p>

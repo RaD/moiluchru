@@ -18,6 +18,7 @@ urlpatterns = patterns(
     # страница результатов поиска
     (r'^search/', 'moiluchru.shop.views.search_query'),
     (r'^result/((?P<page>\d+)/)?', 'moiluchru.shop.views.search_results'),
+    (r'^tag/(?P<tag>\w+)/', 'moiluchru.shop.views.tag_results'),
 
     # список товаров
     (r'^items/((?P<page>\d+)/)?', 
