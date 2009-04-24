@@ -31,5 +31,6 @@ Django-related:
     libapache2-mod-wsgi - подключение Django к Apache2
     python-markdown	- text-to-HTML conversion library/tool
     python-mysqldb	- A Python interface to MySQL
-    python-openid	- OpenID support for servers and consumers
+    python-openid	- OpenID support for servers and consumer
+    python-dnspython python-m2crypto python-pyxmpp python-pyxmpp-doc - for xmpp
     svn co http://django-tagging.googlecode.com/svn/trunk django-tagging
