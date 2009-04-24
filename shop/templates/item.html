@@ -8,6 +8,14 @@
     <h3 class="ttl"><span></span>Категории</h3>
 
     {% include "shop/inc-category.html" %}
+
+    <h3 class="ttl"><span></span>Облако тегов</h3>
+    <p>
+    {% for tag in tags %}
+    <span style="font-size: {{ tag.font_size }}%;">{{ tag }}</span>
+    {% endfor %}
+    </p>
+
   </div>
 
   <div id="right">
