@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
+import logging
+
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseRedirect
 
 from moiluchru.snippets import ajax_processor
 from moiluchru.shop import common
-from moiluchru.shop.forms import CartAdd, CartClean, CartRecalculate, CartRemoveItem, JabberSend
+from moiluchru.shop.forms import CartAdd, CartClean, CartRecalculate, CartRemoveItem, JabberMessage
 from moiluchru.shop.models import Item
 
 @ajax_processor(CartAdd)
@@ -83,16 +84,29 @@ def cart_remove_item(request, form):
             'cart_price': request.session['cart_price']}
 
 # Отправка сообщения на джаббер
-@ajax_processor(JabberSend)
-def jabber_send(request, form):
-    from pyxmpp.jid import JID
-    from pyxmpp.jabber.simple import send_message
+@ajax_processor(JabberMessage)
+def jabber_message(request, form):
+    logger = logging.getLogger('moiluchrulogger')
+    try:
+        from moiluchru.shop.jabberclient import Client
+        from pyxmpp.all import JID
+    except ImportError:
+        print 'jabber_message: Import error. Install pyxmpp!'
+        logger.debug('jabber_message: Import error. Install pyxmpp!')
 
+    action = form.cleaned_data['action']
     message = form.cleaned_data['message']
-    jid = JID(settings.JABBER_ID)
-    if not jid.resource:
-        jid = JID(jid.node, jid.domain, 'send_message')
-    recipient = JID(settings.JABBER_RECIPIENTS[0])
-    send_message(jid, settings.JABBER_PASSWORD, recipient, message, settings.JABBER_TITLE)
-    return {'code': '200', 'desc': 'success'}
 
+    import pdb; pdb.set_trace()
+    logger.debug('%s: %s' % (action, message))
+    if action == 'connect':
+        c = Client(JID(settings.JABBER_ID),
+                   settings.JABBER_PASSWORD)
+        c.connect()
+        return {'code': '200', 'sub': '1', 'desc': 'connected'}
+    elif action == 'send':
+        if not jid.resource:
+            jid = JID(jid.node, jid.domain, 'CommBot [moiluch.ru]')
+        return {'code': '200', 'sub': '2', 'desc': 'sent'}
+    else:
+        return {'code': '400', 'desc': 'error'}

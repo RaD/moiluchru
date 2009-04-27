@@ -59,19 +59,41 @@ function buy(id, count) {
 	   }, 'json' );
 }
 
-function jabber_send(input) {
+function jabber_message(action, input) {
     var chat = $('#chat-window');
     var loading = $('#loading');
+    var params = {}
     loading.toggleClass('hide');
-    $.post('/ajax/jabber/send/',
-	   { message: input.val() },
+    switch(action) {
+    case 'connect':
+	chat.html('<div style="color: orange;">Система: подключение...</div>');
+	params = { action: action, message: 'not used' }
+	break;
+    case 'send':
+	params = { action: action, message: input.val() }
+	break;
+    }
+    $.post('/ajax/jabber/message/', params,
 	   function(json) {
+	       loading.toggleClass('hide');
 	       if (json['code'] == 200) {
-		   chat.html(chat.html() + '<div style="color: red;">Клиент: ' + input.val() + '</div>');
-		   input.val('');
-		   loading.toggleClass('hide');
+		   switch(action) {
+		   case 'connect':
+		       chat.html(chat.html() + '<div style="color: orange;">Система: соединение установлено...</div>');
+		       break;
+		   case 'send':
+		       chat.html(chat.html() + '<div style="color: green;">Клиент: ' + input.val() + '</div>');
+		       input.val('');
+		       break;
+		   }
 	       } else {
-		   alert(json['code'] + ': ' + json['desc']);
+		   switch(action) {
+		       case 'connect':
+		       chat.html(chat.html() + '<div style="color: orange;">Система: соединение не установлено...</div>');
+		       break;
+		   }
+		   chat.html(chat.html() + '<div style="color: red;">Ошибка: ' + json['code'] + ': ' + json['desc'] + '</div>');
 	       }
 	   }, 'json' );
 }
+
