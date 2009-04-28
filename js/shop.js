@@ -40,8 +40,11 @@ $.fn.toggleZoom = function() {
 	// выводим изображение и вешаем обработчик
 	$('#popup').html($(this).html()).alignCenter().toggleClass('hide');
     } else {
-	$('#popup').toggleClass('hide');
-	$('#opaco').fadeTo('slow', 0.0).toggleClass('hide');
+	$('#opaco').fadeTo('slow', 0.0, 
+			   function() {
+			       $('#popup').toggleClass('hide');
+			       $(this).toggleClass('hide')
+			   });
     }
 };
 
