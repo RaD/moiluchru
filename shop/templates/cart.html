@@ -56,7 +56,7 @@
   {% for i in cart_items %}
   <tr item="{{ i.record.id }}">
     <td width="100" class="thumbnail-containter">
-      <a href="{{ i.get_absolute_url }}">
+      <a href="{{ i.record.get_absolute_url }}">
 	<img id="th_{{ i.record.id }}" src="{{ i.record.image.path|thumbnail:"100x,itempics" }}" 
              border="0" title="{{ i.record.title }}"/>
       </a>
