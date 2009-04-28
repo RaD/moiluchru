@@ -41,7 +41,7 @@ $.fn.toggleZoom = function() {
 	$('#popup').html($(this).html()).alignCenter().toggleClass('hide');
     } else {
 	$('#popup').toggleClass('hide');
-	$('#opaco').toggleClass('hide');
+	$('#opaco').fadeTo('slow', 0.0).toggleClass('hide');
     }
 };
 
