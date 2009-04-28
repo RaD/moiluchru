@@ -77,7 +77,7 @@ def search_results(request):
     else: # обращение через paginator
         try:
             items = request.session.get('cached_search').order_by(sort[sort_type])
-        except KeyError:
+        except:
             items = [] # FIXME: видать прошли по ссылке напрямую, надо решить, что делать в таком случае
         return {'items': items,
                 'search_query': request.session.get('searchquery', ''),
