@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-23 09:54+0400\n"
+"POT-Creation-Date: 2009-04-30 17:26+0400\n"
 "PO-Revision-Date: 2008-07-09 20:40+0400\n"
 "Last-Translator: Ruslan Popov <radz@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -15,23 +15,39 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#: jabber/forms.py:7 jabber/models.py:8
+msgid "Message"
+msgstr "Сообщение"
+
+#: jabber/models.py:7
+msgid "Nick"
+msgstr "Псевдоним"
+
+#: jabber/models.py:9
+msgid "Sent"
+msgstr "Отправлено"
+
 #: manager/views.py:48 manager/views.py:51
 msgid "Form has bad data."
 msgstr "Форма содержит плохие данные."
 
-#: shop/admin.py:53 shop/models.py:153
+#: shop/admin.py:58 shop/models.py:153
 msgid "Price (shop)"
 msgstr "Цена (продажа)"
 
-#: shop/admin.py:54 shop/models.py:152
+#: shop/admin.py:59 shop/models.py:152
 msgid "Price (store)"
 msgstr "Цена (склад)"
 
-#: shop/admin.py:123
+#: shop/admin.py:125
+msgid "Preview"
+msgstr "Просмотр"
+
+#: shop/admin.py:134
 msgid "Price of a store"
 msgstr "Цена склада"
 
-#: shop/admin.py:131
+#: shop/admin.py:142
 msgid "Price of the shop"
 msgstr "Цена магазина"
 
@@ -183,7 +199,7 @@ msgstr "Цена"
 msgid "Item"
 msgstr "Товар"
 
-#: shop/models.py:112 shop/views.py:24
+#: shop/models.py:112 shop/views.py:30
 msgid "Items"
 msgstr "Товары"
 
@@ -259,19 +275,19 @@ msgstr "Ширина"
 msgid "Brow"
 msgstr "Выступ"
 
-#: shop/views.py:24 shop/templates/inc-linkbar.html:4
+#: shop/views.py:30
 msgid "Main"
 msgstr "Главная"
 
-#: shop/views.py:24
+#: shop/views.py:30
 msgid "Search"
 msgstr "Поиск"
 
-#: shop/views.py:25 shop/templates/inc-linkbar.html:10
+#: shop/views.py:31
 msgid "Shipping"
 msgstr "Доставка"
 
-#: shop/views.py:25 shop/templates/inc-linkbar.html:7
+#: shop/views.py:31
 msgid "Contact"
 msgstr "Контакт"
 
