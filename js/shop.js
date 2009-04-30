@@ -48,6 +48,14 @@ $.fn.toggleZoom = function() {
     }
 };
 
+$.fn.extend({
+    scrollTo: function(shift, speed, easing) {
+	return this.each(function() {
+	    $(this).animate({scrollTop: parseInt($(this).css('scrollTop') + shift)}, speed, easing);
+	});
+    }
+});
+
 function buy(id, count) {
     $('#loading').toggleClass('hide');
     $.post('/ajax/cart/add/',
@@ -62,41 +70,64 @@ function buy(id, count) {
 	   }, 'json' );
 }
 
-function jabber_message(action, input) {
+var tID;
+var POLL_TIMEOUT = 10000;
+function jabber_init() {
+    $('#jabber-client').toggleZoom();
+    $('#message-window').bind('keypress',
+                              function(e) {
+				  var code = (e.keyCode ? e.keyCode : e.which);
+				  if (code == 13) {
+				      jabber_message($('#message-window'));
+				  }
+			      }
+			     );
+    $('#message-window').focus();
+    tID = setTimeout(jabber_poll, POLL_TIMEOUT);
+    return false;
+}
+
+function jabber_destroy() {
+    clearTimeout(tID);
+    $('jabber-client').toggleZoom(); 
+    return false;
+}
+
+function jabber_message(input) {
     var chat = $('#chat-window');
     var loading = $('#loading');
     var params = {}
-    loading.toggleClass('hide');
-    switch(action) {
-    case 'connect':
-	chat.html('<div style="color: orange;">Система: подключение...</div>');
-	params = { action: action, message: 'not used' }
-	break;
-    case 'send':
-	params = { action: action, message: input.val() }
-	break;
+    var msgwin = $('#chat-window').offset();
+    if (loading.hasClass('hide')) {
+	loading.css({'top': parseInt(msgwin.top) + 'px', 'left': parseInt(msgwin.left) + 'px'}).toggleClass('hide');
     }
+    params = { message: input.val() }
     $.post('/ajax/jabber/message/', params,
 	   function(json) {
 	       loading.toggleClass('hide');
 	       if (json['code'] == 200) {
-		   switch(action) {
-		   case 'connect':
-		       chat.html(chat.html() + '<div style="color: orange;">Система: соединение установлено...</div>');
-		       break;
-		   case 'send':
-		       chat.html(chat.html() + '<div style="color: green;">Клиент: ' + input.val() + '</div>');
-		       input.val('');
-		       break;
-		   }
+		   chat.html(chat.html() + '<div style="color: green;">Клиент: ' + input.val() + '</div>');
+		   input.val('');
 	       } else {
-		   switch(action) {
-		       case 'connect':
-		       chat.html(chat.html() + '<div style="color: orange;">Система: соединение не установлено...</div>');
-		       break;
-		   }
-		   chat.html(chat.html() + '<div style="color: red;">Ошибка: ' + json['code'] + ': ' + json['desc'] + '</div>');
+		   chat.html(chat.html() + '<div style="color: red;">Ошибка: [' + json['code'] + '] ' + json['desc'] + '</div>');
 	       }
+	       chat.scrollTo('100', 500);
 	   }, 'json' );
 }
 
+function jabber_poll() {
+    var chat = $('#chat-window');
+    $.post('/ajax/jabber/poll/', {},
+	   function(json) {
+	       if (json['code'] == 200) {
+		   $.each(json['messages'], function() { 
+		       chat.html(chat.html() + '<div style="color: orange;">Консультант: ' + this + '</div>');
+		       chat.scrollTo('100', 500);
+		   });
+		   tID = setTimeout(jabber_poll, POLL_TIMEOUT);
+	       } else {
+		   chat.html(chat.html() + '<div style="color: red;">Ошибка: [' + json['code'] + '] ' + json['desc'] + '</div>');
+		   chat.scrollTo('100', 500);
+	       }
+	   }, 'json' );
+}

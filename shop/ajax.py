@@ -6,8 +6,12 @@ from django.conf import settings
 
 from moiluchru.snippets import ajax_processor
 from moiluchru.shop import common
-from moiluchru.shop.forms import CartAdd, CartClean, CartRecalculate, CartRemoveItem, JabberMessage
+from moiluchru.shop.forms import CartAdd, CartClean, CartRecalculate, CartRemoveItem
 from moiluchru.shop.models import Item
+from moiluchru.jabber.forms import JabberMessage
+from moiluchru.jabber.models import Message
+
+from datetime import timedelta, datetime as dt
 
 @ajax_processor(CartAdd)
 def add_to_cart(request, form):
@@ -86,27 +90,39 @@ def cart_remove_item(request, form):
 # Отправка сообщения на джаббер
 @ajax_processor(JabberMessage)
 def jabber_message(request, form):
-    logger = logging.getLogger('moiluchrulogger')
+    message = form.cleaned_data['message'] # может быть пустым
+
+    # при первом обращении клиента следует автоматически сгенерировать
+    # ему ник из минут и секунд, ник записывается в сессию и
+    # используется при дальнейшем общении, на сессию накладывается
+    # получасовое ограничение времени жизни после последнего
+    # сообщения.
+    now = dt.now()
+    last = request.session.get('JABBER_LAST', now - timedelta(days=1))
+    if now - timedelta(minutes=30) > last:
+        del(request.session['JABBER_NICK'])
+
+    nick = request.session.get('JABBER_NICK', dt.now().strftime('%M%S'))
+    
     try:
-        from moiluchru.shop.jabberclient import Client
-        from pyxmpp.all import JID
-    except ImportError:
-        print 'jabber_message: Import error. Install pyxmpp!'
-        logger.debug('jabber_message: Import error. Install pyxmpp!')
+        msg = Message(nick=nick, msg=message)
+        msg.save()
+        request.session['JABBER_NICK'] = nick
+        request.session['JABBER_LAST'] = dt.now()
+    except Exception, e:
+        return {'code': '400', 'desc': e}
+    return {'code': '200', 'desc': 'sent'}
 
-    action = form.cleaned_data['action']
-    message = form.cleaned_data['message']
-
-    import pdb; pdb.set_trace()
-    logger.debug('%s: %s' % (action, message))
-    if action == 'connect':
-        c = Client(JID(settings.JABBER_ID),
-                   settings.JABBER_PASSWORD)
-        c.connect()
-        return {'code': '200', 'sub': '1', 'desc': 'connected'}
-    elif action == 'send':
-        if not jid.resource:
-            jid = JID(jid.node, jid.domain, 'CommBot [moiluch.ru]')
-        return {'code': '200', 'sub': '2', 'desc': 'sent'}
-    else:
-        return {'code': '400', 'desc': 'error'}
+# Отправка сообщения клиенту
+@ajax_processor(None)
+def jabber_poll(request):
+    nick = request.session.get('JABBER_NICK', dt.now().strftime('%M%S'))
+    try:
+        # приём сообщений
+        msgs = Message.objects.filter(nick=nick, is_really_sent=False, client_admin=False).order_by('sent_date')
+        for m in msgs:
+            m.is_really_sent = True
+            m.save()
+    except Exception, e:
+        return {'code': '400', 'desc': e}
+    return {'code': '200', 'desc': 'done', 'messages': [m.msg for m in msgs]}

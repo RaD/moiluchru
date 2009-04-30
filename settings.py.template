@@ -86,6 +86,7 @@ INSTALLED_APPS = (
     'django.contrib.webdesign',
     'moiluchru.shop',
     'moiluchru.text',
+    'moiluchru.jabber',
     'moiluchru.manager',
     'tagging',
 )

@@ -50,5 +50,6 @@ urlpatterns = patterns(
     (r'^ajax/cart/remove/', 'moiluchru.shop.ajax.cart_remove_item'),
     (r'^ajax/cart/recalculate/', 'moiluchru.shop.ajax.cart_recalculate'),
     (r'^ajax/jabber/message', 'moiluchru.shop.ajax.jabber_message'),
+    (r'^ajax/jabber/poll', 'moiluchru.shop.ajax.jabber_poll'),
     
 )
