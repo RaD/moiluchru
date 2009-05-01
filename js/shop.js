@@ -49,9 +49,10 @@ $.fn.toggleZoom = function() {
 };
 
 $.fn.extend({
-    scrollTo: function(shift, speed, easing) {
+    scrollTo: function(obj, speed, easing) {
 	return this.each(function() {
-	    $(this).animate({scrollTop: parseInt($(this).css('scrollTop') + shift)}, speed, easing);
+	    var targetOffset = obj.offset().top;
+	    $(this).animate({scrollTop: targetOffset}, speed, easing);
 	});
     }
 });
@@ -101,17 +102,20 @@ function jabber_message(input) {
     if (loading.hasClass('hide')) {
 	loading.css({'top': parseInt(msgwin.top) + 'px', 'left': parseInt(msgwin.left) + 'px'}).toggleClass('hide');
     }
+    input[0].disabled = true;
     params = { message: input.val() }
     $.post('/ajax/jabber/message/', params,
 	   function(json) {
 	       loading.toggleClass('hide');
 	       if (json['code'] == 200) {
-		   chat.html(chat.html() + '<div style="color: green;">Клиент: ' + input.val() + '</div>');
+		   $('#down').before('<div style="color: green;">Клиент: ' + input.val() + '</div>');
 		   input.val('');
 	       } else {
-		   chat.html(chat.html() + '<div style="color: red;">Ошибка: [' + json['code'] + '] ' + json['desc'] + '</div>');
+		   $('#down').before('<div style="color: red;">Ошибка: [' + json['code'] + '] ' + json['desc'] + '</div>');
 	       }
-	       chat.scrollTo('100', 500);
+	       input[0].disabled = false;
+	       $('#message-window').focus();
+	       chat.scrollTo($('#down'), 500);
 	   }, 'json' );
 }
 
@@ -121,13 +125,13 @@ function jabber_poll() {
 	   function(json) {
 	       if (json['code'] == 200) {
 		   $.each(json['messages'], function() { 
-		       chat.html(chat.html() + '<div style="color: orange;">Консультант: ' + this + '</div>');
-		       chat.scrollTo('100', 500);
+		       $('#down').before('<div style="color: orange;">Консультант: ' + this + '</div>');
+		       chat.scrollTo($('#down'), 500);
 		   });
 		   tID = setTimeout(jabber_poll, POLL_TIMEOUT);
 	       } else {
-		   chat.html(chat.html() + '<div style="color: red;">Ошибка: [' + json['code'] + '] ' + json['desc'] + '</div>');
-		   chat.scrollTo('100', 500);
+		   $('#down').before('<div style="color: red;">Ошибка: [' + json['code'] + '] ' + json['desc'] + '</div>');
+		   chat.scrollTo($('#down'), 500);
 	       }
 	   }, 'json' );
 }
