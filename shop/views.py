@@ -28,7 +28,7 @@ def cart_ctx_proc(request):
                       initial={'userinput': session.get('searchquery', ''),
                                'howmuch': session.get('howmuch_id', 1)})
     menu = [(1, u'/', _(u'Main')), (2, u'/search/', _(u'Search')), (3, u'/items/', _(u'Items')),
-            (4, u'/text/shipping/', _(u'Shipping')), (5, u'/text/contact/', _(u'Contact'))]
+            (4, u'/text/shipping/', _(u'Shipping')), (5, u'/text/map/', _(u'Map'))]
     cloud = calculate_cloud(Tag.objects.usage_for_model(Item, counts=True))
     cp = {'min_pct': 75, 'max_pct': 150, 'steps': 4}
     step_pct = int((cp['max_pct'] - cp['min_pct'])/(cp['steps'] - 1))
