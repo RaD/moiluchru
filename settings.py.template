@@ -115,6 +115,7 @@ pageTracker._trackPageview();
 } catch(err) {}</script>
 """
 
+JABBER_ENGINE = False
 JABBER_ID = 'moiluchru@jabber.ru'
 JABBER_PASSWORD = 'alexsizov'
 JABBER_TITLE = 'http://moiluch.ru/ : web client'

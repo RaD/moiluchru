@@ -12,9 +12,11 @@
 </head>
 
 <body>
+  {% if jabber %}
   <div id="widget-jabber" onclick="jabber_init();">
     <img src="/pics/jabber-protocol.png" align="left"/> Консультация
   </div>
+  {% endif %}
   <div id="opaco" class="hide"></div> {# элемент для затемнения экрана #}
   <div id="popup" class="hide"></div> {# элемент для всплывающих окон #}
   

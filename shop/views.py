@@ -35,6 +35,7 @@ def cart_ctx_proc(request):
     for i in cloud:
         i.font_size = (i.font_size - 1) * step_pct + cp['min_pct']
     return {'debug': settings.DEBUG,
+            'jabber': settings.JABBER_ENGINE,
             'site_title': settings.SITE_TITLE,
             'site_subtitle': settings.SITE_SUBTITLE,
             'google_analytics': settings.GOOGLE_ANALYTICS,
