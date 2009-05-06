@@ -1,17 +1,53 @@
-{% extends "base.html" %}
-{% load i18n %}
-{% block structure %}
-<div style="font-size: 24px; margin: 0.5em 0px 1em 0px; padding: 0.5em; background-color: #ddddff;">
-  {% trans "Forgotten page..." %}
-</div>
-<div style="font-size: 16px; margin: 2em;">
-  Error 404
-</div>
-<div style="font-family: arial; font-size: 14px; background-color: lightgreen; padding: 0.5em; ">
-  {% trans "You may visit" %}:
-  <ul>
-  <li><a href="/shop/">{% trans "my demo shop" %};</a></li>
-  <li><a href="/djangobook/">{% trans "my book" %};</a></li>
-  </ul>
-</div>
+{% extends "shop/base.html" %}
+
+{% load markup %}
+
+{% block content %}
+  <div id="left">
+    <h3 class="ttl"><span></span>Категории</h3>
+
+    {% include "shop/inc-category.html" %}
+
+    <h3 class="ttl"><span></span>Облако поиска</h3>
+
+    {% include "shop/inc-tagcloud.html" %}
+  </div>
+
+  <div id="right">
+
+    <h3 class="ttl"><span></span>Нет такой страницы</h3>
+
+    <div class="warning">
+      <p>
+	Запрошенная вами страница не найдена!
+      </p>
+      
+      <p>
+	Возможно вам поможет облако поиска?
+      </p>
+    </div>
+
+    <h3 class="ttl"><span></span>Самые популярные</h3>
+
+    <table width="100%">
+      <tr>
+	<td>
+	  {% for item in items_col1 %}
+	  {% include "shop/inc-column-items.html" %}
+	  {% empty %}
+	  К сожалению база товаров на данный момент пуста.
+	  {% endfor %}
+	</td>
+
+	<td>
+	  {% for item in items_col2 %}
+	  {% include "shop/inc-column-items.html" %}
+	  {% empty %}
+	  К сожалению база товаров на данный момент пуста.
+	  {% endfor %}
+	</td>
+      </tr>
+    </table>
+    
+  </div>
 {% endblock %}

@@ -482,3 +482,5 @@ BUTTON {
 .acronym {
    border-bottom: 1px dashed #071c71; color: #54026e;
 }
+
+.warning { border: 2px solid #ffdb00; background-color: #ffeb73; -moz-border-radius: 8px; padding: 2px 4px; margin: 0px 0px 2em 0px;}

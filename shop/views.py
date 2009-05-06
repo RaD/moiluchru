@@ -278,3 +278,18 @@ def show_text_page(request, label):
 #             'url': '/shop/producer/%s/%s/' % (producer_id, category_id),
 #             'items': paginator.page(page).object_list,
 #             'page': paginator.page(page), 'page_range': paginator.page_range}
+
+@render_to('404.html', cart_ctx_proc)
+def handler404(request):
+    if request.session.test_cookie_worked():
+        common.does_cart_exist(request)
+    else:
+        request.session.set_test_cookie()
+
+    try:
+        items = Item.objects.order_by('-buys')[:settings.ITEMS_ON_MAIN_PAGE]
+    except Item.DoesNotExist:
+        items = 0
+    return {'menu_current': 1, 'page_title': '404: Страница не найдена...',
+            'items_col1': items[:settings.ITEMS_ON_MAIN_PAGE/2],
+            'items_col2': items[settings.ITEMS_ON_MAIN_PAGE/2:]}

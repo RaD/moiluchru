@@ -6,6 +6,9 @@ from django.conf.urls.defaults import *
 from django.contrib import admin
 admin.autodiscover()
 
+handler404 = 'moiluchru.shop.views.handler404'
+#handler500 = 'moiluchru.shop.views.handler500'
+
 urlpatterns = patterns(
     '',
     # Интерфейс администратора
