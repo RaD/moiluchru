@@ -120,3 +120,4 @@ JABBER_ID = 'moiluchru@jabber.ru'
 JABBER_PASSWORD = 'alexsizov'
 JABBER_TITLE = 'http://moiluch.ru/ : web client'
 JABBER_RECIPIENTS = ('ruslan.popov@gmail.com',)
+JABBER_NOTIFICATION = True
