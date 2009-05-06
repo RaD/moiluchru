@@ -128,7 +128,7 @@ def order_info(request, order_id):
             return {'form': form, 'order': o, 'phone': p, 'items': items, 'history': history }
     else:
         o = Order.objects.get(id=order_id)
-        p = Phone.objects.get(owner=o.buyer)
+        p = Phone.objects.filter(owner=o.buyer)[0] # FIXME
         d = OrderDetail.objects.filter(order=order_id)
         if o.courier:
             courier = o.courier.id
@@ -138,7 +138,7 @@ def order_info(request, order_id):
         # корзина
         items = []
         for i in d:
-            items.append(CartItem(i, i.count, i.price))
+            items.append(CartItem(i.item, i.count, i.price))
         # история
         history = OrderStatusChange.objects.filter(order=order_id).order_by('-reg_date')
         return {'form': form, 'order': o, 'phone': p, 'items': items, 'history': history}
