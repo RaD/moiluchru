@@ -1,0 +1,16 @@
+{% load thumbnail_filter %}
+
+<div id="cartadd_{{ item.id }}" class="hide">
+  <h3 class="ttl"><span></span>{{ item.title }}</h3>
+  <div style="width: 400px; height: 400px; text-align: center;" class="pointer" 
+       onclick="$(this).toggleZoom(); return false;">
+    <img src="{{ item.image.path|thumbnail:"400x,itempics" }}" title="{{ item.title }}" border="0" style="vertical-align: middle;"/>
+  </div>
+  <div style="text-align: right;">
+    <img id="loading" class="hide" src="/pics/loading.gif" title="Ожидайте..." border="0"/>
+    Количество
+    <input type="text" id="quantity_{{ item.id }}" value="1" maxlength="2" title="Количество" style="width: 30px; text-align: right;"/>
+    <button onclick="buy({{ item.id }}, $('#quantity_{{ item.id }}').val()); return false;">Добавить в корзину</button>
+  </div>
+  <div class="center">Нажмите на изображение, чтобы закрыть просмотр.</div>
+</div>
