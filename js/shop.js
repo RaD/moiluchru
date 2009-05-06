@@ -37,13 +37,13 @@ $.fn.toggleZoom = function() {
 	} else {
 	    $('#opaco').height($(document).height()).toggleClass('hide');
 	}
-	// выводим изображение и вешаем обработчик
+	// отображаем
 	$('#popup').html($(this).html()).alignCenter().toggleClass('hide');
     } else {
 	$('#opaco').fadeTo('slow', 0.0, 
 			   function() {
 			       $('#popup').toggleClass('hide');
-			       $(this).toggleClass('hide')
+			       $(this).toggleClass('hide');
 			   });
     }
 };
@@ -59,8 +59,8 @@ $.fn.extend({
 
 function buy(id, count) {
     $('#loading').toggleClass('hide');
-    $.post('/ajax/cart/add/',
-	   { item: id, count: count },
+    var params = { item: id, count: count }
+    $.post('/ajax/cart/add/', params,
 	   function(json) {
 	       if (json['code'] == 200) {
 		   update_cart(json['cart_count'], json['cart_price']);

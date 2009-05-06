@@ -8,7 +8,7 @@
   <tr>
     {% for column in column_list %}
       <td valign="top">
-        {% for i in column %}
+        {% for item in column %}
           {% include "shop/inc-column-items-wide.html" %}
         {% empty %}
           К сожалению база товаров на данный момент пуста.

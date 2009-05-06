@@ -2,17 +2,17 @@
 
 <table width="100%" height="100" border="0">
   <tr>
-    <td width="100" class="thumbnail-containter">
-      <a href="{{ i.get_absolute_url }}">
-	<img src="{{ i.image.path|thumbnail:"100x,itempics" }}" border="0" title="{{ i.title }}"/>
-      </a>
+    <td width="100" class="thumbnail-containter" onclick="$('#cartadd_{{ item.id }}').toggleZoom(); return false;">
+      <img src="{{ item.image.path|thumbnail:"100x,itempics" }}" border="0" title="{{ item.title }}"/>
     </td>
     <td align="left">
-      <div>Категория: {{ i.category.title }}</div>
-      <div>Есть в наличии: <span>{% ifequal i.is_present 1 %}Да{% else %}Нет{% endifequal %}</span ></div>
-      <div>Цвет: <span>{{ i.color }}</span></div>
-      <div>Цена: <span>{{ i.get_price.1|floatformat:2 }}</span> руб.</div>
-      <a href="{{ i.get_absolute_url }}">Описание...</a>
+      <div>Категория: {{ item.category.title }}</div>
+      <div>Есть в наличии: <span>{% ifequal item.is_present 1 %}Да{% else %}Нет{% endifequal %}</span ></div>
+      <div>Цвет: <span>{{ item.color }}</span></div>
+      <div>Цена: <span>{{ item.get_price.1|floatformat:2 }}</span> руб.</div>
+      <a href="{{ item.get_absolute_url }}">Описание...</a>
     </td>
   </tr>
 </table>
+
+{% include "shop/inc-w-cart-add.html" %}

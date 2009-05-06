@@ -71,19 +71,17 @@ def search_results(request):
             request.session['searchquery'] = clean['userinput']
             request.session['howmuch_id'] = clean['howmuch']
             request.session['cached_search'] = items # кэшируем для paginator
-            return {'items': items.order_by(sort[sort_type]),
+            return {'items': items.order_by(sort[sort_type]), 'addtocart': True,
                     'search_query': clean['userinput'],
-                    'url': '/result/',
-                    'sort_type': sort_type}
+                    'url': '/result/', 'sort_type': sort_type}
     else: # обращение через paginator
         try:
             items = request.session.get('cached_search').order_by(sort[sort_type])
         except:
             items = [] # FIXME: видать прошли по ссылке напрямую, надо решить, что делать в таком случае
         return {'items': items,
-                'search_query': request.session.get('searchquery', ''),
-                'url': '/result/',
-                'sort_type': sort_type}
+                'search_query': request.session.get('searchquery', ''), 'addtocart': True,
+                'url': '/result/', 'sort_type': sort_type}
 
 ### Страница с результатами поиска по тегу
 def tag_results(request, tag):
@@ -106,7 +104,7 @@ def show_main_page(request):
         items = Item.objects.order_by('-buys')[:settings.ITEMS_ON_MAIN_PAGE]
     except Item.DoesNotExist:
         items = 0
-    return {'menu_current': 1,
+    return {'menu_current': 1, 'addtocart': True,
             'items_col1': items[:settings.ITEMS_ON_MAIN_PAGE/2],
             'items_col2': items[settings.ITEMS_ON_MAIN_PAGE/2:]}
 
@@ -114,7 +112,7 @@ def show_main_page(request):
 @columns('items', 2)
 @paginate_by('items', 'page', settings.SHOP_ITEMS_PER_PAGE)
 def show_items(request):
-    """ Представление для отображения общей страницы с новинками. """
+    """ Отображение списка товаров. """
     sort_type = request.session.get('sort_type', 1)
 
     common.does_cart_exist(request)
@@ -122,7 +120,7 @@ def show_items(request):
     # получаем отсортированные товары всех категорий
     items = common.category_items().order_by(sort[sort_type]) 
     
-    return {'menu_current': 3,
+    return {'menu_current': 3, 'addtocart': True,
             'child_cats': common.child_categories(),
             'sort_type': sort_type, 
             'url': reverse(show_items), # для многостраничности
@@ -151,31 +149,13 @@ def show_category_page(request, category_id=None):
             'sort_type': sort_type, 
             'items': items}
 
-@render_to('shop/category.html', cart_ctx_proc)
-def show_producer_page(request, producer_id, page, category_id=0):
-    """ Функция для отображения товаром для указанного производителя
-    из всех подчинённых категорий. """
-    common.does_cart_exist(request)
-    p = Producer.objects.get(id=producer_id)
-    i = common.category_items(category_id, producer_id)
-    paginator = Paginator(i, settings.SHOP_ITEMS_PER_PAGE)
-    return {'parent_cats': common.parent_categories(category_id),
-            'child_cats': common.child_categories(category_id),
-            'category_id': (category_id == 0) and None or category_id,
-            #'currentproc': p,
-            #'categories': child_cats,
-            'producers': common.category_producers(category_id),
-            'url': '/shop/producer/%s/%s/' % (producer_id, category_id),
-            'items': paginator.page(page).object_list,
-            'page': paginator.page(page), 'page_range': paginator.page_range}
-
 @render_to('shop/item.html', cart_ctx_proc)
 def show_item_page(request, item_id):
-    """ Отображение информации о товаре. """
+    """ Отображение подробной информации о товаре. """
     common.does_cart_exist(request)
     try:
         item = Item.objects.get(id=item_id)
-        return {'menu_current': 3,
+        return {'menu_current': 3, 'addtocart': True,
                 'item': item, 'lamp': item.get_lamp(), 'addons': item.get_size(),
                 'parent_cats': common.parent_categories(item.category.id)}
     except Item.DoesNotExist:
@@ -278,3 +258,23 @@ def show_text_page(request, label):
     from moiluchru.text.views import text
     return {'menu_current': modes.get(label, 0),
             'text': text(request, label)}
+
+
+
+# @render_to('shop/category.html', cart_ctx_proc)
+# def show_producer_page(request, producer_id, page, category_id=0):
+#     """ Функция для отображения товаром для указанного производителя
+#     из всех подчинённых категорий. """
+#     common.does_cart_exist(request)
+#     p = Producer.objects.get(id=producer_id)
+#     i = common.category_items(category_id, producer_id)
+#     paginator = Paginator(i, settings.SHOP_ITEMS_PER_PAGE)
+#     return {'parent_cats': common.parent_categories(category_id),
+#             'child_cats': common.child_categories(category_id),
+#             'category_id': (category_id == 0) and None or category_id,
+#             #'currentproc': p,
+#             #'categories': child_cats,
+#             'producers': common.category_producers(category_id),
+#             'url': '/shop/producer/%s/%s/' % (producer_id, category_id),
+#             'items': paginator.page(page).object_list,
+#             'page': paginator.page(page), 'page_range': paginator.page_range}

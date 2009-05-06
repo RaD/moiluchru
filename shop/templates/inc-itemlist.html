@@ -9,10 +9,8 @@
     <table>
       {% for item in items %}
       <tr>
-	<td class="thumbnail">
-	  <a href="{{ item.get_absolute_url }}">
-	  <!-- img src="{{ item.get_image_filename|thumbnail:"100x,itempics" }}" border="0" title="{{ item.title }}"/></a //-->
-	  <img src="{{ item.image.path|thumbnail:"100x,itempics" }}" border="0" title="{{ item.title }}"/></a>
+	<td class="thumbnail" onclick="$('#cartadd_{{ item.id }}').toggleZoom(); return false;">
+	  <img src="{{ item.image.path|thumbnail:"100x,itempics" }}" border="0" title="{{ item.title }}"/>
 	</td>
 	<td class="info">
 	  <div style="margin: 0.5em 0em;">
@@ -38,6 +36,7 @@
 	    </div>
 	    <a href="{{ item.get_absolute_url }}">Описание...</a>
 	  </div>
+          {% include "shop/inc-w-cart-add.html" %}
 	</td>
       </tr>
       {% endfor %}

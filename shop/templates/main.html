@@ -38,7 +38,7 @@
     <table width="100%">
       <tr>
 	<td>
-	  {% for i in items_col1 %}
+	  {% for item in items_col1 %}
 	  {% include "shop/inc-column-items.html" %}
 	  {% empty %}
 	  К сожалению база товаров на данный момент пуста.
@@ -46,7 +46,7 @@
 	</td>
 
 	<td>
-	  {% for i in items_col2 %}
+	  {% for item in items_col2 %}
 	  {% include "shop/inc-column-items.html" %}
 	  {% empty %}
 	  К сожалению база товаров на данный момент пуста.

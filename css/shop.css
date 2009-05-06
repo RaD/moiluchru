@@ -389,6 +389,7 @@ body {
    text-align: center;
    padding: 0.5em;
    vertical-align: middle;
+   cursor: pointer;
 }
 .thumbnail-containter img {
    vertical-align: middle;
@@ -457,7 +458,7 @@ BUTTON {
 #popup {
     font-size: 12px; 
     background-color: white; border: 2px solid black; -moz-border-radius: 8px; padding: 0px 1em;
-    position: fixed; min-width: 300px; top: 50%; left: 50%; z-index: 11;
+    position: fixed; min-width: 300px; min-height: 400px; top: 50%; left: 50%; z-index: 11;
 }
 
 #popup h3 {
@@ -470,6 +471,8 @@ BUTTON {
    border: 1px solid #071C71;
    vertical-align: middle;
    background: #6F83D6;
+}
+#popup .footer {
 }
 
 .has_preview {

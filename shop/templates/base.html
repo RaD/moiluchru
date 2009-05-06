@@ -1,3 +1,4 @@
+{% load thumbnail_filter %}
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
         "http://www.w3.org/TR/html4/strict.dtd">
@@ -12,14 +13,15 @@
 </head>
 
 <body>
+  <div id="opaco" class="hide"></div> {# элемент для затемнения экрана #}
+  <div id="popup" class="hide"></div> {# элемент для всплывающих окон #}
+  
   {% if jabber %}
   <div id="widget-jabber" onclick="jabber_init();">
     <img src="/pics/jabber-protocol.png" align="left"/> Консультация
   </div>
   {% endif %}
-  <div id="opaco" class="hide"></div> {# элемент для затемнения экрана #}
-  <div id="popup" class="hide"></div> {# элемент для всплывающих окон #}
-  
+
   <div id="topbg"></div>
   
   <div id="main">

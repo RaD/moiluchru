@@ -20,7 +20,7 @@
     <table width="100%">
       <tr>
 	<td width="200" valign="middle" id="image-container"
-	       onclick="$('#zoom').toggleZoom(); return false;">
+	       onclick="$('#cartadd_{{ item.id }}').toggleZoom(); return false;">
 	    {# Изображение товара #}
 	    <img src="{{ item.image.path|thumbnail:"200x,itempics" }}" 
 		 id="thumbnail" border="0"
@@ -29,7 +29,7 @@
 	
 	<td valign="top">
 	  <div id="add_widget" class="pointer" style="padding: 0.5em 0px;" 
-	       onclick="$('#widget-addtocart').toggleZoom(); return false;">
+	       onclick="$('#cartadd_{{ item.id }}').toggleZoom(); return false;">
 	    <img src="http://moiluchru/pics/add.png" title="Добавить в корзину" width="32" height="32"/>
 	    <u>Добавить в корзину</u>
 	  </div>
@@ -76,25 +76,7 @@
     </div>
     {% endif %}
 
-    <div id="zoom" class="hide">
-      <h3 class="ttl"><span></span>{{ item.title }}</h3>
-      <img src="{{ item.image.path|thumbnail:"400x,itempics" }}" border="0" title="{{ item.title }}"
-	   class="pointer" onclick="$(this).toggleZoom(); return false;"/>
-      <div class="center">Нажмите на изображение, чтобы закрыть просмотр.</div>
-    </div>
+    {% include "shop/inc-w-cart-add.html" %}
 
-    <div id="widget-addtocart" class="hide">
-      <h3 class="ttl"><span></span>{{ item.title }}</h3>
-      <img src="{{ item.image.path|thumbnail:"400x,itempics" }}" border="0" title="{{ item.title }}"
-	   class="pointer" onclick="$(this).toggleZoom(); $('#widget_item_quantity').focus(); return false;"/>
-      <div style="text-align: right;">
-	<img id="loading" class="hide" src="/pics/loading.gif" title="Ожидайте..." border="0"/>
-	Количество
-	<input type="text" id="widget_item_quantity" value="1" maxlength="2" title="Количество" style="width: 30px; text-align: right;"/>
-	<button onclick="buy({{ item.id }}, $('#widget_item_quantity').val()); return false;">Добавить</button>
-      </div>
-      <div class="center">Нажмите на изображение, чтобы закрыть просмотр.</div>
-    </div>
-  
   </div>
 {% endblock %}
