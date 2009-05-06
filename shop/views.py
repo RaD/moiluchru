@@ -182,7 +182,7 @@ def show_offer(request):
     """ Отображение формы для ввода данных о покупателе.  Обработка
     пользовательского ввода. """
     if not 'cart_items' in request.session or request.session['cart_count'] == 0:
-        return HttpResponseRedirect('/shop/')
+        return HttpResponseRedirect('/')
 
     if request.method == 'POST':
         form = OfferForm(request.POST)
@@ -219,7 +219,7 @@ def show_offer(request):
                     producer = item.producer
                     producer.buys += 1
                     producer.save()
-                return HttpResponseRedirect('/shop/ordered/')
+                return HttpResponseRedirect('/ordered/')
             except Exception, e:
                 return HttpResponse('bad form data: %s' % e)  #FIXME: DECORATOR
         else:
@@ -229,9 +229,24 @@ def show_offer(request):
         form = OfferForm(auto_id='field_%s')
         return {'form_offer': form, 'cart_show' : 'yes'}
 
+# Заказ выполнен, отсылаем уведомление, очищаем корзину.
 @render_to('shop/ordered.html', cart_ctx_proc)
 def show_ordered(request):
     common.init_cart(request)
+    if settings.JABBER_NOTIFICATION:
+        import xmpp, time
+        jid = xmpp.protocol.JID(settings.JABBER_ID)
+        cl = xmpp.Client(jid.getDomain(), debug=[])
+        conn = cl.connect()
+        if conn:
+            auth = cl.auth(jid.getNode(), settings.JABBER_PASSWORD,
+                           resource=jid.getResource())
+            if auth:
+                for recipient in settings.JABBER_RECIPIENTS:
+                    id = cl.send(xmpp.protocol.Message(recipient, 'Внимание! Есть заказ!'))
+                # Некоторые старые сервера не отправляют сообщения,
+                # если вы немедленно отсоединяетесь после отправки
+                time.sleep(1)
     return {}
     
 def set_sort_mode(request, mode=1):
@@ -249,7 +264,7 @@ def set_sort_mode(request, mode=1):
                 request.session['sort_type'] = 3
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '#'))
     else:
-        return HttpResponseRedirect('/shop/%s/' % mode)
+        return HttpResponseRedirect('/shop/%s/' % mode) #FIXME
 
 @render_to('shop/text.html', cart_ctx_proc)
 def show_text_page(request, label):
@@ -291,5 +306,20 @@ def handler404(request):
     except Item.DoesNotExist:
         items = 0
     return {'menu_current': 1, 'page_title': '404: Страница не найдена...',
+            'items_col1': items[:settings.ITEMS_ON_MAIN_PAGE/2],
+            'items_col2': items[settings.ITEMS_ON_MAIN_PAGE/2:]}
+
+@render_to('500.html', cart_ctx_proc)
+def handler500(request):
+    if request.session.test_cookie_worked():
+        common.does_cart_exist(request)
+    else:
+        request.session.set_test_cookie()
+
+    try:
+        items = Item.objects.order_by('-buys')[:settings.ITEMS_ON_MAIN_PAGE]
+    except Item.DoesNotExist:
+        items = 0
+    return {'menu_current': 1, 'page_title': '500: Что-то с моим кодом...',
             'items_col1': items[:settings.ITEMS_ON_MAIN_PAGE/2],
             'items_col2': items[settings.ITEMS_ON_MAIN_PAGE/2:]}
