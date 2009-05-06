@@ -1,12 +1,12 @@
 <div class="cat-widget">
   <h3 class="ttl"><span></span>Категории</h3>
   {% for parcat in parent_cats %}
-  <a href="{{ parcat.get_absolute_url }}">{{ parcat.title }}</a>{% if not forloop.last %} / {% endif %}
+  <a href="{{ parcat.get_absolute_url }}" class="nowrap">{{ parcat.title }}</a>{% if not forloop.last %} <span style="color: #b964d4;">&bull;</span> {% endif %}
   {% endfor %}
 
   <div class="subcategories">
     {% for cat in child_cats %}
-    <a href="{{ cat.get_absolute_url }}">{{ cat.title }}</a>{% if not forloop.last %} / {% endif %}
+    <a href="{{ cat.get_absolute_url }}" class="nowrap">{{ cat.title }}</a>{% if not forloop.last %} <span style="color: #b964d4;">&bull;</span> {% endif %}
     {% endfor %}
   </div>
 </div>
