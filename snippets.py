@@ -64,13 +64,11 @@ def paginate_by(param_name, get_name, count=10):
             # получаем контекст
             context =  func(request, *args, **kwargs)
             if param_name in context:
-                THRESHOLD1 = 10
-                THRESHOLD2 = 20
                 try:
                     objects = context.get(param_name)
                     paginator = Paginator(objects, count)
+
                     context['page'] = paginator.page(int(pagenum))
-                    context['page_range'] = paginator.page_range
                     context[param_name] = paginator.page(int(pagenum)).object_list
                 except (EmptyPage, InvalidPage):
                     context[param_name] = paginator.page(paginator.num_pages).object_list
