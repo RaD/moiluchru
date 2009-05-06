@@ -4,6 +4,7 @@ import sys
 import logging
 import locale
 import codecs
+import django
 
 from pyxmpp.all import JID,Iq,Presence,Message,StreamError
 from pyxmpp.jabber.client import JabberClient
@@ -166,45 +167,45 @@ class Client(JabberClient):
         print u"Roster item updated:"
         self.print_roster_item(item)
 
-# # XMPP protocol is Unicode-based to properly display data received
-# # _must_ convert it to local encoding or UnicodeException may be raised
-# locale.setlocale(locale.LC_CTYPE,"")
-# encoding=locale.getlocale()[1]
-# if not encoding:
-#     encoding="us-ascii"
-# sys.stdout=codecs.getwriter(encoding)(sys.stdout,errors="replace")
-# sys.stderr=codecs.getwriter(encoding)(sys.stderr,errors="replace")
+# XMPP protocol is Unicode-based to properly display data received
+# _must_ convert it to local encoding or UnicodeException may be raised
+locale.setlocale(locale.LC_CTYPE,"")
+encoding=locale.getlocale()[1]
+if not encoding:
+    encoding="us-ascii"
+sys.stdout=codecs.getwriter(encoding)(sys.stdout,errors="replace")
+sys.stderr=codecs.getwriter(encoding)(sys.stderr,errors="replace")
 
 
-# # PyXMPP uses `logging` module for its debug output
-# # applications should set it up as needed
-# logger=logging.getLogger()
-# logger.addHandler(logging.StreamHandler())
-# logger.setLevel(logging.INFO) # change to DEBUG for higher verbosity
+# PyXMPP uses `logging` module for its debug output
+# applications should set it up as needed
+logger=logging.getLogger()
+logger.addHandler(logging.StreamHandler())
+logger.setLevel(logging.INFO) # change to DEBUG for higher verbosity
 
-# if len(sys.argv)<3:
-#     print u"Usage:"
-#     print "\t%s JID password" % (sys.argv[0],)
-#     print "example:"
-#     print "\t%s test@localhost verysecret" % (sys.argv[0],)
-#     sys.exit(1)
+if len(sys.argv)<3:
+    print u"Usage:"
+    print "\t%s JID password" % (sys.argv[0],)
+    print "example:"
+    print "\t%s test@localhost verysecret" % (sys.argv[0],)
+    sys.exit(1)
 
-# print u"creating client..."
-# c=Client(JID(sys.argv[1]),sys.argv[2])
+print u"creating client..."
+c=Client(JID(sys.argv[1]),sys.argv[2])
 
-# print u"connecting..."
-# c.connect()
+print u"connecting..."
+c.connect()
 
-# print u"looping..."
-# try:
-#     # Component class provides basic "main loop" for the applitation
-#     # Though, most applications would need to have their own loop and call
-#     # component.stream.loop_iter() from it whenever an event on
-#     # component.stream.fileno() occurs.
-#     c.loop(1)
-# except KeyboardInterrupt:
-#     print u"disconnecting..."
-#     c.disconnect()
+print u"looping..."
+try:
+    # Component class provides basic "main loop" for the applitation
+    # Though, most applications would need to have their own loop and call
+    # component.stream.loop_iter() from it whenever an event on
+    # component.stream.fileno() occurs.
+    c.loop(1)
+except KeyboardInterrupt:
+    print u"disconnecting..."
+    c.disconnect()
 
-# print u"exiting..."
-# # vi: sts=4 et sw=4
+print u"exiting..."
+# vi: sts=4 et sw=4
