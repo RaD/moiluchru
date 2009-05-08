@@ -24,6 +24,10 @@ class SearchForm(forms.Form):
     userinput = forms.CharField(max_length=64)
     howmuch = forms.ChoiceField(choices=[(1, settings.SHOP_ITEMS_PER_PAGE), (2, '10'), (3, '25'), (4, '50')])
 
+class FullSearchForm(SearchForm):
+    min_price = forms.CharField(label=_(u'Price (min)'), max_length=6)
+    max_price = forms.CharField(label=_(u'Price (max)'), max_length=6)
+
 class OfferForm(forms.Form):
     fname = forms.CharField(label=_(u'Last name'), max_length=64,
                             widget=forms.TextInput(attrs={'class':'longitem'}))

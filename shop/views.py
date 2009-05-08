@@ -12,7 +12,7 @@ from tagging.utils import calculate_cloud
 from moiluchru.shop import common
 from moiluchru.shop.models import Item, Category, Producer, Buyer, Phone, Order, \
     OrderStatus, OrderDetail, Lamp
-from moiluchru.shop.forms import DivErrorList, SearchForm, OfferForm
+from moiluchru.shop.forms import DivErrorList, SearchForm, FullSearchForm, OfferForm
 from moiluchru.shop.classes import CartItem
 
 from moiluchru.snippets import render_to, columns, paginate_by
@@ -49,7 +49,7 @@ def cart_ctx_proc(request):
 ### Страница с поисковым запросом
 @render_to('shop/search.html', cart_ctx_proc)
 def search_query(request):
-    context = {'searchform': SearchForm()}
+    context = {'searchform': SearchForm(), 'fullsearchform': FullSearchForm()}
     return context
 
 ### Страница с результатами поиска
@@ -61,13 +61,20 @@ def search_results(request):
     common.does_cart_exist(request)
     sort_type = request.session.get('sort_type', 1)
     if request.method == 'POST':
+        full_search = 'max_price' in request.POST.keys() # полный поиск
         form = SearchForm(request.POST)
+        #import pdb; pdb.set_trace()
+        if full_search:
+            form = FullSearchForm(request.POST)
         if form.is_valid():
             clean = form.cleaned_data
             items = Item.objects.filter(Q(title__search='*%s*' % clean['userinput']) |
                                         Q(desc__search='*%s*' % clean['userinput']) |
                                         Q(tags__search='*%s*' % clean['userinput'])
                                         )
+            if full_search: # полный поиск
+                items = items.filter(sort_price__gte=clean['min_price'],
+                                     sort_price__lte=clean['max_price'])
             request.session['searchquery'] = clean['userinput']
             request.session['howmuch_id'] = clean['howmuch']
             request.session['cached_search'] = items # кэшируем для paginator
