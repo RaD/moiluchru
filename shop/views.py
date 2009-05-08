@@ -91,6 +91,7 @@ def tag_results(request, tag):
     request.session['cached_search'] = items # кэшируем для paginator
     return HttpResponseRedirect(u'/result/')
 
+### Главная страница
 @render_to('shop/main.html', cart_ctx_proc)
 def show_main_page(request):
     """ Функция для отображения главной страницы сайта.  Осуществляем
@@ -108,6 +109,7 @@ def show_main_page(request):
             'items_col1': items[:settings.ITEMS_ON_MAIN_PAGE/2],
             'items_col2': items[settings.ITEMS_ON_MAIN_PAGE/2:]}
 
+### Страница со списком товаров
 @render_to('shop/category.html', cart_ctx_proc)
 @columns('items', 2)
 @paginate_by('items', 'page', settings.SHOP_ITEMS_PER_PAGE)
@@ -126,6 +128,7 @@ def show_items(request):
             'url': reverse(show_items), # для многостраничности
             'items': items}
 
+### Страница со списком товаров указанно категории
 @render_to('shop/category.html', cart_ctx_proc)
 @columns('items', 2)
 @paginate_by('items', 'page', settings.SHOP_ITEMS_PER_PAGE)
@@ -149,6 +152,7 @@ def show_category_page(request, category_id=None):
             'sort_type': sort_type, 
             'items': items}
 
+### Страница с описанием товара
 @render_to('shop/item.html', cart_ctx_proc)
 def show_item_page(request, item_id):
     """ Отображение подробной информации о товаре. """
@@ -161,6 +165,7 @@ def show_item_page(request, item_id):
     except Item.DoesNotExist:
         pass # FIXME
     
+# Страница с содержимым корзины
 @render_to('shop/cart.html', cart_ctx_proc)
 def show_cart(request):
     """ Отображение содержимого корзины. """
@@ -177,6 +182,7 @@ def show_cart(request):
             'cart_show' : 'yes',
             'categories': Category.objects.filter(parent__isnull=True)}
 
+#
 @render_to('shop/offer.html', cart_ctx_proc)
 def show_offer(request):
     """ Отображение формы для ввода данных о покупателе.  Обработка
@@ -244,11 +250,12 @@ def show_ordered(request):
             if auth:
                 for recipient in settings.JABBER_RECIPIENTS:
                     id = cl.send(xmpp.protocol.Message(recipient, 'Внимание! Есть заказ!'))
-                # Некоторые старые сервера не отправляют сообщения,
-                # если вы немедленно отсоединяетесь после отправки
-                time.sleep(1)
+                    # Некоторые старые сервера не отправляют сообщения,
+                    # если вы немедленно отсоединяетесь после отправки
+                    time.sleep(1)
     return {}
     
+# Метод для изменения параметров сортировки
 def set_sort_mode(request, mode=1):
     if int(mode) in range(1,3):
         sort_type = int(request.session.get('sort_type', 1))
@@ -266,6 +273,7 @@ def set_sort_mode(request, mode=1):
     else:
         return HttpResponseRedirect('/shop/%s/' % mode) #FIXME
 
+# Страница с текстом
 @render_to('shop/text.html', cart_ctx_proc)
 def show_text_page(request, label):
     """ Отображение страницы с текстом. """
@@ -273,26 +281,6 @@ def show_text_page(request, label):
     from moiluchru.text.views import text
     return {'menu_current': modes.get(label, 0),
             'text': text(request, label)}
-
-
-
-# @render_to('shop/category.html', cart_ctx_proc)
-# def show_producer_page(request, producer_id, page, category_id=0):
-#     """ Функция для отображения товаром для указанного производителя
-#     из всех подчинённых категорий. """
-#     common.does_cart_exist(request)
-#     p = Producer.objects.get(id=producer_id)
-#     i = common.category_items(category_id, producer_id)
-#     paginator = Paginator(i, settings.SHOP_ITEMS_PER_PAGE)
-#     return {'parent_cats': common.parent_categories(category_id),
-#             'child_cats': common.child_categories(category_id),
-#             'category_id': (category_id == 0) and None or category_id,
-#             #'currentproc': p,
-#             #'categories': child_cats,
-#             'producers': common.category_producers(category_id),
-#             'url': '/shop/producer/%s/%s/' % (producer_id, category_id),
-#             'items': paginator.page(page).object_list,
-#             'page': paginator.page(page), 'page_range': paginator.page_range}
 
 @render_to('404.html', cart_ctx_proc)
 def handler404(request):
