@@ -76,6 +76,26 @@
     </div>
     {% endif %}
 
+    {# Отображение остальных элементов коллекции #}
+    {% if collection %}
+    <div>
+      <h3 class="ttl"><span></span>Коллекция</h3>
+    <table wdth="100%" border="0">
+      <tr>
+	{% for i in collection %}
+	<td align="center">
+	  <div>{{ i.title }}</div>
+	  <div>
+	    <img src="{{ i.image.path|thumbnail:"80x,itempics" }}" border="0"/>
+	  </div>
+	  <div><a href="{{ i.get_absolute_url }}">Описание...</a></div>
+	</td>
+	{% endfor %}
+      </tr>
+    </table>
+    </div>
+    {% endif %}
+
     {% include "shop/inc-w-cart-add.html" %}
 
   </div>
