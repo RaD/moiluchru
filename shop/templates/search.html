@@ -17,7 +17,23 @@
     <form method="post" action="/result/">
       <table width="100%">
 	<tr>
-	  {{ fullsearchform }}
+	  <td>
+	    Запрос <input id="field_userinput" type="text" name="userinput" value="тиффани" maxlength="64" />
+	    <select name="howmuch" id="field_howmuch">
+	      <option value="1" selected="selected">10</option>
+	      <option value="2">10</option>
+	      <option value="3">25</option>
+	      <option value="4">50</option>
+	    </select> шт. на странице
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    Диапазон цен
+	    от <input id="field_min_price" type="text" name="min_price" value="" maxlength="6" />
+	    до <input id="field_max_price" type="text" name="max_price" value="" maxlength="6" />
+	    рублей.
+	  </td>
 	</tr>
 	<tr>
 	  <td>

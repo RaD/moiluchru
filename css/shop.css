@@ -192,6 +192,8 @@ body {
    position: absolute; top: 90px; left: 20px;
    width: 16em;
 }
+#field_min_price { width: 80px; }
+#field_max_price { width: 80px; }
 
 /* @end */
 

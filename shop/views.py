@@ -61,6 +61,7 @@ def search_results(request):
     common.does_cart_exist(request)
     sort_type = request.session.get('sort_type', 1)
     if request.method == 'POST':
+        userinput = ''
         full_search = 'max_price' in request.POST.keys() # полный поиск
         form = SearchForm(request.POST)
         #import pdb; pdb.set_trace()
@@ -68,19 +69,22 @@ def search_results(request):
             form = FullSearchForm(request.POST)
         if form.is_valid():
             clean = form.cleaned_data
-            items = Item.objects.filter(Q(title__search='*%s*' % clean['userinput']) |
-                                        Q(desc__search='*%s*' % clean['userinput']) |
-                                        Q(tags__search='*%s*' % clean['userinput'])
-                                        )
+            userinput = clean['userinput']
+            items = Item.objects.filter(Q(title__search='*%s*' % userinput) |
+                                        Q(desc__search='*%s*' % userinput) |
+                                        Q(tags__search='*%s*' % userinput))
             if full_search: # полный поиск
-                items = items.filter(sort_price__gte=clean['min_price'],
-                                     sort_price__lte=clean['max_price'])
+                min = clean['min_price']
+                max = clean['max_price']
+                items = items.filter(sort_price__gte=min, sort_price__lte=max)
             request.session['searchquery'] = clean['userinput']
             request.session['howmuch_id'] = clean['howmuch']
             request.session['cached_search'] = items # кэшируем для paginator
-            return {'items': items.order_by(sort[sort_type]), 'addtocart': True,
-                    'search_query': clean['userinput'],
-                    'url': '/result/', 'sort_type': sort_type}
+        else:
+            items = Item.objects.all()
+        return {'items': items.order_by(sort[sort_type]), 'addtocart': True,
+                'search_query': userinput,
+                'url': '/result/', 'sort_type': sort_type}
     else: # обращение через paginator
         try:
             items = request.session.get('cached_search').order_by(sort[sort_type])
