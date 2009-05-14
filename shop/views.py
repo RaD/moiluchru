@@ -170,7 +170,7 @@ def show_item_page(request, item_id):
     common.does_cart_exist(request)
     try:
         item = Item.objects.get(id=item_id)
-        collection = Item.objects.filter(collection=item.collection).exclude(id=item.id)
+        collection = Item.objects.filter(collection=item.collection, collection__isnull=False).exclude(id=item.id)
         return {'menu_current': 3, 'addtocart': True,
                 'item': item, 'collection': collection,
                 'lamp': item.get_lamp(), 'addons': item.get_size(),
