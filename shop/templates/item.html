@@ -82,7 +82,7 @@
       <h3 class="ttl"><span></span>Коллекция</h3>
       <div>
       {% for i in collection %}
-      <span style="width: 100px; height: 130px; float: left; text-align: center; padding: 2px; margin: 2px; border: 1px solid #FFEB73; -moz-border-radius: 4px;">
+      <span class="collection-list-item">
 	<a href="{{ i.get_absolute_url }}" title="Нажмите для просмотра товара">{{ i.title }}</a>
 	<br/>
 	<a href="{{ i.get_absolute_url }}" title="Нажмите для просмотра товара">

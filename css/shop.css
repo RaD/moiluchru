@@ -385,6 +385,14 @@ body {
    padding: 4px;
 }
 
+.collection-list-item {
+   width: 100px; height: 130px; 
+   float: left; 
+   text-align: center; 
+   padding: 4px; margin: 2px; 
+   border: 1px solid #FFEB73; -moz-border-radius: 4px;
+}
+
 .thumbnail-containter {
    background-color: white;
    width: 100px; height: 100px;
