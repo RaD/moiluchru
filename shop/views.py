@@ -33,7 +33,10 @@ def cart_ctx_proc(request):
     cp = {'min_pct': 75, 'max_pct': 150, 'steps': 4}
     step_pct = int((cp['max_pct'] - cp['min_pct'])/(cp['steps'] - 1))
     for i in cloud:
-        i.font_size = (i.font_size - 1) * step_pct + cp['min_pct']
+        try:
+            i.font_size = (i.font_size - 1) * step_pct + cp['min_pct']
+        except:
+            pass # FIXME
     return {'debug': settings.DEBUG,
             'jabber': settings.JABBER_ENGINE,
             'site_title': settings.SITE_TITLE,
