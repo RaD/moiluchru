@@ -33,10 +33,7 @@ def cart_ctx_proc(request):
     cp = {'min_pct': 75, 'max_pct': 150, 'steps': 4}
     step_pct = int((cp['max_pct'] - cp['min_pct'])/(cp['steps'] - 1))
     for i in cloud:
-        try:
-            i.font_size = (i.font_size - 1) * step_pct + cp['min_pct']
-        except:
-            pass # FIXME
+        i.font_size = (i.font_size - 1) * step_pct + cp['min_pct']
     return {'debug': settings.DEBUG,
             'jabber': settings.JABBER_ENGINE,
             'site_title': settings.SITE_TITLE,
@@ -67,7 +64,6 @@ def search_results(request):
         userinput = ''
         full_search = 'max_price' in request.POST.keys() # полный поиск
         form = SearchForm(request.POST)
-        #import pdb; pdb.set_trace()
         if full_search:
             form = FullSearchForm(request.POST)
         if form.is_valid():
