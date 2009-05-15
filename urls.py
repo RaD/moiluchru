@@ -9,11 +9,28 @@ admin.autodiscover()
 handler404 = 'moiluchru.shop.views.handler404'
 #handler500 = 'moiluchru.shop.views.handler500'
 
+# карта сайта
+from django.contrib.sitemaps import FlatPageSitemap, GenericSitemap
+from moiluchru.shop.models import Item
+
+sitemap_dict = {
+    'queryset': Item.objects.all(),
+    'date_field': 'reg_date',
+}
+
+sitemaps = {
+    'flatpages': FlatPageSitemap,
+    'items': GenericSitemap(sitemap_dict, priority=0.6),
+}
+
 urlpatterns = patterns(
     '',
     # Интерфейс администратора
     (r'^admin/doc/', include('django.contrib.admindocs/urls')),
     (r'^admin/(.*)', admin.site.root),
+
+    # карта сайта
+    (r'^sitemap.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
 
     #(r'^$', 'django.views.generic.simple.redirect_to', {'url': '/shop/'}),
     (r'^$', 'moiluchru.shop.views.show_main_page'),
