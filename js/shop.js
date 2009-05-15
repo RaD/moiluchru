@@ -30,7 +30,8 @@ $.fn.alignCenter = function() {
 };
 
 $.fn.toggleZoom = function() {
-    if ($('#popup').hasClass('hide')) {
+    var popup = $('#popup');
+    if (popup.hasClass('hide')) {
 	// затеняем окно
 	if(! $.browser.msie) {
 	    $('#opaco').height($(document).height()).toggleClass('hide').fadeTo('slow', 0.7);
@@ -38,11 +39,20 @@ $.fn.toggleZoom = function() {
 	    $('#opaco').height($(document).height()).toggleClass('hide');
 	}
 	// отображаем
-	$('#popup').html($(this).html()).alignCenter().toggleClass('hide');
+	popup.html($(this).html()).alignCenter().toggleClass('hide');
+	// ставим обработчик клавиатуры
+	$(document).bind('keypress',
+                         function(e) {
+			     var code = (e.keyCode ? e.keyCode : e.which);
+			     if (code == 27) popup.toggleZoom();
+			 }
+			);
     } else {
+	// снимаем обработчик клавиатуры
+	$(document).unbind('keypress');
 	$('#opaco').fadeTo('slow', 0.0, 
 			   function() {
-			       $('#popup').toggleClass('hide');
+			       popup.toggleClass('hide');
 			       $(this).toggleClass('hide');
 			   });
     }
