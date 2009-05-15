@@ -52,22 +52,26 @@
     <th width="20%" class="center">Стоимость</td>
     <th width="50"></td>
   </tr>
-  
+
   {% for i in cart_items %}
   <tr item="{{ i.record.id }}">
-    <td width="100" class="thumbnail-containter">
+    <td width="100" height="100" align="center" valign="middle" class="thumbnail-containter">
       <a href="{{ i.record.get_absolute_url }}">
 	<img id="th_{{ i.record.id }}" src="{{ i.record.image.path|thumbnail:"100x,itempics" }}" 
-             border="0" title="{{ i.record.title }}"/>
-      </a>
+             border="0" title="{{ i.record.title }}: Перейти на страницу товара"/></a>
     </td>
     <td class="longitem" title="{{ i.title }}">
-      <div>{{ i.record.title }}</div>
-      <div>Категория: {{ i.record.category }}</div>
+      <div style="font-size: 150%;">{{ i.record.title }}</div>
+      <div>
+	Категория: 
+	<a href="{{ i.record.category.get_absolute_url }}" 
+	   title="Просмотреть товары этой категории">{{ i.record.category }}</a>
+      </div>
     </td>
     <td class="right nowrap"><span class="money">{{ i.price|floatformat:2 }}</span> руб</td>
     <td class="center mono">
       <input type="text" name="count_{{ i.record.id }}"
+	     title="Пересчёт происходит после покидания поля. Совет: нажмите [TAB]"
              onchange="cart_recalculate(this);" item="{{ i.record.id }}"
 	     value="{{ i.count }}" style="width: 30px; text-align: right;"/>
     </td>

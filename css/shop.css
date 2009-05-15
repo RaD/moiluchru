@@ -397,8 +397,6 @@ body {
    background-color: white;
    width: 100px; height: 100px;
    text-align: center;
-   padding: 0.5em;
-   vertical-align: middle;
    cursor: pointer;
 }
 .thumbnail-containter img {

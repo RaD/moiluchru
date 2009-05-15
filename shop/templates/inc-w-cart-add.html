@@ -15,10 +15,16 @@
     </div>
   </div>
 
-  <div style="width: 400px; height: 400px; text-align: center;" class="pointer" 
+  <table width="400" height="400" align="center" valign="middle" class="pointer" 
        onclick="$(this).toggleZoom(); return false;">
-    <img src="{{ item.image.path|thumbnail:"400x,itempics" }}" title="{{ item.title }}" border="0" style="vertical-align: middle;"/>
-  </div>
+    <tr>
+      <td>
+	<img src="{{ item.image.path|thumbnail:"400x,itempics" }}" title="{{ item.title }}" 
+	     border="0" style="vertical-align: middle;"/>
+      </td>
+    </tr>
+  </table>
+
   <div style="text-align: right;">
     <img id="loading" class="hide" src="/pics/loading.gif" title="Ожидайте..." border="0"/>
     Количество
