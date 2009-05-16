@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-04 11:14+0400\n"
+"POT-Creation-Date: 2009-05-16 09:18+0400\n"
 "PO-Revision-Date: 2008-07-09 20:40+0400\n"
 "Last-Translator: Ruslan Popov <radz@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -52,58 +52,66 @@ msgid "Price of the shop"
 msgstr "Цена магазина"
 
 #: shop/forms.py:28
+msgid "Price (min)"
+msgstr "Цена (минимальная)"
+
+#: shop/forms.py:29
+msgid "Price (max)"
+msgstr "Цена (максимальная)"
+
+#: shop/forms.py:32
 msgid "Last name"
 msgstr "Фамилия"
 
-#: shop/forms.py:30
+#: shop/forms.py:34
 msgid "First name"
 msgstr "Имя"
 
-#: shop/forms.py:32
+#: shop/forms.py:36
 msgid "Second name"
 msgstr "Отчество"
 
-#: shop/forms.py:34
+#: shop/forms.py:38
 msgid "Address"
 msgstr "Адрес"
 
-#: shop/forms.py:36
+#: shop/forms.py:40
 msgid "Contact phone"
 msgstr "Контактный телефон"
 
-#: shop/forms.py:38 shop/models.py:226
+#: shop/forms.py:42 shop/models.py:226
 msgid "Phone type"
 msgstr "Тип телефона"
 
-#: shop/forms.py:40
+#: shop/forms.py:44
 msgid "E-mail"
 msgstr "Е-почта"
 
-#: shop/forms.py:42
+#: shop/forms.py:46
 msgid "Comment"
 msgstr "Комментарий"
 
-#: shop/forms.py:46
+#: shop/forms.py:50
 msgid "Login"
 msgstr "Логин"
 
-#: shop/forms.py:48
+#: shop/forms.py:52
 msgid "Password"
 msgstr "Пароль"
 
-#: shop/forms.py:52
+#: shop/forms.py:56
 msgid "Status"
 msgstr "Состояние"
 
-#: shop/forms.py:54
+#: shop/forms.py:58
 msgid "Courier"
 msgstr "Курьер"
 
-#: shop/forms.py:58 shop/forms.py:65 shop/forms.py:69
+#: shop/forms.py:62 shop/forms.py:69 shop/forms.py:73
 msgid "Item id"
 msgstr "Идентификатор товара"
 
-#: shop/forms.py:59 shop/forms.py:66
+#: shop/forms.py:63 shop/forms.py:70
 msgid "Item count"
 msgstr "Количество товара"
 
@@ -199,7 +207,7 @@ msgstr "Цена"
 msgid "Item"
 msgstr "Товар"
 
-#: shop/models.py:112 shop/views.py:30
+#: shop/models.py:112 shop/views.py:30 shop/views.py:136
 msgid "Items"
 msgstr "Товары"
 
@@ -291,21 +299,13 @@ msgstr "Доставка"
 msgid "Map"
 msgstr "Карта"
 
-#: templates/404.html:5 templates/500.html:5
-msgid "Forgotten page..."
-msgstr "Потерянная страница..."
+#: shop/views.py:159
+msgid "Items of the category"
+msgstr "Товары категории"
 
-#: templates/404.html:11 templates/500.html:11
-msgid "You may visit"
-msgstr "Вы можете посетить"
-
-#: templates/404.html:13 templates/500.html:13
-msgid "my demo shop"
-msgstr "мой демо магазин"
-
-#: templates/404.html:14 templates/500.html:14
-msgid "my book"
-msgstr "мою книгу"
+#: shop/views.py:189
+msgid "Items of the collection"
+msgstr "Товары коллекции"
 
 #: text/models.py:7
 msgid "Label"
