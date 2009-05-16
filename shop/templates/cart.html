@@ -67,6 +67,12 @@
 	<a href="{{ i.record.category.get_absolute_url }}" 
 	   title="Просмотреть товары этой категории">{{ i.record.category }}</a>
       </div>
+      {% if i.record.collection %}
+      <div>
+	<a href="{{ i.record.collection.get_absolute_url }}" 
+	   title="Просмотреть товары этой коллекции">Просмотреть товары из данной коллекции</a>
+      </div>
+      {% endif %}
     </td>
     <td class="right nowrap"><span class="money">{{ i.price|floatformat:2 }}</span> руб</td>
     <td class="center mono">

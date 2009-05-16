@@ -10,7 +10,7 @@ from tagging.models import Tag
 from tagging.utils import calculate_cloud
 
 from moiluchru.shop import common
-from moiluchru.shop.models import Item, Category, Producer, Buyer, Phone, Order, \
+from moiluchru.shop.models import Item, Category, Collection, Buyer, Phone, Order, \
     OrderStatus, OrderDetail, Lamp
 from moiluchru.shop.forms import DivErrorList, SearchForm, FullSearchForm, OfferForm
 from moiluchru.shop.classes import CartItem
@@ -78,19 +78,19 @@ def search_results(request):
                 items = items.filter(sort_price__gte=min, sort_price__lte=max)
             request.session['searchquery'] = clean['userinput']
             request.session['howmuch_id'] = clean['howmuch']
-            request.session['cached_search'] = items # кэшируем для paginator
+            request.session['cached_items'] = items # кэшируем для paginator
         else:
             items = Item.objects.all()
-        return {'items': items.order_by(sort[sort_type]), 'addtocart': True,
+        return {'items': items.order_by(sort[sort_type]),
                 'search_query': userinput,
                 'url': '/result/', 'sort_type': sort_type}
     else: # обращение через paginator
         try:
-            items = request.session.get('cached_search').order_by(sort[sort_type])
+            items = request.session.get('cached_items').order_by(sort[sort_type])
         except:
             items = [] # FIXME: видать прошли по ссылке напрямую, надо решить, что делать в таком случае
         return {'items': items,
-                'search_query': request.session.get('searchquery', ''), 'addtocart': True,
+                'search_query': request.session.get('searchquery', ''),
                 'url': '/result/', 'sort_type': sort_type}
 
 ### Страница с результатами поиска по тегу
@@ -98,7 +98,7 @@ def tag_results(request, tag):
     """ Функция для результатов поиска по тегу. """
     items = Item.objects.filter(Q(tags__search='%s' % tag))
     request.session['searchquery'] = tag
-    request.session['cached_search'] = items # кэшируем для paginator
+    request.session['cached_items'] = items # кэшируем для paginator
     return HttpResponseRedirect(u'/result/')
 
 ### Главная страница
@@ -115,12 +115,12 @@ def show_main_page(request):
         items = Item.objects.order_by('-buys')[:settings.ITEMS_ON_MAIN_PAGE]
     except Item.DoesNotExist:
         items = 0
-    return {'menu_current': 1, 'addtocart': True,
+    return {'menu_current': 1,
             'items_col1': items[:settings.ITEMS_ON_MAIN_PAGE/2],
             'items_col2': items[settings.ITEMS_ON_MAIN_PAGE/2:]}
 
 ### Страница со списком товаров
-@render_to('shop/category.html', cart_ctx_proc)
+@render_to('shop/itemlist.html', cart_ctx_proc)
 @columns('items', 2)
 @paginate_by('items', 'page', settings.SHOP_ITEMS_PER_PAGE)
 def show_items(request):
@@ -131,15 +131,16 @@ def show_items(request):
 
     # получаем отсортированные товары всех категорий
     items = common.category_items().order_by(sort[sort_type]) 
+    request.session['cached_items'] = items # кэшируем для paginator
     
-    return {'menu_current': 3, 'addtocart': True,
-            'child_cats': common.child_categories(),
+    return {'menu_current': 3, 'title': _(u'Items'),
+            'categories': Category.objects.all(),
             'sort_type': sort_type, 
             'url': reverse(show_items), # для многостраничности
             'items': items}
 
-### Страница со списком товаров указанно категории
-@render_to('shop/category.html', cart_ctx_proc)
+### Страница со списком товаров указанной категории
+@render_to('shop/itemlist.html', cart_ctx_proc)
 @columns('items', 2)
 @paginate_by('items', 'page', settings.SHOP_ITEMS_PER_PAGE)
 def show_category_page(request, category_id=None):
@@ -149,16 +150,45 @@ def show_category_page(request, category_id=None):
     common.does_cart_exist(request)
 
     items = common.category_items(category_id).order_by(sort[sort_type])
+    request.session['cached_items'] = items # кэшируем для paginator
     try:
         c = Category.objects.get(id=category_id)
     except Category.DoesNotExist:
         return HttpResponseRedirect(u'/items/')
 
-    return {'menu_current': 3,
-            'parent_cats': common.parent_categories(category_id),
-            'child_cats': common.child_categories(category_id),
-            'category_id': category_id,
+    return {'menu_current': 3, 'title': _(u'Items of the category'),
+            'categories': Category.objects.all(),
+            'category_id': int(category_id),
             'url': c.get_absolute_url(), # для многостраничности
+            'sort_type': sort_type, 
+            'items': items}
+
+### Страница со списком товаров указанной коллекции
+@render_to('shop/itemlist.html', cart_ctx_proc)
+@columns('items', 2)
+@paginate_by('items', 'page', settings.SHOP_ITEMS_PER_PAGE)
+def show_collection_page(request, collection_id=None):
+    """ Функция для отображения подчинённых категорий. """
+    sort_type = request.session.get('sort_type', 1)
+
+    common.does_cart_exist(request)
+
+    try:
+        collection = Collection.objects.get(id=collection_id)
+        items = Item.objects.filter(collection=collection_id).order_by(sort[sort_type])
+        request.session['cached_items'] = items # кэшируем для paginator
+        categories_of_collection = set([i.category for i in items])
+    except Item.DoesNotExist:
+        # FIXME
+        return HttpResponseRedirect(u'/items/')
+    except Collection.DoesNotExist:
+        from django.http import Http404
+        raise Http404
+
+    return {'menu_current': 3, 'title': _(u'Items of the collection'),
+            'child_cats': categories_of_collection,
+            'collection_id': collection_id,
+            'url': collection.get_absolute_url(), # для многостраничности
             'sort_type': sort_type, 
             'items': items}
 
@@ -170,7 +200,7 @@ def show_item_page(request, item_id):
     try:
         item = Item.objects.get(id=item_id)
         collection = Item.objects.filter(collection=item.collection, collection__isnull=False).exclude(id=item.id)
-        return {'menu_current': 3, 'addtocart': True,
+        return {'menu_current': 3,
                 'item': item, 'collection': collection,
                 'lamp': item.get_lamp(), 'addons': item.get_size(),
                 'parent_cats': common.parent_categories(item.category.id)}

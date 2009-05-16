@@ -48,6 +48,10 @@ urlpatterns = patterns(
     (r'^category/(?P<category_id>\d+)/((?P<page>\d+)/)?', 
      'moiluchru.shop.views.show_category_page'),
 
+    # коллекции товаров
+    (r'^collection/(?P<collection_id>\d+)/((?P<page>\d+)/)?', 
+     'moiluchru.shop.views.show_collection_page'),
+
     # товар
     (r'^item/(?P<item_id>\d+)/', 'moiluchru.shop.views.show_item_page'),
 

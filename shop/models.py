@@ -82,7 +82,7 @@ class Collection(CommonEntity):
         verbose_name_plural = _(u'Collections')
 
     def get_absolute_url(self):
-        return u'/shop/collection/%i/' % self.id
+        return u'/collection/%i/' % self.id
 
 class ItemType(CommonEntity):
     """ The collection for items. """

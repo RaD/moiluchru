@@ -1,7 +1,9 @@
 {% extends "shop/base.html" %}
 
 {% block content %}
-{# <div><span class="title">Товары</span></div> #}
+
+<h3 class="ttl"><span></span>{{ title }}</h3>
+
 {% include "shop/inc-catwidget.html" %}
 {% include "shop/inc-paginator.html" %}  
 <table width="100%">
@@ -21,4 +23,5 @@
   </tr>
 </table>
 {% include "shop/inc-paginator.html" %}  
+{% include "shop/inc-catwidget.html" %}
 {% endblock %}
