@@ -5,7 +5,7 @@ from django.conf import settings
 from django.utils.translation import ugettext as _
 from django.contrib.admin import models as admmodels
 
-from moiluchru.shop import models
+from shop import models
 
 # Определяем класс для отображения ошибок в пользовательском вводе
 class DivErrorList(forms.util.ErrorList):

@@ -3,7 +3,7 @@
 from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
-from moiluchru.text.models import Text
+from text.models import Text
 
 def text(request, label=None):
     try:

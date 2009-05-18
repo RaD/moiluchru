@@ -3,7 +3,7 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from moiluchru.text.models import Text
+from text.models import Text
 
 class TextAdmin(admin.ModelAdmin):
     fieldsets = (

@@ -6,12 +6,12 @@ from django.conf.urls.defaults import *
 from django.contrib import admin
 admin.autodiscover()
 
-handler404 = 'moiluchru.shop.views.handler404'
-#handler500 = 'moiluchru.shop.views.handler500'
+handler404 = 'shop.views.handler404'
+#handler500 = 'shop.views.handler500'
 
 # карта сайта
 from django.contrib.sitemaps import FlatPageSitemap, GenericSitemap
-from moiluchru.shop.models import Item
+from shop.models import Item
 
 sitemap_dict = {
     'queryset': Item.objects.all(),
@@ -33,47 +33,47 @@ urlpatterns = patterns(
     (r'^sitemap.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
 
     #(r'^$', 'django.views.generic.simple.redirect_to', {'url': '/shop/'}),
-    (r'^$', 'moiluchru.shop.views.show_main_page'),
+    (r'^$', 'shop.views.show_main_page'),
 
     # страница результатов поиска
-    (r'^search/', 'moiluchru.shop.views.search_query'),
-    (r'^result/((?P<page>\d+)/)?', 'moiluchru.shop.views.search_results'),
-    (r'^tag/(?P<tag>\w+)/', 'moiluchru.shop.views.tag_results'),
+    (r'^search/', 'shop.views.search_query'),
+    (r'^result/((?P<page>\d+)/)?', 'shop.views.search_results'),
+    (r'^tag/(?P<tag>\w+)/', 'shop.views.tag_results'),
 
     # список товаров
     (r'^items/((?P<page>\d+)/)?', 
-     'moiluchru.shop.views.show_items'),
+     'shop.views.show_items'),
 
     # категории товаров
     (r'^category/(?P<category_id>\d+)/((?P<page>\d+)/)?', 
-     'moiluchru.shop.views.show_category_page'),
+     'shop.views.show_category_page'),
 
     # коллекции товаров
     (r'^collection/(?P<collection_id>\d+)/((?P<page>\d+)/)?', 
-     'moiluchru.shop.views.show_collection_page'),
+     'shop.views.show_collection_page'),
 
     # товар
-    (r'^item/(?P<item_id>\d+)/', 'moiluchru.shop.views.show_item_page'),
+    (r'^item/(?P<item_id>\d+)/', 'shop.views.show_item_page'),
 
     # процесс покупки
-    (r'^cart', 'moiluchru.shop.views.show_cart'),
-    (r'^offer', 'moiluchru.shop.views.show_offer'),
-    (r'^ordered', 'moiluchru.shop.views.show_ordered'),
+    (r'^cart', 'shop.views.show_cart'),
+    (r'^offer', 'shop.views.show_offer'),
+    (r'^ordered', 'shop.views.show_ordered'),
 
     # отображение текстов
-    (r'^text/((?P<label>\w+)/)?', 'moiluchru.shop.views.show_text_page'),
+    (r'^text/((?P<label>\w+)/)?', 'shop.views.show_text_page'),
 
     # магазин
-    (r'^shop/', include('moiluchru.shop.urls')),
+    (r'^shop/', include('shop.urls')),
 
     # интерфейс менеджера
-    (r'^manager/', include('moiluchru.manager.urls')),
+    (r'^manager/', include('manager.urls')),
 
     # ajax
-    (r'^ajax/cart/add', 'moiluchru.shop.ajax.add_to_cart'),
-    (r'^ajax/cart/remove/', 'moiluchru.shop.ajax.cart_remove_item'),
-    (r'^ajax/cart/recalculate/', 'moiluchru.shop.ajax.cart_recalculate'),
-    (r'^ajax/jabber/message', 'moiluchru.shop.ajax.jabber_message'),
-    (r'^ajax/jabber/poll', 'moiluchru.shop.ajax.jabber_poll'),
+    (r'^ajax/cart/add', 'shop.ajax.add_to_cart'),
+    (r'^ajax/cart/remove/', 'shop.ajax.cart_remove_item'),
+    (r'^ajax/cart/recalculate/', 'shop.ajax.cart_recalculate'),
+    (r'^ajax/jabber/message', 'shop.ajax.jabber_message'),
+    (r'^ajax/jabber/poll', 'shop.ajax.jabber_poll'),
     
 )

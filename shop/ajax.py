@@ -4,12 +4,12 @@ import logging
 
 from django.conf import settings
 
-from moiluchru.snippets import ajax_processor
-from moiluchru.shop import common
-from moiluchru.shop.forms import CartAdd, CartClean, CartRecalculate, CartRemoveItem
-from moiluchru.shop.models import Item
-from moiluchru.jabber.forms import JabberMessage
-from moiluchru.jabber.models import Message
+from snippets import ajax_processor
+from shop import common
+from shop.forms import CartAdd, CartClean, CartRecalculate, CartRemoveItem
+from shop.models import Item
+from jabber.forms import JabberMessage
+from jabber.models import Message
 
 from datetime import timedelta, datetime as dt
 

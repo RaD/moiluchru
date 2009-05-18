@@ -9,13 +9,13 @@ from django.utils.translation import gettext_lazy as _
 from tagging.models import Tag
 from tagging.utils import calculate_cloud
 
-from moiluchru.shop import common
-from moiluchru.shop.models import Item, Category, Collection, Buyer, Phone, Order, \
+from shop import common
+from shop.models import Item, Category, Collection, Buyer, Phone, Order, \
     OrderStatus, OrderDetail, Lamp
-from moiluchru.shop.forms import DivErrorList, SearchForm, FullSearchForm, OfferForm
-from moiluchru.shop.classes import CartItem
+from shop.forms import DivErrorList, SearchForm, FullSearchForm, OfferForm
+from shop.classes import CartItem
 
-from moiluchru.snippets import render_to, columns, paginate_by
+from snippets import render_to, columns, paginate_by
 
 sort = ['', '-buys', 'buys', '-sort_price', 'sort_price']
 
@@ -320,7 +320,7 @@ def set_sort_mode(request, mode=1):
 def show_text_page(request, label):
     """ Отображение страницы с текстом. """
     modes = {'shipping': 4, 'contact': 5}
-    from moiluchru.text.views import text
+    from text.views import text
     return {'menu_current': modes.get(label, 0),
             'text': text(request, label)}
 

@@ -7,11 +7,11 @@ from django.contrib import admin
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from moiluchru.snippets import thumbnail
+from snippets import thumbnail
 
-from moiluchru.shop.models import Color, Country, Producer, Category, \
+from shop.models import Color, Country, Producer, Category, \
      Collection, Item, ItemType, Price, Buyer, Order
-from moiluchru.shop.models import Lamp, Size, Socle
+from shop.models import Lamp, Size, Socle
 
 class SocleAdmin(admin.ModelAdmin):
     fieldsets = (('Параметры', {'fields': ('title',)}),)

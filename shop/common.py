@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db.models.query import QuerySet
 
-from moiluchru.shop import models
+from shop import models
 
 def init_cart(request):
     """ Инициализация корзины. """
