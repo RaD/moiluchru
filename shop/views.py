@@ -49,8 +49,10 @@ def cart_ctx_proc(request):
 ### Страница с поисковым запросом
 @render_to('shop/search.html', cart_ctx_proc)
 def search_query(request):
-    context = {'searchform': SearchForm(), 'fullsearchform': FullSearchForm()}
-    return context
+    return {'searchform': SearchForm(), 
+            'fullsearchform': FullSearchForm(),
+            'page_title': u'Мой Луч'
+            }
 
 ### Страница с результатами поиска
 @render_to('shop/result.html', cart_ctx_proc)
@@ -81,7 +83,8 @@ def search_results(request):
             request.session['cached_items'] = items # кэшируем для paginator
         else:
             items = Item.objects.all()
-        return {'items': items.order_by(sort[sort_type]),
+        return {'page_title': u'Результаты поискового запроса',
+                'items': items.order_by(sort[sort_type]),
                 'search_query': userinput,
                 'url': '/result/', 'sort_type': sort_type}
     else: # обращение через paginator
@@ -89,7 +92,8 @@ def search_results(request):
             items = request.session.get('cached_items').order_by(sort[sort_type])
         except:
             items = [] # FIXME: видать прошли по ссылке напрямую, надо решить, что делать в таком случае
-        return {'items': items,
+        return {'page_title': u'Результаты поискового запроса',
+                'items': items,
                 'search_query': request.session.get('searchquery', ''),
                 'url': '/result/', 'sort_type': sort_type}
 
@@ -115,9 +119,11 @@ def show_main_page(request):
         items = Item.objects.order_by('-buys')[:settings.ITEMS_ON_MAIN_PAGE]
     except Item.DoesNotExist:
         items = 0
-    return {'menu_current': 1,
-            'items_col1': items[:settings.ITEMS_ON_MAIN_PAGE/2],
-            'items_col2': items[settings.ITEMS_ON_MAIN_PAGE/2:]}
+    return {
+        'page_title': u'Мой Луч',
+        'menu_current': 1,
+        'items_col1': items[:settings.ITEMS_ON_MAIN_PAGE/2],
+        'items_col2': items[settings.ITEMS_ON_MAIN_PAGE/2:]}
 
 ### Страница со списком товаров
 @render_to('shop/itemlist.html', cart_ctx_proc)
@@ -133,11 +139,13 @@ def show_items(request):
     items = common.category_items().order_by(sort[sort_type]) 
     request.session['cached_items'] = items # кэшируем для paginator
     
-    return {'menu_current': 3, 'title': _(u'Items'),
-            'categories': Category.objects.all(),
-            'sort_type': sort_type, 
-            'url': reverse(show_items), # для многостраничности
-            'items': items}
+    return {
+        'page_title': u'Товары',
+        'menu_current': 3, 'title': _(u'Items'),
+        'categories': Category.objects.all(),
+        'sort_type': sort_type, 
+        'url': reverse(show_items), # для многостраничности
+        'items': items}
 
 ### Страница со списком товаров указанной категории
 @render_to('shop/itemlist.html', cart_ctx_proc)
@@ -156,12 +164,14 @@ def show_category_page(request, category_id=None):
     except Category.DoesNotExist:
         return HttpResponseRedirect(u'/items/')
 
-    return {'menu_current': 3, 'title': _(u'Items of the category'),
-            'categories': Category.objects.all(),
-            'category_id': int(category_id),
-            'url': c.get_absolute_url(), # для многостраничности
-            'sort_type': sort_type, 
-            'items': items}
+    return {
+        'page_title': u'Категория товаров',
+        'menu_current': 3, 'title': _(u'Items of the category'),
+        'categories': Category.objects.all(),
+        'category_id': int(category_id),
+        'url': c.get_absolute_url(), # для многостраничности
+        'sort_type': sort_type, 
+        'items': items}
 
 ### Страница со списком товаров указанной коллекции
 @render_to('shop/itemlist.html', cart_ctx_proc)
@@ -185,12 +195,14 @@ def show_collection_page(request, collection_id=None):
         from django.http import Http404
         raise Http404
 
-    return {'menu_current': 3, 'title': _(u'Items of the collection'),
-            'child_cats': categories_of_collection,
-            'collection_id': collection_id,
-            'url': collection.get_absolute_url(), # для многостраничности
-            'sort_type': sort_type, 
-            'items': items}
+    return {
+        'page_title': u'Коллекция товаров',
+        'menu_current': 3, 'title': _(u'Items of the collection'),
+        'child_cats': categories_of_collection,
+        'collection_id': collection_id,
+        'url': collection.get_absolute_url(), # для многостраничности
+        'sort_type': sort_type, 
+        'items': items}
 
 ### Страница с описанием товара
 @render_to('shop/item.html', cart_ctx_proc)
@@ -200,10 +212,12 @@ def show_item_page(request, item_id):
     try:
         item = Item.objects.get(id=item_id)
         collection = Item.objects.filter(collection=item.collection, collection__isnull=False).exclude(id=item.id)
-        return {'menu_current': 3,
-                'item': item, 'collection': collection,
-                'lamp': item.get_lamp(), 'addons': item.get_size(),
-                'parent_cats': common.parent_categories(item.category.id)}
+        return {
+            'page_title': item.title,
+            'menu_current': 3,
+            'item': item, 'collection': collection,
+            'lamp': item.get_lamp(), 'addons': item.get_size(),
+            'parent_cats': common.parent_categories(item.category.id)}
     except Item.DoesNotExist:
         pass # FIXME
     
@@ -219,10 +233,12 @@ def show_cart(request):
         for i in cart:
             record = Item.objects.get(id=i)
             items.append(CartItem(record, cart[i]['count'], cart[i]['price']))
-    return {'cart': cart, # для отключения кнопок
-            'cart_items': items,
-            'cart_show' : 'yes',
-            'categories': Category.objects.filter(parent__isnull=True)}
+    return {
+        'page_title': u'Корзина',
+        'cart': cart, # для отключения кнопок
+        'cart_items': items,
+        'cart_show' : 'yes',
+        'categories': Category.objects.filter(parent__isnull=True)}
 
 #
 @render_to('shop/offer.html', cart_ctx_proc)
@@ -275,8 +291,10 @@ def show_offer(request):
             return {'form_offer': form, 'cart_show' : 'yes'}
     else:
         form = OfferForm(auto_id='field_%s')
-        return {'form_offer': form, 'cart_show' : 'yes'}
-
+        return {
+            'page_title': u'Оформление заказа',
+            'form_offer': form, 'cart_show' : 'yes'}
+    
 # Заказ выполнен, отсылаем уведомление, очищаем корзину.
 @render_to('shop/ordered.html', cart_ctx_proc)
 def show_ordered(request):
@@ -295,7 +313,7 @@ def show_ordered(request):
                     # Некоторые старые сервера не отправляют сообщения,
                     # если вы немедленно отсоединяетесь после отправки
                     time.sleep(1)
-    return {}
+    return {'page_title': u'Мой Луч'}
     
 # Метод для изменения параметров сортировки
 def set_sort_mode(request, mode=1):
@@ -321,8 +339,10 @@ def show_text_page(request, label):
     """ Отображение страницы с текстом. """
     modes = {'shipping': 4, 'contact': 5}
     from text.views import text
-    return {'menu_current': modes.get(label, 0),
-            'text': text(request, label)}
+    return {            
+        'page_title': u'Мой Луч',
+        'menu_current': modes.get(label, 0),
+        'text': text(request, label)}
 
 @render_to('404.html', cart_ctx_proc)
 def handler404(request):
