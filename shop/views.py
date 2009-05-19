@@ -3,7 +3,7 @@
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.utils.translation import gettext_lazy as _
 
 from tagging.models import Tag
@@ -192,7 +192,6 @@ def show_collection_page(request, collection_id=None):
         # FIXME
         return HttpResponseRedirect(u'/items/')
     except Collection.DoesNotExist:
-        from django.http import Http404
         raise Http404
 
     return {
@@ -331,7 +330,7 @@ def set_sort_mode(request, mode=1):
                 request.session['sort_type'] = 3
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '#'))
     else:
-        return HttpResponseRedirect('/shop/%s/' % mode) #FIXME
+        return HttpResponseRedirect('/%s/' % mode) #FIXME
 
 # Страница с текстом
 @render_to('shop/text.html', cart_ctx_proc)

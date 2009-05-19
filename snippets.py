@@ -37,13 +37,16 @@ def columns(param, count):
     def cols(func):
         def wrapper(request, *args, **kwargs):
             context =  func(request, *args, **kwargs)
+            #import pdb; pdb.set_trace()
             if param in context:
                 object_list = context.get(param, None)
                 length = len(object_list)
-                per_page = length/count
+                
+                from math import ceil
+                per_column = int(ceil(float(length)/count))
                 column_list = []
                 for i in range(count):
-                    column_list.append(object_list[i*per_page:(i+1)*per_page])
+                    column_list.append(object_list[i*per_column:(i+1)*per_column])
                 context['column_list'] = column_list
             return context
         return wrapper
