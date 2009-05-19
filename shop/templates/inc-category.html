@@ -2,11 +2,7 @@
 <div class="sectioncontent">
   {% for category in top_cats %}
   <div class="category">
-    {% ifequal category item.category %}
-    <span style="background-color: #FFEB73; border: 1px solid #FFDB00; -moz-border-radius: 4px; padding: 1px 2px;">{{ category.title }}</span>
-    {% else %}
-    <a href="{{ category.get_absolute_url }}">{{ category.title }}</a>
-    {% endifequal %}
+    <a href="{{ category.get_absolute_url }}">{% ifequal category item.category %}<span style="background-color: #FFEB73; border: 1px solid #FFDB00; -moz-border-radius: 4px; padding: 1px 2px;">{{ category.title }}</span>{% else %}{{ category.title }}{% endifequal %}</a>
     <div class="subcategories">
       {% for subcat in category.category_set.all %}
       {% ifequal subcat item.category %}
