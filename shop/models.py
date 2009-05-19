@@ -29,7 +29,7 @@ class CommonEntity(models.Model):
 
 # Наследуем класс от entity
 class Color(CommonEntity):
-    pass
+    code = models.CharField(verbose_name=_(u'Code of color'), max_length=6, default="ffffff")
 
     class Meta:
         verbose_name = _(u'Color')
