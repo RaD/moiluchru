@@ -1,10 +1,21 @@
 {% load thumbnail_filter %}
 
-<div class="thumbnail-containter" onclick="$('#cartadd_{{ item.id }}').toggleZoom(); return false;">
-  <img src="{{ item.image.path|thumbnail:"100x,itempics" }}" border="0" title="{{ item.title }}"/>
-</div>
-<div>Категория: {{ item.category.title }}</div>
-<div>Цена: <span>{{ item.get_price.1|floatformat:2 }}</span> руб.</div>
-<a href="{{ item.get_absolute_url }}">Описание...</a>
+<table width="100%" height="100" border="0" style="margin: 0.8em;">
+  <tr>
+    <td width="100" class="thumbnail-containter" onclick="$('#cartadd_{{ item.id }}').toggleZoom(); return false;">
+      <img src="{{ item.image.path|thumbnail:"100x,itempics" }}" border="0" 
+	   title="{{ item.title }}: Нажмите, чтобы увеличить"/>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <div>Категория товара:
+      <a href="{{ item.category.get_absolute_url }}" style="white-space: nowrap;"
+	 title="Просмотреть товары этой категории">{{ item.category.title }}</a></div>
+      <div>Цена: <span>{{ item.get_price.1|floatformat:2 }}</span> руб.</div>
+      <a href="{{ item.get_absolute_url }}">Описание...</a>
+    </td>
+  </tr>
+</table>
 
 {% include "shop/inc-w-cart-add.html" %}

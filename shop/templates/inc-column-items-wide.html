@@ -9,7 +9,7 @@
     <td align="left">
       <div>
 	Категория товара:
-	<a href="{{ item.category.get_absolute_url }}" 
+	<a href="{{ item.category.get_absolute_url }}" style="white-space: nowrap;"
 	   title="Просмотреть товары этой категории">{{ item.category.title }}</a>
       </div>
       <div>Есть в наличии: <span>{% ifequal item.is_present 1 %}Да{% else %}Нет{% endifequal %}</span ></div>
