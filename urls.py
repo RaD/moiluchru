@@ -41,8 +41,7 @@ urlpatterns = patterns(
     (r'^tag/(?P<tag>\w+)/', 'shop.views.tag_results'),
 
     # список товаров
-    (r'^items/((?P<page>\d+)/)?', 
-     'shop.views.show_items'),
+    (r'^items/((?P<page>\d+)/)?', 'shop.views.show_items'),
 
     # категории товаров
     (r'^category/(?P<category_id>\d+)/((?P<page>\d+)/)?', 
