@@ -64,6 +64,24 @@ $.fn.extend({
 	    var targetOffset = obj.offset().top;
 	    $(this).animate({scrollTop: targetOffset}, speed, easing);
 	});
+    },
+    idle: function(microsec) {
+	var o = $(this);
+	o.queue(function() {
+	    return function() {
+		setTimeout(function() { o.dequeue(); }, microsec);
+	    };
+	});
+    },
+    place: function(obj) {
+	return this.each(function() {
+	    //debugger;
+	    var offset = $(this).offset();
+	    obj.css({'position': 'absolute', 
+		     'top': offset.top+$(this).height(),
+		     'left': offset.left,
+		     'opacity': 0.3}).toggleClass('hide').fadeIn();
+	});
     }
 });
 
@@ -80,6 +98,33 @@ function buy(id, count) {
 	       }
 	   }, 'json' );
 }
+
+var lamp_lock = false;
+
+function show_lamp(name) {
+    if (lamp_lock)
+	return;
+    lamp_lock = true;
+    var th=$('#thumbnail'); 
+    th.fadeOut('fast', function() {
+	th.toggleClass('hide');
+	var lamp = $('#'+name)
+	lamp.fadeIn('fast');
+	setTimeout(function() {return hide_lamp(name)}, 2000);
+    }); 
+}
+
+function hide_lamp(name) {
+    var lamp = $('#'+name)
+    lamp.fadeOut('fast', function() {
+	lamp.toggleClass('hide');
+	var th=$('#thumbnail'); 
+	th.fadeIn('fast');
+	lamp_lock = false;
+    }); 
+}
+
+
 
 var tID;
 var POLL_TIMEOUT = 10000;
