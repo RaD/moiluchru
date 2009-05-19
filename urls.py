@@ -10,7 +10,7 @@ handler404 = 'shop.views.handler404'
 #handler500 = 'shop.views.handler500'
 
 # карта сайта
-from django.contrib.sitemaps import FlatPageSitemap, GenericSitemap
+from django.contrib.sitemaps import Sitemap, FlatPageSitemap, GenericSitemap
 from shop.models import Item
 
 sitemap_dict = {
@@ -21,6 +21,20 @@ sitemap_dict = {
 sitemaps = {
     'flatpages': FlatPageSitemap,
     'items': GenericSitemap(sitemap_dict, priority=0.6),
+}
+
+class ItemSitemap(Sitemap):
+    changefreq = 'daily'
+    priority = 0.5
+
+    def items(self):
+        return Item.objects.filter(is_present=True)
+
+    def lastmod(self, obj):
+        return obj.reg_date
+
+sitemaps = {
+    'items': ItemSitemap(),
 }
 
 urlpatterns = patterns(
