@@ -31,7 +31,7 @@ class ItemSitemap(Sitemap):
         return Item.objects.filter(is_present=True)
 
     def lastmod(self, obj):
-        return obj.reg_date
+        return obj.last_modification
 
     def location(self, obj):
         return obj.get_absolute_url_by_title()

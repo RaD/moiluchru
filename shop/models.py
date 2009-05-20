@@ -102,6 +102,7 @@ class Item(CommonEntity):
     is_present = models.BooleanField(verbose_name=_(u'Is present'))
     has_lamp = models.BooleanField(verbose_name=_(u'Has lamp'))
     reg_date = models.DateTimeField(verbose_name=_(u'Defined'), auto_now_add=True)
+    last_modification = models.DateTimeField(verbose_name=_(u'Last modification'), auto_now_add=True, auto_now=True)
     image = models.ImageField(verbose_name=_(u'Image'), upload_to=u'itempics')
     buys = models.IntegerField(verbose_name=_(u'Buys'), default=0)
     sort_price = models.FloatField(_(u'Price'))
