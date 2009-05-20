@@ -114,6 +114,9 @@ class Item(CommonEntity):
     def get_absolute_url(self):
         return u'/item/%i/' % self.id
 
+    def get_absolute_url_by_title(self):
+        return u'/item/%s/' % self.title
+
     def get_lamp(self):
         try:
             return Lamp.objects.filter(item=self)

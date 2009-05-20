@@ -33,6 +33,9 @@ class ItemSitemap(Sitemap):
     def lastmod(self, obj):
         return obj.reg_date
 
+    def location(self, obj):
+        return obj.get_absolute_url_by_title()
+
 sitemaps = {
     'items': ItemSitemap(),
 }
@@ -67,6 +70,7 @@ urlpatterns = patterns(
 
     # товар
     (r'^item/(?P<item_id>\d+)/', 'shop.views.show_item_page'),
+    (r'^item/(?P<item_title>\d+\-\d+\-\d+)/', 'shop.views.show_item_by_title_page'),
 
     # процесс покупки
     (r'^cart', 'shop.views.show_cart'),

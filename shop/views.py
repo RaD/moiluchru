@@ -220,6 +220,23 @@ def show_item_page(request, item_id):
     except Item.DoesNotExist:
         pass # FIXME
     
+### Страница с описанием товара
+@render_to('shop/item.html', cart_ctx_proc)
+def show_item_by_title_page(request, item_title):
+    """ Отображение подробной информации о товаре. """
+    common.does_cart_exist(request)
+    try:
+        item = Item.objects.get(title=item_title)
+        collection = Item.objects.filter(collection=item.collection, collection__isnull=False).exclude(id=item.id)
+        return {
+            'page_title': item.title,
+            'menu_current': 3,
+            'item': item, 'collection': collection,
+            'lamp': item.get_lamp(), 'addons': item.get_size(),
+            'parent_cats': common.parent_categories(item.category.id)}
+    except Item.DoesNotExist:
+        pass # FIXME
+    
 # Страница с содержимым корзины
 @render_to('shop/cart.html', cart_ctx_proc)
 def show_cart(request):
