@@ -20,8 +20,8 @@ class SocleAdmin(admin.ModelAdmin):
 admin.site.register(Socle, SocleAdmin)
 
 class ColorAdmin(admin.ModelAdmin):
-    fieldsets = ((None,{'fields': ('title',)}),)
-    list_display = ('title',)
+    fieldsets = ((None,{'fields': ('title','code')}),)
+    list_display = ('title','code')
     ordered = ('title',)
 admin.site.register(Color, ColorAdmin)
 

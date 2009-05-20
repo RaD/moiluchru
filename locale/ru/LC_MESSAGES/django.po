@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-16 09:18+0400\n"
+"POT-Creation-Date: 2009-05-20 08:18+0400\n"
 "PO-Revision-Date: 2008-07-09 20:40+0400\n"
 "Last-Translator: Ruslan Popov <radz@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -119,6 +119,10 @@ msgstr "Количество товара"
 msgid "Title"
 msgstr "Название"
 
+#: shop/models.py:32
+msgid "Code of color"
+msgstr "Код цвета"
+
 #: shop/models.py:35 shop/models.py:101
 msgid "Color"
 msgstr "Цвет"
@@ -207,7 +211,7 @@ msgstr "Цена"
 msgid "Item"
 msgstr "Товар"
 
-#: shop/models.py:112 shop/views.py:30 shop/views.py:136
+#: shop/models.py:112 shop/views.py:30 shop/views.py:144
 msgid "Items"
 msgstr "Товары"
 
@@ -299,11 +303,11 @@ msgstr "Доставка"
 msgid "Map"
 msgstr "Карта"
 
-#: shop/views.py:159
+#: shop/views.py:169
 msgid "Items of the category"
 msgstr "Товары категории"
 
-#: shop/views.py:189
+#: shop/views.py:199
 msgid "Items of the collection"
 msgstr "Товары коллекции"
 
@@ -318,4 +322,3 @@ msgstr "Текст"
 #: text/models.py:13
 msgid "Texts"
 msgstr "Тексты"
-
