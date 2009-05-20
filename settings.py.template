@@ -91,6 +91,7 @@ INSTALLED_APPS = (
     'moiluchru.text',
     'moiluchru.jabber',
     'moiluchru.manager',
+    'robots',
     'tagging',
 )
 
@@ -101,6 +102,11 @@ SITE_SUBTITLE = "Многообразие света!"
 SHOP_ITEMS_PER_PAGE = 20
 MANAGER_ORDERS_PER_PAGE = 20
 ITEMS_ON_MAIN_PAGE = 8
+
+# robots begin
+ROBOTS_USE_SITEMAP = True
+ROBOTS_SITEMAP_URL = '/sitemap.xml'
+# robots end
 
 # tagging begin
 FORCE_LOWERCASE_TAGS = True

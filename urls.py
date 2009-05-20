@@ -46,8 +46,9 @@ urlpatterns = patterns(
     (r'^admin/doc/', include('django.contrib.admindocs/urls')),
     (r'^admin/(.*)', admin.site.root),
 
-    # карта сайта
+    # карта сайта, robots.txt
     (r'^sitemap.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
+    (r'^robots.txt$', include('robots.urls')),
 
     #(r'^$', 'django.views.generic.simple.redirect_to', {'url': '/shop/'}),
     (r'^$', 'shop.views.show_main_page'),
