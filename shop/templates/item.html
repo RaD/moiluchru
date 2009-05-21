@@ -26,7 +26,7 @@
 		 id="thumbnail" border="0"
 		 title="{{ item.title }} : Нажмите, чтобы увеличить" />
 	    {% for l in lamp %}
-	    <img id="lamp_{{ l.socle|lower }}" src="/pics/lamps/{{ l.socle|lower }}.jpeg" class="hide" 
+	    <img id="lamp_{{ l.socle|lower|cut:' ' }}" src="/pics/lamps/{{ l.socle|lower|cut:' ' }}.jpeg" class="hide" 
 		 style="position: relative; top: 0px; left: 0px;"/>
 	    {% endfor %}
 	</td>
@@ -54,8 +54,7 @@
 	  <h4 class="ttl"><span></span>Лампочки</h4>
 	  {% for l in lamp %}
 	  <div>
-	    <span onmouseover="show_lamp('lamp_{{ l.socle|lower }}');" 
-		  onmouseout="//hide_lamp('lamp_{{ l.socle|lower }}');" 
+	    <span onmouseover="show_lamp('lamp_{{ l.socle|lower|cut:' ' }}');" 
 		  style="font-size: 150%; font-weight: bold;">{{ l.socle }}</span>
 	    <span style="font-size: 80%;">{{ l.count }} x {{ l.watt }} Вт</span>
 	  </div>
