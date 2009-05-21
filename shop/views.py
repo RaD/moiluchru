@@ -75,9 +75,16 @@ def search_results(request):
                                         Q(desc__search='*%s*' % userinput) |
                                         Q(tags__search='*%s*' % userinput))
             if full_search: # полный поиск
+                # поиск по диапазону цен
                 min = clean['min_price']
                 max = clean['max_price']
-                items = items.filter(sort_price__gte=min, sort_price__lte=max)
+                if min != '' and max != '':
+                    items = items.filter(sort_price__gte=min, sort_price__lte=max)
+                # поиск по диапазону лампочек
+#                 min_lamps = clean['min_lamps']
+#                 max_lamps = clean['max_lamps']
+#                 if min_lamps != '' and max_lamps != '':
+#                     items = items.filter(get_lamp.count__gte=min_lamps, get_lamp.count__lte=max_lamps)
             request.session['searchquery'] = clean['userinput']
             request.session['howmuch_id'] = clean['howmuch']
             request.session['cached_items'] = items # кэшируем для paginator
@@ -170,6 +177,32 @@ def show_category_page(request, category_id=None):
         'categories': Category.objects.all(),
         'category_id': int(category_id),
         'url': c.get_absolute_url(), # для многостраничности
+        'sort_type': sort_type, 
+        'items': items}
+
+### Страница со списком товаров указанной категории
+@render_to('shop/itemlist.html', cart_ctx_proc)
+@columns('items', 2)
+@paginate_by('items', 'page', settings.SHOP_ITEMS_PER_PAGE)
+def show_category_page_by_title(request, category_title=None):
+    """ Функция для отображения подчинённых категорий. """
+    sort_type = request.session.get('sort_type', 1)
+
+    common.does_cart_exist(request)
+
+    try:
+        category = Category.objects.get(title=category_title)
+        items = Item.objects.filter(category=category).order_by(sort[sort_type])
+        request.session['cached_items'] = items # кэшируем для paginator
+    except Category.DoesNotExist:
+        raise Http404
+
+    return {
+        'page_title': u'Категория товаров',
+        'menu_current': 3, 'title': _(u'Items of the category'),
+        'categories': Category.objects.all(),
+        'category_id': category.id,
+        'url': category.get_absolute_url(), # для многостраничности
         'sort_type': sort_type, 
         'items': items}
 

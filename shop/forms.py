@@ -27,6 +27,8 @@ class SearchForm(forms.Form):
 class FullSearchForm(SearchForm):
     min_price = forms.CharField(label=_(u'Price (min)'), max_length=6)
     max_price = forms.CharField(label=_(u'Price (max)'), max_length=6)
+#     min_lamps = forms.CharField(label=_(u'Lamps (min)'), max_length=3)
+#     max_lamps = forms.CharField(label=_(u'Lamps (max)'), max_length=3)
 
 class OfferForm(forms.Form):
     fname = forms.CharField(label=_(u'Last name'), max_length=64,

@@ -50,7 +50,6 @@ urlpatterns = patterns(
     (r'^sitemap.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
     (r'^robots.txt$', include('robots.urls')),
 
-    #(r'^$', 'django.views.generic.simple.redirect_to', {'url': '/shop/'}),
     (r'^$', 'shop.views.show_main_page'),
 
     # страница результатов поиска
@@ -64,6 +63,8 @@ urlpatterns = patterns(
     # категории товаров
     (r'^category/(?P<category_id>\d+)/((?P<page>\d+)/)?', 
      'shop.views.show_category_page'),
+    (r'^category/(?P<category_title>[\w ]+)/((?P<page>\d+)/)?', 
+     'shop.views.show_category_page_by_title'),
 
     # коллекции товаров
     (r'^collection/(?P<collection_id>\d+)/((?P<page>\d+)/)?', 

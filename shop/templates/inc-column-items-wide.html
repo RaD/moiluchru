@@ -7,7 +7,7 @@
 	   title="{{ item.title }}: Нажмите, чтобы увеличить"/>
     </td>
     <td align="left">
-      <div style="font-size: 130%;">{{ item.title }}</div>
+      <div style="font-size: 130%;">Артикул: {{ item.title }}</div>
       <div>
 	Категория товара:
 	<a href="{{ item.category.get_absolute_url }}" style="white-space: nowrap;"
@@ -20,7 +20,7 @@
       </div>
       {% endif %}
       <div>Цвет: <span>{{ item.color }}</span></div>
-      <div>Цена: <span>{{ item.get_price.1|floatformat:2 }}</span> руб.</div>
+      <div style="font-weight: bold;">Цена: <span>{{ item.get_price.1|floatformat:2 }}</span> руб.</div>
       <a href="{{ item.get_absolute_url }}" title="Перейти на страницу товара">Описание...</a>
     </td>
   </tr>
