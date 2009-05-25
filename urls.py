@@ -73,6 +73,7 @@ urlpatterns = patterns(
     # товар
     (r'^item/(?P<item_id>\d+)/', 'shop.views.show_item_page'),
     (r'^item/(?P<item_title>\d+\-\d+\-\d+)/', 'shop.views.show_item_by_title_page'),
+    (r'^item/(?P<item_title>[\w\d\-]+)/', 'shop.views.show_item_by_title_page'),
 
     # процесс покупки
     (r'^cart', 'shop.views.show_cart'),
