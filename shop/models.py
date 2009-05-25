@@ -132,8 +132,9 @@ class Item(CommonEntity):
 
     def get_price(self):
         try:
-            price_store = Price.objects.filter(item=self).order_by('-applied')[0].price_store
-            price_shop = Price.objects.filter(item=self).order_by('-applied')[0].price_shop
+            obj = Price.objects.filter(item=self).order_by('-applied')[0]
+            price_store = obj.price_store
+            price_shop = obj.price_shop
             return (price_store, price_shop)
         except:
             return (float(0.00), float(0.00))
