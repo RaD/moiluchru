@@ -28,6 +28,8 @@
 	  <div>Цвет: <span>{{ item.color }}</span></div>
 	  <div style="font-weight: bold;">Цена: <span>{{ item.get_price.1|floatformat:2 }}</span> руб.</div>
 	  <a href="{{ item.get_absolute_url }}" title="Перейти на страницу товара">Описание...</a>
+
+	  {% include "shop/inc-w-cart-add.html" %}
 	</td>
       </tr>
       {% endfor %}
