@@ -2,8 +2,7 @@
 Остановился на поиске, надо сделать поиск по диапазону цен.
 
 ПЛАНЫ:
-1. Убрать из кода информацию о проекте.
-2. Сделать джаббер.
+1. Сделать джаббер.
 
 Получить проект из репозитория:
 
@@ -42,3 +41,9 @@ Django-related:
     python-dnspython python-m2crypto python-pyxmpp python-pyxmpp-doc - for xmpp
     svn co http://django-tagging.googlecode.com/svn/trunk django-tagging
 
+Настройка полнотекстового поиска:
+1. Добавить в /etc/mysql/my.cnf, в раздел [mysqld] строку:
+   ft_min_word_len=2
+2. Перезапустить MySQL сервер.
+3. Зайти в базу и перестроить таблицу:
+   repair table shop_item quick;
