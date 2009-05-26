@@ -99,7 +99,7 @@ def jabber_message(request, form):
     # сообщения.
     now = dt.now()
     last = request.session.get('JABBER_LAST', now - timedelta(days=1))
-    if now - timedelta(minutes=30) > last:
+    if now - timedelta(minutes=30) > last and 'JABBER_NICK' in request.session:
         del(request.session['JABBER_NICK'])
 
     nick = request.session.get('JABBER_NICK', dt.now().strftime('%M%S'))
