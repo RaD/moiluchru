@@ -13,6 +13,8 @@ class JidPool(models.Model):
     last_used = models.DateTimeField(verbose_name=_(u'Last usage'), auto_now_add=True, auto_now=True)
 
     def alloc_jid(self):
+        """ Метод для выделения свободного идентификатора, если свободных нет,
+        то создаётся дополнительный. """
         jid_unlocked = JidPool.objects.filter(is_locked=False)
         jids_count = len(jid_unlocked)
         if jids_count > 0:
@@ -23,11 +25,13 @@ class JidPool(models.Model):
         else:
             return self.create_jid()
 
-    def free_jid(self):
-        self.is_locked = False
-        self.save()
+    def free_jid(self, jid):
+        """ Метод для освобождения занятого идентификатора. """
+        jid.is_locked = False
+        jid.save()
 
     def create_jid(self):
+        """ Метод для создания идентификатора. """
         jids_count = JidPool.objects.count()
         self.nick = 'ml%04d' % int(jids_count + 1)
         self.password = self.generate_password()
@@ -36,6 +40,7 @@ class JidPool(models.Model):
         return self
 
     def generate_password(self):
+        """ Метод для генерации пароля. """
         import random
         algo = 'sha1'
         salt = get_hexdigest(algo, str(random.random()), str(random.random()))[:5]
@@ -43,7 +48,8 @@ class JidPool(models.Model):
         return '%s$%s$%s' % (algo, salt, hsh)
 
 class Message(models.Model):
-    nick = models.CharField(_(u'Nick'), max_length=4) # надеемся, минуты и секунды в качестве ника будут достаточно уникальными
+    """ Модель для хранения сообщений. """
+    nick = models.CharField(_(u'Nick'), max_length=6)
     msg = models.CharField(_(u'Message'), max_length=1024)
     sent_date = models.DateTimeField(verbose_name=_(u'Sent'), auto_now_add=True)
     is_really_sent = models.BooleanField(default=False)
