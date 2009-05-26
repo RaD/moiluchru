@@ -12,8 +12,6 @@ class JidPool(models.Model):
     created = models.DateTimeField(verbose_name=_(u'Created'), auto_now_add=True)
     last_used = models.DateTimeField(verbose_name=_(u'Last usage'), auto_now_add=True, auto_now=True)
 
-    #objects = models.manager.Manager()
-
     def alloc_jid(self):
         jid_unlocked = JidPool.objects.filter(is_locked=False)
         jids_count = len(jid_unlocked)
@@ -31,9 +29,9 @@ class JidPool(models.Model):
 
     def create_jid(self):
         jids_count = JidPool.objects.count()
-        self.nick='ml%04d' % int(jids_count + 1)
-        self.password=self.generate_password()
-        self.is_locked=True
+        self.nick = 'ml%04d' % int(jids_count + 1)
+        self.password = self.generate_password()
+        self.is_locked = True
         self.save(force_insert=True)
         return self
 
