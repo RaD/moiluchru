@@ -1,13 +1,32 @@
 # -*- coding: utf-8 -*-
 
-import sys
+import os, sys
 import logging
 import locale
 import codecs
-import django
 
 from pyxmpp.all import JID,Iq,Presence,Message,StreamError
 from pyxmpp.jabber.client import JabberClient
+from pyxmpp.jid import JIDError
+
+# Import and set up Django's settings
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append('/home/rad/django.engine')
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+from django.conf import settings
+from jabber.models import Message as WebMsg
+
+try:
+    botjid = JID(getattr(settings, 'JABBER_ID', None))
+except JIDError:
+    print "Check JABBER_ID in project's settings file."
+    sys.exit(1)
+
+try:
+    jids = [JID(x) for x in getattr(settings, 'JABBER_RECIPIENTS', None)]
+except TypeError:
+    print "Check JABBER_RECIPIENTS in project's settings file."
+    sys.exit(1)
 
 class Client(JabberClient):
     """Simple bot (client) example. Uses
@@ -39,7 +58,7 @@ class Client(JabberClient):
     def session_started(self):
         """This is called when the IM session is successfully started
         (after all the neccessery negotiations, authentication and
-        authorizasion).
+        authorization).
 
         That is the best place to setup various handlers for the
         stream.  Do not forget about calling the session_started()
@@ -100,16 +119,25 @@ class Client(JabberClient):
             return True
         if subject:
             subject=u"Re: "+subject
-        m=Message(
-            to_jid=stanza.get_from(),
-            from_jid=stanza.get_to(),
-            stanza_type=stanza.get_type(),
-            subject=subject,
-            body=body)
-        self.stream.send(m)
-        if body:
-            p=Presence(status=body)
-            self.stream.send(p)
+
+        # save incoming jabber message (from admins)
+        msg_admin = WebMsg(nick = 'Mngr', msg = body)
+        msg_admin.save()
+
+        messages = WebMsg.objects.filter(is_really_sent=False, client_admin=True).order_by('sent_date')
+        for msg in messages:
+            #import pdb; pdb.set_trace()
+            for j in jids:
+                nick, mess = getattr(msg, 'nick'), getattr(msg, 'msg')
+                print j, nick, mess
+                m=Message(to_jid=j, from_jid=botjid, stanza_type='message',
+                          subject=nick, body=msg)
+                self.stream.send(m)
+                if body:
+                    p=Presence(status=body)
+                    self.stream.send(p)
+            msg.is_really_sent = True
+            msg.save()
         return True
 
     def presence(self,stanza):
@@ -183,15 +211,9 @@ logger=logging.getLogger()
 logger.addHandler(logging.StreamHandler())
 logger.setLevel(logging.INFO) # change to DEBUG for higher verbosity
 
-if len(sys.argv)<3:
-    print u"Usage:"
-    print "\t%s JID password" % (sys.argv[0],)
-    print "example:"
-    print "\t%s test@localhost verysecret" % (sys.argv[0],)
-    sys.exit(1)
-
 print u"creating client..."
-c=Client(JID(sys.argv[1]),sys.argv[2])
+c=Client(JID(getattr(settings, 'JABBER_ID', None)),
+         getattr(settings, 'JABBER_PASSWORD', None))
 
 print u"connecting..."
 c.connect()
