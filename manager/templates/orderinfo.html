@@ -42,7 +42,7 @@
       </tr>
       {% for i in items %}
       <tr>
-	<td class="longitem" title="{{ i.record.title }}">{{ i.record.title }}</td>
+	<td class="longitem" title="{{ i.record.title }}"><a href="{{ i.record.get_absolute_url }}">{{ i.record.title }}</a></td>
 	<td class="right">{{ i.price|floatformat:2 }} руб</td>
 	<td class="center">{{ i.count }}</td>
 	<td class="right">{{ i.cost|floatformat:2 }} руб.</td>
