@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append('/home/rad/django.engine')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from django.conf import settings
-from jabber.models import Message as WebMsg
+from jabber.models import Message as WebMsg, JidPool
 
 try:
     botjid = JID(getattr(settings, 'JABBER_ID', None))
@@ -86,7 +86,7 @@ class Client(JabberClient):
         used very carefully!"""
         iq=iq.make_result_response()
         q=iq.new_query("jabber:iq:version")
-        q.newTextChild(q.ns(),"name","Echo component")
+        q.newTextChild(q.ns(),"name","WebJabber component")
         q.newTextChild(q.ns(),"version","1.0")
         self.stream.send(iq)
         return True
@@ -121,10 +121,15 @@ class Client(JabberClient):
             subject=u"Re: "+subject
 
         # save incoming jabber message (from admins)
-        msg_admin = WebMsg(nick = 'Mngr', msg = body)
-        msg_admin.save()
+        try:
+            jid_admin = JidPool.objects.get('nick'='admins')
+            msg_admin = WebMsg(jid=jid_admin, msg=body)
+            msg_admin.save()
+        except JidPool.DoesNotExist:
+            print "Install Administrators' JID into jabber_jidpool table."
+            sys.exit(1)
 
-        messages = WebMsg.objects.filter(is_really_sent=False, client_admin=True).order_by('sent_date')
+        messages = WebMsg.objects.filter(is_really_sent=False).order_by('sent_date')
         for msg in messages:
             #import pdb; pdb.set_trace()
             for j in jids:

@@ -12,6 +12,13 @@ class JidPool(models.Model):
     created = models.DateTimeField(verbose_name=_(u'Created'), auto_now_add=True)
     last_used = models.DateTimeField(verbose_name=_(u'Last usage'), auto_now_add=True, auto_now=True)
 
+    class Meta:
+        verbose_name = u'JID'
+        verbose_name_plural = u'JIDs'
+
+    def __unicode__(self):
+        return self.nick
+        
     def alloc_jid(self):
         """ Метод для выделения свободного идентификатора, если свободных нет,
         то создаётся дополнительный. """
@@ -49,8 +56,8 @@ class JidPool(models.Model):
 
 class Message(models.Model):
     """ Модель для хранения сообщений. """
+    jid = models.ForeignKey(JidPool, verbose_name=u'JID')
     nick = models.CharField(_(u'Nick'), max_length=6)
     msg = models.CharField(_(u'Message'), max_length=1024)
     sent_date = models.DateTimeField(verbose_name=_(u'Sent'), auto_now_add=True)
     is_really_sent = models.BooleanField(default=False)
-    client_admin = models.BooleanField(default=True)
