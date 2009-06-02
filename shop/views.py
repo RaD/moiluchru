@@ -34,11 +34,11 @@ def cart_ctx_proc(request):
     step_pct = int((cp['max_pct'] - cp['min_pct'])/(cp['steps'] - 1))
     for i in cloud:
         i.font_size = (i.font_size - 1) * step_pct + cp['min_pct']
-    return {'debug': settings.DEBUG,
-            'jabber': settings.JABBER_ENGINE,
-            'site_title': settings.SITE_TITLE,
-            'site_subtitle': settings.SITE_SUBTITLE,
-            'google_analytics': settings.GOOGLE_ANALYTICS,
+    return {'debug': getattr(settings, 'DEBUG', False),
+            'jabber': getattr(settings, 'JABBER_ENGINE', False),
+            'site_title': getattr(settings, 'SITE_TITLE', 'Установите название сайта'),
+            'site_subtitle': getattr(settings, 'SITE_SUBTITLE', 'Установите текст'),
+            'google_analytics': getattr(settings, 'GOOGLE_ANALYTICS', False),
             'menu': menu, 'path': request.path,
             'form': form,
             'tags': cloud,
@@ -57,7 +57,7 @@ def search_query(request):
 ### Страница с результатами поиска
 @render_to('shop/result.html', cart_ctx_proc)
 @columns('items', 1)
-@paginate_by('items', 'page', settings.SHOP_ITEMS_PER_PAGE)
+@paginate_by('items', 'page', getattr(settings, 'SHOP_ITEMS_PER_PAGE', 20))
 def search_results(request):
     """ Функция для результатов поиска по магазину. """
     common.does_cart_exist(request)
@@ -81,10 +81,11 @@ def search_results(request):
                 if min != '' and max != '':
                     items = items.filter(sort_price__gte=min, sort_price__lte=max)
                 # поиск по диапазону лампочек
-#                 min_lamps = clean['min_lamps']
-#                 max_lamps = clean['max_lamps']
-#                 if min_lamps != '' and max_lamps != '':
-#                     items = items.filter(get_lamp.count__gte=min_lamps, get_lamp.count__lte=max_lamps)
+                #min_lamps = clean['min_lamps']
+                #max_lamps = clean['max_lamps']
+                #import pdb; pdb.set_trace()
+                #if min_lamps != '' and max_lamps != '':
+                #    items = items.filter(get_lamp.count__gte=min_lamps, get_lamp.count__lte=max_lamps)
             request.session['searchquery'] = clean['userinput']
             request.session['howmuch_id'] = clean['howmuch']
             request.session['cached_items'] = items # кэшируем для paginator
@@ -123,19 +124,19 @@ def show_main_page(request):
         request.session.set_test_cookie()
 
     try:
-        items = Item.objects.order_by('-buys')[:settings.ITEMS_ON_MAIN_PAGE]
+        items = Item.objects.order_by('-buys')[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)]
     except Item.DoesNotExist:
         items = 0
     return {
         'page_title': u'Мой Луч',
         'menu_current': 1,
-        'items_col1': items[:settings.ITEMS_ON_MAIN_PAGE/2],
-        'items_col2': items[settings.ITEMS_ON_MAIN_PAGE/2:]}
+        'items_col1': items[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)/2],
+        'items_col2': items[getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)/2:]}
 
 ### Страница со списком товаров
 @render_to('shop/itemlist.html', cart_ctx_proc)
 @columns('items', 2)
-@paginate_by('items', 'page', settings.SHOP_ITEMS_PER_PAGE)
+@paginate_by('items', 'page', getattr(settings, 'SHOP_ITEMS_PER_PAGE', 20))
 def show_items(request):
     """ Отображение списка товаров. """
     sort_type = request.session.get('sort_type', 1)
@@ -157,7 +158,7 @@ def show_items(request):
 ### Страница со списком товаров указанной категории
 @render_to('shop/itemlist.html', cart_ctx_proc)
 @columns('items', 2)
-@paginate_by('items', 'page', settings.SHOP_ITEMS_PER_PAGE)
+@paginate_by('items', 'page', getattr(settings, 'SHOP_ITEMS_PER_PAGE', 20))
 def show_category_page(request, category_id=None):
     """ Функция для отображения подчинённых категорий. """
     sort_type = request.session.get('sort_type', 1)
@@ -183,7 +184,7 @@ def show_category_page(request, category_id=None):
 ### Страница со списком товаров указанной категории
 @render_to('shop/itemlist.html', cart_ctx_proc)
 @columns('items', 2)
-@paginate_by('items', 'page', settings.SHOP_ITEMS_PER_PAGE)
+@paginate_by('items', 'page', getattr(settings, 'SHOP_ITEMS_PER_PAGE', 20))
 def show_category_page_by_title(request, category_title=None):
     """ Функция для отображения подчинённых категорий. """
     sort_type = request.session.get('sort_type', 1)
@@ -209,7 +210,7 @@ def show_category_page_by_title(request, category_title=None):
 ### Страница со списком товаров указанной коллекции
 @render_to('shop/itemlist.html', cart_ctx_proc)
 @columns('items', 2)
-@paginate_by('items', 'page', settings.SHOP_ITEMS_PER_PAGE)
+@paginate_by('items', 'page', getattr(settings, 'SHOP_ITEMS_PER_PAGE', 20))
 def show_collection_page(request, collection_id=None):
     """ Функция для отображения подчинённых категорий. """
     sort_type = request.session.get('sort_type', 1)
@@ -348,16 +349,17 @@ def show_offer(request):
 @render_to('shop/ordered.html', cart_ctx_proc)
 def show_ordered(request):
     common.init_cart(request)
-    if settings.JABBER_NOTIFICATION:
+    if getattr(settings, 'JABBER_NOTIFICATION', False):
         import xmpp, time
-        jid = xmpp.protocol.JID(settings.JABBER_ID)
+        jid = xmpp.protocol.JID(getattr(settings, 'JABBER_ID', None))
         cl = xmpp.Client(jid.getDomain(), debug=[])
         conn = cl.connect()
         if conn:
-            auth = cl.auth(jid.getNode(), settings.JABBER_PASSWORD,
+            auth = cl.auth(jid.getNode(), 
+                           getattr(settings, 'JABBER_PASSWORD', None),
                            resource=jid.getResource())
             if auth:
-                for recipient in settings.JABBER_RECIPIENTS:
+                for recipient in getattr(settings, 'JABBER_RECIPIENTS', None):
                     id = cl.send(xmpp.protocol.Message(recipient, 'Внимание! Есть заказ!'))
                     # Некоторые старые сервера не отправляют сообщения,
                     # если вы немедленно отсоединяетесь после отправки
@@ -401,12 +403,12 @@ def handler404(request):
         request.session.set_test_cookie()
 
     try:
-        items = Item.objects.order_by('-buys')[:settings.ITEMS_ON_MAIN_PAGE]
+        items = Item.objects.order_by('-buys')[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)]
     except Item.DoesNotExist:
         items = 0
     return {'menu_current': 1, 'page_title': '404: Страница не найдена...',
-            'items_col1': items[:settings.ITEMS_ON_MAIN_PAGE/2],
-            'items_col2': items[settings.ITEMS_ON_MAIN_PAGE/2:]}
+            'items_col1': items[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)/2],
+            'items_col2': items[getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)/2:]}
 
 @render_to('500.html', cart_ctx_proc)
 def handler500(request):
@@ -416,9 +418,9 @@ def handler500(request):
         request.session.set_test_cookie()
 
     try:
-        items = Item.objects.order_by('-buys')[:settings.ITEMS_ON_MAIN_PAGE]
+        items = Item.objects.order_by('-buys')[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)]
     except Item.DoesNotExist:
         items = 0
     return {'menu_current': 1, 'page_title': '500: Что-то с моим кодом...',
-            'items_col1': items[:settings.ITEMS_ON_MAIN_PAGE/2],
-            'items_col2': items[settings.ITEMS_ON_MAIN_PAGE/2:]}
+            'items_col1': items[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)/2],
+            'items_col2': items[getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)/2:]}
