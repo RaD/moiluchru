@@ -119,9 +119,9 @@ def jabber_poll(request):
     nick = request.session.get('JABBER_NICK', dt.now().strftime('%M%S'))
     try:
         # приём сообщений
-        msgs = Message.objects.filter(nick=nick, is_really_sent=False, client_admin=False).order_by('sent_date')
+        msgs = Message.objects.filter(nick=nick, is_processed=False, client_admin=False).order_by('sent_date')
         for m in msgs:
-            m.is_really_sent = True
+            m.is_processed = True
             m.save()
     except Exception, e:
         return {'code': '400', 'desc': e}

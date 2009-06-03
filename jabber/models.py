@@ -56,8 +56,9 @@ class JidPool(models.Model):
 
 class Message(models.Model):
     """ Модель для хранения сообщений. """
-    jid = models.ForeignKey(JidPool, verbose_name=u'JID')
     nick = models.CharField(_(u'Nick'), max_length=6)
     msg = models.CharField(_(u'Message'), max_length=1024)
     sent_date = models.DateTimeField(verbose_name=_(u'Sent'), auto_now_add=True)
-    is_really_sent = models.BooleanField(default=False)
+    is_processed = models.BooleanField(default=False)
+    is_system = models.BooleanField(default=False)
+    client_admin = models.BooleanField(default=True)
