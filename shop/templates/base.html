@@ -28,7 +28,7 @@
   <div id="main">
     
     <div id="header">
-      <div id="icqinfo" style="position: absolute; top: 10px; right: 140px; z-index: 10;"><img src="/pics/icq.gif" align="left"/> 563-533-804</div>
+      <div id="icqinfo" style="position: absolute; top: 10px; right: 140px; z-index: 1;"><img src="/pics/icq.gif" align="left"/> 563-533-804</div>
       <div id="header-overlay"></div>
       <div id="header-box-1" class="box bg-pri-1"></div>
       <div id="header-box-2" class="box bg-pri-2"></div>
@@ -87,11 +87,23 @@
       <div class="cleaner"></div>
     
       <div id="footer">
-	{% for m in menu %}
-	  {% ifequal menu_current m.0 %}{{ m.2 }}{% else %}<a href="{{ m.1 }}">{{ m.2 }}</a>{% endifequal %}
-	  {% if not forloop.last %}|{% endif %}
-	{% endfor %}
+	<table width="100%">
+	  <tr>
+	    <td>Powered by <a href="http://djangoproject.com/">Django</a></td>
+	    <td width="50%">
+	      {% for m in menu %}
+	      {% ifequal menu_current m.0 %}{{ m.2 }}{% else %}<a href="{{ m.1 }}">{{ m.2 }}</a>{% endifequal %}
+	      {% if not forloop.last %}|{% endif %}
+	      {% endfor %}
+	    </td>
+	    <td>
+	      <a href="mailto:info@moiluch.ru">@ Информация</a>
+	      <a href="mailto:support@moiluch.ru">@ Поддержка</a>
+	    </td>
+	  </tr>
+	</table>
       </div>
+
     </div>
 
   </div>
