@@ -94,6 +94,7 @@ def search_results(request):
         return {'page_title': u'Результаты поискового запроса',
                 'items': items.order_by(sort[sort_type]),
                 'search_query': userinput,
+                'paginator_use_session': True,
                 'url': '/result/', 'sort_type': sort_type}
     else: # обращение через paginator
         try:
@@ -278,7 +279,7 @@ def show_cart(request):
     items = []
     cart = request.session.get('cart_items', {})
     if len(cart) == 0:
-        items.append(CartItem("Нет товаров", 0, 0.00))
+        items = None
     else:
         for i in cart:
             record = Item.objects.get(id=i)

@@ -11,15 +11,22 @@
 
       $.post('/ajax/cart/remove/', { item: item_id },
  	     function(json) {
-		 if (json['code'] == 200) {
-		     // обновить корзину
-		     update_cart(json['cart_count'], json['cart_price']);
-		     // обновить общую сумму
-		     $('#cart_total').html(json['cart_price']);
-		     // удалить строку с товаром с интерфейса
-		     $('tr[item=' + item_id + ']').remove();
+		 var code = json['code'];
+		 var count = json['cart_count'];
+		 var price = json['cart_price'];
+		 if (code == 200) {
+		     if (count > 0) {
+			 // обновить корзину
+			 update_cart(count, price);
+			 // обновить общую сумму
+			 $('#cart_total').html(price);
+			 // удалить строку с товаром с интерфейса
+			 $('tr[item=' + item_id + ']').remove();
+		     } else {
+			 document.location = '/cart/';
+		     }
 		 } else {
-		     alert(json['code'] + ': ' + json['desc']);
+		     alert(code + ': ' + json['desc']);
 		 }
 	     }, 'json');
   }
@@ -83,6 +90,19 @@
     </td>
     <td class="right nowrap"><span id="total_{{ i.record.id }}" class="money">{{ i.cost|floatformat:2 }}</span> руб.</td>
     <td class="right"><button class="pointer" onclick="cart_remove_item({{ i.record.id }});">Удалить</button></td>
+  </tr>
+  {% empty %}
+  <tr item="None">
+    <td width="100" height="100" align="center" valign="middle" class="thumbnail-containter"></td>
+    <td class="longitem" title="{{ i.title }}">
+      <div style="font-size: 150%;">Нет товаров</div>
+    </td>
+    <td class="right nowrap"><span class="money">0.00</span> руб</td>
+    <td class="center mono">
+      <input type="text" name="count_None" value="0" style="width: 30px; text-align: right;"/>
+    </td>
+    <td class="right nowrap"><span id="total_None" class="money">0.00</span> руб.</td>
+    <td class="right"></td>
   </tr>
   {% endfor %}
   
