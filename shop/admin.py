@@ -102,23 +102,6 @@ class ItemAdmin(admin.ModelAdmin):
     save_as = True
     inlines = [SizeInline, LampInline]
 
-    def __init__(self, *args, **kwargs):
-        super(ItemAdmin, self).__init__(*args, **kwargs)
-        """ Дмитрий Аникин: может быть стоит сделать у class ItemAdmin
-        функцию __init__() и в ней прописать это условие, которое будет
-        списку inlines присваивать нужный класс-наследний
-        admin.TabularInline?"""
-        try:
-            pass
-            #item_type = Item.objects.get(id=args[0].id)
-#             print item_type
-            #print args[0].item_type
-            #print args[0].item_type.field
-            #self.inline = eval('[%sInline]' % model_name)
-        except Exception, e:
-            print e
-            self.inline = []
-        
     def field_image_preview(self, item):
         url = thumbnail(item.image.path, '100x,itempics')
         return '<img src="%s"/>' % url
@@ -142,6 +125,7 @@ class ItemAdmin(admin.ModelAdmin):
     field_price_shop.short_description = _(u'Price of the shop')
 
 admin.site.register(Item, ItemAdmin)
+
 ###
 
 class BuyerAdmin(admin.ModelAdmin):
