@@ -20,9 +20,14 @@ class CourierSelect(forms.ModelChoiceField):
     def label_from_instance(self, obj):
         return "%s" % obj.get_full_name()
             
+ipp_settings = settings.SHOP_ITEMS_PER_PAGE
+ITEMS_PER_PAGE_CHOICE = [(1, ipp_settings), 
+                         (2, int(1.5 * ipp_settings)), 
+                         (3, int(2 * ipp_settings)), 
+                         (4, int(3 * ipp_settings))]
 class SearchForm(forms.Form):
     userinput = forms.CharField(max_length=64)
-    howmuch = forms.ChoiceField(choices=[(1, settings.SHOP_ITEMS_PER_PAGE), (2, '10'), (3, '25'), (4, '50')])
+    howmuch = forms.ChoiceField(choices=ITEMS_PER_PAGE_CHOICE)
 
 class FullSearchForm(SearchForm):
     min_price = forms.CharField(label=_(u'Price (min)'), max_length=6)
