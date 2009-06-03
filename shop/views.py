@@ -62,6 +62,7 @@ def search_results(request):
     """ Функция для результатов поиска по магазину. """
     common.does_cart_exist(request)
     sort_type = request.session.get('sort_type', 1)
+
     if request.method == 'POST':
         userinput = ''
         full_search = 'max_price' in request.POST.keys() # полный поиск
@@ -71,26 +72,31 @@ def search_results(request):
         if form.is_valid():
             clean = form.cleaned_data
             userinput = clean['userinput']
-            items = Item.objects.filter(Q(title__search='*%s*' % userinput) |
-                                        Q(desc__search='*%s*' % userinput) |
-                                        Q(tags__search='*%s*' % userinput))
+            if userinput != '':
+                items = Item.objects.filter(Q(title__search='*%s*' % userinput) |
+                                            Q(desc__search='*%s*' % userinput) |
+                                            Q(tags__search='*%s*' % userinput))
+            else:
+                items = Item.objects.all()
+
             if full_search: # полный поиск
                 # поиск по диапазону цен
                 min = clean['min_price']
                 max = clean['max_price']
                 if min != '' and max != '':
                     items = items.filter(sort_price__gte=min, sort_price__lte=max)
-                # поиск по диапазону лампочек
-                #min_lamps = clean['min_lamps']
-                #max_lamps = clean['max_lamps']
-                #import pdb; pdb.set_trace()
-                #if min_lamps != '' and max_lamps != '':
-                #    items = items.filter(get_lamp.count__gte=min_lamps, get_lamp.count__lte=max_lamps)
+                    # поиск по диапазону лампочек
+                    #min_lamps = clean['min_lamps']
+                    #max_lamps = clean['max_lamps']
+                    #import pdb; pdb.set_trace()
+                    #if min_lamps != '' and max_lamps != '':
+                    #    items = items.filter(get_lamp.count__gte=min_lamps, get_lamp.count__lte=max_lamps)
             request.session['searchquery'] = clean['userinput']
             request.session['howmuch_id'] = clean['howmuch']
             request.session['cached_items'] = items # кэшируем для paginator
         else:
             items = Item.objects.all()
+    
         return {'page_title': u'Результаты поискового запроса',
                 'items': items.order_by(sort[sort_type]),
                 'search_query': userinput,

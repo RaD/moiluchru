@@ -26,7 +26,7 @@ ITEMS_PER_PAGE_CHOICE = [(1, ipp_settings),
                          (3, int(2 * ipp_settings)), 
                          (4, int(3 * ipp_settings))]
 class SearchForm(forms.Form):
-    userinput = forms.CharField(max_length=64)
+    userinput = forms.CharField(max_length=64, required=False)
     howmuch = forms.ChoiceField(choices=ITEMS_PER_PAGE_CHOICE)
 
 class FullSearchForm(SearchForm):
