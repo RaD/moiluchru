@@ -94,7 +94,6 @@ def search_results(request):
         return {'page_title': u'Результаты поискового запроса',
                 'items': items.order_by(sort[sort_type]),
                 'search_query': userinput,
-                'paginator_use_session': True,
                 'url': '/result/', 'sort_type': sort_type}
     else: # обращение через paginator
         try:

@@ -69,15 +69,11 @@ def paginate_by(param_name, get_name, count=10):
             if param_name in context:
                 try:
                     objects = context.get(param_name)
-                    if request.session.get('paginator_use_session', False):
-                        ipp_settings = settings.SHOP_ITEMS_PER_PAGE
-                        ITEMS_PER_PAGE_CHOICE = [(1, ipp_settings), 
-                                                 (2, int(1.5 * ipp_settings)), 
-                                                 (3, int(2 * ipp_settings)), 
-                                                 (4, int(3 * ipp_settings))]
-                        count = request.request.get('howmuch_id', 1)
-                    else:
-                        count = 10
+                    ipp_settings = settings.SHOP_ITEMS_PER_PAGE
+                    count = [ipp_settings, ipp_settings,
+                             int(1.5 * ipp_settings),
+                             int(2 * ipp_settings),
+                             int(3 * ipp_settings)][int(request.session.get('howmuch_id', 1))]
                     paginator = Paginator(objects, count)
 
                     context['page'] = paginator.page(int(pagenum))
