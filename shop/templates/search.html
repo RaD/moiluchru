@@ -1,6 +1,15 @@
 {% extends "shop/base.html" %}
 
 {% block content %}
+  <script>
+    function add_tag_to_list(select, list) {
+	var s_obj = $('#'+select)
+	var l_obj = $('#'+list)
+	var options = s_obj[0].options;
+	var selected = s_obj[0].selectedIndex;
+	l_obj.val(l_obj.val() + options[selected].value + ' ');
+    }
+  </script>
   <div id="left">
     <h3 class="ttl"><span></span>Категории</h3>
 
@@ -27,6 +36,22 @@
 	    от {{ fullsearchform.min_price }}
 	    до {{ fullsearchform.max_price }}
 	    рублей.
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    Метки
+	    {{ fullsearchform.tag_list }}
+	    <input type="button" value="&larr;" 
+		   onclick="add_tag_to_list('id_tag_select', 'id_tag_list');"
+		   title="Добавить метку в список поиска"/>
+	    <select id="id_tag_select" name="tag_select" id="field_tag_select">
+	    {% for t in tags %}
+	    <option value="{{ t }}">{{ t }}</option>
+	    {% empty %}
+	    <option value="">Метки отсутствуют</option>
+	    {% endfor %}
+	    </select>
 	  </td>
 	</tr>
 	<tr>

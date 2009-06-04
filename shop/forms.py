@@ -30,8 +30,9 @@ class SearchForm(forms.Form):
     howmuch = forms.ChoiceField(choices=ITEMS_PER_PAGE_CHOICE)
 
 class FullSearchForm(SearchForm):
-    min_price = forms.CharField(label=_(u'Price (min)'), max_length=6)
-    max_price = forms.CharField(label=_(u'Price (max)'), max_length=6)
+    tag_list = forms.CharField(label=_(u'Tag list'), max_length=1024, required=False)
+    min_price = forms.CharField(label=_(u'Price (min)'), max_length=6, required=False)
+    max_price = forms.CharField(label=_(u'Price (max)'), max_length=6, required=False)
 #     min_lamps = forms.CharField(label=_(u'Lamps (min)'), max_length=3)
 #     max_lamps = forms.CharField(label=_(u'Lamps (max)'), max_length=3)
 

@@ -85,7 +85,13 @@ def search_results(request):
                 max = clean['max_price']
                 if min != '' and max != '':
                     items = items.filter(sort_price__gte=min, sort_price__lte=max)
-                    # поиск по диапазону лампочек
+
+                # поиск по меткам
+                tags = clean['tag_list'].strip().split()
+                for t in tags:
+                    items = items.filter(Q(tags__search='%s' % t))
+
+                # поиск по диапазону лампочек
                     #min_lamps = clean['min_lamps']
                     #max_lamps = clean['max_lamps']
                     #import pdb; pdb.set_trace()
