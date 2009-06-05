@@ -495,3 +495,5 @@ BUTTON {
 
 
 #id_min_price, #id_max_price { width: 50px; }
+#id_socle { width: 60px; }
+#id_min_lamps, #id_max_lamps { width: 30px; }

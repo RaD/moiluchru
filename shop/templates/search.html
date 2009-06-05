@@ -32,10 +32,30 @@
 	</tr>
 	<tr>
 	  <td>
+	    {% comment %}
 	    Диапазон цен
 	    от {{ fullsearchform.min_price }}
 	    до {{ fullsearchform.max_price }}
 	    рублей.
+	    {% endcomment %}
+	  </td>
+	</tr>
+	<tr>
+	  <td>
+	    {{ fullsearchform }}
+	    {% comment %}
+	    Лампочки: цоколь 
+	    <select id="id_socle" name="socle" id="field_socle">
+	    {% for s in socles %}
+	    <option value="{{ s }}">{{ s }}</option>
+	    {% empty %}
+	    <option value="">Цоколи отсутствуют</option>
+	    {% endfor %}
+	    </select>, количество
+	    от {{ fullsearchform.min_lamps }}
+	    до {{ fullsearchform.max_lamps }}
+	    штук.
+	    {% endcomment %}
 	  </td>
 	</tr>
 	<tr>

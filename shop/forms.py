@@ -20,21 +20,6 @@ class CourierSelect(forms.ModelChoiceField):
     def label_from_instance(self, obj):
         return "%s" % obj.get_full_name()
             
-ipp_settings = settings.SHOP_ITEMS_PER_PAGE
-ITEMS_PER_PAGE_CHOICE = [(1, ipp_settings), 
-                         (2, int(1.5 * ipp_settings)), 
-                         (3, int(2 * ipp_settings)), 
-                         (4, int(3 * ipp_settings))]
-class SearchForm(forms.Form):
-    userinput = forms.CharField(max_length=64, required=False)
-    howmuch = forms.ChoiceField(choices=ITEMS_PER_PAGE_CHOICE)
-
-class FullSearchForm(SearchForm):
-    tag_list = forms.CharField(label=_(u'Tag list'), max_length=1024, required=False)
-    min_price = forms.CharField(label=_(u'Price (min)'), max_length=6, required=False)
-    max_price = forms.CharField(label=_(u'Price (max)'), max_length=6, required=False)
-#     min_lamps = forms.CharField(label=_(u'Lamps (min)'), max_length=3)
-#     max_lamps = forms.CharField(label=_(u'Lamps (max)'), max_length=3)
 
 class OfferForm(forms.Form):
     fname = forms.CharField(label=_(u'Last name'), max_length=64,
@@ -79,4 +64,111 @@ class CartRecalculate(forms.Form):
 
 class CartRemoveItem(forms.Form):
     item = forms.CharField(label=_(u'Item id'), max_length=8)
+
+##
+## ПОИСКОВЫЙ ИНТЕРФЕЙС
+##
+
+from django.forms.models import ModelFormMetaclass
+from django.forms.fields import IntegerField
+from django.utils.datastructures import SortedDict
+
+class MinMaxWidget(forms.MultiWidget):
+    """ Виджет для отображения полей для ввода диапазона значений. """
+    def __init__(self, attrs=None, **kwargs):
+        widgets = (
+            forms.TextInput(),
+            forms.TextInput(),
+            )
+        #super(MinMaxWidget, self).__init__(widgets, {'id': 'desc'})
+        super(MinMaxWidget, self).__init__(widgets, attrs)
+
+    def decompress(self, value):
+        if value:
+            return (value[0], value[1])
+        return (0, 0)
+
+class MinMaxFormField(forms.MultiValueField):
+    widget = MinMaxWidget
+
+    def __init__(self, *args, **kwargs):
+        fields = (
+            forms.CharField(required=False),
+            forms.CharField(required=False),
+            )
+        super(MinMaxFormField, self).__init__(fields, *args, **kwargs)
+
+    def clean(self, data_list):
+        if int(data_list[0]) > int(data_list[1]):
+            raise forms.ValidationError(_(u'Min field is greater than Max field.'))
+
+    def compress(self, data_list):
+        if data_list:
+            return data_list
+        return None
+
+class SearchFormMetaclass(ModelFormMetaclass):
+    """ Данный метакласс предназначен для преобразования списка полей для
+    реализации подстраивающихся поисковых форм. """
+
+    def __new__(cls, name, bases, attrs):
+        """ Метод для управления настройкой класса. """
+        # вызываем метод родительского класса, получаем поля в base_fields
+        new_class = super(SearchFormMetaclass, cls).__new__(cls, name, bases, attrs)
+        #print new_class.base_fields
+
+        new_base_fields = []
+
+        # обрабатываем каждое поле
+        for field_name in new_class.base_fields.keys():
+            # получаем имя класса для поля
+            field_class_name = type(new_class.base_fields[field_name]).__name__
+
+            if field_class_name == 'IntegerField':
+                #print 'создать диапазон для %s' % field_name
+                new_base_fields.append((field_name, MinMaxFormField()))
+                #new_base_fields.append(('%s_min' % field_name, IntegerField()))
+                #new_base_fields.append(('%s_max' % field_name, IntegerField()))
+            else:
+                #print 'поле %s, класс %s' % (field_name, field_class_name)
+                new_base_fields.append((field_name, new_class.base_fields[field_name]))
+
+        # замещаем поля
+        new_class.base_fields = SortedDict(new_base_fields)
+
+        # вернуть настроенный класс
+        return new_class
+
+class BaseSearchForm(forms.ModelForm): # Lamp
+    __metaclass__ = SearchFormMetaclass
+
+    userinput = forms.CharField(max_length=10, required=False)
+    simple = forms.BooleanField(widget=forms.HiddenInput, initial=False)
+
+    def search(self):
+        #print '== searching =='
+        #print self.cleaned_data
+
+        queryset = self._meta.model._default_manager.get_query_set()
+        for item in self.fields:
+            if isinstance(self.fields[item], MinMaxFormField):
+                filter = {'%s__range' % item: self.cleaned_data[item]}
+                queryset = queryset.filter(**filter)
+        return queryset
+
+class FullSearchForm(BaseSearchForm):
+    class Meta:
+        model = models.Lamp
+        exclude = ('item',)
+
+ipp_settings = settings.SHOP_ITEMS_PER_PAGE
+ITEMS_PER_PAGE_CHOICE = [(1, ipp_settings),
+                         (2, int(1.5 * ipp_settings)),
+                         (3, int(2 * ipp_settings)),
+                         (4, int(3 * ipp_settings))]
+class SearchForm(forms.Form):
+    """ Реализация формы простого поиска. """
+    userinput = forms.CharField(max_length=64, required=False)
+    howmuch = forms.ChoiceField(choices=ITEMS_PER_PAGE_CHOICE)
+    simple = forms.BooleanField(widget=forms.HiddenInput, initial=True)
 

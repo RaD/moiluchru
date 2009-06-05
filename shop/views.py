@@ -11,7 +11,7 @@ from tagging.utils import calculate_cloud
 
 from shop import common
 from shop.models import Item, Category, Collection, Buyer, Phone, Order, \
-    OrderStatus, OrderDetail, Lamp
+    OrderStatus, OrderDetail, Socle, Lamp
 from shop.forms import DivErrorList, SearchForm, FullSearchForm, OfferForm
 from shop.classes import CartItem
 
@@ -51,7 +51,8 @@ def cart_ctx_proc(request):
 def search_query(request):
     return {'searchform': SearchForm(), 
             'fullsearchform': FullSearchForm(),
-            'page_title': u'Мой Луч'
+            'page_title': u'Мой Луч',
+            'socles': Socle.objects.all()
             }
 
 ### Страница с результатами поиска
@@ -65,11 +66,16 @@ def search_results(request):
 
     if request.method == 'POST':
         userinput = ''
-        full_search = 'max_price' in request.POST.keys() # полный поиск
-        form = SearchForm(request.POST)
+
+        full_search = not request.POST['simple']
+
         if full_search:
             form = FullSearchForm(request.POST)
+        else:
+            form = SearchForm(request.POST)
+
         if form.is_valid():
+            form.search()
             clean = form.cleaned_data
             userinput = clean['userinput']
             if userinput != '':
@@ -92,11 +98,10 @@ def search_results(request):
                     items = items.filter(Q(tags__search='%s' % t))
 
                 # поиск по диапазону лампочек
-                    #min_lamps = clean['min_lamps']
-                    #max_lamps = clean['max_lamps']
-                    #import pdb; pdb.set_trace()
-                    #if min_lamps != '' and max_lamps != '':
-                    #    items = items.filter(get_lamp.count__gte=min_lamps, get_lamp.count__lte=max_lamps)
+                min_lamps = clean['min_lamps']
+                max_lamps = clean['max_lamps']
+                #if min_lamps != '' and max_lamps != '':
+                #    items = items.filter(get_lamp.count__gte=min_lamps, get_lamp.count__lte=max_lamps)
             request.session['searchquery'] = clean['userinput']
             request.session['howmuch_id'] = clean['howmuch']
             request.session['cached_items'] = items # кэшируем для paginator
