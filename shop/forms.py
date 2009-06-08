@@ -80,7 +80,6 @@ class MinMaxWidget(forms.MultiWidget):
             forms.TextInput(),
             forms.TextInput(),
             )
-        #super(MinMaxWidget, self).__init__(widgets, {'id': 'desc'})
         super(MinMaxWidget, self).__init__(widgets, attrs)
 
     def decompress(self, value):
@@ -93,19 +92,19 @@ class MinMaxFormField(forms.MultiValueField):
 
     def __init__(self, *args, **kwargs):
         fields = (
-            forms.CharField(required=False),
-            forms.CharField(required=False),
+            # required=False автоматически назначается в родительском конструкторе
+            forms.CharField(),
+            forms.CharField(),
             )
         super(MinMaxFormField, self).__init__(fields, *args, **kwargs)
 
     def clean(self, data_list):
         if int(data_list[0]) > int(data_list[1]):
             raise forms.ValidationError(_(u'Min field is greater than Max field.'))
+        return data_list
 
     def compress(self, data_list):
-        if data_list:
-            return data_list
-        return None
+        return data_list
 
 class SearchFormMetaclass(ModelFormMetaclass):
     """ Данный метакласс предназначен для преобразования списка полей для
@@ -115,7 +114,6 @@ class SearchFormMetaclass(ModelFormMetaclass):
         """ Метод для управления настройкой класса. """
         # вызываем метод родительского класса, получаем поля в base_fields
         new_class = super(SearchFormMetaclass, cls).__new__(cls, name, bases, attrs)
-        #print new_class.base_fields
 
         new_base_fields = []
 
@@ -124,13 +122,11 @@ class SearchFormMetaclass(ModelFormMetaclass):
             # получаем имя класса для поля
             field_class_name = type(new_class.base_fields[field_name]).__name__
 
-            if field_class_name == 'IntegerField':
-                #print 'создать диапазон для %s' % field_name
+            if field_class_name in ['IntegerField', 'FloatField']:
                 new_base_fields.append((field_name, MinMaxFormField()))
-                #new_base_fields.append(('%s_min' % field_name, IntegerField()))
-                #new_base_fields.append(('%s_max' % field_name, IntegerField()))
             else:
-                #print 'поле %s, класс %s' % (field_name, field_class_name)
+                # в полном поиске ни одно поле не может быть обязательным
+                new_class.base_fields[field_name].required = False
                 new_base_fields.append((field_name, new_class.base_fields[field_name]))
 
         # замещаем поля
@@ -139,16 +135,20 @@ class SearchFormMetaclass(ModelFormMetaclass):
         # вернуть настроенный класс
         return new_class
 
-class BaseSearchForm(forms.ModelForm): # Lamp
+# Настройки для выпадашки "количество элементов на странице".
+ipp_settings = settings.SHOP_ITEMS_PER_PAGE
+ITEMS_PER_PAGE_CHOICE = [(1, ipp_settings),
+                         (2, int(1.5 * ipp_settings)),
+                         (3, int(2 * ipp_settings)),
+                         (4, int(3 * ipp_settings))]
+
+class BaseSearchForm(forms.ModelForm):
+    """ Базовый класс для форм, строящихся по модели. """
     __metaclass__ = SearchFormMetaclass
 
-    userinput = forms.CharField(max_length=10, required=False)
-    simple = forms.BooleanField(widget=forms.HiddenInput, initial=False)
+    simple = forms.BooleanField(widget=forms.HiddenInput, initial=False, required=False)
 
     def search(self):
-        #print '== searching =='
-        #print self.cleaned_data
-
         queryset = self._meta.model._default_manager.get_query_set()
         for item in self.fields:
             if isinstance(self.fields[item], MinMaxFormField):
@@ -156,19 +156,20 @@ class BaseSearchForm(forms.ModelForm): # Lamp
                 queryset = queryset.filter(**filter)
         return queryset
 
-class FullSearchForm(BaseSearchForm):
-    class Meta:
-        model = models.Lamp
-        exclude = ('item',)
-
-ipp_settings = settings.SHOP_ITEMS_PER_PAGE
-ITEMS_PER_PAGE_CHOICE = [(1, ipp_settings),
-                         (2, int(1.5 * ipp_settings)),
-                         (3, int(2 * ipp_settings)),
-                         (4, int(3 * ipp_settings))]
 class SearchForm(forms.Form):
     """ Реализация формы простого поиска. """
     userinput = forms.CharField(max_length=64, required=False)
     howmuch = forms.ChoiceField(choices=ITEMS_PER_PAGE_CHOICE)
-    simple = forms.BooleanField(widget=forms.HiddenInput, initial=True)
+    simple = forms.BooleanField(widget=forms.HiddenInput, initial=True, required=False)
 
+class MainSearchForm(BaseSearchForm):
+    """ Реализация формы поиска по основным параметрам товара. """
+    class Meta:
+        model= models.Item
+        exclude = ('title', 'desc', 'item_type', 'collection', 
+                   'producer', 'image', 'buys', 'tags')
+class FullSearchForm(BaseSearchForm):
+    """ Реализация формы поиска по уникальным параметрам товара. """
+    class Meta:
+        model = models.Lamp
+        exclude = ('item',)

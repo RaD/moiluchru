@@ -23,57 +23,24 @@
   <div id="right">
     <h3 class="ttl"><span></span>Поиск</h3>
 
+    {% if error_desc %}<div id="error">{{ error_desc }}</div>{% endif %}
+    
     <form method="post" action="/result/">
-      <table width="100%">
-	<tr>
-	  <td>
-	    Запрос {{ fullsearchform.userinput }} {{ fullsearchform.howmuch }} шт. на странице
-	  </td>
-	</tr>
-	<tr>
-	  <td>
-	    {% comment %}
-	    Диапазон цен
-	    от {{ fullsearchform.min_price }}
-	    до {{ fullsearchform.max_price }}
-	    рублей.
-	    {% endcomment %}
-	  </td>
-	</tr>
-	<tr>
-	  <td>
-	    {{ fullsearchform }}
-	    {% comment %}
-	    Лампочки: цоколь 
-	    <select id="id_socle" name="socle" id="field_socle">
-	    {% for s in socles %}
-	    <option value="{{ s }}">{{ s }}</option>
-	    {% empty %}
-	    <option value="">Цоколи отсутствуют</option>
-	    {% endfor %}
-	    </select>, количество
-	    от {{ fullsearchform.min_lamps }}
-	    до {{ fullsearchform.max_lamps }}
-	    штук.
-	    {% endcomment %}
-	  </td>
-	</tr>
-	<tr>
-	  <td>
-	    Метки
-	    {{ fullsearchform.tag_list }}
-	    <input type="button" value="&larr;" 
-		   onclick="add_tag_to_list('id_tag_select', 'id_tag_list');"
-		   title="Добавить метку в список поиска"/>
-	    <select id="id_tag_select" name="tag_select" id="field_tag_select">
-	    {% for t in tags %}
-	    <option value="{{ t }}">{{ t }}</option>
-	    {% empty %}
-	    <option value="">Метки отсутствуют</option>
-	    {% endfor %}
-	    </select>
-	  </td>
-	</tr>
+      <p>
+	Запрос {{ searchform.userinput }} {{ searchform.howmuch }} шт. на странице
+      </p>
+      <p>
+	Основные характеристики продукта:
+      </p>
+      <table id="simple_search" width="100%">
+	{{ mainsearchform }}
+      </table>
+
+      <p>
+	Уникальные характеристики продукта:
+      </p>
+      <table id="full_search" width="100%">
+	{{ fullsearchform }}
 	<tr>
 	  <td>
 	    <input type="submit" name="go" value="Найти"/>

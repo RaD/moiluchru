@@ -12,7 +12,7 @@ from tagging.utils import calculate_cloud
 from shop import common
 from shop.models import Item, Category, Collection, Buyer, Phone, Order, \
     OrderStatus, OrderDetail, Socle, Lamp
-from shop.forms import DivErrorList, SearchForm, FullSearchForm, OfferForm
+from shop.forms import DivErrorList, SearchForm, MainSearchForm, FullSearchForm, OfferForm
 from shop.classes import CartItem
 
 from snippets import render_to, columns, paginate_by
@@ -49,11 +49,31 @@ def cart_ctx_proc(request):
 ### Страница с поисковым запросом
 @render_to('shop/search.html', cart_ctx_proc)
 def search_query(request):
-    return {'searchform': SearchForm(), 
-            'fullsearchform': FullSearchForm(),
-            'page_title': u'Мой Луч',
-            'socles': Socle.objects.all()
-            }
+    error_post = request.session.get('error_post', None)
+    error_form = request.session.get('error_form', None)
+    error_desc = request.session.get('error_desc', None)
+
+    for i in ['post', 'form', 'desc']:
+        try:
+            del(request.session['error_%s' % i])
+        except KeyError:
+            pass
+
+    context = {
+        'searchform': SearchForm(), 
+        'mainsearchform': MainSearchForm(),
+        'fullsearchform': FullSearchForm(),
+        'error_desc': error_desc,
+        'page_title': u'Мой Луч'
+        }
+
+    if error_form == 'simple':
+        context.update({'searchform': SearchForm(error_post)})
+    if error_form == 'main':
+        context.update({'mainsearchform': MainSearchForm(error_post)})
+    if error_form == 'full':
+        context.update({'fullsearchform': FullSearchForm(error_post)})
+    return context
 
 ### Страница с результатами поиска
 @render_to('shop/result.html', cart_ctx_proc)
@@ -63,19 +83,16 @@ def search_results(request):
     """ Функция для результатов поиска по магазину. """
     common.does_cart_exist(request)
     sort_type = request.session.get('sort_type', 1)
+    context = {'page_title': u'Результаты поискового запроса',
+               'url': '/result/', 'sort_type': sort_type}
 
     if request.method == 'POST':
         userinput = ''
 
-        full_search = not request.POST['simple']
+        full_search = 'simple' in request.POST
 
-        if full_search:
-            form = FullSearchForm(request.POST)
-        else:
-            form = SearchForm(request.POST)
-
+        form = SearchForm(request.POST)
         if form.is_valid():
-            form.search()
             clean = form.cleaned_data
             userinput = clean['userinput']
             if userinput != '':
@@ -85,42 +102,39 @@ def search_results(request):
             else:
                 items = Item.objects.all()
 
-            if full_search: # полный поиск
-                # поиск по диапазону цен
-                min = clean['min_price']
-                max = clean['max_price']
-                if min != '' and max != '':
-                    items = items.filter(sort_price__gte=min, sort_price__lte=max)
+            if full_search:
+                form = FullSearchForm(request.POST)
+                if form.is_valid():
+                    subset = form.search()
+                    items = items.filter(id__in=[i.item.id for i in subset])
+                else:
+                    request.session['error_desc'] = u'Ошибка во введённых данных. Проверьте их правильность.'
+                    request.session['error_post'] = request.POST
+                    request.session['error_form'] = 'full'
+                    return HttpResponseRedirect('/search/')
 
-                # поиск по меткам
-                tags = clean['tag_list'].strip().split()
-                for t in tags:
-                    items = items.filter(Q(tags__search='%s' % t))
-
-                # поиск по диапазону лампочек
-                min_lamps = clean['min_lamps']
-                max_lamps = clean['max_lamps']
-                #if min_lamps != '' and max_lamps != '':
-                #    items = items.filter(get_lamp.count__gte=min_lamps, get_lamp.count__lte=max_lamps)
             request.session['searchquery'] = clean['userinput']
             request.session['howmuch_id'] = clean['howmuch']
             request.session['cached_items'] = items # кэшируем для paginator
         else:
-            items = Item.objects.all()
+            #print form.errors
+            request.session['error_desc'] = u'Ошибка во введённых данных. Проверьте их правильность.'
+            request.session['error_post'] = request.POST
+            request.session['error_form'] = 'simple'
+            return HttpResponseRedirect('/search/')
     
-        return {'page_title': u'Результаты поискового запроса',
-                'items': items.order_by(sort[sort_type]),
-                'search_query': userinput,
-                'url': '/result/', 'sort_type': sort_type}
+        context.update(
+            {'items': items.order_by(sort[sort_type]),
+             'search_query': userinput})
     else: # обращение через paginator
         try:
             items = request.session.get('cached_items').order_by(sort[sort_type])
         except:
             items = [] # FIXME: видать прошли по ссылке напрямую, надо решить, что делать в таком случае
-        return {'page_title': u'Результаты поискового запроса',
-                'items': items,
-                'search_query': request.session.get('searchquery', ''),
-                'url': '/result/', 'sort_type': sort_type}
+        context.update(
+            {'items': items,
+             'search_query': request.session.get('searchquery', '')})
+    return context
 
 ### Страница с результатами поиска по тегу
 def tag_results(request, tag):

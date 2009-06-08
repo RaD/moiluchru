@@ -250,15 +250,18 @@ class Socle(CommonEntity):
 
 class Lamp(models.Model):
     item = models.ForeignKey(Item)
-    socle = models.ForeignKey(Socle)
-    watt = models.PositiveIntegerField(_(u'Power'), default=0)
-    count = models.PositiveIntegerField(_(u'Count of lamps'), default=1)
-    voltage = models.PositiveIntegerField(_(u'Voltage'), default=220)
+    socle = models.ForeignKey(Socle, 
+                              verbose_name=_(u'Socle'),
+                              help_text=_(u'Socle of lamp'))
+    watt = models.PositiveIntegerField(verbose_name=_(u'Power'), default=0,
+                                       help_text=_(u'Power of lamp'))
+    count = models.PositiveIntegerField(help_text=_(u'Count of lamps'), default=1)
+    voltage = models.PositiveIntegerField(verbose_name=_(u'Voltage'), default=220)
 
 class Size(models.Model):
     item = models.ForeignKey(Item)
-    diameter = models.PositiveIntegerField(_(u'Diameter'), null=True, blank=True)
-    height = models.PositiveIntegerField(_(u'Height'), null=True, blank=True)
-    length = models.PositiveIntegerField(_(u'Length'), null=True, blank=True)
-    width = models.PositiveIntegerField(_(u'Width'), null=True, blank=True)
-    brow = models.PositiveIntegerField(_(u'Brow'), null=True, blank=True)
+    diameter = models.PositiveIntegerField(verbose_name=_(u'Diameter'), null=True, blank=True)
+    height = models.PositiveIntegerField(verbose_name=_(u'Height'), null=True, blank=True)
+    length = models.PositiveIntegerField(verbose_name=_(u'Length'), null=True, blank=True)
+    width = models.PositiveIntegerField(verbose_name=_(u'Width'), null=True, blank=True)
+    brow = models.PositiveIntegerField(verbose_name=_(u'Brow'), null=True, blank=True)

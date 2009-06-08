@@ -493,7 +493,8 @@ BUTTON {
 
 .warning { border: 2px solid #ffdb00; background-color: #ffeb73; -moz-border-radius: 8px; padding: 2px 4px; margin: 0px 0px 2em 0px;}
 
+#simple_search #id_userinput { width: auto; }
+#simple_search INPUT { width: 60px; margin: 0px 2px; }
+#full_search INPUT { width: 60px; margin: 0px 2px; }
 
-#id_min_price, #id_max_price { width: 50px; }
-#id_socle { width: 60px; }
-#id_min_lamps, #id_max_lamps { width: 30px; }
+
