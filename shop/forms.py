@@ -119,15 +119,20 @@ class SearchFormMetaclass(ModelFormMetaclass):
 
         # обрабатываем каждое поле
         for field_name in new_class.base_fields.keys():
+            fobj = new_class.base_fields[field_name]
             # получаем имя класса для поля
-            field_class_name = type(new_class.base_fields[field_name]).__name__
+            field_class_name = type(fobj).__name__
 
             if field_class_name in ['IntegerField', 'FloatField']:
-                new_base_fields.append((field_name, MinMaxFormField()))
+                #print dir(fobj)
+                widget = MinMaxFormField()
+                widget.label = fobj.label
+                widget.help_text = fobj.help_text
+                new_base_fields.append((field_name, widget))
             else:
                 # в полном поиске ни одно поле не может быть обязательным
                 new_class.base_fields[field_name].required = False
-                new_base_fields.append((field_name, new_class.base_fields[field_name]))
+                new_base_fields.append((field_name, fobj))
 
         # замещаем поля
         new_class.base_fields = SortedDict(new_base_fields)
@@ -151,8 +156,25 @@ class BaseSearchForm(forms.ModelForm):
     def search(self):
         queryset = self._meta.model._default_manager.get_query_set()
         for item in self.fields:
+            #print item, self.fields[item], self.cleaned_data[item]
+            # обработка специального поля
+            if item == 'simple':
+                continue
+            # получаем значение и соответственно обрабатываем его
+            value = self.cleaned_data[item]
+            if isinstance(self.fields[item], forms.BooleanField):
+                queryset = queryset.filter(**{'%s' % item: value})
+            if isinstance(self.fields[item], forms.ModelChoiceField):
+                if value is None:
+                    continue
+                queryset = queryset.filter(**{'%s' % item: value})
             if isinstance(self.fields[item], MinMaxFormField):
-                filter = {'%s__range' % item: self.cleaned_data[item]}
+                # обработка ситуации по умолчанию: оба поля равны нулю
+                (min, max) = value
+                if int(min) == int(max) and int(max) == 0:
+                    continue
+                # фильтруем набор по диапазону
+                filter = {'%s__range' % item: pair}
                 queryset = queryset.filter(**filter)
         return queryset
 

@@ -99,13 +99,14 @@ class Item(CommonEntity):
     collection = models.ForeignKey(Collection, verbose_name=_(u'Collection'), null=True, blank=True)
     producer = models.ForeignKey(Producer, verbose_name=_(u'Producer'))
     color = models.ForeignKey(Color, verbose_name=_(u'Color'))
-    is_present = models.BooleanField(verbose_name=_(u'Is present'))
+    is_present = models.BooleanField(verbose_name=_(u'Is present'), 
+                                     help_text=_(u'An item is present at store'))
     has_lamp = models.BooleanField(verbose_name=_(u'Has lamp'))
     reg_date = models.DateTimeField(verbose_name=_(u'Defined'), auto_now_add=True)
     last_modification = models.DateTimeField(verbose_name=_(u'Last modification'), auto_now_add=True, auto_now=True)
     image = models.ImageField(verbose_name=_(u'Image'), upload_to=u'itempics')
     buys = models.IntegerField(verbose_name=_(u'Buys'), default=0)
-    sort_price = models.FloatField(_(u'Price'))
+    sort_price = models.FloatField(_(u'Price'), help_text=_(u'Price of an item, in roubles'))
     tags = TagField()
     
     class Meta:
@@ -255,8 +256,10 @@ class Lamp(models.Model):
                               help_text=_(u'Socle of lamp'))
     watt = models.PositiveIntegerField(verbose_name=_(u'Power'), default=0,
                                        help_text=_(u'Power of lamp'))
-    count = models.PositiveIntegerField(help_text=_(u'Count of lamps'), default=1)
-    voltage = models.PositiveIntegerField(verbose_name=_(u'Voltage'), default=220)
+    count = models.PositiveIntegerField(verbose_name=_(u'Count of lamps'), 
+                                        help_text=_(u'Count of lamps'), default=1)
+    voltage = models.PositiveIntegerField(verbose_name=_(u'Voltage'),
+                                          help_text=_(u'Voltage of lamps'), default=220)
 
 class Size(models.Model):
     item = models.ForeignKey(Item)

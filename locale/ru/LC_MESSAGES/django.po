@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-08 17:00+0400\n"
+"POT-Creation-Date: 2009-06-09 12:17+0400\n"
 "PO-Revision-Date: 2008-07-09 20:40+0400\n"
 "Last-Translator: Ruslan Popov <radz@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -43,11 +43,11 @@ msgstr "Отправлено"
 msgid "Form has bad data."
 msgstr "Форма содержит плохие данные."
 
-#: shop/admin.py:58 shop/models.py:158
+#: shop/admin.py:58 shop/models.py:159
 msgid "Price (shop)"
 msgstr "Цена (продажа)"
 
-#: shop/admin.py:59 shop/models.py:157
+#: shop/admin.py:59 shop/models.py:158
 msgid "Price (store)"
 msgstr "Цена (склад)"
 
@@ -83,7 +83,7 @@ msgstr "Адрес"
 msgid "Contact phone"
 msgstr "Контактный телефон"
 
-#: shop/forms.py:35 shop/models.py:231
+#: shop/forms.py:35 shop/models.py:232
 msgid "Phone type"
 msgstr "Тип телефона"
 
@@ -115,7 +115,7 @@ msgstr "Идентификатор товара"
 msgid "Item count"
 msgstr "Количество товара"
 
-#: shop/forms.py:108
+#: shop/forms.py:103
 msgid "Min field is greater than Max field."
 msgstr "Минимальное значение больше максимального."
 
@@ -147,7 +147,7 @@ msgstr "Страны"
 msgid "Company"
 msgstr "Компания"
 
-#: shop/models.py:49 shop/models.py:107
+#: shop/models.py:49 shop/models.py:108
 msgid "Buys"
 msgstr "Куплено"
 
@@ -196,110 +196,122 @@ msgid "Is present"
 msgstr "В наличии"
 
 #: shop/models.py:103
+msgid "An item is present at store"
+msgstr "Товар есть на складе"
+
+#: shop/models.py:104
 msgid "Has lamp"
 msgstr "Лампы в поставке"
 
-#: shop/models.py:104 text/models.py:8
+#: shop/models.py:105 text/models.py:8
 msgid "Defined"
 msgstr "Определено"
 
-#: shop/models.py:105
+#: shop/models.py:106
 msgid "Last modification"
 msgstr "Изменено"
 
-#: shop/models.py:106
+#: shop/models.py:107
 msgid "Image"
 msgstr "Изображение"
 
-#: shop/models.py:108 shop/models.py:162
+#: shop/models.py:109 shop/models.py:163
 msgid "Price"
 msgstr "Цена"
 
-#: shop/models.py:112
+#: shop/models.py:109
+msgid "Price of an item, in roubles"
+msgstr "Цена товара, в рублях"
+
+#: shop/models.py:113
 msgid "Item"
 msgstr "Товар"
 
-#: shop/models.py:113 shop/views.py:30 shop/views.py:183
+#: shop/models.py:114 shop/views.py:30 shop/views.py:192
 msgid "Items"
 msgstr "Товары"
 
-#: shop/models.py:163
+#: shop/models.py:164
 msgid "Prices"
 msgstr "Цены"
 
-#: shop/models.py:177
+#: shop/models.py:178
 msgid "Buyer"
 msgstr "Покупатель"
 
-#: shop/models.py:178
+#: shop/models.py:179
 msgid "Buyers"
 msgstr "Покупатели"
 
-#: shop/models.py:188
+#: shop/models.py:189
 msgid "Order status"
 msgstr "Статус заказа"
 
-#: shop/models.py:189
+#: shop/models.py:190
 msgid "Order statuses"
 msgstr "Статусы заказа"
 
-#: shop/models.py:201
+#: shop/models.py:202
 msgid "Order"
 msgstr "Заказ"
 
-#: shop/models.py:202
+#: shop/models.py:203
 msgid "Orders"
 msgstr "Заказы"
 
-#: shop/models.py:232
+#: shop/models.py:233
 msgid "Phone types"
 msgstr "Типы телефона"
 
-#: shop/models.py:248 shop/models.py:254
+#: shop/models.py:249 shop/models.py:255
 msgid "Socle"
 msgstr "Цоколь"
 
-#: shop/models.py:249
+#: shop/models.py:250
 msgid "Socles"
 msgstr "Цоколи"
 
-#: shop/models.py:255
+#: shop/models.py:256
 msgid "Socle of lamp"
 msgstr "Цоколь лампы"
 
-#: shop/models.py:256
+#: shop/models.py:257
 msgid "Power"
 msgstr "Мощность"
 
-#: shop/models.py:257
+#: shop/models.py:258
 msgid "Power of lamp"
 msgstr "Мощность лампы"
 
-#: shop/models.py:258
+#: shop/models.py:259 shop/models.py:260
 msgid "Count of lamps"
 msgstr "Количество ламп"
 
-#: shop/models.py:259
+#: shop/models.py:261
 msgid "Voltage"
 msgstr "Напряжение"
 
-#: shop/models.py:263
+#: shop/models.py:262
+msgid "Voltage of lamps"
+msgstr "Номинальное напряжение ламп"
+
+#: shop/models.py:266
 msgid "Diameter"
 msgstr "Диаметр"
 
-#: shop/models.py:264
+#: shop/models.py:267
 msgid "Height"
 msgstr "Высота"
 
-#: shop/models.py:265
+#: shop/models.py:268
 msgid "Length"
 msgstr "Длина"
 
-#: shop/models.py:266
+#: shop/models.py:269
 msgid "Width"
 msgstr "Ширина"
 
-#: shop/models.py:267
+#: shop/models.py:270
 msgid "Brow"
 msgstr "Выступ"
 
@@ -319,11 +331,11 @@ msgstr "Доставка"
 msgid "Map"
 msgstr "Карта"
 
-#: shop/views.py:208 shop/views.py:234
+#: shop/views.py:217 shop/views.py:243
 msgid "Items of the category"
 msgstr "Товары категории"
 
-#: shop/views.py:264
+#: shop/views.py:273
 msgid "Items of the collection"
 msgstr "Товары коллекции"
 

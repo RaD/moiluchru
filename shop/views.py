@@ -61,7 +61,7 @@ def search_query(request):
 
     context = {
         'searchform': SearchForm(), 
-        'mainsearchform': MainSearchForm(),
+        'mainsearchform': MainSearchForm(initial={'is_present': True}),
         'fullsearchform': FullSearchForm(),
         'error_desc': error_desc,
         'page_title': u'Мой Луч'
@@ -85,24 +85,33 @@ def search_results(request):
     sort_type = request.session.get('sort_type', 1)
     context = {'page_title': u'Результаты поискового запроса',
                'url': '/result/', 'sort_type': sort_type}
-
+    #import pdb; pdb.set_trace()
     if request.method == 'POST':
-        userinput = ''
-
-        full_search = 'simple' in request.POST
+        full_search = 'simple' in request.POST and request.POST['simple'] == 'False'
 
         form = SearchForm(request.POST)
         if form.is_valid():
             clean = form.cleaned_data
-            userinput = clean['userinput']
-            if userinput != '':
-                items = Item.objects.filter(Q(title__search='*%s*' % userinput) |
-                                            Q(desc__search='*%s*' % userinput) |
-                                            Q(tags__search='*%s*' % userinput))
-            else:
+            # поиск по тексту
+            if clean['userinput'] == u'':
                 items = Item.objects.all()
-
+            else:
+                items = Item.objects.filter(Q(title__search='*%s*' % clean['userinput']) |
+                                            Q(desc__search='*%s*' % clean['userinput']) |
+                                            Q(tags__search='*%s*' % clean['userinput']))
+                
+            # поиск по категории
             if full_search:
+                form = MainSearchForm(request.POST)
+                if form.is_valid():
+                    subset = form.search()
+                    items = items.filter(id__in=[i.id for i in subset])
+                else:
+                    request.session['error_desc'] = u'Ошибка во введённых данных. Проверьте их правильность.'
+                    request.session['error_post'] = request.POST
+                    request.session['error_form'] = 'main'
+                    return HttpResponseRedirect('/search/')
+
                 form = FullSearchForm(request.POST)
                 if form.is_valid():
                     subset = form.search()
@@ -125,7 +134,7 @@ def search_results(request):
     
         context.update(
             {'items': items.order_by(sort[sort_type]),
-             'search_query': userinput})
+             'search_query': clean['userinput']})
     else: # обращение через paginator
         try:
             items = request.session.get('cached_items').order_by(sort[sort_type])
