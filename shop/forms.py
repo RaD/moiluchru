@@ -48,7 +48,8 @@ class LoginForm(forms.Form):
 class OrderForm(forms.Form):
     status = forms.ModelChoiceField(label=_(u'Status'), queryset=models.OrderStatus.objects.all(),
                                     widget=forms.Select(attrs={'class':'longitem'}))
-    courier = CourierSelect(label=_(u'Courier'), queryset=admmodels.User.objects.filter(groups=1),
+    courier = CourierSelect(label=_(u'Courier'), required=False,
+                            queryset=admmodels.User.objects.filter(groups=1),
                             widget=forms.Select(attrs={'class':'longitem'}))
 
 class CartAdd(forms.Form):

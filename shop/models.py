@@ -220,7 +220,7 @@ class OrderDetail(models.Model):
 
 class OrderStatusChange(models.Model):
     order = models.ForeignKey(Order)
-    courier = models.ForeignKey(User)
+    courier = models.ForeignKey(User, null=True)
     old_status = models.ForeignKey(OrderStatus, related_name=u'old_status')
     new_status = models.ForeignKey(OrderStatus, related_name=u'new_status')
     reg_date = models.DateTimeField(auto_now_add=True)
