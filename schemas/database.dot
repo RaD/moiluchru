@@ -1,0 +1,120 @@
+digraph G {
+	graph [rankdir = "TB", compound=true, ratio=compress, 
+		remincross=true, center=true];
+	node [shape=plaintext, fontname="Verdana", fontsize=8];
+	edge [arrowsize=1, color=blue, fontname="Verdana", fontsize=8];
+	
+subgraph cluster_profile {label="profile"; labelloc="t"; fontname="Verdana"; fontsize=12; profile};
+profile [shape=record, color=gray, label="{<user> user|phone CharField(20)|address CharField(50)}"]
+
+subgraph cluster_color {label="color"; labelloc="t"; fontname="Verdana"; fontsize=12; color};
+color [shape=record, color=gray, label="{<id> id integer not null|title CharField(64)|code CharField(6)}"]
+
+subgraph cluster_country {label="country"; labelloc="t"; fontname="Verdana"; fontsize=12; country};
+country [shape=record, color=gray, label="{<id>id integer not null|title CharField(64)}"]
+
+subgraph cluster_producer {label="producer"; labelloc="t"; fontname="Verdana"; fontsize=12; producer};
+producer [shape=record, color=gray, label="{<id> id integer not null|name CharField(30)|<country> country|buys IntegerField}"]
+
+subgraph cluster_category {label="category"; labelloc="t"; fontname="Verdana"; fontsize=12; category};
+category [shape=record, color=gray, label="{<id> id integer not null|title CharField(64)|<parent> parent null}"]
+
+subgraph cluster_collection {label="collection"; labelloc="t"; fontname="Verdana"; fontsize=12; collection};
+collection [shape=record, color=gray, label="{<id> id integer not null|title CharField(64)}"]
+
+subgraph cluster_item_type {label="item_type"; labelloc="t"; fontname="Verdana"; fontsize=12; item_type};
+item_type [shape=record, color=gray, label="{<id> id integer not null|title CharField(64)|<model_name> model_name CharField(64)}"]
+
+subgraph cluster_item {label="item"; labelloc="t"; fontname="Verdana"; fontsize=12; item};
+item [shape=record, color=gray, label="{<id> id integer not null|title CharField(64)|desc TextField null|<item_type> item_type|<category> category|<collection> collection null|<producer> producer|<color> color|is_present BooleanField|has_lamp BooleanField|reg_date DateTimeField|last_modification DateTimeField|image ImageField|buys IntegerField|sort_price FloatField|tags TagField}"]
+
+subgraph cluster_price {label="price"; labelloc="t"; fontname="Verdana"; fontsize=12; price};
+price [shape=record, color=gray, label="{<id> id integer not null|<item> item|price_store FloatField|price_shop FloatField|applied DateTimeField}"]
+
+subgraph cluster_buyer {label="buyer"; labelloc="t"; fontname="Verdana"; fontsize=12; buyer};
+buyer [shape=record, color=gray, label="{<id>id integer not null|lastname CharField(64)|firstname CharField(64)|secondname CharField(64)|address CharField(255)|email EmailField|join_date DateTimeField}"]
+
+subgraph cluster_orderstatus {label="orderstatus"; labelloc="t"; fontname="Verdana"; fontsize=12; orderstatus};
+orderstatus [shape=record, color=gray, label="{<id>id integer not null|title CharField(64)}"]
+
+subgraph cluster_order {label="order"; labelloc="t"; fontname="Verdana"; fontsize=12; order};
+order [shape=record, color=gray, label="{<id>id integer not null|<buyer> buyer|count PositiveIntegerField|totalprice FloatField|comment TextField|reg_date DateTimeField|<status> status|<courier> courier null}"]
+
+subgraph cluster_orderdetail {label="orderdetail"; labelloc="t"; fontname="Verdana"; fontsize=12; orderdetail};
+orderdetail [shape=record, color=gray, label="{<id>id integer not null|<order> order|<item> item|count PositiveIntegerField|price FloatField}"]
+
+subgraph cluster_orderstatuschange {label="orderstatuschange"; labelloc="t"; fontname="Verdana"; fontsize=12; orderstatuschange};
+orderstatuschange [shape=record, color=gray, label="{<id>id integer not null|<order> order|<courier> courier null|<old_status> old_status|<new_status> new_status|reg_date DateTimeField}"]
+
+subgraph cluster_phonetype {label="phonetype"; labelloc="t"; fontname="Verdana"; fontsize=12; phonetype};
+phonetype [shape=record, color=gray, label="{<id>id integer not null|title CharField(64)}"]
+
+subgraph cluster_phone {label="phone"; labelloc="t"; fontname="Verdana"; fontsize=12; phone};
+phone [shape=record, color=gray, label="{<id>id integer not null|number CharField(20)|<type> type|<owner> owner}"]
+
+subgraph cluster_User {label="User"; labelloc="t"; fontname="Verdana"; fontsize=12; User};
+User [shape=record, color=gray, label="{<id>id integer not null|username CharField(20)}"]
+
+##
+## Освещение
+##
+subgraph cluster_lamp {label="lamp"; labelloc="t"; fontname="Verdana"; fontsize=12; lamp};
+lamp [shape=record, color=gray, label="{<id> id integer not null|<socle> socle|watt PositiveIntegerField(0)|count PositiveIntegerField(1)|voltage PositiveIntegerField(0)}"]
+
+subgraph cluster_socle {label="socle"; labelloc="t"; fontname="Verdana"; fontsize=12; socle};
+socle [shape=record, color=gray, label="{<id> id integer not null|title CharField(64)}"]
+
+##
+## Автомодели
+##
+subgraph cluster_rcauto {label="rcauto"; labelloc="t"; fontname="Verdana"; fontsize=12; rcauto};
+rcauto [shape=record, color=gray, label="{<id> id integer not null|title CharField(64)|<remote> remote|<akku> akku|<engine> engine}"]
+
+subgraph cluster_remote {label="remote"; labelloc="t"; fontname="Verdana"; fontsize=12; remote};
+remote [shape=record, color=gray, label="{<id> id integer not null|title CharField(64)|power PositiveIntegerField(0)|<frequency_range> frequency_range}"]
+
+subgraph cluster_frequency_range {label="frequency_range"; labelloc="t"; fontname="Verdana"; fontsize=12; frequency_range};
+frequency_range [shape=record, color=gray, label="{<id> id integer not null|title CharField(64)}"]
+
+subgraph cluster_akku {label="akku"; labelloc="t"; fontname="Verdana"; fontsize=12; akku};
+akku [shape=record, color=gray, label="{<id> id integer not null|title CharField(64)|capacity PositiveIntegerField(0)|current PositiveIntegerField(0)|voltage PositiveIntegerField(0)}"]
+
+subgraph cluster_engine {label="engine"; labelloc="t"; fontname="Verdana"; fontsize=12; engine};
+engine [shape=record, color=gray, label="{<id> id integer not null|title CharField(64)| <engine_type> engine_type}"]
+
+subgraph cluster_engine_type {label="engine_type"; labelloc="t"; fontname="Verdana"; fontsize=12; engine_type};
+engine_type [shape=record, color=gray, label="{<id> id integer not null|title CharField(64)}"]
+
+##
+## Связи
+##
+producer:country -> country:id [tailport=e, headport=w];
+category:parent -> category:id;
+item:item_type -> item_type:id;
+item:category -> category:id;
+item:collection -> collection:id;
+item:producer -> producer:id;
+item:color -> color:id;
+price:item -> item:id;
+order:buyer -> buyer:id;
+order:status -> orderstatus:id;
+order:courier -> User:id;
+orderdetail:order -> order:id;
+orderdetail:item -> item:id;
+orderstatuschange:order -> order:id;
+orderstatuschange:courier -> User:id;
+orderstatuschange:old_status -> orderstatus:id;
+orderstatuschange:new_status -> orderstatus:id;
+phone:type -> phonetype:id;
+phone:owner -> buyer:id;
+
+item_type:model_name -> lamp [color=red, style=dashed];
+lamp:socle -> socle:id [color=brown];
+
+item_type:model_name -> rcauto [color=red, style=dashed];
+rcauto:remote -> remote:id [color=orange];
+remote:frequency_range -> frequency_range:id [color=orange];
+rcauto:akku -> akku:id [color=orange];
+rcauto:engine -> engine:id [color=orange];
+engine:engine_type -> engine_type:id [color=orange];
+}
