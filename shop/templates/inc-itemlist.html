@@ -1,7 +1,5 @@
 {% load thumbnail_filter %}
 
-{% if items %}
-
 {% include "shop/inc-paginator.html" %}  
 
 <div class="sectioncontent">
@@ -32,11 +30,22 @@
 	  {% include "shop/inc-w-cart-add.html" %}
 	</td>
       </tr>
+      {% empty %}
+      <tr>
+	<td>
+	  <div style="margin:2em; text-align: center;">
+	    <p>
+	      Ничего не найдено
+	    </p>
+	    <p>
+	      Попробуйте изменить параметры поискового запроса.
+	    </p>
+	  </div>
+	</td>
+      </tr>
       {% endfor %}
     </table>
   </div>
 </div>
   
 {% include "shop/inc-paginator.html" %}  
-
-{% endif %}

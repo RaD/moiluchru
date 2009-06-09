@@ -85,7 +85,7 @@ def search_results(request):
     sort_type = request.session.get('sort_type', 1)
     context = {'page_title': u'Результаты поискового запроса',
                'url': '/result/', 'sort_type': sort_type}
-    #import pdb; pdb.set_trace()
+
     if request.method == 'POST':
         full_search = 'simple' in request.POST and request.POST['simple'] == 'False'
 
@@ -96,9 +96,9 @@ def search_results(request):
             if clean['userinput'] == u'':
                 items = Item.objects.all()
             else:
-                items = Item.objects.filter(Q(title__search='*%s*' % clean['userinput']) |
-                                            Q(desc__search='*%s*' % clean['userinput']) |
-                                            Q(tags__search='*%s*' % clean['userinput']))
+                items = Item.objects.filter(Q(title__search=u'*%s*' % clean['userinput']) |
+                                            Q(desc__search=u'*%s*' % clean['userinput']) |
+                                            Q(tags__search=u'*%s*' % clean['userinput']))
                 
             # поиск по категории
             if full_search:
@@ -126,7 +126,6 @@ def search_results(request):
             request.session['howmuch_id'] = clean['howmuch']
             request.session['cached_items'] = items # кэшируем для paginator
         else:
-            #print form.errors
             request.session['error_desc'] = u'Ошибка во введённых данных. Проверьте их правильность.'
             request.session['error_post'] = request.POST
             request.session['error_form'] = 'simple'

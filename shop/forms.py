@@ -125,7 +125,6 @@ class SearchFormMetaclass(ModelFormMetaclass):
             field_class_name = type(fobj).__name__
 
             if field_class_name in ['IntegerField', 'FloatField']:
-                #print dir(fobj)
                 widget = MinMaxFormField()
                 widget.label = fobj.label
                 widget.help_text = fobj.help_text
