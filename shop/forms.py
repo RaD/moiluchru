@@ -175,7 +175,7 @@ class BaseSearchForm(forms.ModelForm):
                 if int(min) == int(max) and int(max) == 0:
                     continue
                 # фильтруем набор по диапазону
-                filter = {'%s__range' % item: pair}
+                filter = {'%s__range' % item: value}
                 queryset = queryset.filter(**filter)
         return queryset
 
