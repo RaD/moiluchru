@@ -1,0 +1,95 @@
+digraph G {
+	graph [rankdir = "TB", compound=true, ratio=compress, size="16,10", 
+		remincross=true, center=true];
+	node [shape=plaintext, fontname="Verdana", fontsize=8];
+	edge [arrowsize=1, color=blue, fontname="Verdana", fontsize=8];
+	
+A -> B [color="orange", label="метакласс"];
+B -> C [color="blue", label="наследование"];
+C -> D [color="green", label="использование"];
+C -> D [color="#33FFAA", label="использование"];
+
+subgraph cluster_main {label="Базовые шаблоны"; labelloc="t"; 
+	 fontname="Verdana"; fontsize=12; color="gray"
+	 main_base [label="base.html", shape="record"];
+	 main_404 [label="404.html", shape="record"];
+	 main_500 [label="500.html", shape="record"];
+
+	 main_base -> main_404 [color="blue"];
+	 main_base -> main_500 [color="blue"]
+};
+
+subgraph cluster_shop {label="Шаблоны магазина"; labelloc="t"; 
+	 fontname="Verdana"; fontsize=12; color="gray"
+	 shop_base [label="base.html", shape="record"];
+	 shop_cart [label="cart.html", shape="record"];
+	 shop_inc_category [label="inc-category.html", shape="record", color="purple"];
+	 shop_inc_catwidget [label="inc-catwidget.html", shape="record", color="purple"];
+	 shop_inc_column_items_wide [label="inc-column_items_wide.html", shape="record", color="purple"];
+	 shop_inc_column_items [label="inc-column_items.html", shape="record", color="purple"];
+	 shop_inc_howtos [label="inc-howtos.html", shape="record", color="purple"];
+	 shop_inc_itemlist [label="inc-itemlist.html", shape="record", color="purple"];
+	 shop_inc_jabber [label="inc-jabber.html", shape="record", color="purple"];
+	 shop_inc_paginator [label="inc-paginator.html", shape="record", color="purple"];
+	 shop_inc_producers [label="inc-producers.html", shape="record", color="purple"];
+	 shop_inc_tagcloud [label="inc-tagcloud.html", shape="record", color="purple"];
+	 shop_inc_w_cart_add [label="inc-w-card-add.html", shape="record", color="purple"];
+	 shop_item [label="item.html", shape="record"];
+	 shop_itemlist [label="itemlist.html", shape="record"];
+	 shop_main [label="main.html", shape="record"];
+	 shop_offer [label="offer.html", shape="record"];
+	 shop_ordered [label="ordered.html", shape="record"];
+	 shop_result [label="result.html", shape="record"];
+	 shop_search [label="search.html", shape="record"];
+	 shop_text [label="text.html", shape="record"];
+
+	 shop_base -> shop_cart [color="blue"];
+	 shop_base -> shop_item [color="blue"];
+	 shop_base -> shop_itemlist [color="blue"];
+	 shop_base -> shop_main [color="blue"];
+	 shop_base -> shop_offer [color="blue"];
+	 shop_base -> shop_ordered [color="blue"];
+	 shop_base -> shop_result [color="blue"];
+	 shop_base -> shop_search [color="blue"];
+	 shop_base -> shop_text [color="blue"];
+
+	 shop_inc_column_items_wide -> shop_inc_w_cart_add [color="#00FF00"];
+	 shop_inc_column_items -> shop_inc_w_cart_add [color="#00FF00"];
+	 shop_inc_itemlist -> shop_inc_paginator [color="#00FF00"];
+	 shop_inc_itemlist -> shop_inc_w_cart_add [color="#00FF00"];
+	 shop_item -> shop_inc_category [color="#00FF00"];
+	 shop_item -> shop_inc_tagcloud [color="#00FF00"];
+	 shop_item -> shop_inc_w_cart_add [color="#00FF00"];
+	 shop_itemlist -> shop_inc_catwidget [color="#00FF00"];
+	 shop_itemlist -> shop_inc_paginator [color="#00FF00"];
+	 shop_itemlist -> shop_inc_column_items_wide [color="#00FF00"];
+	 shop_main -> shop_inc_category [color="#00FF00"];
+	 shop_main -> shop_inc_jabber [color="#00FF00"];
+	 shop_main -> shop_inc_column_items [color="#00FF00"];
+	 shop_result -> shop_inc_category [color="#00FF00"];
+	 shop_result -> shop_inc_tagcloud [color="#00FF00"];
+	 shop_result -> shop_inc_itemlist [color="#00FF00"];
+	 shop_search -> shop_inc_category [color="#00FF00"];
+	 shop_search -> shop_inc_tagcloud [color="#00FF00"];
+};
+
+subgraph cluster_manager {label="Шаблоны управления"; labelloc="t"; 
+	 fontname="Verdana"; fontsize=12; color="gray"
+	 manager_base [label="base.html", shape="record"];
+	 manager_login [label="login.html", shape="record"];
+	 manager_orderinfo [label="orderinfo.html", shape="record"];
+	 manager_orders [label="orderinfo.html", shape="record"];
+
+	 manager_base -> manager_login [color="blue"];
+	 manager_base -> manager_orderinfo [color="blue"];
+	 manager_base -> manager_orders [color="blue"];
+};
+
+main_404 -> shop_inc_category [color="#33FFAA"];
+main_404 -> shop_inc_tagcloud [color="#33FFAA"];
+main_404 -> shop_inc_column_items [color="#33FFAA"];
+main_500 -> shop_inc_category [color="#33FFAA"];
+main_500 -> shop_inc_tagcloud [color="#33FFAA"];
+main_500 -> shop_inc_column_items [color="#33FFAA"];
+
+}
