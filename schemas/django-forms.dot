@@ -4,24 +4,28 @@ digraph G {
 	node [shape=plaintext, fontname="Verdana", fontsize=8];
 	edge [arrowsize=1, color=blue, fontname="Verdana", fontsize=8];
 	
+A -> B [color="orange", label="метакласс"];
+B -> C [color="blue", label="наследование"];
+C -> D [color="green", label="использование"];
+
 declarative_fields_metaclass [shape="ellipse", color="brown", label="DeclarativeFieldsMetaclass"];
 str_and_unicode [shape="record", color="black", label="StrAndUnicode"];
 base_form [shape="record", color="black", label="BaseForm"];
 form [shape="record", color="black", label="Form"];
 
-declarative_fields_metaclass -> form [color="orange", label="метакласс", tailport="s", headport="e"];
-base_form -> form [color="blue", label="наследование", tailport="s", headport="n"];
-str_and_unicode -> base_form [color="blue", label="наследование"];
+declarative_fields_metaclass -> form [color="orange", tailport="s", headport="e"];
+base_form -> form [color="blue", tailport="s", headport="n"];
+str_and_unicode -> base_form [color="blue"];
 
 model_form_metaclass [shape="ellipse", color="brown", label="ModelFormMetaclass"];
 model_form_options [shape="record", color="black", label="ModelFormOptions"];
 base_model_form [shape="record", color="black", label="BaseModelForm"];
 model_form [shape="record", color="black", label="ModelForm"];
 
-base_form -> base_model_form [color="blue", label="наследование", tailport="s", headport="n"];
-base_model_form -> model_form [color="blue", label="наследование", tailport="s", headport="n"];
-model_form_options -> model_form_metaclass [color="green", label="использование", tailport="s", headport="e"];
-model_form_metaclass -> model_form [color="orange", label="метакласс", tailport="s", headport="e"];
+base_form -> base_model_form [color="blue", tailport="s", headport="n"];
+base_model_form -> model_form [color="blue", tailport="s", headport="n"];
+model_form_options -> model_form_metaclass [color="green", tailport="s", headport="e"];
+model_form_metaclass -> model_form [color="orange", tailport="s", headport="e"];
 
 multi_widget [shape="record", color="black", label="MultiWidget"];
 multi_value_field [shape="record", color="black", label="MultiValueField"];
@@ -29,15 +33,18 @@ min_max_widget [shape="record", color="gray", label="MinMaxWidget"];
 min_max_form_field [shape="record", color="gray", label="MinMaxFormField"];
 search_form_metaclass [shape="ellipse", color="yellow", label="SearchFormMetaclass"];
 base_search_form [shape="record", color="gray", label="BaseSearchForm"];
+search_form [shape="record", color="gray", label="SearchForm"];
+main_search_form [shape="record", color="gray", label="MainSearchForm"];
 full_search_form [shape="record", color="gray", label="FullSearchForm"];
 
-multi_widget -> min_max_widget [color="blue", label="наследование"];
-multi_value_field -> min_max_form_field [color="blue", label="наследование"];
-min_max_widget -> min_max_form_field [color="green", label="использование", tailport="s", headport="w"];
-model_form_metaclass -> search_form_metaclass [color="blue", label="наследование"];
-model_form -> base_search_form [color="blue", label="наследование"];
-search_form_metaclass -> base_search_form [color="orange", label="метакласс", tailport="s", headport="e"];
-min_max_form_field -> search_form_metaclass [color="green", label="использование", tailport="s", headport="e"];
-base_search_form -> full_search_form [color="blue", label="наследование"];
-
+multi_widget -> min_max_widget [color="blue"];
+multi_value_field -> min_max_form_field [color="blue"];
+min_max_widget -> min_max_form_field [color="green", tailport="s", headport="w"];
+model_form_metaclass -> search_form_metaclass [color="blue"];
+model_form -> base_search_form [color="blue"];
+search_form_metaclass -> base_search_form [color="orange", tailport="s", headport="e"];
+form -> search_form [color="blue"];
+min_max_form_field -> search_form_metaclass [color="green", tailport="s", headport="e"];
+base_search_form -> main_search_form [color="blue"];
+base_search_form -> full_search_form [color="blue"];
 }

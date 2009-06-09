@@ -1,20 +1,23 @@
 digraph G {
-	graph [rankdir = "TB", compound=true, ratio=compress, size="16,10", 
+	graph [rankdir = "TB", compound=true, ratio=compress, 
 		remincross=true, center=true];
 	node [shape=plaintext, fontname="Verdana", fontsize=8];
 	edge [arrowsize=1, color=blue, fontname="Verdana", fontsize=8];
 	
+subgraph cluster_profile {label="profile"; labelloc="t"; fontname="Verdana"; fontsize=12; profile};
+profile [shape=record, color=gray, label="{<user> user|phone CharField(20)|address CharField(50)}"]
+
 subgraph cluster_color {label="color"; labelloc="t"; fontname="Verdana"; fontsize=12; color};
-color [shape=record, color=gray, label="{<id> id integer not null|title CharField(64)}"]
+color [shape=record, color=gray, label="{<id> id integer not null|title CharField(64)|code CharField(6)}"]
 
 subgraph cluster_country {label="country"; labelloc="t"; fontname="Verdana"; fontsize=12; country};
 country [shape=record, color=gray, label="{<id>id integer not null|title CharField(64)}"]
 
 subgraph cluster_producer {label="producer"; labelloc="t"; fontname="Verdana"; fontsize=12; producer};
-producer [shape=record, color=gray, label="{<id> id integer not null|name CharField(30)|<country> country|buys IntegerField()}"]
+producer [shape=record, color=gray, label="{<id> id integer not null|name CharField(30)|<country> country|buys IntegerField}"]
 
 subgraph cluster_category {label="category"; labelloc="t"; fontname="Verdana"; fontsize=12; category};
-category [shape=record, color=gray, label="{<id> id integer not null|title CharField(64)|<parent> parent}"]
+category [shape=record, color=gray, label="{<id> id integer not null|title CharField(64)|<parent> parent null}"]
 
 subgraph cluster_collection {label="collection"; labelloc="t"; fontname="Verdana"; fontsize=12; collection};
 collection [shape=record, color=gray, label="{<id> id integer not null|title CharField(64)}"]
@@ -23,25 +26,25 @@ subgraph cluster_item_type {label="item_type"; labelloc="t"; fontname="Verdana";
 item_type [shape=record, color=gray, label="{<id> id integer not null|title CharField(64)|<model_name> model_name CharField(64)}"]
 
 subgraph cluster_item {label="item"; labelloc="t"; fontname="Verdana"; fontsize=12; item};
-item [shape=record, color=gray, label="{<id> id integer not null|title CharField(64)|desc TextField|<item_type> item_type|<category> category|<collection> collection|<producer> producer|<color> color|is_present BooleanField()|reg_date DateTimeField()|image ImageField()|buys IntegerField()}"]
+item [shape=record, color=gray, label="{<id> id integer not null|title CharField(64)|desc TextField null|<item_type> item_type|<category> category|<collection> collection null|<producer> producer|<color> color|is_present BooleanField|has_lamp BooleanField|reg_date DateTimeField|last_modification DateTimeField|image ImageField|buys IntegerField|sort_price FloatField|tags TagField}"]
 
 subgraph cluster_price {label="price"; labelloc="t"; fontname="Verdana"; fontsize=12; price};
-price [shape=record, color=gray, label="{<id> id integer not null|<item> item|price_shop FloatField()|price_store FloatField()|applied DateTimeField()}"]
+price [shape=record, color=gray, label="{<id> id integer not null|<item> item|price_store FloatField|price_shop FloatField|applied DateTimeField}"]
 
 subgraph cluster_buyer {label="buyer"; labelloc="t"; fontname="Verdana"; fontsize=12; buyer};
-buyer [shape=record, color=gray, label="{<id>id integer not null|lastname CharField(64)|firstname CharField(64)|secondname CharField(64)|address CharField(255)|email EmailField()|join_date DateTimeField()}"]
+buyer [shape=record, color=gray, label="{<id>id integer not null|lastname CharField(64)|firstname CharField(64)|secondname CharField(64)|address CharField(255)|email EmailField|join_date DateTimeField}"]
 
 subgraph cluster_orderstatus {label="orderstatus"; labelloc="t"; fontname="Verdana"; fontsize=12; orderstatus};
 orderstatus [shape=record, color=gray, label="{<id>id integer not null|title CharField(64)}"]
 
 subgraph cluster_order {label="order"; labelloc="t"; fontname="Verdana"; fontsize=12; order};
-order [shape=record, color=gray, label="{<id>id integer not null|<buyer> buyer|count PositiveIntegerField(0)|totalprice FloatField()|comment TextField()|reg_date DateTimeField()|<status> status|<courier> courier}"]
+order [shape=record, color=gray, label="{<id>id integer not null|<buyer> buyer|count PositiveIntegerField|totalprice FloatField|comment TextField|reg_date DateTimeField|<status> status|<courier> courier null}"]
 
 subgraph cluster_orderdetail {label="orderdetail"; labelloc="t"; fontname="Verdana"; fontsize=12; orderdetail};
-orderdetail [shape=record, color=gray, label="{<id>id integer not null|<order> order|<item> item|count PositiveIntegerField(0)|price FloatField()}"]
+orderdetail [shape=record, color=gray, label="{<id>id integer not null|<order> order|<item> item|count PositiveIntegerField|price FloatField}"]
 
 subgraph cluster_orderstatuschange {label="orderstatuschange"; labelloc="t"; fontname="Verdana"; fontsize=12; orderstatuschange};
-orderstatuschange [shape=record, color=gray, label="{<id>id integer not null|<order> order|<courier> courier|<old_status> old_status|<new_status> new_status|reg_date DateTimeField()}"]
+orderstatuschange [shape=record, color=gray, label="{<id>id integer not null|<order> order|<courier> courier null|<old_status> old_status|<new_status> new_status|reg_date DateTimeField}"]
 
 subgraph cluster_phonetype {label="phonetype"; labelloc="t"; fontname="Verdana"; fontsize=12; phonetype};
 phonetype [shape=record, color=gray, label="{<id>id integer not null|title CharField(64)}"]
