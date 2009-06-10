@@ -397,10 +397,17 @@ body {
    background-color: white;
    width: 100px; height: 100px;
    text-align: center;
-   cursor: pointer;
 }
 .thumbnail-containter img {
    vertical-align: middle;
+}
+
+#thumbnail {
+   cursor: url(/pics/viewmag+.png), pointer;
+}
+
+#zoomed {
+   cursor: url(/pics/viewmag-.png), pointer;
 }
 
 #image-container {

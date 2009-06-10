@@ -8,7 +8,7 @@
       {% for item in items %}
       <tr>
 	<td class="thumbnail" style="cursor: pointer;" onclick="$('#cartadd_{{ item.id }}').toggleZoom(); return false;">
-	  <img src="{{ item.image.path|thumbnail:"100x,itempics" }}" border="0" title="{{ item.title }}: Нажмите, чтобы увеличить"/>
+	  <img src="{{ item.image.path|thumbnail:"100x,itempics" }}" id="thumbnail" border="0" title="{{ item.title }}: Нажмите, чтобы увеличить"/>
 	</td>
 	<td align="left">
 	  <div style="font-size: 130%;">Артикул: {{ item.title }}</div>

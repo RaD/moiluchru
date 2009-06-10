@@ -19,7 +19,9 @@
        onclick="$(this).toggleZoom(); return false;">
     <tr>
       <td align="center" valign="middle">
-	<img src="{{ item.image.path|thumbnail:"400x,itempics" }}" title="{{ item.title }}" 
+	<img src="{{ item.image.path|thumbnail:"400x,itempics" }}" 
+	     id="zoomed"
+	     title="{{ item.title }}" 
 	     border="0" style="vertical-align: middle;"/>
       </td>
     </tr>
