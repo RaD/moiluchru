@@ -1,14 +1,18 @@
 DOT=$(wildcard *.dot)
-PNG=$(patsubst %.dot,%.png,$(DOT))
+DOTPNG=$(patsubst %.dot,%.dot.png,$(DOT))
+FDPPNG=$(patsubst %.dot,%.fdp.png,$(DOT))
 
-all: $(PNG)
+all: $(DOTPNG) $(FDPPNG)
 
-clean: $(PNG)
+clean: $(DOTPNG) $(FDPPNG)
 	rm -rf *.png *~
 
 # пример использования временного файла для изменения кодировки
 #%.utf: %.dot
 #	iconv -t utf-8 $< > $*.utf
 
-%.png: %.dot
+%.dot.png: %.dot
 	dot -Tpng $< > $@
+
+%.fdp.png: %.dot
+	fdp -Tpng $< > $@
