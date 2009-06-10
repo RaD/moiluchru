@@ -12,7 +12,8 @@ from tagging.utils import calculate_cloud
 from shop import common
 from shop.models import Item, Category, Collection, Buyer, Phone, Order, \
     OrderStatus, OrderDetail, Socle, Lamp
-from shop.forms import DivErrorList, SearchForm, MainSearchForm, FullSearchForm, OfferForm
+from shop.forms import DivErrorList, SearchForm, MainSearchForm, SizeSearchForm, \
+    FullSearchForm, OfferForm
 from shop.classes import CartItem
 
 from snippets import render_to, columns, paginate_by
@@ -62,6 +63,7 @@ def search_query(request):
     context = {
         'searchform': SearchForm(), 
         'mainsearchform': MainSearchForm(initial={'is_present': True}),
+        'sizesearchform': SizeSearchForm(),
         'fullsearchform': FullSearchForm(),
         'error_desc': error_desc,
         'page_title': u'Мой Луч'
@@ -71,6 +73,8 @@ def search_query(request):
         context.update({'searchform': SearchForm(error_post)})
     if error_form == 'main':
         context.update({'mainsearchform': MainSearchForm(error_post)})
+    if error_form == 'size':
+        context.update({'sizesearchform': SizeSearchForm(error_post)})
     if error_form == 'full':
         context.update({'fullsearchform': FullSearchForm(error_post)})
     return context
@@ -110,6 +114,16 @@ def search_results(request):
                     request.session['error_desc'] = u'Ошибка во введённых данных. Проверьте их правильность.'
                     request.session['error_post'] = request.POST
                     request.session['error_form'] = 'main'
+                    return HttpResponseRedirect('/search/')
+
+                form = SizeSearchForm(request.POST)
+                if form.is_valid():
+                    subset = form.search()
+                    items = items.filter(id__in=[i.item.id for i in subset])
+                else:
+                    request.session['error_desc'] = u'Ошибка во введённых данных. Проверьте их правильность.'
+                    request.session['error_post'] = request.POST
+                    request.session['error_form'] = 'size'
                     return HttpResponseRedirect('/search/')
 
                 form = FullSearchForm(request.POST)

@@ -263,8 +263,18 @@ class Lamp(models.Model):
 
 class Size(models.Model):
     item = models.ForeignKey(Item)
-    diameter = models.PositiveIntegerField(verbose_name=_(u'Diameter'), null=True, blank=True)
-    height = models.PositiveIntegerField(verbose_name=_(u'Height'), null=True, blank=True)
-    length = models.PositiveIntegerField(verbose_name=_(u'Length'), null=True, blank=True)
-    width = models.PositiveIntegerField(verbose_name=_(u'Width'), null=True, blank=True)
-    brow = models.PositiveIntegerField(verbose_name=_(u'Brow'), null=True, blank=True)
+    diameter = models.PositiveIntegerField(verbose_name=_(u'Diameter'), 
+                                           help_text=_(u'Diameter of an item, in millimeters'),
+                                           null=True, blank=True)
+    height = models.PositiveIntegerField(verbose_name=_(u'Height'), 
+                                         help_text=_(u'Height of an item, in millimeters'),
+                                         null=True, blank=True)
+    length = models.PositiveIntegerField(verbose_name=_(u'Length'), 
+                                         help_text=_(u'Length of an item, in millimeters'),
+                                         null=True, blank=True)
+    width = models.PositiveIntegerField(verbose_name=_(u'Width'), 
+                                        help_text=_(u'Width of an item, in millimeters'),
+                                        null=True, blank=True)
+    brow = models.PositiveIntegerField(verbose_name=_(u'Brow'), 
+                                       help_text=_(u'Brow of an item, in millimeters'),
+                                       null=True, blank=True)
