@@ -189,7 +189,7 @@ class MainSearchForm(BaseSearchForm):
     class Meta:
         model= models.Item
         exclude = ('title', 'desc', 'item_type', 'collection', 
-                   'producer', 'image', 'buys', 'tags')
+                   'producer', 'has_lamp', 'image', 'buys', 'tags')
 class FullSearchForm(BaseSearchForm):
     """ Реализация формы поиска по уникальным параметрам товара. """
     class Meta:
