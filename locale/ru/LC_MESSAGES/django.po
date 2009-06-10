@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-09 12:17+0400\n"
+"POT-Creation-Date: 2009-06-10 19:17+0400\n"
 "PO-Revision-Date: 2008-07-09 20:40+0400\n"
 "Last-Translator: Ruslan Popov <radz@yandex.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -107,15 +107,15 @@ msgstr "Состояние"
 msgid "Courier"
 msgstr "Курьер"
 
-#: shop/forms.py:55 shop/forms.py:62 shop/forms.py:66
+#: shop/forms.py:56 shop/forms.py:63 shop/forms.py:67
 msgid "Item id"
 msgstr "Идентификатор товара"
 
-#: shop/forms.py:56 shop/forms.py:63
+#: shop/forms.py:57 shop/forms.py:64
 msgid "Item count"
 msgstr "Количество товара"
 
-#: shop/forms.py:103
+#: shop/forms.py:104
 msgid "Min field is greater than Max field."
 msgstr "Минимальное значение больше максимального."
 
@@ -227,7 +227,7 @@ msgstr "Цена товара, в рублях"
 msgid "Item"
 msgstr "Товар"
 
-#: shop/models.py:114 shop/views.py:30 shop/views.py:192
+#: shop/models.py:114 shop/views.py:31 shop/views.py:205
 msgid "Items"
 msgstr "Товары"
 
@@ -300,42 +300,62 @@ msgid "Diameter"
 msgstr "Диаметр"
 
 #: shop/models.py:267
+msgid "Diameter of an item, in millimeters"
+msgstr "Диаметр товара, в миллиметрах"
+
+#: shop/models.py:269
 msgid "Height"
 msgstr "Высота"
 
-#: shop/models.py:268
+#: shop/models.py:270
+msgid "Height of an item, in millimeters"
+msgstr "Высота товара, в миллиметрах"
+
+#: shop/models.py:272
 msgid "Length"
 msgstr "Длина"
 
-#: shop/models.py:269
+#: shop/models.py:273
+msgid "Length of an item, in millimeters"
+msgstr "Длина товара, в миллиметрах"
+
+#: shop/models.py:275
 msgid "Width"
 msgstr "Ширина"
 
-#: shop/models.py:270
+#: shop/models.py:276
+msgid "Width of an item, in millimeters"
+msgstr "Ширина товара, в миллиметрах"
+
+#: shop/models.py:278
 msgid "Brow"
 msgstr "Выступ"
 
-#: shop/views.py:30
+#: shop/models.py:279
+msgid "Brow of an item, in millimeters"
+msgstr "Выступ товара, в миллиметрах"
+
+#: shop/views.py:31
 msgid "Main"
 msgstr "Главная"
 
-#: shop/views.py:30
+#: shop/views.py:31
 msgid "Search"
 msgstr "Поиск"
 
-#: shop/views.py:31
+#: shop/views.py:32
 msgid "Shipping"
 msgstr "Доставка"
 
-#: shop/views.py:31
+#: shop/views.py:32
 msgid "Map"
 msgstr "Карта"
 
-#: shop/views.py:217 shop/views.py:243
+#: shop/views.py:230 shop/views.py:256
 msgid "Items of the category"
 msgstr "Товары категории"
 
-#: shop/views.py:273
+#: shop/views.py:286
 msgid "Items of the collection"
 msgstr "Товары коллекции"
 
