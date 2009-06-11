@@ -106,35 +106,32 @@ def search_results(request):
                 
             # поиск по категории
             if full_search:
-                form = MainSearchForm(request.POST)
-                if form.is_valid():
-                    subset = form.search()
-                    items = items.filter(id__in=[i.id for i in subset])
-                else:
-                    request.session['error_desc'] = u'Ошибка во введённых данных. Проверьте их правильность.'
-                    request.session['error_post'] = request.POST
-                    request.session['error_form'] = 'main'
-                    return HttpResponseRedirect('/search/')
 
-                form = SizeSearchForm(request.POST)
-                if form.is_valid():
-                    subset = form.search()
-                    items = items.filter(id__in=[i.item.id for i in subset])
-                else:
-                    request.session['error_desc'] = u'Ошибка во введённых данных. Проверьте их правильность.'
-                    request.session['error_post'] = request.POST
-                    request.session['error_form'] = 'size'
-                    return HttpResponseRedirect('/search/')
+                def subset_search(items, request, form_class):
+                    form = form_class(request.POST)
+                    if form.is_valid():
+                        subset = form.search()
+                        if isinstance(form, MainSearchForm):
+                            id_array = [i.id for i in subset]
+                        else:
+                            id_array = [i.item.id for i in subset]
+                        return items.filter(id__in=id_array)
+                    else:
+                        if isinstance(form, MainSearchForm):
+                            request.session['error_form'] = 'main'
+                        elif isinstance(form, SizeSearchForm):
+                            request.session['error_form'] = 'size'
+                        elif isinstance(form, FullSearchForm):
+                            request.session['error_form'] = 'full'
+                        else:
+                            return Http404
+                        request.session['error_desc'] = u'Ошибка во введённых данных. Проверьте их правильность.'
+                        request.session['error_post'] = request.POST
+                        return HttpResponseRedirect('/search/')
 
-                form = FullSearchForm(request.POST)
-                if form.is_valid():
-                    subset = form.search()
-                    items = items.filter(id__in=[i.item.id for i in subset])
-                else:
-                    request.session['error_desc'] = u'Ошибка во введённых данных. Проверьте их правильность.'
-                    request.session['error_post'] = request.POST
-                    request.session['error_form'] = 'full'
-                    return HttpResponseRedirect('/search/')
+                items = subset_search(items, request, MainSearchForm)
+                items = subset_search(items, request, SizeSearchForm)
+                items = subset_search(items, request, FullSearchForm)
 
             request.session['searchquery'] = clean['userinput']
             request.session['howmuch_id'] = clean['howmuch']
