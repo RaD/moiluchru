@@ -58,13 +58,12 @@ def search_query(request):
         'page_title': u'Мой Луч'
         }
 
-    # удаляем из сессии эту информацию
+    # здесь мы обрабатываем ситуацию вызова поисковых форм после
+    # обнаружения ошибки в поисковом запросе
     try:
         (form_name, post, desc) = request.session['error']
         del(request.session['error'])
-        context.update({
-                'error_desc': error_desc
-                })
+        context.update({'error_desc': error_desc})
         if form_name == 'simple':
             context.update({'searchform': SearchForm(post)})
         else:
@@ -99,7 +98,7 @@ def search_results(request):
                                             Q(desc__search=u'*%s*' % clean['userinput']) |
                                             Q(tags__search=u'*%s*' % clean['userinput']))
                 
-            # поиск по категории
+            # поиск по дополнительным параметрам товара
             if full_search:
 
                 for form_class in [MainSearchForm, SizeSearchForm, FullSearchForm]:
