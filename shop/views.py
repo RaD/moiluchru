@@ -63,7 +63,7 @@ def search_query(request):
     try:
         (form_name, post, desc) = request.session['error']
         del(request.session['error'])
-        context.update({'error_desc': error_desc})
+        context.update({'error_desc': desc})
         if form_name == 'simple':
             context.update({'searchform': SearchForm(post)})
         else:
