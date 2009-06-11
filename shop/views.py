@@ -50,30 +50,28 @@ def cart_ctx_proc(request):
 ### Страница с поисковым запросом
 @render_to('shop/search.html', cart_ctx_proc)
 def search_query(request):
-    error_post = request.session.get('error_post', None)
-    error_form = request.session.get('error_form', None)
-    error_desc = request.session.get('error_desc', None)
-
-    # удаляем из сессии эту информацию
-    for i in ['post', 'form', 'desc']:
-        try:
-            del(request.session['error_%s' % i])
-        except KeyError:
-            pass
-
     context = {
         'searchform': SearchForm(), 
         'mainsearchform': MainSearchForm(initial={'is_present': True}),
         'sizesearchform': SizeSearchForm(),
         'fullsearchform': FullSearchForm(),
-        'error_desc': error_desc,
         'page_title': u'Мой Луч'
         }
 
-    if error_form == 'simple':
-        context.update({'searchform': SearchForm(error_post)})
-    else:
-        context.update({ error_form.lower(): eval('%s(error_post)' % error_form) })
+    # удаляем из сессии эту информацию
+    try:
+        (form_name, post, desc) = request.session['error']
+        del(request.session['error'])
+        context.update({
+                'error_desc': error_desc
+                })
+        if form_name == 'simple':
+            context.update({'searchform': SearchForm(post)})
+        else:
+            context.update({ form_name.lower(): eval('%s(post)' % form_name) })
+    except KeyError:
+        pass
+
     return context
 
 ### Страница с результатами поиска
@@ -116,20 +114,17 @@ def search_results(request):
                         items = items.filter(id__in=id_array)
                     else:
                         try: # сохраняем имя класса формы
-                            request.session['error_form'] = form_class.__name__
+                            request.session['error'] = (form_class.__name__, request.POST, 
+                                                        u'Ошибка во введённых данных. Проверьте их правильность.')
                         except KeyError:
                             return Http404
-                        request.session['error_desc'] = u'Ошибка во введённых данных. Проверьте их правильность.'
-                        request.session['error_post'] = request.POST
                         return HttpResponseRedirect('/search/')
 
             request.session['searchquery'] = clean['userinput']
             request.session['howmuch_id'] = clean['howmuch']
             request.session['cached_items'] = items # кэшируем для paginator
         else:
-            request.session['error_desc'] = u'Ошибка во введённых данных. Проверьте их правильность.'
-            request.session['error_post'] = request.POST
-            request.session['error_form'] = 'simple'
+            request.session['error'] = ('simple', request.POST, u'Ошибка во введённых данных. Проверьте их правильность.')
             return HttpResponseRedirect('/search/')
     
         context.update(
