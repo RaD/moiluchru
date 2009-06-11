@@ -111,19 +111,16 @@ def search_results(request):
                     form = form_class(request.POST)
                     if form.is_valid():
                         subset = form.search()
-                        if isinstance(form, MainSearchForm):
+                        if form_class.__name__ == 'MainSearchForm':
                             id_array = [i.id for i in subset]
                         else:
                             id_array = [i.item.id for i in subset]
                         return items.filter(id__in=id_array)
                     else:
-                        if isinstance(form, MainSearchForm):
-                            request.session['error_form'] = 'main'
-                        elif isinstance(form, SizeSearchForm):
-                            request.session['error_form'] = 'size'
-                        elif isinstance(form, FullSearchForm):
-                            request.session['error_form'] = 'full'
-                        else:
+                        classes = ['MainSearchForm', 'SizeSearchForm', 'FullSearchForm']
+                        try:
+                            request.session['error_form'] = ['main', 'size', 'full'][classes.index(form_class.__name__)]
+                        except KeyError:
                             return Http404
                         request.session['error_desc'] = u'Ошибка во введённых данных. Проверьте их правильность.'
                         request.session['error_post'] = request.POST
