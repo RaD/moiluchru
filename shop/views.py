@@ -54,6 +54,7 @@ def search_query(request):
     error_form = request.session.get('error_form', None)
     error_desc = request.session.get('error_desc', None)
 
+    # удаляем из сессии эту информацию
     for i in ['post', 'form', 'desc']:
         try:
             del(request.session['error_%s' % i])
@@ -71,12 +72,8 @@ def search_query(request):
 
     if error_form == 'simple':
         context.update({'searchform': SearchForm(error_post)})
-    if error_form == 'main':
-        context.update({'mainsearchform': MainSearchForm(error_post)})
-    if error_form == 'size':
-        context.update({'sizesearchform': SizeSearchForm(error_post)})
-    if error_form == 'full':
-        context.update({'fullsearchform': FullSearchForm(error_post)})
+    else:
+        context.update({ error_form.lower(): eval('%s(error_post)' % error_form) })
     return context
 
 ### Страница с результатами поиска
@@ -107,28 +104,24 @@ def search_results(request):
             # поиск по категории
             if full_search:
 
-                def subset_search(items, request, form_class):
+                for form_class in [MainSearchForm, SizeSearchForm, FullSearchForm]:
                     form = form_class(request.POST)
                     if form.is_valid():
                         subset = form.search()
+                        # для inline моделей фильтр создаётся немного по другому, т.к. у них item.id
                         if form_class.__name__ == 'MainSearchForm':
                             id_array = [i.id for i in subset]
                         else:
                             id_array = [i.item.id for i in subset]
-                        return items.filter(id__in=id_array)
+                        items = items.filter(id__in=id_array)
                     else:
-                        classes = ['MainSearchForm', 'SizeSearchForm', 'FullSearchForm']
-                        try:
-                            request.session['error_form'] = ['main', 'size', 'full'][classes.index(form_class.__name__)]
+                        try: # сохраняем имя класса формы
+                            request.session['error_form'] = form_class.__name__
                         except KeyError:
                             return Http404
                         request.session['error_desc'] = u'Ошибка во введённых данных. Проверьте их правильность.'
                         request.session['error_post'] = request.POST
                         return HttpResponseRedirect('/search/')
-
-                items = subset_search(items, request, MainSearchForm)
-                items = subset_search(items, request, SizeSearchForm)
-                items = subset_search(items, request, FullSearchForm)
 
             request.session['searchquery'] = clean['userinput']
             request.session['howmuch_id'] = clean['howmuch']
