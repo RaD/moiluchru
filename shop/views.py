@@ -152,7 +152,8 @@ def search_results(request):
         try:
             items = request.session.get('cached_items').order_by(sort[sort_type])
         except:
-            items = [] # FIXME: видать прошли по ссылке напрямую, надо решить, что делать в таком случае
+            # видать прошли по ссылке напрямую, отправим на страницу поиска
+            return HttpResponseRedirect('/search/')
         context.update(
             {'items': items,
              'search_query': request.session.get('searchquery', '')})
