@@ -1,17 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os, sys
-import threading, Queue
-import time
-
-import logging
-import locale
-import codecs
-
-from pyxmpp.all import JID,Iq,Presence,Message,StreamError
-from pyxmpp.jabber.client import JabberClient
-from pyxmpp.jid import JIDError
+import os, sys, time, xmpp
+import locale, codecs
 
 # Подключение и настройка среды Django
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
@@ -20,226 +11,58 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from django.conf import settings
 from jabber import models
 
-# Отладка управляется из конфигурации проекта
-DEBUG = getattr(settings, 'DEBUG', False)
+class Bot:
 
-try:
-    admin_jids = [JID(x) for x in getattr(settings, 'JABBER_RECIPIENTS', None)]
-except TypeError:
-    print "Check JABBER_RECIPIENTS in project's settings file."
-    sys.exit(1)
+    def __init__(self, jabber, jid_info, remotejids):
+        self.jabber = jabber
+        self.remotejids = remotejids
+        self.received_messages = []
 
-##
-## Класс потока для джаббер клиента
-## TODO: продумать как оно будет ловить сигнал Die
-##
-class JabberThread(threading.Thread):
-    """ Класс потока для джаббер клиента. """
-    def __init__(self, client, queue_wj, queue_jw, register=False):
-        self.client = client
-        self.queue_web_jabber = queue_wj
-        self.queue_jabber_web = queue_jw
-        self.register = register
-        self.die = False
+        jid_str = '%s@%s' % (jid_info.nick, getattr(settings, 'JABBER_SERVER'))
+        self.jid = xmpp.protocol.JID(jid_str)
+        self.password = jid_info.password
 
-    def run(self):
-        """ Код потока. """
-        if DEBUG:
-            print u"connecting..."
-        self.client.connect(self.register)
+    def register_handlers(self):
+        self.jabber.RegisterHandler('message', self.xmpp_message)
 
-        if DEBUG:
-            print u"looping..."
-        
-        while not self.die:
-            self.client.loop(1)
+    def xmpp_connect(self):
+        con=self.jabber.connect()
+        if not con:
+            sys.stderr.write('could not connect!\n')
+            return False
+        sys.stderr.write('[%s]: connected with %s\n' % (self.jid, con))
+        auth=self.jabber.auth(self.jid.getNode(),
+                              self.password,
+                              resource=self.jid.getResource())
+        if not auth:
+            sys.stderr.write('could not authenticate!\n')
+            return False
+        sys.stderr.write('[%s]: authenticated using %s\n' % (self.jid, auth))
+        self.register_handlers()
+        return con
 
-        if DEBUG:
-            print u"disconnecting..."
-        self.client.disconnect()
+    def xmpp_message(self, con, event):
+        sys.stderr.write('[%s]: received message\n' % self.jid)
+        type = event.getType()
+        fromjid = event.getFrom().getStripped()
+        if type in ['message', 'chat', None] and fromjid in self.remotejids:
+            msg = event.getBody()
+            self.received_messages.append(msg)
+            sys.stderr.write('[%s]: text is %s\n' % (self.jid, msg))
 
-##
-## Класс джаббер клиента
-##
-class Client(JabberClient):
-    """ Простой джаббер клиент, который предоставляет базовую настройку
-    соединения, включая аутентификацию и поиск сервисов. Также
-    производится поиска адреса и порта сервера по предоставленному
-    идентификатору. """
+    def send_message(self, message):
+        sys.stderr.write('[%s]: send message\n' % self.jid)
+        for recipient in self.remotejids:
+            m = xmpp.protocol.Message(to=recipient, body=message, typ='chat')
+            self.jabber.send(m)
+            sys.stderr.write('[%s]: text is %s\n' % (self.jid, message))
+            pass
 
-    def __init__(self, jid, password):
-
-        # обязательно надо указывать resource
-        if not jid.resource:
-            jid=JID(jid.node, jid.domain, "[moiluch.ru]")
-
-        # настроить клиента по переданной информации
-        JabberClient.__init__(self, jid, password,
-                              disco_name="WebBot", disco_type="bot")
-
-        # регистрируем свойства, которые будут доступны через локатор сервисов
-        self.disco_info.add_feature("jabber:iq:version")
-
-    def stream_state_changed(self,state,arg):
-        """ Метод вызывается при изменении состояния соединения. Обычно
-        используется для уведомления пользователя о данном событии. """
-        #print "*** State changed: %s %r ***" % (state,arg)
-
-    def session_started(self):
-        """ Метод вызывается при успешном установлении соединения (после всех
-        необходимых "обнюхиваний", аутентификаций и авторизаций.
-
-        Является лучшим местом для настройки разнообразных
-        обработчиков для потока. Не забудьте вызвать данный метод
-        базового класса! """
-
-        JabberClient.session_started(self)
-
-        # установка обработчика для <iq/> запросов
-        self.stream.set_iq_get_handler("query","jabber:iq:version",self.get_version)
-
-        # установка обработчиков для <presence/> stanzas
-        self.stream.set_presence_handler("available",self.presence)
-        self.stream.set_presence_handler("subscribe",self.presence_control)
-        self.stream.set_presence_handler("subscribed",self.presence_control)
-        self.stream.set_presence_handler("unsubscribe",self.presence_control)
-        self.stream.set_presence_handler("unsubscribed",self.presence_control)
-
-        # установка обработчика для <message stanza>
-        self.stream.set_message_handler("normal",self.message)
-
-    def get_version(self,iq):
-        """ Обработчик для jabber:iq:version запросов.
-
-        jabber:iq:version запросы не поддерживаются напрямую
-        библиотекой PyXMPP, следовательно соответствующий XML узел
-        обрабатывается напрямую через libxml2 API. Этим надо
-        пользоваться очень аккуратно! """
-        iq=iq.make_result_response()
-        q=iq.new_query("jabber:iq:version")
-        q.newTextChild(q.ns(),"name","WebJabber component")
-        q.newTextChild(q.ns(),"version","1.0")
-        self.stream.send(iq)
-        return True
-
-    def message(self,stanza):
-        """ Обработчик сообщений.
-
-        Отправляет принятые сообщения обратно, в случае если они не
-        принадлежат к типам 'error' или 'headline', также
-        устанавливает собственный статус активности в теле
-        сообщения. Следует помнить, что все типы сообщений, кроме
-        'error' будут передаваться данному обработчику до тех пор,
-        пока не будут созданы соответствующие обработчика для таких
-        типов сообщений.
-
-        :возвращает: `True` для того, чтобы указать, что данное
-        сообщение больше не надо обрабатывать. """
-        subject=stanza.get_subject()
-        body=stanza.get_body()
-        t=stanza.get_type()
-        if DEBUG:
-            print u'Message from %s received.' % (unicode(stanza.get_from(),)),
-            if subject:
-                print u'Subject: "%s".' % (subject,),
-            if body:
-                print u'Body: "%s".' % (body,),
-            if t:
-                print u'Type: "%s".' % (t,)
-            else:
-                print u'Type: "normal".' % (t,)
-        if stanza.get_type()=="headline":
-            # сообщения типа 'headline' никогда не надо отправлять обратно
-            return True
-        if subject:
-            subject=u"Re: "+subject
-
-        # сохраняем в базу данных сообщение пришедшее от администраторов
-        try:
-            jid_admin = JidPool.objects.get(nick='admins')
-            msg_admin = WebMsg(jid=jid_admin, msg=body)
-            msg_admin.save()
-        except JidPool.DoesNotExist:
-            if DEBUG:
-                print "Install Administrators' JID into jabber_jidpool table."
-            sys.exit(1)
-
-        messages = WebMsg.objects.filter(is_really_sent=False).order_by('sent_date')
-        for msg in messages:
-            #import pdb; pdb.set_trace()
-            for j in jids:
-                nick, mess = getattr(msg, 'nick'), getattr(msg, 'msg')
-                if DEBUG:
-                    print j, nick, mess
-                m=Message(to_jid=j, from_jid=botjid, stanza_type='message',
-                          subject=nick, body=msg)
-                self.stream.send(m)
-                if body:
-                    p=Presence(status=body)
-                    self.stream.send(p)
-            msg.is_really_sent = True
-            msg.save()
-        return True
-
-    def presence(self,stanza):
-        """ Обработчик для 'available' (без 'type') и 'unavailable' <presence/>."""
-        msg=u"%s has become " % (stanza.get_from())
-        t=stanza.get_type()
-        if t=="unavailable":
-            msg+=u"unavailable"
-        else:
-            msg+=u"available"
-
-        show=stanza.get_show()
-        if show:
-            msg+=u"(%s)" % (show,)
-
-        status=stanza.get_status()
-        if status:
-            msg+=u": "+status
-        if DEBUG:
-            print msg
-
-    def presence_control(self,stanza):
-        """ Обработчик для управления подпиской на <presence/> stanzas --
-        acknowledge them."""
-        msg=unicode(stanza.get_from())
-        t=stanza.get_type()
-        if t=="subscribe":
-            msg+=u" has requested presence subscription."
-        elif t=="subscribed":
-            msg+=u" has accepted our presence subscription request."
-        elif t=="unsubscribe":
-            msg+=u" has canceled his subscription of our."
-        elif t=="unsubscribed":
-            msg+=u" has canceled our subscription of his presence."
-
-        if DEBUG:
-            print msg
-        p=stanza.make_accept_response()
-        self.stream.send(p)
-        return True
-
-    def print_roster_item(self,item):
-        if item.name:
-            name=item.name
-        else:
-            name=u""
-        if DEBUG:
-            print (u'%s "%s" subscription=%s groups=%s'
-                   % (unicode(item.jid), name, item.subscription,
-                      u",".join(item.groups)) )
-
-    def roster_updated(self,item=None):
-        if not item:
-            if DEBUG:
-                print u"My roster:"
-            for item in self.roster.get_items():
-                self.print_roster_item(item)
-            return
-        if DEBUG:
-            print u"Roster item updated:"
-        self.print_roster_item(item)
+    def get_received_messages(self, clean=False):
+        result = self.received_messages
+        if clean:
+            self.received_messages = []
+        return result
 
 ##
 ## Начало программы
@@ -256,59 +79,112 @@ if not encoding:
 sys.stdout=codecs.getwriter(encoding)(sys.stdout,errors="replace")
 sys.stderr=codecs.getwriter(encoding)(sys.stderr,errors="replace")
 
+jabber_pool = {} # {'nick': 'jid_id'}
 
-# PyXMPP использует модуль logging для записи отладочных сообщений.
+# Отладка управляется из конфигурации проекта
+DEBUG = getattr(settings, 'DEBUG', False)
 
-logger=logging.getLogger()
-logger.addHandler(logging.StreamHandler())
-logger.setLevel(logging.INFO) # change to DEBUG for higher verbosity
-
-thread_pool = {} # {'nick': 'jid_id'}
-message_pool_wj = Queue.Queue(0) # web to jabber
-message_pool_jw = Queue.Queue(0) # jabber to web
-#shared_look = threading.Lock()
+try:
+    admin_jids = [xmpp.protocol.JID(x) for x in getattr(settings, 'JABBER_RECIPIENTS', None)]
+except TypeError:
+    print "Check JABBER_RECIPIENTS in project's settings file."
+    sys.exit(1)
 
 ##
 ## Функции
 ##
 
+def register_connection(web_nick):
+    """ Метод для регистрации нового аккаунта на джаббер сервере. """
+    sys.stderr.write('[%s]: register connection\n' % web_nick)
+    jid_info = models.JidPool().alloc_jid()
+
+    jid_str = '%s@%s' % (jid_info.nick, getattr(settings, 'JABBER_SERVER'))
+    jid = xmpp.protocol.JID(jid_str)
+    client = xmpp.Client(jid.getDomain(), debug=[])
+        
+    bot = Bot(client, jid_info, admin_jids)
+
+    if not bot.xmpp_connect():
+        sys.stderr.write("Could not connect to server, or password mismatch!\n")
+        sys.exit(1)
+
+    jabber_pool.update({web_nick: (jid_info.id, jid_str, client, bot)})
+
+
+def create_connection(web_nick, jid_info):
+    """ Метод для создания соединения с джаббер сервером. """
+    sys.stderr.write('[%s]: create connection\n' % web_nick)
+    jid_str = '%s@%s' % (jid_info.nick, getattr(settings, 'JABBER_SERVER'))
+    jid = xmpp.protocol.JID(jid_str)
+    client = xmpp.Client(jid.getDomain(), debug=[])
+        
+    bot = Bot(client, jid_info, admin_jids)
+
+    if not bot.xmpp_connect():
+        sys.stderr.write("Could not connect to server, or password mismatch!\n")
+        sys.exit(1)
+
+    jabber_pool.update({web_nick: (jid_info.id, jid_str, client, bot)})
+
+
 def process_message(msg):
-    nick = msg.nick
-    text = msg.msg
+    """ Для обработки сообщения требуется соединение с джаббер сервером:
+    1) оно может быть активным, т.е. лежит в пуле; 2) оно может быть
+    зарегистрированным, т.е. надо взять из базы и использовать; 3) его
+    нет, т.е. надо пройти оба шага. """
 
-    try:
-        jid_id = thread_pool[nick]
-        if DEBUG:
-            print 'Got JID from pool'
-    except KeyError:
-        if DEBUG:
-            print 'Register new JID'
-        model = models.JidPool()
-        jid = model.alloc_jid()
-        jid_id = jid.id
+    web_nick = msg.nick
+    web_text = msg.msg
+
+    # получаем активное соединение
+    if web_nick not in jabber_pool:
         try:
-            client = Client(JID('%s@%s' % (jid.nick, getattr(settings, 'JABBER_SERVER'))),
-                            jid.password)
-            thread = JabberThread(client, message_pool_wj, message_pool_jw, True)
-            runner = threading.Thread(None, thread.run)
-            thread_pool.update({nick: jid_id})
-            runner.start()
-        except Exception, e:
-            print e
-            sys.exit(1)
+            # соединение надо активировать
+            jid_info = models.JidPool.objects.filter(is_locked=False)[0]
+            create_connection(web_nick, jid_info)
+        except IndexError:
+            # надо создать дополнительный аккаунт
+            register_connection(web_nick)
 
-if DEBUG:
-    print 'Looping'
+    (id, jid_info, client, bot) = jabber_pool[web_nick]
+
+    bot.send_message(web_text)
+
+    msg.is_processed = True
+    msg.save()
+
+pool = models.JidPool.objects.filter(id__gt=1, is_locked=True)
+
+def jid_free(pool_object):
+    pool_object.is_locked = False
+    pool_object.save()
+
+map(jid_free, pool)
+
+print 'Initialized'
+
 while True:
-    # получить сообщения для отправки
+    # проверить наличие сообщений для отправки
     messages = models.Message.objects.filter(is_processed=False, client_admin=True).order_by('sent_date')
-    if DEBUG:
+    if DEBUG and len(messages) > 0:
         print 'Got %i messages' % len(messages)
     # обработать каждое сообщение
     map(process_message, messages)
+    # проверить наличие пришедших сообщений
+    for web_nick in jabber_pool.keys():
+        (id, jid_info, client, bot) = jabber_pool[web_nick]
+        client.Process(1)
+        
+        received = bot.get_received_messages(True)
+        for msg in received:
+            m = models.Message(nick=web_nick, msg=msg, client_admin=False)
+            m.save()
     # спячка
-    if DEBUG:
-        print '.',
-    time.sleep(5)
+    time.sleep(1)
+
+for k in jabber_pool.keys():
+    (id, jid_info, client, bot) = jabber_pool[k]
+    client.disconnect()
 
 sys.exit(0)
