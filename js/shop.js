@@ -146,6 +146,8 @@ function jabber_init() {
 function jabber_destroy() {
     clearTimeout(tID);
     $('jabber-client').toggleZoom(); 
+    $.post('/ajax/jabber/message/', { system: 'close connection'},
+	   function(json) {}, 'json');
     return false;
 }
 

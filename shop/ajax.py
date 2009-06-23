@@ -90,6 +90,9 @@ def cart_remove_item(request, form):
 # Отправка сообщения на джаббер
 @ajax_processor(JabberMessage)
 def jabber_message(request, form):
+    if 'system' in form.cleaned_data: # системное сообщение
+        return {'code': '200', 'desc': 'closed'} # FIXME
+
     message = form.cleaned_data['message'] # может быть пустым
 
     # при первом обращении клиента следует автоматически сгенерировать

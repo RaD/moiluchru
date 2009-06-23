@@ -2,7 +2,29 @@
 # -*- coding: utf-8 -*-
 
 import os, sys, time, xmpp
-import locale, codecs
+
+def demonize():
+    pid = os.fork()
+    if not pid:
+        print 'not pid'
+        otherpid = os.fork()
+        if not otherpid:
+            ppid = os.getppid()
+            while ppid != 1:
+                time.sleep(0.5)
+                ppid = os.getppid()
+            return
+        else:
+            print 'other exit'
+            os._exit(0)
+    else:
+        print 'main exit'
+        os.wait()
+        sys.exit(0)
+
+#demonize()
+
+#print 'works'
 
 # Подключение и настройка среды Django
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
@@ -10,6 +32,24 @@ sys.path.append('/home/rad/django.engine')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from django.conf import settings
 from jabber import models
+
+# XMPP протокол использует Unicode и для правильного отображения
+# полученных данных должен преобразовывать их в локальную кодировку
+# или вызывать исключение UnicodeException.
+
+import locale, codecs
+locale.setlocale(locale.LC_CTYPE,"")
+encoding=locale.getlocale()[1]
+if not encoding:
+    encoding="utf-8"
+sys.stdout=codecs.getwriter(encoding)(sys.stdout,errors="replace")
+sys.stderr=codecs.getwriter(encoding)(sys.stderr,errors="replace")
+
+jabber_pool = {}
+
+import logging
+logging.basicConfig(level=logging.DEBUG,
+                    filename='/tmp/moiluch.daemon.log', filemode='a')
 
 class Bot:
 
@@ -28,34 +68,34 @@ class Bot:
     def xmpp_connect(self):
         con=self.jabber.connect()
         if not con:
-            sys.stderr.write('could not connect!\n')
+            logging.debug('[%s]: could not connect!' % self.jid)
             return False
-        sys.stderr.write('[%s]: connected with %s\n' % (self.jid, con))
+        logging.debug('[%s]: connected with %s\n' % (self.jid, con))
         auth=self.jabber.auth(self.jid.getNode(),
                               self.password,
                               resource=self.jid.getResource())
         if not auth:
-            sys.stderr.write('could not authenticate!\n')
+            logging.debug('[%s]: could not authenticate!' % self.jid)
             return False
-        sys.stderr.write('[%s]: authenticated using %s\n' % (self.jid, auth))
+        logging.debug('[%s]: authenticated using %s' % (self.jid, auth))
         self.register_handlers()
         return con
 
     def xmpp_message(self, con, event):
-        sys.stderr.write('[%s]: received message\n' % self.jid)
+        logging.debug('[%s]: received message\n' % self.jid)
         type = event.getType()
         fromjid = event.getFrom().getStripped()
         if type in ['message', 'chat', None] and fromjid in self.remotejids:
             msg = event.getBody()
             self.received_messages.append(msg)
-            sys.stderr.write('[%s]: text is %s\n' % (self.jid, msg))
+            logging.debug('[%s]: text is %s\n' % (self.jid, msg))
 
     def send_message(self, message):
-        sys.stderr.write('[%s]: send message\n' % self.jid)
+        logging.debug('[%s]: send message\n' % self.jid)
         for recipient in self.remotejids:
             m = xmpp.protocol.Message(to=recipient, body=message, typ='chat')
             self.jabber.send(m)
-            sys.stderr.write('[%s]: text is %s\n' % (self.jid, message))
+            logging.debug('[%s]: text is %s\n' % (self.jid, message))
             pass
 
     def get_received_messages(self, clean=False):
@@ -63,32 +103,6 @@ class Bot:
         if clean:
             self.received_messages = []
         return result
-
-##
-## Начало программы
-##
-
-# XMPP протокол использует Unicode и для правильного отображения
-# полученных данных должен преобразовывать их в локальную кодировку
-# или вызывать исключение UnicodeException.
-
-locale.setlocale(locale.LC_CTYPE,"")
-encoding=locale.getlocale()[1]
-if not encoding:
-    encoding="utf-8"
-sys.stdout=codecs.getwriter(encoding)(sys.stdout,errors="replace")
-sys.stderr=codecs.getwriter(encoding)(sys.stderr,errors="replace")
-
-jabber_pool = {} # {'nick': 'jid_id'}
-
-# Отладка управляется из конфигурации проекта
-DEBUG = getattr(settings, 'DEBUG', False)
-
-try:
-    admin_jids = [xmpp.protocol.JID(x) for x in getattr(settings, 'JABBER_RECIPIENTS', None)]
-except TypeError:
-    print "Check JABBER_RECIPIENTS in project's settings file."
-    sys.exit(1)
 
 ##
 ## Функции
@@ -156,6 +170,12 @@ def process_message(msg):
 
 pool = models.JidPool.objects.filter(id__gt=1, is_locked=True)
 
+try:
+    admin_jids = [xmpp.protocol.JID(x) for x in getattr(settings, 'JABBER_RECIPIENTS', None)]
+except TypeError:
+    print "Check JABBER_RECIPIENTS in project's settings file."
+    sys.exit(1)
+
 def jid_free(pool_object):
     pool_object.is_locked = False
     pool_object.save()
@@ -164,27 +184,26 @@ map(jid_free, pool)
 
 print 'Initialized'
 
-while True:
-    # проверить наличие сообщений для отправки
-    messages = models.Message.objects.filter(is_processed=False, client_admin=True).order_by('sent_date')
-    if DEBUG and len(messages) > 0:
-        print 'Got %i messages' % len(messages)
-    # обработать каждое сообщение
-    map(process_message, messages)
-    # проверить наличие пришедших сообщений
-    for web_nick in jabber_pool.keys():
-        (id, jid_info, client, bot) = jabber_pool[web_nick]
-        client.Process(1)
+try:
+    while True:
+        # проверить наличие сообщений для отправки
+        messages = models.Message.objects.filter(is_processed=False, client_admin=True).order_by('sent_date')
+        # обработать каждое сообщение
+        map(process_message, messages)
+        # проверить наличие пришедших сообщений
+        for web_nick in jabber_pool.keys():
+            (id, jid_info, client, bot) = jabber_pool[web_nick]
+            client.Process(1)
         
-        received = bot.get_received_messages(True)
-        for msg in received:
-            m = models.Message(nick=web_nick, msg=msg, client_admin=False)
-            m.save()
-    # спячка
-    time.sleep(1)
-
-for k in jabber_pool.keys():
-    (id, jid_info, client, bot) = jabber_pool[k]
-    client.disconnect()
+            received = bot.get_received_messages(True)
+            for msg in received:
+                m = models.Message(nick=web_nick, msg=msg, client_admin=False)
+                m.save()
+        # спячка
+        time.sleep(1)
+except KeyboardInterrupt:
+    for k in jabber_pool.keys():
+        (id, jid_info, client, bot) = jabber_pool[k]
+        client.disconnect()
 
 sys.exit(0)
