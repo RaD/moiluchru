@@ -89,6 +89,7 @@ class MinMaxWidget(forms.MultiWidget):
         return (0, 0)
 
 class MinMaxFormField(forms.MultiValueField):
+    """ Поле формы, обеспечивающее ввод диапазона. """
     widget = MinMaxWidget
 
     def __init__(self, *args, **kwargs):
@@ -156,7 +157,6 @@ class BaseSearchForm(forms.ModelForm):
     def search(self):
         queryset = self._meta.model._default_manager.get_query_set()
         for item in self.fields:
-            #print item, self.fields[item], self.cleaned_data[item]
             # обработка специального поля
             if item == 'simple':
                 continue
