@@ -1,7 +1,16 @@
-<p class="center">
+<style>
+  #tagcloud { text-align: center; }
+  #tagcloud ul { list-style-type: none; margin: 0 auto; padding: 0; }
+  #tagcloud li { display: inline; background-image:none !important;
+                 padding:0 5px; margin:0; vertical-align:baseline !important;
+		 border:0 !important; }
+</style>
+<div id="tagcloud">
+  <ul>
   {% for tag in tags %}
-  <span class="nowrap" style="font-size: {{ tag.font_size }}%;">
+  <li style="font-size: {{ tag.font_size }}%;">
     <span style="color: lightblue;">[</span><a href="/tag/{{ tag }}/">{{ tag }}</a><span style="color: lightblue;">]</span>
-  </span>
+  </li>
   {% endfor %}
-</p>
+  </ul>
+</div>

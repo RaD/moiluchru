@@ -505,3 +505,8 @@ BUTTON {
 #full_search INPUT { width: 60px; margin: 0px 2px; }
 
 
+#tagcloud { text-align: center; }
+#tagcloud ul { list-style-type: none; margin: 0 auto; padding: 0; }
+#tagcloud li { display: inline; background-image: none !important;
+   padding: 0 5px; margin: 0; vertical-align: baseline !important;
+   border: 0 !important; }
