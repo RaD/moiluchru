@@ -14,19 +14,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append('/home/rad/django.engine')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from django.conf import settings
-from jabber.models import Message as WebMsg, JidPool
-
-try:
-    botjid = JID(getattr(settings, 'JABBER_ID', None))
-except JIDError:
-    print "Check JABBER_ID in project's settings file."
-    sys.exit(1)
-
-try:
-    jids = [JID(x) for x in getattr(settings, 'JABBER_RECIPIENTS', None)]
-except TypeError:
-    print "Check JABBER_RECIPIENTS in project's settings file."
-    sys.exit(1)
+from jabber.models import JidPool
 
 class Client(JabberClient):
     """Simple bot (client) example. Uses
@@ -36,6 +24,7 @@ class Client(JabberClient):
     based on the JID provided."""
 
     def __init__(self, jid, password):
+        self.jid_text = '%s@%s' % (jid.node, jid.domain)
 
         # if bare JID is provided add a resource -- it is required
         if not jid.resource:
@@ -119,30 +108,6 @@ class Client(JabberClient):
             return True
         if subject:
             subject=u"Re: "+subject
-
-        # save incoming jabber message (from admins)
-        try:
-            jid_admin = JidPool.objects.get('nick'='admins')
-            msg_admin = WebMsg(jid=jid_admin, msg=body)
-            msg_admin.save()
-        except JidPool.DoesNotExist:
-            print "Install Administrators' JID into jabber_jidpool table."
-            sys.exit(1)
-
-        messages = WebMsg.objects.filter(is_really_sent=False).order_by('sent_date')
-        for msg in messages:
-            #import pdb; pdb.set_trace()
-            for j in jids:
-                nick, mess = getattr(msg, 'nick'), getattr(msg, 'msg')
-                print j, nick, mess
-                m=Message(to_jid=j, from_jid=botjid, stanza_type='message',
-                          subject=nick, body=msg)
-                self.stream.send(m)
-                if body:
-                    p=Presence(status=body)
-                    self.stream.send(p)
-            msg.is_really_sent = True
-            msg.save()
         return True
 
     def presence(self,stanza):
@@ -200,12 +165,17 @@ class Client(JabberClient):
         print u"Roster item updated:"
         self.print_roster_item(item)
 
+    def send_test(self, message):
+        m=Message(to_jid='ruslan.popov@gmail.com', from_jid=self.jid_text, stanza_type='message',
+                          subject='test', body=message)
+        self.stream.send(m)
+
 # XMPP protocol is Unicode-based to properly display data received
 # _must_ convert it to local encoding or UnicodeException may be raised
 locale.setlocale(locale.LC_CTYPE,"")
 encoding=locale.getlocale()[1]
 if not encoding:
-    encoding="us-ascii"
+    encoding="utf-8"
 sys.stdout=codecs.getwriter(encoding)(sys.stdout,errors="replace")
 sys.stderr=codecs.getwriter(encoding)(sys.stderr,errors="replace")
 
@@ -216,23 +186,24 @@ logger=logging.getLogger()
 logger.addHandler(logging.StreamHandler())
 logger.setLevel(logging.INFO) # change to DEBUG for higher verbosity
 
-print u"creating client..."
-c=Client(JID(getattr(settings, 'JABBER_ID', None)),
-         getattr(settings, 'JABBER_PASSWORD', None))
+pool = JidPool.objects.filter(id__gt=1)
 
-print u"connecting..."
-c.connect()
+#import pdb; pdb.set_trace()
 
-print u"looping..."
-try:
-    # Component class provides basic "main loop" for the applitation
-    # Though, most applications would need to have their own loop and call
-    # component.stream.loop_iter() from it whenever an event on
-    # component.stream.fileno() occurs.
-    c.loop(1)
-except KeyboardInterrupt:
-    print u"disconnecting..."
+for item in pool:
+    print u"creating client..."
+    c=Client(JID('%s@jabber.ru' % item.nick), item.password)
+
+    print u"connecting..."
+    c.connect()
+
+    print u"sending"
+    c.send_test(u'проверка')
+    time.sleep(1)
+
+    print u"disconnect"
     c.disconnect()
+    print
 
 print u"exiting..."
 # vi: sts=4 et sw=4
