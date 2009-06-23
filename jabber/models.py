@@ -22,7 +22,7 @@ class JidPool(models.Model):
     def alloc_jid(self):
         """ Метод для выделения свободного идентификатора, если свободных нет,
         то создаётся дополнительный. """
-        jid_unlocked = JidPool.objects.filter(is_locked=False)
+        jid_unlocked = JidPool.objects.filter(id__gt=1, is_locked=False)
         jids_count = len(jid_unlocked)
         if jids_count > 0:
             allocated_jid = jid_unlocked[0]
