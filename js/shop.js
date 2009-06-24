@@ -214,8 +214,9 @@ function hide_advice(o) {
 $(document).ready(function() {
     var IE6 = false /*@cc_on || @_jscript_version < 5.7 @*/;
     // получить совет через ajax
-    if (IE6) {
+    if (1) { //IE6) {
 	// нифига не делать, пусть обновляются
+	$('#ie6').toggleZoom();
     } else {
 	get_advice();
     }
