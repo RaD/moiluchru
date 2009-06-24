@@ -385,6 +385,20 @@ body {
    padding: 4px;
 }
 
+#advicebot {
+   position: absolute; top: 0px; left: 0px; z-index: 1; width: 120px; height: 1.5em; 
+   color: #54026e; background-color: #bfab30; font-weight: bold; padding: 4px;
+   text-align: center; vertical-align: bottom; -moz-border-radius: 0px 0px 4px 0px; 
+   cursor: pointer;
+}
+#advicebot #advicetext {
+   width: 200px; height: auto; margin-top: 0.5em;
+   color: #54026e; background-color: #ffeb73; font-weight: normal; padding: 4px;
+   text-align: center; vertical-align: bottom; 
+   border: 1px solid #bfab30; -moz-border-radius: 4px; 
+   cursor: normal;
+}
+
 .collection-list-item {
    width: 100px; height: 130px; 
    float: left; 
