@@ -1,30 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import daemonize
 import os, sys, time, xmpp
+daemonize.createDaemon()
 
-def demonize():
-    pid = os.fork()
-    if not pid:
-        print 'not pid'
-        otherpid = os.fork()
-        if not otherpid:
-            ppid = os.getppid()
-            while ppid != 1:
-                time.sleep(0.5)
-                ppid = os.getppid()
-            return
-        else:
-            print 'other exit'
-            os._exit(0)
-    else:
-        print 'main exit'
-        os.wait()
-        sys.exit(0)
-
-#demonize()
-
-#print 'works'
+print 'daemonize'
 
 # Подключение и настройка среды Django
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
@@ -156,6 +137,8 @@ def process_message(msg):
         try:
             # соединение надо активировать
             jid_info = models.JidPool.objects.filter(is_locked=False)[0]
+            jid_info.is_locked = True
+            jid_info.save()
             create_connection(web_nick, jid_info)
         except IndexError:
             # надо создать дополнительный аккаунт
