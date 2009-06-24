@@ -1,3 +1,118 @@
+var BrowserDetect = {
+    init: function () {
+	this.browser = this.searchString(this.dataBrowser) || "An unknown browser";
+	this.version = this.searchVersion(navigator.userAgent)
+	    || this.searchVersion(navigator.appVersion)
+	    || "an unknown version";
+	this.OS = this.searchString(this.dataOS) || "an unknown OS";
+    },
+    searchString: function (data) {
+	for (var i=0;i<data.length;i++)	{
+	    var dataString = data[i].string;
+	    var dataProp = data[i].prop;
+	    this.versionSearchString = data[i].versionSearch || data[i].identity;
+	    if (dataString) {
+		if (dataString.indexOf(data[i].subString) != -1)
+		    return data[i].identity;
+	    }
+	    else if (dataProp)
+		return data[i].identity;
+	}
+    },
+    searchVersion: function (dataString) {
+	var index = dataString.indexOf(this.versionSearchString);
+	if (index == -1) return;
+	return parseFloat(dataString.substring(index+this.versionSearchString.length+1));
+    },
+    dataBrowser: [
+	{
+	    string: navigator.userAgent,
+	    subString: "Chrome",
+	    identity: "Chrome"
+	},
+	{ 	string: navigator.userAgent,
+		subString: "OmniWeb",
+		versionSearch: "OmniWeb/",
+		identity: "OmniWeb"
+	},
+	{
+	    string: navigator.vendor,
+	    subString: "Apple",
+	    identity: "Safari",
+	    versionSearch: "Version"
+	},
+	{
+	    prop: window.opera,
+	    identity: "Opera"
+	},
+	{
+	    string: navigator.vendor,
+	    subString: "iCab",
+	    identity: "iCab"
+	},
+	{
+	    string: navigator.vendor,
+	    subString: "KDE",
+	    identity: "Konqueror"
+	},
+	{
+	    string: navigator.userAgent,
+	    subString: "Firefox",
+	    identity: "Firefox"
+	},
+	{
+	    string: navigator.vendor,
+	    subString: "Camino",
+	    identity: "Camino"
+	},
+	{		// for newer Netscapes (6+)
+	    string: navigator.userAgent,
+	    subString: "Netscape",
+	    identity: "Netscape"
+	},
+	{
+	    string: navigator.userAgent,
+	    subString: "MSIE",
+	    identity: "Explorer",
+	    versionSearch: "MSIE"
+	},
+	{
+	    string: navigator.userAgent,
+	    subString: "Gecko",
+	    identity: "Mozilla",
+	    versionSearch: "rv"
+	},
+	{ 		// for older Netscapes (4-)
+	    string: navigator.userAgent,
+	    subString: "Mozilla",
+	    identity: "Netscape",
+	    versionSearch: "Mozilla"
+	}
+    ],
+    dataOS : [
+	{
+	    string: navigator.platform,
+	    subString: "Win",
+	    identity: "Windows"
+	},
+	{
+	    string: navigator.platform,
+	    subString: "Mac",
+	    identity: "Mac"
+	},
+	{
+	    string: navigator.userAgent,
+	    subString: "iPhone",
+	    identity: "iPhone/iPod"
+	},
+	{
+	    string: navigator.platform,
+	    subString: "Linux",
+	    identity: "Linux"
+	}
+    ]
+};
+BrowserDetect.init();
 
 function update_cart(count, price) {
     $('#cart_count').html(count);
@@ -193,23 +308,45 @@ function jabber_poll() {
 	   }, 'json' );
 }
 
+var ADVICE_HIDE_TIMEOUT = 6 * 1000;
+
+function get_advice() {
+    $.post('/ajax/advice/random/', {},
+	   function(json) {
+	       if (json['code'] == 200) {
+		   $('#advicetext > .title').html(json['title']);
+		   $('#advicetext > .desc').html(json['desc']);
+	       }
+	   }, 'json' );
+}
+
+function hide_advice(o) {
+    o.slideUp("slow", function() { 
+	o.hide();
+	get_advice();
+    });
+}
+
 $(document).ready(function() {
+    // получить совет через ajax
+    if (($.browser.msie && parseInt(BrowserDetect.version) < 7) ||
+	($.browser.opera && parseInt(BrowserDetect.version) < 9) ||
+	($.browser.mozilla && parseInt(BrowserDetect.version) < 3)) {
+	// нифига не делать, пусть обновляются
+    } else {
+	get_advice();
+    }
+
+    // настроить советника
     $('#advicebot').bind('click',
 			 function(e) {
 			     var o = $('#advicetext')
 			     if ( o.is(':hidden') ) {
-				 if (($.browser.msie && parseInt($.browser.version) < 7) ||
-				     ($.browser.opera && parseInt($.browser.version) < 9) ||
-				     ($.browser.mozilla && parseInt($.browser.version) < 3)) {
-				     // получить совет через ajax
-				 }
 				 o.slideDown("slow", function() { 
 				     window.setTimeout(function() {
-					 o.slideUp("slow", function() { o.hide() });
-				     }, 8000);
+					 hide_advice(o);
+				     }, ADVICE_HIDE_TIMEOUT);
 				 });
-			     } else {
-				 o.slideUp("slow", function() { o.hide() });
 			     }
 			 });
 });

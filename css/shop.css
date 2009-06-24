@@ -399,6 +399,8 @@ body {
    cursor: normal;
 }
 
+#advicebot #advicetext .title { font-size: 120%; font-weight: bold; }
+
 .collection-list-item {
    width: 100px; height: 130px; 
    float: left; 

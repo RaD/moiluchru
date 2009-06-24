@@ -90,10 +90,11 @@ urlpatterns = patterns(
     (r'^manager/', include('manager.urls')),
 
     # ajax
-    (r'^ajax/cart/add', 'shop.ajax.add_to_cart'),
+    (r'^ajax/cart/add/', 'shop.ajax.add_to_cart'),
     (r'^ajax/cart/remove/', 'shop.ajax.cart_remove_item'),
     (r'^ajax/cart/recalculate/', 'shop.ajax.cart_recalculate'),
-    (r'^ajax/jabber/message', 'shop.ajax.jabber_message'),
-    (r'^ajax/jabber/poll', 'shop.ajax.jabber_poll'),
+    (r'^ajax/jabber/message/', 'shop.ajax.jabber_message'),
+    (r'^ajax/jabber/poll/', 'shop.ajax.jabber_poll'),
+    (r'^ajax/advice/random/', 'advice.views.get_random_advice'),
     
 )
