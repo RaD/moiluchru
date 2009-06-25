@@ -40,7 +40,7 @@ class JidPool(models.Model):
     def create_jid(self):
         """ Метод для создания идентификатора. """
         jids_count = JidPool.objects.count()
-        self.nick = 'ml%04d' % int(jids_count + 1)
+        self.nick = 'ov%04d' % int(jids_count)
         self.password = self.generate_password()
         self.is_locked = True
         self.save(force_insert=True)

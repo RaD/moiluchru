@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import daemonize
 import os, sys, time, xmpp
-daemonize.createDaemon()
 
-print 'daemonize'
+try:
+    if sys.argv[1] == '-d':
+        import daemonize
+        daemonize.createDaemon()
+except IndexError:
+    pass
 
 # Подключение и настройка среды Django
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
@@ -26,22 +29,20 @@ if not encoding:
 sys.stdout=codecs.getwriter(encoding)(sys.stdout,errors="replace")
 sys.stderr=codecs.getwriter(encoding)(sys.stderr,errors="replace")
 
-jabber_pool = {}
-
 import logging
 logging.basicConfig(level=logging.DEBUG,
                     filename='/tmp/moiluch.daemon.log', filemode='a')
 
 class Bot:
 
-    def __init__(self, jabber, jid_info, remotejids):
+    def __init__(self, jabber, web_nick, remotejids):
         self.jabber = jabber
+        self.web_nick = web_nick
         self.remotejids = remotejids
         self.received_messages = []
 
-        jid_str = '%s@%s' % (jid_info.nick, getattr(settings, 'JABBER_SERVER'))
-        self.jid = xmpp.protocol.JID(jid_str)
-        self.password = jid_info.password
+        self.jid = xmpp.protocol.JID(getattr(settings, 'JABBER_ID'))
+        self.password = getattr(settings, 'JABBER_PASSWORD')
 
     def register_handlers(self):
         self.jabber.RegisterHandler('message', self.xmpp_message)
@@ -49,12 +50,12 @@ class Bot:
     def xmpp_connect(self):
         con=self.jabber.connect()
         if not con:
-            logging.debug('[%s]: could not connect!' % self.jid)
+            logging.debug('[%s/%s]: could not connect!' % (self.jid, self.password))
             return False
         logging.debug('[%s]: connected with %s\n' % (self.jid, con))
         auth=self.jabber.auth(self.jid.getNode(),
                               self.password,
-                              resource=self.jid.getResource())
+                              resource='%s[%s]' % ('moiluch.ru', self.web_nick))
         if not auth:
             logging.debug('[%s]: could not authenticate!' % self.jid)
             return False
@@ -89,39 +90,22 @@ class Bot:
 ## Функции
 ##
 
-def register_connection(web_nick):
-    """ Метод для регистрации нового аккаунта на джаббер сервере. """
-    sys.stderr.write('[%s]: register connection\n' % web_nick)
-    jid_info = models.JidPool().alloc_jid()
+jabber_pool = {}
 
-    jid_str = '%s@%s' % (jid_info.nick, getattr(settings, 'JABBER_SERVER'))
-    jid = xmpp.protocol.JID(jid_str)
-    client = xmpp.Client(jid.getDomain(), debug=[])
-        
-    bot = Bot(client, jid_info, admin_jids)
-
-    if not bot.xmpp_connect():
-        sys.stderr.write("Could not connect to server, or password mismatch!\n")
-        sys.exit(1)
-
-    jabber_pool.update({web_nick: (jid_info.id, jid_str, client, bot)})
-
-
-def create_connection(web_nick, jid_info):
+def create_connection(web_nick):
     """ Метод для создания соединения с джаббер сервером. """
     sys.stderr.write('[%s]: create connection\n' % web_nick)
-    jid_str = '%s@%s' % (jid_info.nick, getattr(settings, 'JABBER_SERVER'))
+    jid_str = '%s@%s' % (getattr(settings, 'JABBER_ID'), getattr(settings, 'JABBER_SERVER'))
     jid = xmpp.protocol.JID(jid_str)
     client = xmpp.Client(jid.getDomain(), debug=[])
         
-    bot = Bot(client, jid_info, admin_jids)
+    bot = Bot(client, web_nick, admin_jids)
 
     if not bot.xmpp_connect():
         sys.stderr.write("Could not connect to server, or password mismatch!\n")
         sys.exit(1)
 
-    jabber_pool.update({web_nick: (jid_info.id, jid_str, client, bot)})
-
+    jabber_pool.update({web_nick: (client, bot)})
 
 def process_message(msg):
     """ Для обработки сообщения требуется соединение с джаббер сервером:
@@ -134,36 +118,21 @@ def process_message(msg):
 
     # получаем активное соединение
     if web_nick not in jabber_pool:
-        try:
-            # соединение надо активировать
-            jid_info = models.JidPool.objects.filter(is_locked=False)[0]
-            jid_info.is_locked = True
-            jid_info.save()
-            create_connection(web_nick, jid_info)
-        except IndexError:
-            # надо создать дополнительный аккаунт
-            register_connection(web_nick)
+        # соединение надо активировать
+        create_connection(web_nick)
 
-    (id, jid_info, client, bot) = jabber_pool[web_nick]
+    (client, bot) = jabber_pool[web_nick]
 
     bot.send_message(web_text)
 
     msg.is_processed = True
     msg.save()
 
-pool = models.JidPool.objects.filter(id__gt=1, is_locked=True)
-
 try:
     admin_jids = [xmpp.protocol.JID(x) for x in getattr(settings, 'JABBER_RECIPIENTS', None)]
 except TypeError:
     print "Check JABBER_RECIPIENTS in project's settings file."
     sys.exit(1)
-
-def jid_free(pool_object):
-    pool_object.is_locked = False
-    pool_object.save()
-
-map(jid_free, pool)
 
 print 'Initialized'
 
@@ -175,7 +144,7 @@ try:
         map(process_message, messages)
         # проверить наличие пришедших сообщений
         for web_nick in jabber_pool.keys():
-            (id, jid_info, client, bot) = jabber_pool[web_nick]
+            (client, bot) = jabber_pool[web_nick]
             client.Process(1)
         
             received = bot.get_received_messages(True)
@@ -186,7 +155,7 @@ try:
         time.sleep(1)
 except KeyboardInterrupt:
     for k in jabber_pool.keys():
-        (id, jid_info, client, bot) = jabber_pool[k]
+        (client, bot) = jabber_pool[k]
         client.disconnect()
 
 sys.exit(0)
