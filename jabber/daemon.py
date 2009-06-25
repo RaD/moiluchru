@@ -133,10 +133,10 @@ except TypeError:
     print "Check JABBER_RECIPIENTS in project's settings file."
     sys.exit(1)
 
-create_connection('main')
-(client, bot) = jabber_pool['main']
-roster = client.getRoster()
-print 'Roster: %s is %s' % ('alexott@gmail.com', roster.getStatus('alexott@gmail.com'))
+# create_connection('main')
+# (client, bot) = jabber_pool['main']
+# roster = client.getRoster()
+# print 'Roster: %s is %s' % ('alexott@gmail.com', roster.getStatus('alexott@gmail.com'))
 
 print 'Initialized'
 
