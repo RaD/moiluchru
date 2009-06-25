@@ -136,7 +136,7 @@ except TypeError:
 create_connection('main')
 (client, bot) = jabber_pool['main']
 roster = client.getRoster()
-print 'Roster: %s is %s' % ('alexott@gmail.com', roster.getStatus())
+print 'Roster: %s is %s' % ('alexott@gmail.com', roster.getStatus('alexott@gmail.com'))
 
 print 'Initialized'
 
