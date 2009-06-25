@@ -96,7 +96,7 @@ def create_connection(web_nick):
     """ Метод для создания соединения с джаббер сервером. """
     sys.stderr.write('[%s]: create connection\n' % web_nick)
     jid = xmpp.protocol.JID(getattr(settings, 'JABBER_ID'))
-    client = xmpp.Client(jid.getDomain(), debug=['always'])
+    client = xmpp.Client(jid.getDomain(), debug=['all'])
         
     bot = Bot(client, web_nick, admin_jids)
 
@@ -132,6 +132,11 @@ try:
 except TypeError:
     print "Check JABBER_RECIPIENTS in project's settings file."
     sys.exit(1)
+
+create_connection('main')
+(client, bot) = jabber_pool['main']
+roster = client.getRoster()
+print 'Roster: %s is %s' % ('alexott@gmail.com', roster.getStatus())
 
 print 'Initialized'
 
