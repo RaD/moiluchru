@@ -95,9 +95,8 @@ jabber_pool = {}
 def create_connection(web_nick):
     """ Метод для создания соединения с джаббер сервером. """
     sys.stderr.write('[%s]: create connection\n' % web_nick)
-    jid_str = '%s@%s' % (getattr(settings, 'JABBER_ID'), getattr(settings, 'JABBER_SERVER'))
-    jid = xmpp.protocol.JID(jid_str)
-    client = xmpp.Client(jid.getDomain(), debug=[])
+    jid = xmpp.protocol.JID(getattr(settings, 'JABBER_ID'))
+    client = xmpp.Client(jid.getDomain(), debug=['always'])
         
     bot = Bot(client, web_nick, admin_jids)
 
