@@ -151,23 +151,25 @@
   
   {# jabber client - begin #}
   <div id="jabber-client" class="hide">
-    <h3 class="ttl"><span></span>Онлайн консультация</h3>
-    <div id="chat-window">
-      <div style="padding: 4px; border: 1px solid orange; -moz-border-radius: 4px; background-color: #ffffaa;">
-	Для отправки набранного сообщения просто нажмите [Enter].
+    <div style="width: 300px;">
+      <h3 class="ttl"><span></span>Онлайн консультация</h3>
+      <div id="chat-window">
+	<div style="padding: 4px; border: 1px solid orange; -moz-border-radius: 4px; background-color: #ffffaa;">
+	  Для отправки набранного сообщения просто нажмите [Enter].
+	</div>
+	<div id="down"></div>
       </div>
-      <div id="down"></div>
+      <div>
+	<input type="text" id="message-window" style="width: 100%;" maxlength="1024" value=""/>
+      </div>
+      <div class="right">
+	{% comment %}
+	<button onclick="jabber_message($('#message-window')); return false;">Отправить</button>
+	{% endcomment %}
+	<button onclick="jabber_destroy();">Закрыть</button>
+      </div>
+      <img src="/pics/loading.gif" id="loading" style="position: fixed; z-index: 2;" class="hide"/>
     </div>
-    <div>
-      <input type="text" id="message-window" style="width: 100%;" maxlength="1024" value=""/>
-    </div>
-    <div class="right">
-      {% comment %}
-      <button onclick="jabber_message($('#message-window')); return false;">Отправить</button>
-      {% endcomment %}
-      <button onclick="jabber_destroy();">Закрыть</button>
-    </div>
-    <img src="/pics/loading.gif" id="loading" style="position: fixed; z-index: 2;" class="hide"/>
   </div>
   {# jabber client - end #}
 
