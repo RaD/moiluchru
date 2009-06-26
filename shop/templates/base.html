@@ -164,9 +164,9 @@
       </div>
       <div class="right">
 	{% comment %}
-	<button onclick="jabber_message($('#message-window')); return false;">Отправить</button>
+	<button type="button" onclick="jabber_message($('#message-window')); return false;">Отправить</button>
 	{% endcomment %}
-	<button onclick="jabber_destroy();">Закрыть</button>
+	<button type="button" onclick="jabber_destroy();">Закрыть</button>
       </div>
       <img src="/pics/loading.gif" id="loading" style="position: fixed; z-index: 2;" class="hide"/>
     </div>
