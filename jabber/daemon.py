@@ -59,6 +59,12 @@ class Bot:
         if not auth:
             logging.debug('[%s]: could not authenticate!' % self.jid)
             return False
+
+        # рассказываем всем, что мы в онлайне
+        self.jabber.sendInitPresence(1)
+        init_p = xmpp.protocol.Presence(status="I'm little bot", show='online')
+        self.jabber.send(init_p)
+
         logging.debug('[%s]: authenticated using %s' % (self.jid, auth))
         self.register_handlers()
         return con
@@ -133,10 +139,9 @@ except TypeError:
     print "Check JABBER_RECIPIENTS in project's settings file."
     sys.exit(1)
 
-# create_connection('main')
-# (client, bot) = jabber_pool['main']
-# roster = client.getRoster()
-# print 'Roster: %s is %s' % ('alexott@gmail.com', roster.getStatus('alexott@gmail.com'))
+create_connection('main')
+(client, bot) = jabber_pool['main']
+roster = client.getRoster()
 
 print 'Initialized'
 
