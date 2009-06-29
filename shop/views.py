@@ -94,9 +94,9 @@ def search_results(request):
             if clean['userinput'] == u'':
                 items = Item.objects.all()
             else:
-                items = Item.objects.filter(Q(title__search=u'*%s*' % clean['userinput']) |
-                                            Q(desc__search=u'*%s*' % clean['userinput']) |
-                                            Q(tags__search=u'*%s*' % clean['userinput']))
+                items = Item.objects.filter(Q(title__search=u'*"%s"*' % clean['userinput']) |
+                                            Q(desc__search=u'*"%s"*' % clean['userinput']) |
+                                            Q(tags__search=u'*"%s"*' % clean['userinput']))
                 
             # поиск по дополнительным параметрам товара
             if full_search:
