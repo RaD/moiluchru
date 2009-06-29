@@ -76,6 +76,9 @@ class Bot:
         if type in ['message', 'chat', None] and fromjid in self.remotejids:
             msg = event.getBody()
             self.received_messages.append(msg)
+            # отправим сообщение от консультанта остальным консультантам
+            for i in [c for c in self.remotejids if c != fromjid]:
+                self.send_message('%s: %s' % (fromjid, msg))
             logging.debug('[%s]: text is %s\n' % (self.jid, msg))
 
     def send_message(self, message):
@@ -102,7 +105,7 @@ def create_connection(web_nick):
     """ Метод для создания соединения с джаббер сервером. """
     sys.stderr.write('[%s]: create connection\n' % web_nick)
     jid = xmpp.protocol.JID(getattr(settings, 'JABBER_ID'))
-    client = xmpp.Client(jid.getDomain(), debug=['all'])
+    client = xmpp.Client(jid.getDomain(), debug=[])
         
     bot = Bot(client, web_nick, admin_jids)
 
@@ -142,6 +145,13 @@ except TypeError:
 create_connection('main')
 (client, bot) = jabber_pool['main']
 roster = client.getRoster()
+roster.Request()
+# while client.Process(1) and roster.getStatus('ruslan.popov@gmail.com') == None:
+#     print '.',
+
+for i in roster.getItems():
+    jid = str(i)
+    print jid, roster.getName(jid), roster.getStatus(jid), roster.getShow(jid), roster.getResources(jid)
 
 print 'Initialized'
 
