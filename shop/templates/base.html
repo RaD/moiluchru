@@ -19,7 +19,7 @@
   
   {% if jabber %}
   <div id="widget-jabber" onclick="jabber_init();">
-    <img src="/pics/jabber-protocol.png" align="left"/> Консультация
+    <img src="/pics/jabber-protocol.png" align="left"/> Онлайн чат
   </div>
   {% endif %}
 
@@ -69,7 +69,9 @@
   <div id="main">
     
     <div id="header">
+      {% comment %}
       <div id="icqinfo" style="position: absolute; top: 10px; right: 140px; z-index: 1;"><img src="/pics/icq.gif" align="left"/> <a href="http://go.icq.com/" title="Запустить онлайн клиент с icq.com">563-533-804</a></div>
+      {% endcomment %}
       <div id="header-overlay"></div>
       <div id="header-box-1" class="box bg-pri-1"></div>
       <div id="header-box-2" class="box bg-pri-2"></div>
