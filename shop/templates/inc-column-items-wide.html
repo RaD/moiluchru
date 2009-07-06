@@ -14,7 +14,7 @@
 	<a href="{{ item.category.get_absolute_url }}" style="white-space: nowrap;"
 	   title="Просмотреть товары этой категории">{{ item.category.title }}</a>
       </div>
-      <div>Есть в наличии: <span>{% ifequal item.is_present 1 %}Да{% else %}Нет{% endifequal %}</span ></div>
+      <div>Есть в наличии: <span>{% ifequal item.is_present 1 %}Да{% else %}Ожидается{% endifequal %}</span ></div>
       {% if item.collection %}
       <div>
 	<a href="{{ item.collection.get_absolute_url }}" title="Перейти к товарам коллекции">Входит в состав коллекции</a>
