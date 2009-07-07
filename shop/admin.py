@@ -9,48 +9,46 @@ from django.utils.translation import gettext_lazy as _
 
 from snippets import thumbnail
 
-from shop.models import Color, Country, Producer, Category, \
-     Collection, Item, ItemType, Price, Buyer, Order
-from shop.models import Lamp, Size, Socle
+from shop import models
 
 class SocleAdmin(admin.ModelAdmin):
     fieldsets = (('Параметры', {'fields': ('title',)}),)
     list_display = ('title',)
 
-admin.site.register(Socle, SocleAdmin)
+admin.site.register(models.Socle, SocleAdmin)
 
 class ColorAdmin(admin.ModelAdmin):
     fieldsets = ((None,{'fields': ('title','code')}),)
     list_display = ('title','code')
     ordered = ('title',)
-admin.site.register(Color, ColorAdmin)
+admin.site.register(models.Color, ColorAdmin)
 
 class CountryAdmin(admin.ModelAdmin):
     fieldsets = ((None,{'fields': ('title',)}),)
     list_display = ('title',)
     ordered = ('title',)
-admin.site.register(Country, CountryAdmin)
+admin.site.register(models.Country, CountryAdmin)
 
 class ProducerAdmin(admin.ModelAdmin):
     fieldsets = ((None,{'fields': ('name','country', 'buys')}),)
     list_display = ('name', 'country', 'buys')
     ordered = ('title', 'country')
     search_fields = ('name',)
-admin.site.register(Producer, ProducerAdmin)
+admin.site.register(models.Producer, ProducerAdmin)
 
 class CategoryAdmin(admin.ModelAdmin):
     fieldsets = ((None,{'fields': ('title','parent')}),)
     list_display = ('title', 'parent')
     ordered = ('parent', 'title')
     search_fields = ('title',)
-admin.site.register(Category, CategoryAdmin)
+admin.site.register(models.Category, CategoryAdmin)
 
 class CollectionAdmin(admin.ModelAdmin):
     fieldsets = ((None,{'fields': ('title',)}),)
     list_display = ('title',)
     ordered = ('title',)
     search_fields = ('title',)
-admin.site.register(Collection, CollectionAdmin)
+admin.site.register(models.Collection, CollectionAdmin)
 
 ### Item
 
@@ -59,7 +57,7 @@ class ItemForm(forms.ModelForm):
     price_store = forms.FloatField(label=_(u'Price (store)'))
 
     class Meta:
-        model = Item
+        model = models.Item
 
     def __init__(self, *args, **kwargs):
         super(ItemForm, self).__init__(*args, **kwargs)
@@ -77,11 +75,15 @@ class ItemForm(forms.ModelForm):
         return m
 
 class LampInline(admin.TabularInline):
-    model = Lamp
+    model = models.Lamp
     extra = 1
       
 class SizeInline(admin.TabularInline):
-    model = Size
+    model = models.Size
+    max_num = 1
+      
+class IntegratedInline(admin.TabularInline):
+    model = models.IntegratedLight
     max_num = 1
       
 class ItemAdmin(admin.ModelAdmin):
@@ -100,7 +102,7 @@ class ItemAdmin(admin.ModelAdmin):
     ordering = ('title', 'category')
     search_fields = ('title', 'category')
     save_as = True
-    inlines = [SizeInline, LampInline]
+    inlines = [SizeInline, LampInline, IntegratedInline]
 
     def field_image_preview(self, item):
         url = thumbnail(item.image.path, '100x,itempics')
@@ -124,7 +126,7 @@ class ItemAdmin(admin.ModelAdmin):
             return '0.00'
     field_price_shop.short_description = _(u'Price of the shop')
 
-admin.site.register(Item, ItemAdmin)
+admin.site.register(models.Item, ItemAdmin)
 
 ###
 
@@ -139,7 +141,7 @@ class BuyerAdmin(admin.ModelAdmin):
     ordering = ('lastname', 'firstname')
     search_fields = ('lastname', 'firstname')
 
-admin.site.register(Buyer, BuyerAdmin)
+admin.site.register(models.Buyer, BuyerAdmin)
 
 class OrderAdmin(admin.ModelAdmin):
     fieldsets = (
@@ -155,5 +157,5 @@ class OrderAdmin(admin.ModelAdmin):
     ordering = ('status', 'totalprice')
     search_fields = ('buyer', 'status')
 
-admin.site.register(Order, OrderAdmin)
+admin.site.register(models.Order, OrderAdmin)
 
