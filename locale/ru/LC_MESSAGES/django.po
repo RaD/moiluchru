@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-06-24 18:42+0400\n"
+"POT-Creation-Date: 2009-07-06 19:20+0400\n"
 "PO-Revision-Date: 2008-07-09 20:40+0400\n"
 "Last-Translator: Ruslan Popov <ruslan.popov@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -83,23 +83,23 @@ msgstr "Отправлено"
 msgid "Form has bad data."
 msgstr "Форма содержит плохие данные."
 
-#: shop/admin.py:58 shop/models.py:159
+#: shop/admin.py:56 shop/models.py:159
 msgid "Price (shop)"
 msgstr "Цена (продажа)"
 
-#: shop/admin.py:59 shop/models.py:158
+#: shop/admin.py:57 shop/models.py:158
 msgid "Price (store)"
 msgstr "Цена (склад)"
 
-#: shop/admin.py:108
+#: shop/admin.py:110
 msgid "Preview"
 msgstr "Просмотр"
 
-#: shop/admin.py:117
+#: shop/admin.py:119
 msgid "Price of a store"
 msgstr "Цена склада"
 
-#: shop/admin.py:125
+#: shop/admin.py:127
 msgid "Price of the shop"
 msgstr "Цена магазина"
 
@@ -163,7 +163,7 @@ msgstr "Минимальное значение больше максималь�
 msgid "Code of color"
 msgstr "Код цвета"
 
-#: shop/models.py:35 shop/models.py:101
+#: shop/models.py:35 shop/models.py:101 shop/models.py:284
 msgid "Color"
 msgstr "Цвет"
 
@@ -366,6 +366,14 @@ msgstr "Выступ"
 #: shop/models.py:279
 msgid "Brow of an item, in millimeters"
 msgstr "Выступ товара, в миллиметрах"
+
+#: shop/models.py:286
+msgid "Diameter of an hole"
+msgstr "Диаметр отверстия, в миллиметрах"
+
+#: shop/models.py:287
+msgid "Diameter of an montage hole, in millimeters"
+msgstr "Диаметр монтажного отверстия, в миллиметрах"
 
 #: shop/views.py:31
 msgid "Search"
