@@ -10,16 +10,22 @@ from tagging.models import Tag
 from tagging.utils import calculate_cloud
 
 from shop import common
-from shop.models import Item, Category, Collection, Buyer, Phone, Order, \
-    OrderStatus, OrderDetail, Socle, Lamp
-from shop.forms import DivErrorList, SearchForm, MainSearchForm, SizeSearchForm, \
-    FullSearchForm, OfferForm
+from shop import models
+from shop.forms import DivErrorList, SearchForm, OfferForm
 from shop.classes import CartItem
 
 from snippets import render_to, columns, paginate_by
 
 sort = ['', '-buys', 'buys', '-sort_price', 'sort_price']
 
+mutable_forms = [('MainSearchForm',
+                  {'model': models.Item,
+                   'exclude': ('title', 'desc', 'item_type', 'collection', 
+                               'producer', 'has_lamp', 'image', 'buys', 'tags')}),
+                 ('SizeSearchForm',
+                  {'model': models.Size, 'exclude': ('item',)}),
+                 ('FullSearchForm',
+                  {'model': models.Lamp, 'exclude': ('item',)})]
 ### Контекст
 def cart_ctx_proc(request):
     """ Контекстный процессор для заполнения данных о корзине и для
@@ -30,7 +36,7 @@ def cart_ctx_proc(request):
                                'howmuch': session.get('howmuch_id', 1)})
     menu = [(1, u'/', _(u'Main')), (2, u'/search/', _(u'Search')), (3, u'/items/', _(u'Items')),
             (4, u'/text/shipping/', _(u'Shipping')), (5, u'/text/map/', _(u'Map'))]
-    cloud = calculate_cloud(Tag.objects.usage_for_model(Item, counts=True))
+    cloud = calculate_cloud(Tag.objects.usage_for_model(models.Item, counts=True))
     cp = {'min_pct': 75, 'max_pct': 150, 'steps': 4}
     step_pct = int((cp['max_pct'] - cp['min_pct'])/(cp['steps'] - 1))
     for i in cloud:
@@ -50,11 +56,16 @@ def cart_ctx_proc(request):
 ### Страница с поисковым запросом
 @render_to('shop/search.html', cart_ctx_proc)
 def search_query(request):
+    from shop.forms import get_search_form
+    from django.utils.datastructures import SortedDict
+
+    forms_dict = SortedDict(mutable_forms)
+
     context = {
         'searchform': SearchForm(), 
-        'mainsearchform': MainSearchForm(initial={'is_present': True}),
-        'sizesearchform': SizeSearchForm(),
-        'fullsearchform': FullSearchForm(),
+        'mainsearchform': get_search_form(forms_dict['MainSearchForm'], initial={'is_present': True}),
+        'sizesearchform': get_search_form(forms_dict['SizeSearchForm']),
+        'fullsearchform': get_search_form(forms_dict['FullSearchForm']),
         'page_title': u'Мой Луч'
         }
 
@@ -67,7 +78,7 @@ def search_query(request):
         if form_name == 'simple':
             context.update({'searchform': SearchForm(post)})
         else:
-            context.update({ form_name.lower(): eval('%s(post)' % form_name) })
+            context.update({ form_name.lower():  get_search_form(forms_dict[form_name], data=post) })
     except KeyError:
         pass
 
@@ -92,28 +103,31 @@ def search_results(request):
             clean = form.cleaned_data
             # поиск по тексту
             if clean['userinput'] == u'':
-                items = Item.objects.all()
+                items = models.Item.objects.all()
             else:
-                items = Item.objects.filter(Q(title__search=u'*"%s"*' % clean['userinput']) |
-                                            Q(desc__search=u'*"%s"*' % clean['userinput']) |
-                                            Q(tags__search=u'*"%s"*' % clean['userinput']))
-                
+                items = models.Item.objects.filter(Q(title__search=u'*"%s"*' % clean['userinput']) |
+                                                   Q(desc__search=u'*"%s"*' % clean['userinput']) |
+                                                   Q(tags__search=u'*"%s"*' % clean['userinput']))
             # поиск по дополнительным параметрам товара
             if full_search:
+                from shop.forms import get_search_form
+                from django.utils.datastructures import SortedDict
 
-                for form_class in [MainSearchForm, SizeSearchForm, FullSearchForm]:
-                    form = form_class(request.POST)
+                forms_dict = SortedDict(mutable_forms)
+
+                for key in forms_dict.keys():
+                    form = get_search_form(forms_dict[key], data=request.POST)
                     if form.is_valid():
                         subset = form.search()
                         # для inline моделей фильтр создаётся немного по другому, т.к. у них item.id
-                        if form_class.__name__ == 'MainSearchForm':
+                        if key == 'MainSearchForm':
                             id_array = [i.id for i in subset]
                         else:
                             id_array = [i.item.id for i in subset]
                         items = items.filter(id__in=id_array)
                     else:
                         try: # сохраняем имя класса формы
-                            request.session['error'] = (form_class.__name__, request.POST, 
+                            request.session['error'] = (key, request.POST, 
                                                         u'Ошибка во введённых данных. Проверьте их правильность.')
                         except KeyError:
                             return Http404
@@ -123,7 +137,8 @@ def search_results(request):
             request.session['howmuch_id'] = clean['howmuch']
             request.session['cached_items'] = items # кэшируем для paginator
         else:
-            request.session['error'] = ('simple', request.POST, u'Ошибка во введённых данных. Проверьте их правильность.')
+            request.session['error'] = ('simple', request.POST, 
+                                        u'Ошибка во введённых данных. Проверьте их правильность.')
             return HttpResponseRedirect('/search/')
     
         context.update(
@@ -143,7 +158,7 @@ def search_results(request):
 ### Страница с результатами поиска по тегу
 def tag_results(request, tag):
     """ Функция для результатов поиска по тегу. """
-    items = Item.objects.filter(Q(tags__search='%s' % tag))
+    items = models.Item.objects.filter(Q(tags__search='%s' % tag))
     request.session['searchquery'] = tag
     request.session['cached_items'] = items # кэшируем для paginator
     return HttpResponseRedirect(u'/result/')
@@ -159,8 +174,8 @@ def show_main_page(request):
         request.session.set_test_cookie()
 
     try:
-        items = Item.objects.order_by('-buys')[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)]
-    except Item.DoesNotExist:
+        items = models.Item.objects.order_by('-buys')[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)]
+    except models.Item.DoesNotExist:
         items = 0
     return {
         'page_title': u'Мой Луч',
@@ -185,7 +200,7 @@ def show_items(request):
     return {
         'page_title': u'Товары',
         'menu_current': 3, 'title': _(u'Items'),
-        'categories': Category.objects.all(),
+        'categories': models.Category.objects.all(),
         'sort_type': sort_type, 
         'url': reverse(show_items), # для многостраничности
         'items': items}
@@ -203,8 +218,8 @@ def show_category_page(request, category_id=None):
     items = common.category_items(category_id).order_by(sort[sort_type])
     request.session['cached_items'] = items # кэшируем для paginator
     try:
-        c = Category.objects.get(id=category_id)
-    except Category.DoesNotExist:
+        c = modelsCategory.objects.get(id=category_id)
+    except models.Category.DoesNotExist:
         return HttpResponseRedirect(u'/items/')
 
     return {
@@ -227,16 +242,16 @@ def show_category_page_by_title(request, category_title=None):
     common.does_cart_exist(request)
 
     try:
-        category = Category.objects.get(title=category_title)
-        items = Item.objects.filter(category=category).order_by(sort[sort_type])
+        category = models.Category.objects.get(title=category_title)
+        items = models.Item.objects.filter(category=category).order_by(sort[sort_type])
         request.session['cached_items'] = items # кэшируем для paginator
-    except Category.DoesNotExist:
+    except models.Category.DoesNotExist:
         raise Http404
 
     return {
         'page_title': u'Категория товаров',
         'menu_current': 3, 'title': _(u'Items of the category'),
-        'categories': Category.objects.all(),
+        'categories': models.Category.objects.all(),
         'category_id': category.id,
         'url': category.get_absolute_url(), # для многостраничности
         'sort_type': sort_type, 
@@ -253,14 +268,14 @@ def show_collection_page(request, collection_id=None):
     common.does_cart_exist(request)
 
     try:
-        collection = Collection.objects.get(id=collection_id)
-        items = Item.objects.filter(collection=collection_id).order_by(sort[sort_type])
+        collection = models.Collection.objects.get(id=collection_id)
+        items = models.Item.objects.filter(collection=collection_id).order_by(sort[sort_type])
         request.session['cached_items'] = items # кэшируем для paginator
         categories_of_collection = set([i.category for i in items])
-    except Item.DoesNotExist:
+    except models.Item.DoesNotExist:
         # FIXME
         return HttpResponseRedirect(u'/items/')
-    except Collection.DoesNotExist:
+    except models.Collection.DoesNotExist:
         raise Http404
 
     return {
@@ -278,15 +293,15 @@ def show_item_page(request, item_id):
     """ Отображение подробной информации о товаре. """
     common.does_cart_exist(request)
     try:
-        item = Item.objects.get(id=item_id)
-        collection = Item.objects.filter(collection=item.collection, collection__isnull=False).exclude(id=item.id)
+        item = models.Item.objects.get(id=item_id)
+        collection = models.Item.objects.filter(collection=item.collection, collection__isnull=False).exclude(id=item.id)
         return {
             'page_title': item.title,
             'menu_current': 3,
             'item': item, 'collection': collection,
             'lamp': item.get_lamp(), 'addons': item.get_size(),
             'parent_cats': common.parent_categories(item.category.id)}
-    except Item.DoesNotExist:
+    except models.Item.DoesNotExist:
         pass # FIXME
     
 ### Страница с описанием товара
@@ -295,15 +310,15 @@ def show_item_by_title_page(request, item_title):
     """ Отображение подробной информации о товаре. """
     common.does_cart_exist(request)
     try:
-        item = Item.objects.get(title=item_title)
-        collection = Item.objects.filter(collection=item.collection, collection__isnull=False).exclude(id=item.id)
+        item = models.Item.objects.get(title=item_title)
+        collection = models.Item.objects.filter(collection=item.collection, collection__isnull=False).exclude(id=item.id)
         return {
             'page_title': item.title,
             'menu_current': 3,
             'item': item, 'collection': collection,
             'lamp': item.get_lamp(), 'addons': item.get_size(),
             'parent_cats': common.parent_categories(item.category.id)}
-    except Item.DoesNotExist:
+    except models.Item.DoesNotExist:
         pass # FIXME
     
 # Страница с содержимым корзины
@@ -316,14 +331,14 @@ def show_cart(request):
         items = None
     else:
         for i in cart:
-            record = Item.objects.get(id=i)
+            record = models.Item.objects.get(id=i)
             items.append(CartItem(record, cart[i]['count'], cart[i]['price']))
     return {
         'page_title': u'Корзина',
         'cart': cart, # для отключения кнопок
         'cart_items': items,
         'cart_show' : 'yes',
-        'categories': Category.objects.filter(parent__isnull=True)}
+        'categories': models.Category.objects.filter(parent__isnull=True)}
 
 #
 @render_to('shop/offer.html', cart_ctx_proc)
@@ -340,24 +355,24 @@ def show_offer(request):
             try:
                 clean = form.cleaned_data
                 phone_type = clean['phonetype']
-                buyer, created = Buyer.objects.get_or_create(
+                buyer, created = models.Buyer.objects.get_or_create(
                     lastname = clean['fname'], firstname = clean['iname'], secondname = clean['oname'],
                     address = clean['address'], email =  clean['email']
                     )
-                phone, created = Phone.objects.get_or_create(
+                phone, created = models.Phone.objects.get_or_create(
                     number = clean['phone'], type = phone_type, owner = buyer
                     )
-                order, created = Order.objects.get_or_create(
+                order, created = models.Order.objects.get_or_create(
                     buyer = buyer,
                     count = request.session.get('cart_count', 0),
                     totalprice = request.session.get('cart_price', 0.00),
                     comment = clean['comment'],
-                    status = OrderStatus.objects.get(id=1)
+                    status = models.OrderStatus.objects.get(id=1)
                     )
                 cart = request.session.get('cart_items', {})
                 for i in cart:
-                    item = Item.objects.get(id=i)
-                    orderdetail = OrderDetail(order = order, item = item,
+                    item = models.Item.objects.get(id=i)
+                    orderdetail = models.OrderDetail(order = order, item = item,
                                                      count = cart[i]['count'],
                                                      price = cart[i]['price'])
                     orderdetail.save()
@@ -438,8 +453,8 @@ def handler404(request):
         request.session.set_test_cookie()
 
     try:
-        items = Item.objects.order_by('-buys')[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)]
-    except Item.DoesNotExist:
+        items = modelsItem.objects.order_by('-buys')[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)]
+    except models.Item.DoesNotExist:
         items = 0
     return {'menu_current': 1, 'page_title': '404: Страница не найдена...',
             'items_col1': items[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)/2],
@@ -453,8 +468,8 @@ def handler500(request):
         request.session.set_test_cookie()
 
     try:
-        items = Item.objects.order_by('-buys')[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)]
-    except Item.DoesNotExist:
+        items = models.Item.objects.order_by('-buys')[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)]
+    except models.Item.DoesNotExist:
         items = 0
     return {'menu_current': 1, 'page_title': '500: Что-то с моим кодом...',
             'items_col1': items[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)/2],
