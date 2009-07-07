@@ -7,6 +7,17 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import simplejson
 
+def trace_to(modulename, filename):
+    import logging
+    logging.basicConfig(level=logging.DEBUG,
+                        filename=filename, filemode='a')
+    def renderer(func):
+        def wrapper(request, *args, **kw):
+            logging.debug('%s:%s' % (modulename, func.__name__))
+            return func(request, *args, **kw)
+        return wrapper
+    return renderer
+
 def render_to(template, processor):
     """ http://www.djangosnippets.org/snippets/821/
 
@@ -23,6 +34,8 @@ def render_to(template, processor):
      - template: template name to use
     """
     def renderer(func):
+        if not callable(processor):
+            raise Exception('Processor is not callable.')
         def wrapper(request, *args, **kw):
             output = func(request, *args, **kw)
             if isinstance(output, (list, tuple)):
