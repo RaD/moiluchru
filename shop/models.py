@@ -278,3 +278,12 @@ class Size(models.Model):
     brow = models.PositiveIntegerField(verbose_name=_(u'Brow'), 
                                        help_text=_(u'Brow of an item, in millimeters'),
                                        null=True, blank=True)
+
+class IntegratedLight(models.Model):
+    item = models.ForeignKey(Item)
+    color = models.ForeignKey(Color, verbose_name=_(u'Color'))
+    montage_diameter = models.PositiveIntegerField(
+        verbose_name=_(u'Diameter of an hole'), 
+        help_text=_(u'Diameter of an montage hole, in millimeters'),
+        null=True, blank=True)
+    
