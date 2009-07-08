@@ -218,20 +218,14 @@ def modelform_factory(model, form=BaseSearchForm, fields=None, exclude=None,
     return SearchFormMetaclass(class_name, (form,), form_class_attrs)
 
 def get_search_form(form_name, initial=None, data=None):
-    from django.utils.datastructures import SortedDict
-
     # Описываем возможные формы поиска
-    mutable_forms = [('MainSearchForm',
-                      {'model': models.Item,
-                       'exclude': ('title', 'desc', 'item_type', 'collection', 
-                                   'producer', 'has_lamp', 'image', 'buys', 'tags')}),
-                     ('SizeSearchForm',
-                      {'model': models.Size, 'exclude': ('item',)}),
-                     ('FullSearchForm',
-                      {'model': models.Lamp, 'exclude': ('item',)})]
+    mutable_forms = {'MainSearchForm': {'model': models.Item,
+                                        'exclude': ('title', 'desc', 'item_type', 'collection', 
+                                                    'producer', 'has_lamp', 'image', 'buys', 'tags')},
+                     'SizeSearchForm': {'model': models.Size, 'exclude': ('item',)} ,
+                     'FullSearchForm': {'model': models.Lamp, 'exclude': ('item',)}}
     
-    dictionary = SortedDict(mutable_forms)
-    info = dictionary[form_name]
+    info = mutable_forms[form_name]
     form_class = modelform_factory(info['model'], exclude=info['exclude'])
     return form_class(data=data, initial=initial)
 

@@ -48,7 +48,7 @@ def cart_ctx_proc(request):
 ### Страница с поисковым запросом
 @render_to('shop/search.html', cart_ctx_proc)
 def search_query(request):
-    from shop.forms import get_search_form
+    from shop.forms import get_search_form # воспользуемся фабрикой поисковых форм
     context = {
         'searchform': SearchForm(), 
         'mainsearchform': get_search_form('MainSearchForm', initial={'is_present': True}),
@@ -98,7 +98,7 @@ def search_results(request):
                                                    Q(tags__search=u'*"%s"*' % clean['userinput']))
             # поиск по дополнительным параметрам товара
             if full_search:
-                from shop.forms import get_search_form
+                from shop.forms import get_search_form # воспользуемся фабрикой поисковых форм
 
                 for key in ['MainSearchForm', 'SizeSearchForm', 'FullSearchForm']:
                     form = get_search_form(key, data=request.POST)
