@@ -162,6 +162,7 @@ def show_main_page(request):
         items = models.Item.objects.order_by('-buys')[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)]
     except models.Item.DoesNotExist:
         items = 0
+
     return {
         'page_title': u'Мой Луч',
         'menu_current': 1,

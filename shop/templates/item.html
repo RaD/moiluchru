@@ -44,6 +44,12 @@
 	  </div>
 	  <div>Есть в наличии: <span>{% ifequal item.is_present 1 %}Да{% else %}Ожидается{% endifequal %}</span ></div>
 	  <div>Цвет: <span>{{ item.color }}</span></div>
+	  {% if jabber %}
+	  <div onclick="jabber_init();"
+	       style="border: 1px solid green; -moz-border-radius: 4px; padding: 4px; cursor: pointer;">
+	    <img src="/pics/jabber-protocol.png" align="left"/> Задать вопрос консультанту
+	  </div>
+  {% endif %}
 	</td>
       </tr>
     </table>
