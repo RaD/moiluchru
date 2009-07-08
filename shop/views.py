@@ -439,7 +439,7 @@ def handler404(request):
         request.session.set_test_cookie()
 
     try:
-        items = modelsItem.objects.order_by('-buys')[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)]
+        items = models.Item.objects.order_by('-buys')[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)]
     except models.Item.DoesNotExist:
         items = 0
     return {'menu_current': 1, 'page_title': '404: Страница не найдена...',
