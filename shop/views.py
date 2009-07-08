@@ -204,14 +204,14 @@ def show_category_page(request, category_id=None):
     items = common.category_items(category_id).order_by(sort[sort_type])
     request.session['cached_items'] = items # кэшируем для paginator
     try:
-        c = modelsCategory.objects.get(id=category_id)
+        c = models.Category.objects.get(id=category_id)
     except models.Category.DoesNotExist:
         return HttpResponseRedirect(u'/items/')
 
     return {
         'page_title': u'Категория товаров',
         'menu_current': 3, 'title': _(u'Items of the category'),
-        'categories': Category.objects.all(),
+        'categories': models.Category.objects.all(),
         'category_id': int(category_id),
         'url': c.get_absolute_url(), # для многостраничности
         'sort_type': sort_type, 
