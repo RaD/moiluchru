@@ -18,14 +18,6 @@ from snippets import render_to, columns, paginate_by
 
 sort = ['', '-buys', 'buys', '-sort_price', 'sort_price']
 
-mutable_forms = [('MainSearchForm',
-                  {'model': models.Item,
-                   'exclude': ('title', 'desc', 'item_type', 'collection', 
-                               'producer', 'has_lamp', 'image', 'buys', 'tags')}),
-                 ('SizeSearchForm',
-                  {'model': models.Size, 'exclude': ('item',)}),
-                 ('FullSearchForm',
-                  {'model': models.Lamp, 'exclude': ('item',)})]
 ### Контекст
 def cart_ctx_proc(request):
     """ Контекстный процессор для заполнения данных о корзине и для
@@ -57,15 +49,11 @@ def cart_ctx_proc(request):
 @render_to('shop/search.html', cart_ctx_proc)
 def search_query(request):
     from shop.forms import get_search_form
-    from django.utils.datastructures import SortedDict
-
-    forms_dict = SortedDict(mutable_forms)
-
     context = {
         'searchform': SearchForm(), 
-        'mainsearchform': get_search_form(forms_dict['MainSearchForm'], initial={'is_present': True}),
-        'sizesearchform': get_search_form(forms_dict['SizeSearchForm']),
-        'fullsearchform': get_search_form(forms_dict['FullSearchForm']),
+        'mainsearchform': get_search_form('MainSearchForm', initial={'is_present': True}),
+        'sizesearchform': get_search_form('SizeSearchForm'),
+        'fullsearchform': get_search_form('FullSearchForm'),
         'page_title': u'Мой Луч'
         }
 
@@ -78,7 +66,7 @@ def search_query(request):
         if form_name == 'simple':
             context.update({'searchform': SearchForm(post)})
         else:
-            context.update({ form_name.lower():  get_search_form(forms_dict[form_name], data=post) })
+            context.update({ form_name.lower():  get_search_form(form_name, data=post) })
     except KeyError:
         pass
 
@@ -111,12 +99,9 @@ def search_results(request):
             # поиск по дополнительным параметрам товара
             if full_search:
                 from shop.forms import get_search_form
-                from django.utils.datastructures import SortedDict
 
-                forms_dict = SortedDict(mutable_forms)
-
-                for key in forms_dict.keys():
-                    form = get_search_form(forms_dict[key], data=request.POST)
+                for key in ['MainSearchForm', 'SizeSearchForm', 'FullSearchForm']:
+                    form = get_search_form(key, data=request.POST)
                     if form.is_valid():
                         subset = form.search()
                         # для inline моделей фильтр создаётся немного по другому, т.к. у них item.id
