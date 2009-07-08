@@ -42,14 +42,16 @@
 	    <span style="font-size: 200%; font-weight: bold; color: #071c71;">{{ item.get_price.1|floatformat:2 }}</span>
 	    <span style="color: #2c3d82;">руб.</span>
 	  </div>
-	  <div>Есть в наличии: <span>{% ifequal item.is_present 1 %}Да{% else %}Ожидается{% endifequal %}</span ></div>
-	  <div>Цвет: <span>{{ item.color }}</span></div>
 	  {% if jabber %}
 	  <div onclick="jabber_init();"
-	       style="border: 1px solid green; -moz-border-radius: 4px; padding: 4px; cursor: pointer;">
+	       style="border: 1px solid green; -moz-border-radius: 4px; 
+		      padding: 4px; cursor: pointer; text-align: center;">
 	    <img src="/pics/jabber-protocol.png" align="left"/> Задать вопрос консультанту
 	  </div>
-  {% endif %}
+	  <br/>
+	  {% endif %}
+	  <div>Есть в наличии: <span>{% ifequal item.is_present 1 %}Да{% else %}Ожидается{% endifequal %}</span ></div>
+	  <div>Цвет: <span>{{ item.color }}</span></div>
 	</td>
       </tr>
     </table>
