@@ -115,7 +115,7 @@ def search_results(request):
                             request.session['error'] = (key, request.POST, 
                                                         u'Ошибка во введённых данных. Проверьте их правильность.')
                         except KeyError:
-                            return Http404
+                            raise Http404
                         return HttpResponseRedirect('/search/')
 
             request.session['searchquery'] = clean['userinput']
@@ -280,7 +280,8 @@ def show_item_page(request, item_id):
     common.does_cart_exist(request)
     try:
         item = models.Item.objects.get(id=item_id)
-        collection = models.Item.objects.filter(collection=item.collection, collection__isnull=False).exclude(id=item.id)
+        collection = models.Item.objects.filter(collection=item.collection, 
+                                                collection__isnull=False).exclude(id=item.id)
         return {
             'page_title': item.title,
             'menu_current': 3,
@@ -288,7 +289,7 @@ def show_item_page(request, item_id):
             'lamp': item.get_lamp(), 'addons': item.get_size(),
             'parent_cats': common.parent_categories(item.category.id)}
     except models.Item.DoesNotExist:
-        pass # FIXME
+        raise Http404
     
 ### Страница с описанием товара
 @render_to('shop/item.html', cart_ctx_proc)
@@ -305,7 +306,7 @@ def show_item_by_title_page(request, item_title):
             'lamp': item.get_lamp(), 'addons': item.get_size(),
             'parent_cats': common.parent_categories(item.category.id)}
     except models.Item.DoesNotExist:
-        pass # FIXME
+        raise Http404
     
 # Страница с содержимым корзины
 @render_to('shop/cart.html', cart_ctx_proc)
