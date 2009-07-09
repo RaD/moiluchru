@@ -113,7 +113,7 @@ class ItemAdmin(admin.ModelAdmin):
     def field_price_store(self, item):
         try:
             # берём самую свежую запись
-            return Price.objects.filter(item=item).order_by('-applied')[0].price_store
+            return models.Price.objects.filter(item=item).order_by('-applied')[0].price_store
         except models.Price.DoesNotExists:
             return '0.00'
     field_price_store.short_description = _(u'Price of a store')
@@ -121,7 +121,7 @@ class ItemAdmin(admin.ModelAdmin):
     def field_price_shop(self, item):
         try:
             # берём самую свежую запись
-            return Price.objects.filter(item=item).order_by('-applied')[0].price_shop
+            return models.Price.objects.filter(item=item).order_by('-applied')[0].price_shop
         except models.Price.DoesNotExists:
             return '0.00'
     field_price_shop.short_description = _(u'Price of the shop')
