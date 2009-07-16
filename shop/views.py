@@ -386,7 +386,7 @@ def show_offer(request):
 @render_to('shop/ordered.html', cart_ctx_proc)
 def show_ordered(request):
     common.init_cart(request)
-    if getattr(settings, 'JABBER_NOTIFICATION', False):
+    if getattr(settings, 'JABBER_NOTIFICATION', False) and not getattr(settings, 'DEBUG', False):
         import xmpp, time
         jid = xmpp.protocol.JID(getattr(settings, 'JABBER_ID', None))
         cl = xmpp.Client(jid.getDomain(), debug=[])
