@@ -105,10 +105,7 @@ TABLE { width: 100%; border-collapse: collapse; }
 
 
 h3 {
-    margin: 0.5em 0 0.3em 1em;
-    font-size: 18px;
-    font-weight: normal;
-    color: #1533AD;
+   margin: 0.5em 0 0.3em 1em;
 }
 h3 span {
    display: inline-block;
@@ -294,17 +291,20 @@ body {
 	padding: 10px 0;
 	}
 #right h3 {
-	clear: left;
-	margin: 0.5em 0 0.3em 0;
-	font-size: 12px;
-	}
+   clear: left;
+   margin: 0.5em 0 0.3em 0;
+   font-family:comic sans ms;
+   font-size: 150%;
+   font-weight: normal;
+   color: #339933;
+}
 #right h3 span {
    display: inline-block;
    width: 9px; height: 9px;
    margin-right: 1em;
    border: 1px solid #071C71;
    vertical-align: middle;
-   background: #6F83D6;
+   background: #55bb55;
 }
 #right h4 span {
    display: inline-block;
@@ -312,7 +312,7 @@ body {
    margin-right: 1em;
    border: 1px solid #071C71;
    vertical-align: middle;
-   background: #6F83D6;
+   background: #55bb55;
 }
 #right .photo {
 	float: left;
@@ -526,3 +526,9 @@ BUTTON {
 #tagcloud li { display: inline; background-image: none !important;
    padding: 0 5px; margin: 0; vertical-align: baseline !important;
    border: 0 !important; }
+
+.active-zone {
+   padding: 2px 4px; 
+   border: 2px solid #77ff77; -moz-border-radius: 4px;
+   background-color: #ccffcc; color: black;
+}

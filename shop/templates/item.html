@@ -4,6 +4,10 @@
 {% load markup %}
 
 {% block content %}
+  <div style="display: none;">
+    код скидки 0xFFC700C8
+    купить светильник недорого доставка скидка
+  </div>
   <div id="left">
     <h3 class="ttl"><span></span>Категории</h3>
 
@@ -61,8 +65,9 @@
 	<td valign="top">
 	  <h4 class="ttl"><span></span>Лампочки</h4>
 	  {% for l in lamp %}
-	  <div>
-	    <span onmouseover="show_lamp('lamp_{{ l.socle|lower|cut:' ' }}');" 
+	  <div style="padding: 2px;">
+	    <span class="active-zone"
+		  onmouseover="show_lamp('lamp_{{ l.socle|lower|cut:' ' }}');" 
 		  style="font-size: 150%; font-weight: bold;">{{ l.socle }}</span>
 	    <span style="font-size: 80%;">{{ l.count }} x {{ l.watt }} Вт</span>
 	  </div>
@@ -95,6 +100,12 @@
     {% if collection %}
     <div>
       <h3 class="ttl"><span></span>Коллекция</h3>
+      <div style="text-align: right;">
+	<span style="margin-left: 1em; padding: 2px 4px; border:2px solid red; -moz-border-radius: 4px; " 
+	      title="При покупке нескольких элементов коллекции спрашивайте о скидке.">
+	  Скидка!
+	</span>
+      </div>
       <div>
       {% for i in collection %}
       <table width="100" height="130" class="collection-list-item">
