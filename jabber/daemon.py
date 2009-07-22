@@ -95,6 +95,13 @@ class Bot:
             self.received_messages = []
         return result
 
+    def system(self, message):
+        """ Обработка системных сообщений. В настоящее время - только закрытие
+        соединения. """
+        if message == 'close connection':
+            logging.debug('[%s]: system disconnect' % (self.web_nick,))
+            self.jabber.disconnect()
+            
 ##
 ## Функции
 ##
@@ -131,7 +138,10 @@ def process_message(msg):
 
     (client, bot) = jabber_pool[web_nick]
 
-    bot.send_message(web_text)
+    if msg.is_system:
+        bot.system(web_text)
+    else:
+        bot.send_message(web_text)
 
     msg.is_processed = True
     msg.save()
@@ -146,12 +156,10 @@ create_connection('main')
 (client, bot) = jabber_pool['main']
 roster = client.getRoster()
 roster.Request()
-# while client.Process(1) and roster.getStatus('ruslan.popov@gmail.com') == None:
-#     print '.',
 
-for i in roster.getItems():
-    jid = str(i)
-    print jid, roster.getName(jid), roster.getStatus(jid), roster.getShow(jid), roster.getResources(jid)
+# for i in roster.getItems():
+#     jid = str(i)
+#     print jid, roster.getName(jid), roster.getStatus(jid), roster.getShow(jid), roster.getResources(jid)
 
 print 'Initialized'
 

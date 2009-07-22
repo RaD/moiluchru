@@ -88,10 +88,15 @@ def cart_remove_item(request, form):
 # Отправка сообщения на джаббер
 @ajax_processor(JabberMessage)
 def jabber_message(request, form):
-    if 'system' in form.cleaned_data: # системное сообщение
-        return {'code': '200', 'desc': 'closed'} # FIXME
+    if 'system' in form.cleaned_data and form.cleaned_data['system'] == '1': # системное сообщение
+        # отправляем сообщение сервису для закрытия соединения
+        nick = request.session['JABBER_NICK']
+        msg = Message(nick=nick, msg='close connection', is_system=True)
+        msg.save()
+        # удаляем информацию из сессии
+        del(request.session['JABBER_NICK'])
 
-    message = form.cleaned_data['message'] # может быть пустым
+        return {'code': '200', 'desc': 'closed'} # FIXME
 
     # при первом обращении клиента следует автоматически сгенерировать
     # ему ник из минут и секунд, ник записывается в сессию и
@@ -101,11 +106,17 @@ def jabber_message(request, form):
     now = dt.now()
     last = request.session.get('JABBER_LAST', now - timedelta(days=1))
     if now - timedelta(minutes=30) > last and 'JABBER_NICK' in request.session:
+        # отправляем сообщение сервису для закрытия соединения
+        nick = request.session['JABBER_NICK']
+        msg = Message(nick=nick, msg='close connection', is_system=True)
+        msg.save()
+        # удаляем информацию из сессии
         del(request.session['JABBER_NICK'])
 
     nick = request.session.get('JABBER_NICK', dt.now().strftime('%M%S'))
     
     try:
+        message = form.cleaned_data['message'] # может быть пустым
         msg = Message(nick=nick, msg=message)
         msg.save()
         request.session['JABBER_NICK'] = nick
