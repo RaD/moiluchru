@@ -1,13 +1,12 @@
 
-PROJECTNAME=cargo
+PROJECTNAME=moiluchru
 
 OWNER=rad
-GROUP=users
+GROUP=rad
 
-INSTALL_DJANGO_DIR=/home/rad/django
-INSTALL_APACHE_DIR=/var/www-$(PROJECTNAME)
+INSTALL_DJANGO_DIR=/home/rad/django.apps
 
-REGEXP_DEVEL_URL=http:\/\/cargo
+REGEXP_DEVEL_URL=http:\/\/moiluchru\/
 
 PO=$(wildcard ./locale/ru/LC_MESSAGES/*.po)
 MO=$(patsubst %.po,%.mo,$(PO))
