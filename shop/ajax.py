@@ -90,11 +90,15 @@ def cart_remove_item(request, form):
 def jabber_message(request, form):
     if 'system' in form.cleaned_data and form.cleaned_data['system'] == '1': # системное сообщение
         # отправляем сообщение сервису для закрытия соединения
-        nick = request.session['JABBER_NICK']
-        msg = Message(nick=nick, msg='close connection', is_system=True)
-        msg.save()
-        # удаляем информацию из сессии
-        del(request.session['JABBER_NICK'])
+        try:
+            nick = request.session['JABBER_NICK']
+            msg = Message(nick=nick, msg='close connection', is_system=True)
+            msg.save()
+            # удаляем информацию из сессии
+            del(request.session['JABBER_NICK'])
+        except KeyError:
+            # нет такого ключа, значит ничего не делаем
+            pass
 
         return {'code': '200', 'desc': 'closed'} # FIXME
 
