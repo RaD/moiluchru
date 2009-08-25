@@ -37,8 +37,8 @@ class ProducerAdmin(admin.ModelAdmin):
 admin.site.register(models.Producer, ProducerAdmin)
 
 class CategoryAdmin(admin.ModelAdmin):
-    fieldsets = ((None,{'fields': ('title','parent')}),)
-    list_display = ('title', 'parent')
+    fieldsets = ((None,{'fields': ('title', 'slug', 'parent')}),)
+    list_display = ('title', 'slug', 'parent')
     ordered = ('parent', 'title')
     search_fields = ('title',)
 admin.site.register(models.Category, CategoryAdmin)

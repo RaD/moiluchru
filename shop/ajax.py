@@ -3,7 +3,7 @@
 from django.conf import settings
 
 from snippets import ajax_processor
-from shop import common
+from shop.views import init_cart
 from shop.forms import CartAdd, CartClean, CartRecalculate, CartRemoveItem
 from shop.models import Item
 from jabber.forms import JabberMessage
@@ -16,9 +16,6 @@ def add_to_cart(request, form):
     """ Функция добавления товара в корзину. """
     id = int(form.cleaned_data['item'])
     cnt = int(form.cleaned_data['count'])
-    # инициализация корзины
-    if not 'cart_items' in request.session:
-        common.does_cart_exist(request)
 
     try:
         item = Item.objects.get(id=id)
@@ -47,7 +44,7 @@ def add_to_cart(request, form):
 @ajax_processor(CartClean)
 def clean_cart(request, form):
     """ Функция очистки корзины  """
-    common.init_cart(request)
+    init_cart(request)
     return {'code': '200', 'desc': 'success'}
 
 @ajax_processor(CartRecalculate)

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # http://markeev.labwr.ru/2008/07/django.html
 
+from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
@@ -65,23 +66,16 @@ def columns(param, count):
         return wrapper
     return cols
 
-def paginate_by(param_name, get_name, count=10):
+def paginate_by(object_name, page_name='page', count=getattr(settings, 'SHOP_ITEMS_PER_PAGE', 20)):
     def paged(func):
         def wrapper(request, *args, **kwargs):
-            try:
-                pagenum = kwargs.get(get_name, '1')
-                del(kwargs[get_name])
-            except ValueError:
-                pagenum = 1
-            except KeyError:
-                pass
-            if pagenum is None:
-                pagenum = 1
+            pagenum = kwargs.get(page_name, 1) or 1
+            del(kwargs[page_name])
             # получаем контекст
             context =  func(request, *args, **kwargs)
-            if param_name in context:
+            if object_name in context:
                 try:
-                    objects = context.get(param_name)
+                    objects = context.get(object_name)
                     ipp_settings = settings.SHOP_ITEMS_PER_PAGE
                     count = [ipp_settings, ipp_settings,
                              int(1.5 * ipp_settings),
@@ -89,10 +83,10 @@ def paginate_by(param_name, get_name, count=10):
                              int(3 * ipp_settings)][int(request.session.get('howmuch_id', 1))]
                     paginator = Paginator(objects, count)
 
-                    context['page'] = paginator.page(int(pagenum))
-                    context[param_name] = paginator.page(int(pagenum)).object_list
+                    context['page'] = paginator.page(pagenum)
+                    context[object_name] = paginator.page(pagenum).object_list
                 except EmptyPage:
-                    context[param_name] = paginator.page(paginator.num_pages).object_list
+                    context[object_name] = paginator.page(paginator.num_pages).object_list
             return context
         return wrapper
     return paged
@@ -189,3 +183,20 @@ def thumbnail(original_image_path, arg):
 
     return miniature_url  
 
+def translit(value):
+    TRANSTABLE = (
+        (u"а", u"a"),   (u"б", u"b"),   (u"в", u"v"),   (u"г", u"g"),
+        (u"д", u"d"),   (u"е", u"e"),   (u"ё", u"yo"),  (u"ж", u"zh"),
+        (u"з", u"z"),   (u"и", u"i"),   (u"й", u"j"),   (u"к", u"k"),
+        (u"л", u"l"),   (u"м", u"m"),   (u"н", u"n"),   (u"о", u"o"),
+        (u"п", u"p"),   (u"р", u"r"),   (u"с", u"s"),   (u"т", u"t"),
+        (u"у", u"u"),   (u"ф", u"f"),   (u"х", u"h"),   (u"ц", u"ts"),
+        (u"ч", u"ch"),  (u"ш", u"sh"),  (u"щ", u"sch"), (u"ъ", u"_"),
+        (u"ы", u"yi"),  (u"ь", u""),   (u"э", u"e"),   (u"ю", u"yu"),
+        (u"я", u"ya"),  (u" ", u"_"),
+        )
+    translit = value
+    for symb_in, symb_out in TRANSTABLE:
+        translit = translit.replace(symb_in, symb_out)
+    translit = slugify(translit)
+    return translit

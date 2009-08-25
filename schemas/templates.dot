@@ -41,6 +41,8 @@ subgraph cluster_include {label="Подключаемые шаблоны"; label
 	 jabber [label="jabber.html", shape="record", color="green"];
 	 zoom [label="zoom.html", shape="record", color="green"];
 	 ga [label="google.html", shape="record", color="green"];
+	 short [label="short.html", shape="record", color="green"];
+	 paginator [label="paginator.html", shape="record", color="green"];
 };
 
 ###
@@ -60,8 +62,12 @@ subgraph cluster_content {label="Основной шаблон"; labelloc="t";
 catlist -> struct_content:catlist [color="orange"];
 taglist -> struct_content:taglist [color="orange"];
 jabber -> base [color="orange"];
-zoom -> base [color="orange"];
+zoom -> base [color="orange", label="jabber widget"];
+zoom -> item [color="orange"];
+zoom -> short [color="orange"];
 ga -> base [color="orange"];
+short -> list [color="orange"];
+paginator -> list [color="orange"];
 
 struct_content:content -> search [color="blue"];
 struct_content:content -> list [color="blue"];

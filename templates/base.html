@@ -1,5 +1,6 @@
 {% load i18n %}
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+{# <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"> #}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -7,10 +8,20 @@
   <meta name="ROBOTS" content="ALL"/>
   <meta name="generator" content="Django"/>
   <title>{{ page_title }}</title>
+  <link rel="stylesheet" href="http://moiluchru/css/shop.css" type="text/css"/>
   <link rel="shortcut icon" href="http://moiluchru/pics/favicon.png"/>
+  <script type="text/javascript" src="http://moiluchru/js/jquery.js"></script>
+  <script type="text/javascript" src="http://moiluchru/js/shop.js"></script>
 </head>
-<body style="padding: 0px; margin: 0px;">
-{% block structure %}{% endblock %}
+
+<body>
+  <div id="opaco" class="hide"></div> {# элемент для затемнения экрана #}
+  <div id="popup" class="hide"></div> {# элемент для всплывающих окон #}
+  {% include "header.html" %}
+  {% block structure %}{% endblock %}
+  {% include "footer.html" %}
+  {% include "jabber.html" %}
 </body>
-{% if not debug %}{{ google_analytics|safe }}{% endif %}
+
+{% if not debug %}{% include "google.html" %}{% endif %}
 </html>

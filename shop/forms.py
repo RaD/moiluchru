@@ -32,12 +32,48 @@ class OfferForm(forms.Form):
                               widget=forms.TextInput(attrs={'class':'longitem'}))
     phone = forms.CharField(label=_(u'Contact phone'), max_length=20,
                             widget=forms.TextInput(attrs={'class':'longitem'}))
-    phonetype = forms.ModelChoiceField(label=_(u'Phone type'), queryset=models.PhoneType.objects.all(),
-                                       widget=forms.Select(attrs={'class':'longitem'}))
     email = forms.EmailField(label=_(u'E-mail'), max_length=75,
                              widget=forms.TextInput(attrs={'class':'longitem'}))
     comment = forms.CharField(label=_(u'Comment'), required=False,
                               widget=forms.Textarea(attrs={'class':'longitem'}))
+
+    def __init__(self, *args, **kwargs):
+        for argument in ['cart', 'count', 'total']:
+            if argument in kwargs:
+                setattr(self, argument, kwargs[argument])
+                del kwargs[argument]
+        super(OfferForm, self).__init__(*args, **kwargs)
+
+    def save(self):
+        clean = self.cleaned_data
+        buyer, created = models.Buyer.objects.get_or_create(
+            lastname = clean['fname'], 
+            firstname = clean['iname'], 
+            secondname = clean['oname'],
+            address = clean['address'], 
+            email =  clean['email']
+            )
+        phone, created = models.Phone.objects.get_or_create(
+            number = clean['phone'], 
+            owner = buyer
+            )
+        order, created = models.Order.objects.get_or_create(
+            buyer = buyer,
+            count = self.count,
+            totalprice = self.total,
+            comment = clean['comment'],
+            status = models.OrderStatus.objects.get(id=1)
+            )
+        for i in self.cart.keys():
+            print i
+            item = models.Item.objects.get(id=i)
+            orderdetail = models.OrderDetail(order = order, item = item,
+                                             count = self.cart[i]['count'],
+                                             price = self.cart[i]['price'])
+            orderdetail.save()
+        # убираем товар с витрины
+        item.buys += 1
+        item.save()
 
 class LoginForm(forms.Form):
     login = forms.CharField(label=_(u'Login'), max_length=30,

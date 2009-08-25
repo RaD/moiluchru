@@ -1,9 +1,0 @@
-<div class="cat-widget">
-  {% for c in categories %}
-  {% ifequal c.id category_id %}
-  <span style="background-color: #FFEB73; border: 1px solid #FFDB00; -moz-border-radius: 4px; padding: 1px 2px;">{{ c.title }}</span>{% if not forloop.last %} <span style="color: #b964d4;">&bull;</span> {% endif %}
-  {% else %}
-  <a href="{{ c.get_absolute_url }}" class="nowrap">{{ c.title }}</a>{% if not forloop.last %} <span style="color: #b964d4;">&bull;</span> {% endif %}
-  {% endifequal %}
-  {% endfor %}
-</div>

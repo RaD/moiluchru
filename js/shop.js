@@ -8,7 +8,7 @@ function update_cart(count, price) {
 }
 
 function clean_cart(url) {
-    $.post('/shop/clean/', {},
+    $.post('/ajax/cart/clean/', {},
 	   function(json) {
 	       if (json['code'] == 200) {
 		   update_cart("0", "0.00");
@@ -198,8 +198,9 @@ function get_advice() {
     $.post('/ajax/advice/random/', {},
 	   function(json) {
 	       if (json['code'] == 200) {
-		   $('#advicetext > .title').html(json['title']);
-		   $('#advicetext > .desc').html(json['desc']);
+		   $('#advicebot .title').html(json['title']);
+		   $('#advicebot .desc').html(json['desc']);
+		   $('#advicebot').toggleClass('hide').fadeTo('slow', 1.0);
 	       }
 	   }, 'json' );
 }
@@ -214,22 +215,7 @@ function hide_advice(o) {
 $(document).ready(function() {
     // получить совет через ajax
     var IE6 = false /*@cc_on || @_jscript_version < 5.7 @*/;
-    if (IE6) {
-	$('#ie6').toggleZoom();
-    } else {
+    if (! IE6) {
 	get_advice();
     }
-
-    // настроить советника
-    $('#advicebot').bind('click',
-			 function(e) {
-			     var o = $('#advicetext')
-			     if ( o.is(':hidden') ) {
-				 o.slideDown("slow", function() { 
-				     window.setTimeout(function() {
-					 hide_advice(o);
-				     }, ADVICE_HIDE_TIMEOUT);
-				 });
-			     }
-			 });
 });

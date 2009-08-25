@@ -50,42 +50,6 @@ urlpatterns = patterns(
     (r'^sitemap.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
     (r'^robots.txt$', include('robots.urls')),
 
-    (r'^$', 'shop.views.show_main_page'),
-
-    # страница результатов поиска
-    (r'^search/', 'shop.views.search_query'),
-    (r'^result/((?P<page>\d+)/)?', 'shop.views.search_results'),
-    (r'^tag/(?P<tag>\w+)/', 'shop.views.tag_results'),
-
-    # список товаров
-    (r'^items/((?P<page>\d+)/)?', 'shop.views.show_items'),
-
-    # категории товаров
-    (r'^category/(?P<category_id>\d+)/((?P<page>\d+)/)?', 
-     'shop.views.show_category_page'),
-    (r'^category/(?P<category_title>[\w ]+)/((?P<page>\d+)/)?', 
-     'shop.views.show_category_page_by_title'),
-
-    # коллекции товаров
-    (r'^collection/(?P<collection_id>\d+)/((?P<page>\d+)/)?', 
-     'shop.views.show_collection_page'),
-
-    # товар
-    (r'^item/(?P<item_id>\d+)/', 'shop.views.show_item_page'),
-    (r'^item/(?P<item_title>\d+\-\d+\-\d+)/', 'shop.views.show_item_by_title_page'),
-    (r'^item/(?P<item_title>[\w\d\-]+)/', 'shop.views.show_item_by_title_page'),
-
-    # процесс покупки
-    (r'^cart', 'shop.views.show_cart'),
-    (r'^offer', 'shop.views.show_offer'),
-    (r'^ordered', 'shop.views.show_ordered'),
-
-    # отображение текстов
-    (r'^text/((?P<label>\w+)/)?', 'shop.views.show_text_page'),
-
-    # магазин
-    (r'^shop/', include('shop.urls')),
-
     # интерфейс менеджера
     (r'^manager/', include('manager.urls')),
 
@@ -93,8 +57,35 @@ urlpatterns = patterns(
     (r'^ajax/cart/add/', 'shop.ajax.add_to_cart'),
     (r'^ajax/cart/remove/', 'shop.ajax.cart_remove_item'),
     (r'^ajax/cart/recalculate/', 'shop.ajax.cart_recalculate'),
+    (r'^ajax/cart/clean/', 'shop.ajax.clean_cart'),
     (r'^ajax/jabber/message/', 'shop.ajax.jabber_message'),
     (r'^ajax/jabber/poll/', 'shop.ajax.jabber_poll'),
     (r'^ajax/advice/random/', 'advice.views.get_random_advice'),
+
+    # основное
+    (r'^$', 'django.views.generic.simple.redirect_to', {'url': '/category/popular/'}),
+    (r'^category/(?P<title>[\w_]+)/((?P<page>\d+)/)?', 'views.category'),
+    (r'^collection/(?P<id>\d+)/((?P<page>\d+)/)?', 'views.collection'),
+    (r'^tag/(?P<tag>\w+)/', 'views.tag_search'),
+    (r'^search/', 'views.search_query'),
+    (r'^result/((?P<page>\d+)/)?', 'views.search_results'),
+    (r'^item/(?P<id>\d+)/', 'views.item'),
+    #(r'^item/(?P<title>\d+\-\d+\-\d+)/', 'views.item'),
+    #(r'^item/(?P<title>[\w\d\-]+)/', 'views.item'),
+
+    # сортировка
+    (r'^sort/(?P<mode>\d)/', 'views.set_sort_mode'),
+
+    # процесс покупки
+    (r'^cart', 'views.show_cart'),
+    (r'^order', 'views.show_order'),
+    (r'^profit', 'views.show_profit'),
+
+    # отображение текстов
+    (r'^text/((?P<label>\w+)/)?', 'shop.views.show_text_page'),
+
+    # магазин
+    (r'^shop/', include('shop.urls')),
+
     
 )

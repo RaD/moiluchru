@@ -59,18 +59,27 @@ class Producer(models.Model):
     def get_absolute_url(self):
         return u'/shop/producer/%i/' % self.id
 
+# class AutoManager(models.Manager):
+#     def get_query_set(self):
+#         qs = super(AutoManager, self).get_query_set()
+#         print qs
+#         return qs
+
 # Наследуем класс от entity
 class Category(CommonEntity):
     """ The categories of items. """
     parent = models.ForeignKey(u'self', blank=True, null=True,
                                verbose_name=_(u'Parent'))
+    slug = models.CharField(_(u'Slug'), max_length=255)
+
+    #objects = AutoManager()
 
     class Meta:
         verbose_name = _(u'Category')
         verbose_name_plural = _(u'Categories')
 
     def get_absolute_url(self):
-        return u'/category/%i/' % self.id
+        return u'/category/%s/' % self.slug
 
 # Наследуем класс от entity
 class Collection(CommonEntity):
@@ -225,16 +234,8 @@ class OrderStatusChange(models.Model):
     new_status = models.ForeignKey(OrderStatus, related_name=u'new_status')
     reg_date = models.DateTimeField(auto_now_add=True)
 
-class PhoneType(CommonEntity):
-    pass
-
-    class Meta:
-        verbose_name = _(u'Phone type')
-        verbose_name_plural = _(u'Phone types')
-    
 class Phone(models.Model):
     number = models.CharField(max_length=20)
-    type = models.ForeignKey(PhoneType)
     owner = models.ForeignKey(Buyer)
 
 ##
