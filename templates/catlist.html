@@ -1,0 +1,21 @@
+<div id="categories">
+  <div class="title">
+    Категории
+  </div>
+  <div class="item {% ifequal this.slug 'popular' %} choosen{% endifequal %}" title="Популярные">
+    <a href="/category/popular/"><div class="overflow">Популярные</div></a>
+  </div>
+  <div class="item {% ifequal this.slug 'new' %} choosen{% endifequal %}" title="Новинки">
+    <a href="/category/new/"><div class="overflow">Новинки</div></a>
+  </div>
+  {% ifequal cat_mode 'search' %}
+  <div class="item choosen" title="Результаты поиска">
+    <div class="overflow">Результаты поиска</div>
+  </div>
+  {% endifequal %}
+  {% for cat in category_list %}
+  <div class="item {% ifequal this.slug cat.slug %} choosen{% endifequal %}" title="{{ cat.title }}">
+    <a href="{{ cat.get_absolute_url }}"><div class="overflow">{{ cat.title }}</div></a>
+  </div>
+  {% endfor %}
+</div>

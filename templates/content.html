@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block structure %}
+<br/>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="250" valign="top">
+      {% include "catlist.html" %}
+    </td>
+    <td valign="top" style="border: 1px sold green;">
+      <div id="placeholder">
+	<div class="panel">
+	  {% block panel_top %}{% endblock %}
+	</div>
+	<div id="content">
+	  {% block content %}{% endblock %}
+	</div>
+	<div class="panel footer">
+	  {% block panel_bottom %}{% endblock %}
+	</div>
+      </div>
+    </td>
+    <td width="15%" valign="top">
+      {% include "taglist.html" %}
+    </td>
+  </tr>
+</table>
+{% endblock %}

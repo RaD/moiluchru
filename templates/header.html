@@ -1,0 +1,54 @@
+{# header.html begins #}
+<table id="advicebot" class="hide" width="100%">
+  <tr>
+    <td class="title" width="25%">&nbsp;</td>
+    <td class="desc"  width="75%">&nbsp;</td>
+  </tr>
+</table>
+
+<table id="control" width="100%">
+  <tr>
+    <td width="25%" valign="middle">
+      <div style="width: 240px; margin: 0px 8px; padding: 8px;">
+	<div style="font-family: comic sans ms; font-size: 300%; padding-top: 10px;">Мой Луч</div>
+	<div style="font-family: comic sans ms; font-size: 120%; color: orange; position: relative; top: -18px; text-align: center;">Многообразие света!</div>
+      </div>
+      {# <span><a href="/contact/">Контакты</a></span> #}
+    </td>
+
+    <td width="50%" valign="bottom" align="center">
+      <div id="title-phone">
+	<span class="region-code">(495)</span>
+	<img src="http://moiluchru/pics/phone.png"/>
+	<span class="phone-number">789-17-22</span>
+      </div>
+      <form method="post" action="/result/">
+	<input type="text" name="userinput" value="{{ search_query }}"/>
+	<input type="hidden" name="howmuch" value="1"/>
+      </form>
+      {# <div style="text-align: right;"><a href="/search/">Расширенный поиск</a></div> #}
+    </td>
+
+    <td width="25%" valign="middle">
+      <div id="cartwidget">
+	<div class="header">
+	  <span title="Очистить корзину" style="font-family: arial; font-size: 80%; float: right; vertical-align: middle; "><a href="#" onclick="clean_cart(); return false;">Очистить</a></span>
+	  КОРЗИНА
+	</div>
+	<div class="body">
+	  <div style="height: 72px; padding: 4px; float: left;">
+	    <img src="http://moiluchru/pics/cart.png" align="left" title="Корзина"/>
+	  </div>
+	  <div>Цена: <span id="cart_price" class="price">{{ cart_price|floatformat:2 }}</span> руб</div>
+	  <div>Количество: <span id="cart_count" class="price">{{ cart_count }}</span></div>
+	  <div style="clear: both;"></div>
+	</div>
+	<div class="footer">
+	  <span style="float: right;"><a href="#">Доставка</a></span>
+	  <span><a href="/cart/">Подробнее</a></span>
+	</div>
+      </div>
+    </td>
+  </tr>
+</table>
+{# header.html ends #}

@@ -1,0 +1,147 @@
+{% extends "content.html" %}
+{% load thumbnail_filter %}
+
+{% block panel_top %}
+<span style="float: right;">
+  <a href="/order/">Оформить заказ</a>
+</span>
+<span style="float: left;">
+<h3>Корзина</h3>
+</span>
+{% endblock %}
+
+{% block panel_bottom %}
+<span style="float: right;">
+  <a href="/order/">Оформить заказ</a>
+</span>
+<span style="float: left;">
+<h3>Корзина</h3>
+</span>
+{% endblock %}
+
+{% block content %}
+<script>
+  function cart_remove_item(item_id) {
+      thumbnail = $('#th_' + item_id)
+      $('<img id="loading" class="hide" src="http://moiluchru/pics/loading.gif" title="Ожидайте..." border="0"/>')
+      .insertAfter(thumbnail).css({'position': 'relative', 'top': '-'+thumbnail.height()/2+'px'})
+      .toggleClass('hide');
+
+      $.post('/ajax/cart/remove/', { item: item_id },
+ 	     function(json) {
+		 var code = json['code'];
+		 var count = json['cart_count'];
+		 var price = json['cart_price'];
+		 if (code == 200) {
+		     if (count > 0) {
+			 // обновить корзину
+			 update_cart(count, price);
+			 // обновить общую сумму
+			 $('#cart_total').html(price);
+			 // удалить строку с товаром с интерфейса
+			 $('tr[item=' + item_id + ']').remove();
+		     } else {
+			 document.location = '/cart/';
+		     }
+		 } else {
+		     alert(code + ': ' + json['desc']);
+		 }
+	     }, 'json');
+  }
+  function cart_recalculate(input) {
+      id = $(input).attr('item')
+      $.post('/ajax/cart/recalculate/', 
+	     { item: id, count: $(input).attr('value') }, 
+ 	     function(json) {
+		 if (json['code'] == 200) {
+		     // обновить корзину
+		     update_cart(json['cart_count'], json['cart_price']);
+		     // обновить общую сумму
+		     $('#cart_total').html(json['cart_price']);
+		     $('#total_' + id).html(json['item_total']);
+		 } else {
+		     alert(json['code'] + ': ' + json['desc']);
+		 }
+	     }, 'json');
+  }
+</script>
+
+<table id="cart-list" width="100%" class="cart" cellpadding="4">
+  <tr class="header">
+    <th width="100" class="left">Товар</td>
+    <th width="30%" class="left">Наименование</td>
+    <th width="20%" class="center">Цена</td>
+    <th width="20%" class="center">Кол-во</td>
+    <th width="20%" class="center">Стоимость</td>
+    <th width="50"></td>
+  </tr>
+
+  {% for i in items %}
+  <tr item="{{ i.record.id }}">
+    <td width="100" height="100" align="center" valign="middle" class="thumbnail-containter">
+      <a href="{{ i.record.get_absolute_url }}">
+	<img id="th_{{ i.record.id }}" src="{{ i.record.image.path|thumbnail:"100x,itempics" }}" 
+             border="0" title="{{ i.record.title }}: Перейти на страницу товара"/></a>
+    </td>
+    <td class="longitem" title="{{ i.title }}">
+      <div style="font-size: 150%;">{{ i.record.title }}</div>
+      <div class="overflow">
+	<a href="{{ i.record.category.get_absolute_url }}" 
+	   title="Просмотреть товары этой категории">{{ i.record.category }}</a>
+      </div>
+      {% if i.record.collection %}
+      <div>
+	<a href="{{ i.record.collection.get_absolute_url }}" 
+	   title="Просмотреть товары этой коллекции">Коллекция</a>
+      </div>
+      {% endif %}
+    </td>
+    <td class="right nowrap"><span class="money">{{ i.price|floatformat:2 }}</span> руб</td>
+    <td class="center mono">
+      <input type="text" name="count_{{ i.record.id }}" class="active-zone"
+	     title="Пересчёт происходит после покидания поля. Совет: нажмите [TAB]"
+             onchange="cart_recalculate(this);" item="{{ i.record.id }}"
+	     value="{{ i.count }}" style="width: 30px; text-align: right;"/>
+    </td>
+    <td class="right nowrap"><span id="total_{{ i.record.id }}" class="money">{{ i.cost|floatformat:2 }}</span> руб.</td>
+    <td><span class="button" 
+	      title="Удалить товар из корзины"
+	      onclick="cart_remove_item({{ i.record.id }});">x</span></td>
+  </tr>
+  {% comment %}
+  {% if not forloop.last %}
+  <tr><td colspan="6" style="border-top: 1px dashed gray">&nbsp;</td></tr>
+  {% endif %}
+  {% endcomment %}
+  {% empty %}
+  <tr item="None">
+    <td width="100" height="100" align="center" valign="middle" class="thumbnail-containter"></td>
+    <td class="longitem" title="{{ i.title }}">
+      <div style="font-size: 150%;">Нет товаров</div>
+    </td>
+    <td class="right nowrap"><span class="money">0.00</span> руб</td>
+    <td class="center mono">
+      <input type="text" name="count_None" value="0" style="width: 30px; text-align: right;"/>
+    </td>
+    <td class="right nowrap"><span id="total_None" class="money">0.00</span> руб.</td>
+    <td class="right"></td>
+  </tr>
+  {% endfor %}
+
+  <tr class="total">
+    <td colspan="6" class="right">
+      <span class="nowrap">
+	Итого <span id="cart_total" class="money">{{ cart_price|floatformat:2 }}</span> руб.
+      </span>
+  </tr>
+</table>
+
+{% if cart %}
+<br/>
+<div class="right">
+  <button id="offer_apply" onclick="document.location='/offer/';">Оформить заказ</button>
+  <button id="offer_cancel" 
+	  onclick="clean_cart('/shop/'); $('offer_apply').disabled=$('offer_cancel').disabled=true; document.location='/';">Отменить заказ</button>
+</div>
+{% endif %}
+{% endblock %}

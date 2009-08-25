@@ -1,0 +1,46 @@
+{% extends "content.html" %}
+
+{% block content %}
+  <script>
+    function add_tag_to_list(select, list) {
+	var s_obj = $('#'+select)
+	var l_obj = $('#'+list)
+	var options = s_obj[0].options;
+	var selected = s_obj[0].selectedIndex;
+	l_obj.val(l_obj.val() + options[selected].value + ' ');
+    }
+  </script>
+    <h3 class="ttl"><span></span>Поиск</h3>
+
+    {% if error_desc %}<div id="error">{{ error_desc }}</div>{% endif %}
+    
+    <form method="post" action="/result/">
+      <p>
+	Запрос {{ searchform.userinput }} {{ searchform.howmuch }} шт. на странице
+      </p>
+      <p>
+	Если вы не желаете указывать диапазон, например, цены, то не
+	вносите изменения в эти поля. Ноль в обоих полях означает, что
+	данное условие не будет учитываться при выполнении поиска.
+      </p>
+
+      <h3 class="ttl"><span></span>Основные характеристики продукта</h3>
+      
+      <table id="simple_search" width="100%">
+	{{ mainsearchform }}
+	{{ sizesearchform }}
+      </table>
+
+      <h3 class="ttl"><span></span>Уникальные характеристики продукта</h3>
+
+      <table id="full_search" width="100%">
+	{{ fullsearchform }}
+      </table>
+      
+      <hr/>
+      <p align="right">
+	<input type="submit" name="go" value="Найти"/>
+      </p>
+    </form>
+    
+{% endblock %}

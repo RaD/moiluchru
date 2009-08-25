@@ -1,0 +1,28 @@
+{% extends "content.html" %}
+
+{% block panel_top %}
+  {% include "paginator.html" %}
+{% endblock %}
+
+{% block panel_bottom %}
+  {% include "paginator.html" %}
+{% endblock %}
+
+{% block content %}
+<table width="100%">
+  <tr>
+    {% for column in column_list %}
+      <td valign="top" width="50%">
+        {% for item in column %}
+          {% include "short.html" %}
+        {% empty %}
+          К сожалению база товаров на данный момент пуста.
+        {% endfor %}
+      </td>
+      {% if not forloop.last %}
+        <td width="8em">&nbsp;</td>
+      {% endif %}
+    {% endfor %}
+  </tr>
+</table>
+{% endblock %}

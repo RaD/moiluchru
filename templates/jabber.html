@@ -1,0 +1,21 @@
+  {# jabber client - begin #}
+  <div id="jabber-client" class="hide">
+    <div style="width: 300px;">
+      <h3 class="ttl"><span></span>Онлайн консультация</h3>
+      <div style="position: absolute; top: 4px; right: 4px;">
+	<button type="button" onclick="jabber_destroy();">Закрыть</button>
+      </div>
+      <div id="chat-window">
+	<div style="padding: 4px; border: 1px solid orange; -moz-border-radius: 4px; background-color: #ffffaa;">
+	  Для отправки набранного сообщения просто нажмите [Enter].
+	</div>
+	<div id="down"></div>
+      </div>
+      <div>
+	<input type="text" id="message-window" style="width: 100%;" maxlength="1024" value=""/>
+      </div>
+      <img src="/pics/loading.gif" id="loading" style="position: fixed; z-index: 2;" class="hide"/>
+    </div>
+  </div>
+  {# jabber client - end #}
+

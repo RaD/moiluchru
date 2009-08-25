@@ -1,0 +1,37 @@
+{% if page %}
+<div class="paginator">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td align="left">
+	Страница {{ page.number }} из {{ page.paginator.num_pages }}
+
+	{% if page.has_previous %}
+	<a href="{{ url }}{{ page.previous_page_number }}/">
+	  <span title="Предыдущая страница" class="button">&lt;</span></a>
+	{% else %}
+	<span title="Предыдущая страница" class="button disabled">&lt;</span>
+	{% endif %}
+
+	{% if page.has_next %}
+	<a href="{{ url }}{{ page.next_page_number }}/">
+	  <span title="Следующая страница" class="button">&gt;</span></a>
+	{% else %}
+	<span title="Следующая страница" class="button disabled">&gt;</span>
+	{% endif %}
+      </td>
+      <td>&nbsp;</td>
+      <td align="right" class="nowrap">
+	<span title="Сортировка" class="pointer" onclick="document.location='/sort/1/';">Популярность
+	  {% ifequal sort_type 1 %}<img src="http://moiluchru/pics/sort-down.png"/>{% endifequal %}
+	  {% ifequal sort_type 2 %}<img src="http://moiluchru/pics/sort-up.png"/>{% endifequal %}
+	</span>
+	<span style="margin: 0px 1em;">&nbsp;</span>
+	<span title="Сортировка" class="pointer" onclick="document.location='/sort/2/';">Цена
+	  {% ifequal sort_type 3 %}<img src="http://moiluchru/pics/sort-down.png"/>{% endifequal %}
+	  {% ifequal sort_type 4 %}<img src="http://moiluchru/pics/sort-up.png"/>{% endifequal %}
+	</span>
+      </td>
+    </tr>
+  </table>
+</div>
+{% endif %}

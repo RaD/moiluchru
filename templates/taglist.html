@@ -1,0 +1,12 @@
+<div id="tagcloud">
+  <div class="title">
+    Метки
+  </div>
+  <ul>
+  {% for tag in tag_list %}
+  <li style="font-size: {{ tag.font_size }}%;">
+    <a href="/tag/{{ tag }}/">{{ tag }}</a>
+  </li>
+  {% endfor %}
+  </ul>
+</div>
