@@ -3,6 +3,7 @@
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
+from django.utils.translation import gettext_lazy as _
 
 from shop import views as v_shop
 from shop import forms as f_shop
@@ -45,7 +46,7 @@ def search_results(request):
     if items is None:
         return HttpResponseRedirect('/search/')
     return {
-        'page_title': u'Поиск : Результаты : %s' % (settings.SITE_TITLE,),
+        'page_title': '%s : %s : %s' % (_(u'Search'), _(u'Results'), settings.SITE_TITLE,),
         'mode': 'list', 'cat_mode': 'search',
         'items': items.order_by(sort_variants[request.session.get('sort_type', 1)]),
         'url': '/result/',
@@ -61,7 +62,7 @@ def category(request, title=None):
         del(request.session['search_query'])
     (category, items) = v_shop.get_items_by_category(request, title)
     return {
-        'page_title': u'Категория : %s : %s' % (category, settings.SITE_TITLE),
+        'page_title': '%s : %s : %s' % (_(u'Category'), category, settings.SITE_TITLE),
         'mode': 'list',
         'this': category,
         'items': items,
@@ -77,7 +78,7 @@ def collection(request, id=None):
         del(request.session['search_query'])
     (collection, items) = v_shop.get_items_by_collection(request, id)
     return {
-        'page_title': u'Коллекция : %s' % (settings.SITE_TITLE, ),
+        'page_title': '%s : %s' % (_(u'Collection'), settings.SITE_TITLE, ),
         'mode': 'list',
         'this': collection,
         'items': items,
@@ -92,7 +93,7 @@ def item(request, id=None):
     (item, collection, previous, next) = v_shop.get_item_info(request, id)
 
     return {
-        'page_title': u'Товар : %s : %s' % (item, settings.SITE_TITLE),
+        'page_title': '%s : %s : %s' % (_(u'Item'), item, settings.SITE_TITLE),
         'mode': 'item',
         'this': item.category,
         'item': item, 'collection': collection,
@@ -104,7 +105,7 @@ def item(request, id=None):
 @render_to('cart.html', common_context)
 def show_cart(request):
     return {
-        'page_title': u'Корзина : %s' % (settings.SITE_TITLE, ),
+        'page_title': '%s : %s' % (_(u'Cart'), settings.SITE_TITLE, ),
         'mode': 'cart',
         'items': v_shop.get_cart_items(request),
         }
@@ -125,7 +126,7 @@ def show_order(request):
         except Exception, e:
             error_desc = e
     return {
-        'page_title': u'Заказ : %s' % (settings.SITE_TITLE, ),
+        'page_title': '%s : %s' % (_(u'Order'), settings.SITE_TITLE, ),
         'form': form,
         'error_desc': error_desc,
         }
@@ -150,7 +151,7 @@ def show_profit(request):
                     # если вы немедленно отсоединяетесь после отправки
                     time.sleep(1)
     return {
-        'page_title': u'Заказ принят : %s' % (settings.SITE_TITLE, ),
+        'page_title': '%s : %s' % (_(u'Order processed'), settings.SITE_TITLE, ),
         }
 
 # Метод для изменения параметров сортировки

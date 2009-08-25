@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.utils.translation import gettext_lazy as _
@@ -42,7 +41,7 @@ def get_items_by_category(request, title):
             items = models.Item.objects.all().order_by('-reg_date')
         else:
             category = models.Category.objects.get(slug=title)
-            items = models.Item.objects.filter(category=category) #.order_by(sort[sort_type])
+            items = models.Item.objects.filter(category=category)
         # not used: request.session['cached_items'] = items # кэшируем для paginator
     except models.Item.DoesNotExist:
         raise Http404
@@ -186,18 +185,14 @@ def get_cart_items(request):
 
 def handler404(request):
     try:
-        items = models.Item.objects.order_by('-buys')[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)]
+        items = models.Item.objects.all()
     except models.Item.DoesNotExist:
-        items = 0
-    return {'menu_current': 1, 'page_title': '404: Страница не найдена...',
-            'items_col1': items[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)/2],
-            'items_col2': items[getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)/2:]}
+        items = []
+    return {'menu_current': 1, 'page_title': '404: Страница не найдена...'}
 
 def handler500(request):
     try:
-        items = models.Item.objects.order_by('-buys')[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)]
+        items = models.Item.objects.all()
     except models.Item.DoesNotExist:
-        items = 0
-    return {'menu_current': 1, 'page_title': '500: Что-то с моим кодом...',
-            'items_col1': items[:getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)/2],
-            'items_col2': items[getattr(settings, 'ITEMS_ON_MAIN_PAGE', 10)/2:]}
+        items = []
+    return {'menu_current': 1, 'page_title': '500: Что-то с моим кодом...'}
