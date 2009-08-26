@@ -218,4 +218,11 @@ $(document).ready(function() {
     if (! IE6) {
 	get_advice();
     }
+    // очистка поискового поля при первом тычке
+    var search_field = $('form input[name="userinput"]');
+    search_field.bind('focus',
+		      function(e) {
+			  search_field.val('');
+			  search_field.unbind('focus');
+		      });
 });
