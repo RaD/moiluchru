@@ -42,7 +42,7 @@ def get_items_by_category(request, title):
         else:
             category = models.Category.objects.get(slug=title)
             items = models.Item.objects.filter(category=category)
-        # not used: request.session['cached_items'] = items # кэшируем для paginator
+        request.session['cached_items'] = items # кэшируем для paginator
     except models.Item.DoesNotExist:
         raise Http404
     request.session['cached_items'] = items
@@ -63,10 +63,7 @@ def get_item_info(request, id):
         collection = models.Item.objects.filter(collection=item.collection, 
                                                 collection__isnull=False).exclude(id=item.id)
         cached_items = request.session.get('cached_items', [])
-        try:
-            index = list(cached_items).index(filter(lambda x: x.id==item.id, cached_items)[0])
-        except IndexError:
-            index = list(collection).index(filter(lambda x: x.id==item.id, collection)[0])
+        index = list(cached_items).index(filter(lambda x: x.id==item.id, cached_items)[0])
         previous = next = None
         if index > 0:
             previous = cached_items[index - 1]
