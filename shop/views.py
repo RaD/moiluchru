@@ -66,7 +66,7 @@ def get_item_info(request, id):
         try:
             index = list(cached_items).index(filter(lambda x: x.id==item.id, cached_items)[0])
         except IndexError:
-            index = 0
+            index = list(collection).index(filter(lambda x: x.id==item.id, collection)[0])
         previous = next = None
         if index > 0:
             previous = cached_items[index - 1]
