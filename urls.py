@@ -82,5 +82,5 @@ urlpatterns = patterns(
     (r'^profit', 'views.show_profit'),
 
     # отображение текстов
-    (r'^text/((?P<label>\w+)/)?', 'shop.views.show_text_page'),   
+    #(r'^text/((?P<label>\w+)/)?', 'shop.views.show_text_page'),   
 )
