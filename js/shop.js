@@ -192,24 +192,25 @@ function jabber_poll() {
 	   }, 'json' );
 }
 
-var ADVICE_HIDE_TIMEOUT = 6 * 1000;
+var ADVICE_HIDE_TIMEOUT = 5 * 1000;
 
 function get_advice() {
     $.post('/ajax/advice/random/', {},
 	   function(json) {
 	       if (json['code'] == 200) {
-		   $('#advicebot .title').html(json['title']);
-		   $('#advicebot .desc').html(json['desc']);
-		   $('#advicebot').toggleClass('hide').fadeTo('slow', 1.0);
+		   var bot = $('#advicebot');
+		   $('.title', bot).html(json['title']);
+		   $('.desc', bot).html(json['desc']);
+		   bot.toggleClass('hide')
+		      .fadeTo('slow', 1.0, function() {
+			  window.setTimeout(function() {
+				  bot.fadeTo("slow", 0.0, function() { 
+				      get_advice();
+				  });
+			  }, ADVICE_HIDE_TIMEOUT);
+		      });
 	       }
 	   }, 'json' );
-}
-
-function hide_advice(o) {
-    o.slideUp("slow", function() { 
-	o.hide();
-	get_advice();
-    });
 }
 
 $(document).ready(function() {
