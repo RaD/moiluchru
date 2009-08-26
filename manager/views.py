@@ -7,7 +7,7 @@ from django.contrib.admin.models import User
 from django.core.paginator import Paginator
 from django.forms import ValidationError
 from django.http import HttpResponseRedirect, HttpResponse
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 
 from snippets import render_to
 from shop.models import Order, OrderDetail, OrderStatus, OrderStatusChange, Phone

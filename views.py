@@ -3,7 +3,7 @@
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 
 from shop import views as v_shop
 from shop import forms as f_shop

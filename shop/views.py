@@ -3,7 +3,7 @@
 from django.conf import settings
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 
 from tagging.models import Tag
 from tagging.utils import calculate_cloud
