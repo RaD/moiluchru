@@ -12,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 from snippets import render_to
 from shop.models import Order, OrderDetail, OrderStatus, OrderStatusChange, Phone
 from shop.forms import DivErrorList, CourierSelect, LoginForm, OrderForm
-from shop.classes import CartItem
+from shop.views import CartItem
 
 def is_stuff(user):
     return user.is_authenticated()

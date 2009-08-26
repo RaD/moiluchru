@@ -13,6 +13,14 @@ from shop.forms import DivErrorList, SearchForm, OfferForm
 
 from snippets import render_to, columns, paginate_by
 
+class CartItem:
+    """ Класс объекта-корзины. """
+    def __init__(self, record, count, price):
+        self.record = record
+        self.count = count
+        self.price = price
+        self.cost = count * price
+
 def get_all_categories():
     return models.Category.objects.all()
 
@@ -168,14 +176,6 @@ def get_search_results(request):
 
 def get_cart_items(request):
     """ Возвращаем содержимое корзины. """
-
-    class CartItem:
-        """ Класс объекта-корзины. """
-        def __init__(self, record, count, price):
-            self.record = record
-            self.count = count
-            self.price = price
-            self.cost = count * price
 
     cart = request.session.get('cart_items', {})
     if len(cart) == 0:
