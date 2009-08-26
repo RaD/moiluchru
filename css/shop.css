@@ -99,8 +99,9 @@ form input[type="text"] { width: 96%; }
    padding: 0.2em 0.4em;
 }
 #cartwidget .body {
-   padding: 0.2em 0.4em; vertical-align: middle;
-   background-color: lightgray;
+   height: 56px; vertical-align: middle;
+   background: lightgray url(/pics/cart.png) no-repeat scroll 0 0;
+   padding: 4px 8px 4px 64px;
 }
 #cartwidget .footer {
    padding: 0.2em 0.4em;

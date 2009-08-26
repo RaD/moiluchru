@@ -36,11 +36,15 @@
 	  КОРЗИНА
 	</div>
 	<div class="body">
-	  <div style="height: 72px; padding: 4px; float: left;">
-	    <img src="http://moiluchru/pics/cart.png" align="left" title="Корзина"/>
+	  <div>
+	    <span class="rfloat"><span id="cart_price" class="price">{{ cart_price|floatformat:2 }}</span> руб</span>
+	    <span class="lfloat">Цена:</span>
+	    <div style="clear: both;"></div>
 	  </div>
-	  <div>Цена: <span id="cart_price" class="price">{{ cart_price|floatformat:2 }}</span> руб</div>
-	  <div>Количество: <span id="cart_count" class="price">{{ cart_count }}</span></div>
+	  <div>
+	    <span class="rfloat"><span id="cart_count" class="price">{{ cart_count }}</span></span>
+	    <span class="lfloat">Количество:</span>
+	  </div>
 	  <div style="clear: both;"></div>
 	</div>
 	<div class="footer">
