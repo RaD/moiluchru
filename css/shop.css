@@ -111,7 +111,7 @@ form input[type="text"] { width: 96%; }
 #cartwidget .body {
    height: 56px; vertical-align: middle;
    background: lightgray url(/pics/cart.png) no-repeat scroll 0 0;
-   padding: 4px 8px 4px 64px;
+   padding: 4px 8px 4px 80px;
 }
 #cartwidget .footer {
    padding: 0.2em 0.4em;
