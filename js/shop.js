@@ -192,32 +192,41 @@ function jabber_poll() {
 	   }, 'json' );
 }
 
+
+var IE6 = false /*@cc_on || @_jscript_version < 5.7 @*/;
+var ADVICE_WAIT_TIMEOUT = 10 * 1000;
 var ADVICE_HIDE_TIMEOUT = 5 * 1000;
+var ADVICE_SLEEP_TIMEOUT = 60 * 1000;
+var t_wait = t_hide = t_sleep = null;
 
 function get_advice() {
     $.post('/ajax/advice/random/', {},
 	   function(json) {
 	       if (json['code'] == 200) {
-		   var bot = $('#advicebot');
-		   $('.title', bot).html(json['title']);
-		   $('.desc', bot).html(json['desc']);
-		   bot.toggleClass('hide')
-		      .fadeTo('slow', 1.0, function() {
-			  window.setTimeout(function() {
-				  bot.fadeTo("slow", 0.0, function() { 
-				      get_advice();
-				  });
-			  }, ADVICE_HIDE_TIMEOUT);
-		      });
+		   var bot = $('#advicebot table');
+		   if (! IE6) {
+		       $('.title', bot).html(json['title']);
+		       $('.desc', bot).html(json['desc']);
+		   }
+		   bot.slideDown('slow', function() {
+		       t_hide = window.setTimeout(function() {
+			   bot.slideUp("slow", function() { 
+			       t_sleep = window.setTimeout(function() {
+				   get_advice()
+			       }, ADVICE_SLEEP_TIMEOUT);
+			   });
+		       }, ADVICE_HIDE_TIMEOUT);
+		   });
 	       }
 	   }, 'json' );
 }
 
 $(document).ready(function() {
     // получить совет через ajax
-    var IE6 = false /*@cc_on || @_jscript_version < 5.7 @*/;
-    if (! IE6) {
+    if (IE6) {
 	get_advice();
+    } else {
+	t_wait = window.setTimeout(get_advice, ADVICE_WAIT_TIMEOUT);
     }
     // очистка поискового поля при первом тычке
     var search_field = $('form input[name="userinput"]');

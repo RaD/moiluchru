@@ -63,20 +63,29 @@ input,textarea,select { border: 1px solid gray; -moz-border-radius: 4px; padding
 }
    
 #advicebot { 
-   position: absolute; top: 0px; left: 0px; right: 0px; bottom: auto; 
-   opacity: 0.0; border-bottom: 1px dashed black; }
-
-#advicebot .title { 
+   position: absolute; z-index: 5; height: 1em;
+   top: 0px; left: 0px; right: 0px; bottom: 1em; 
+}
+#advicebot .trigger { 
+   font-size: 90%; padding: 2px 2em; 
+   color: white; background-color: #bfab30; 
+}
+#advicebot table {
+   background-color: #FFEB73; 
+   border-bottom: 3px solid #bfab30; 
+   opacity: 0.9; filter: alpha(opacity=0.9);
+}
+#advicebot table .title { 
    width: 25%; text-align: right;
    padding: 4px 8px; white-space: nowrap;
-   color: white; background-color: #bfab30; 
+   color: white; background-color: #cfbb40; 
    font-size: 110%; font-weight: bold;}
 
-#advicebot .desc {
-   color: #54026e; background-color: #FFEB73; font-weight: normal; 
-   padding: 0px 1em;
+#advicebot table .desc {
+   color: #54026e; background-color: #FFEB73; 
+   font-weight: normal; padding: 1em;
    text-align: left; vertical-align: bottom; 
-   opacity: 0.8; filter: alpha(opacity=0.8);
+   opacity: 0.9; filter: alpha(opacity=0.9);
 }
 
 #advicebot .i-ve-know { border-bottom: 1px dotted gray; padding: 4px 1em; cursor: pointer; }

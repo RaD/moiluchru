@@ -17,6 +17,23 @@
 <body>
   <div id="opaco" class="hide"></div> {# элемент для затемнения экрана #}
   <div id="popup" class="hide"></div> {# элемент для всплывающих окон #}
+
+  <div id="advicebot">
+    <div class="trigger">Советник</div>
+    <table class="hide">
+      <tr>
+	<td class="title">Обновите браузер</td>
+	<td class="desc">
+	  Для полноценного использования данного сайта и множества
+	  других, рекомендуем Вам обновить Ваш браузер. Хорошим
+	  вариантом будет использование <a
+	  href="http://www.mozilla.com/">Firefox 3+</a>.
+	</td>
+      </tr>
+    </table>
+  </div>
+
+
   {% include "header.html" %}
   {% block structure %}{% endblock %}
   {% include "footer.html" %}
