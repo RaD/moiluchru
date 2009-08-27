@@ -133,6 +133,7 @@ form input[type="text"] { width: 96%; }
 #categories .title {
    -moz-border-radius: 0px 0.2em 0.2em 0px;
    text-align: left;  margin-right: 0.2em;
+   padding-right: 1em;
 }
 #categories .item {
    font-family: verdana; font-size: 100%; width: 240px;
@@ -146,10 +147,11 @@ form input[type="text"] { width: 96%; }
    border: 0px solid #aaccee; -moz-border-radius: 0.5em 0em 0em 0.5em;
 }
 
-#tagcloud { text-align: center; }
+#tagcloud { text-align: center; padding: 4px 4px 4px 8px;}
 #tagcloud .title {
    -moz-border-radius: 0.2em 0px 0px 0.2em;
    text-align: right;  margin-left: 0.2em;
+   padding-left: 1em;
 }
 
 #tagcloud ul { list-style-type: none; margin: 0 auto; padding: 0; }
@@ -200,14 +202,12 @@ form input[type="text"] { width: 96%; }
 #cart-list tr[class="total"] { font-weight: bold; border-top: 1px solid gray; }
 #cart-list tr[class="total"] #cart_total { color: darkblue; }
 
-#search {
-   font-size: 100%;
-   width: 16em;
+#advanced_search { font-size: 100%; padding: 4px }
+#advanced_search th { width: 200px; }
+#advanced_search .min_max_widget { 
+   text-align: right;
+   font-family: courier new;
 }
-
-#field_min_price { width: 80px; }
-#field_max_price { width: 80px; }
-
 
 #chat-window {
    width: 300px; height: 300px; overflow: auto;

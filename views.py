@@ -35,7 +35,11 @@ def tag_search(request, tag):
 ### Выдача расширенного поискового интерфейса
 @render_to('search.html', common_context)
 def search_query(request):
-    return {}
+    context = v_shop.get_search_forms(request)
+    context.update({
+            'page_title': u'%s : %s : %s' % (_(u'Search'), _(u'Advanced'), settings.SITE_TITLE,),
+            })
+    return context
 
 ### Выдача результатов поискового запроса
 @render_to('list.html', common_context)

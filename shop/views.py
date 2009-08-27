@@ -98,28 +98,27 @@ def tag_search(request, tag):
     request.session['cached_items'] = items # кэшируем для paginator
     return items
 
-def search_query(request):
+def get_search_forms(request):
     from shop.forms import get_search_form # воспользуемся фабрикой поисковых форм
     context = {
-        'searchform': SearchForm(), 
-        'mainsearchform': get_search_form('MainSearchForm', initial={'is_present': True}),
-        'sizesearchform': get_search_form('SizeSearchForm'),
-        'fullsearchform': get_search_form('FullSearchForm'),
-        'page_title': u'Мой Луч'
+        'searchform': SearchForm(request.POST or None), 
+        'mainsearchform': get_search_form('MainSearchForm', request.POST or None, initial={'is_present': True}),
+        'sizesearchform': get_search_form('SizeSearchForm', request.POST or None),
+        'fullsearchform': get_search_form('FullSearchForm', request.POST or None),
         }
 
-    # здесь мы обрабатываем ситуацию вызова поисковых форм после
-    # обнаружения ошибки в поисковом запросе
-    try:
-        (form_name, post, desc) = request.session['error']
-        del(request.session['error'])
-        context.update({'error_desc': desc})
-        if form_name == 'simple':
-            context.update({'searchform': SearchForm(post)})
-        else:
-            context.update({ form_name.lower():  get_search_form(form_name, data=post) })
-    except KeyError:
-        pass
+#     # здесь мы обрабатываем ситуацию вызова поисковых форм после
+#     # обнаружения ошибки в поисковом запросе
+#     try:
+#         (form_name, post, desc) = request.session['error']
+#         del(request.session['error'])
+#         context.update({'error_desc': desc})
+#         if form_name == 'simple':
+#             context.update({'searchform': SearchForm(post)})
+#         else:
+#             context.update({ form_name.lower():  get_search_form(form_name, data=post) })
+#     except KeyError:
+#         pass
 
     return context
 

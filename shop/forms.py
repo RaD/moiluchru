@@ -112,7 +112,7 @@ from django.utils.datastructures import SortedDict
 
 class MinMaxWidget(forms.MultiWidget):
     """ Виджет для отображения полей для ввода диапазона значений. """
-    def __init__(self, attrs=None, **kwargs):
+    def __init__(self, attrs={'class': 'min_max_widget'}, **kwargs):
         widgets = (
             forms.TextInput(),
             forms.TextInput(),
@@ -253,7 +253,7 @@ def modelform_factory(model, form=BaseSearchForm, fields=None, exclude=None,
 
     return SearchFormMetaclass(class_name, (form,), form_class_attrs)
 
-def get_search_form(form_name, initial=None, data=None):
+def get_search_form(form_name, *args, **kwargs):
     # Описываем возможные формы поиска
     mutable_forms = {'MainSearchForm': {'model': models.Item,
                                         'exclude': ('title', 'desc', 'item_type', 'collection', 
@@ -263,5 +263,5 @@ def get_search_form(form_name, initial=None, data=None):
     
     info = mutable_forms[form_name]
     form_class = modelform_factory(info['model'], exclude=info['exclude'])
-    return form_class(data=data, initial=initial)
+    return form_class(*args, **kwargs)
 

@@ -226,4 +226,17 @@ $(document).ready(function() {
 			  search_field.val('');
 			  search_field.unbind('focus');
 		      });
+    // очистка содержимого поля диапазонного виджета при первом тычке
+    var min_max = $('.min_max_widget');
+    min_max.each(
+	function() {
+	    var _this = $(this);
+	    _this.bind('focus',
+		       function(e) {
+			   _this.val('');
+			   _this.unbind('focus');
+		       }
+		      );
+	}
+    );
 });
