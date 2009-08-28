@@ -1,0 +1,21 @@
+{% extends "content.html" %}
+
+{% load markup %}
+
+{% block panel_top %}
+<div class="title">
+  {{ title }}
+</div>
+{% endblock %}
+
+{% block panel_bottom %}
+<div class="title">
+  {{ title }}
+</div>
+{% endblock %}
+
+{% block content %}
+<div>
+  {{ body|markdown }}
+</div>
+{% endblock %}
