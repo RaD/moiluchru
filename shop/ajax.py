@@ -85,6 +85,7 @@ def cart_remove_item(request, form):
 # Отправка сообщения на джаббер
 @ajax_processor(JabberMessage)
 def jabber_message(request, form):
+    import pdb; pdb.set_trace()
     if 'system' in form.cleaned_data and form.cleaned_data['system'] == '1': # системное сообщение
         # отправляем сообщение сервису для закрытия соединения
         try:
