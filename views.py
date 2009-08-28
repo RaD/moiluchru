@@ -94,7 +94,12 @@ def collection(request, id=None):
 def item(request, id=None):
     if 'search_query' in request.session:
         del(request.session['searchquery'])
-    (item, collection, previous, next) = v_shop.get_item_info(request, id)
+
+    import re
+    if re.match(r'^\d+$', id):
+        (item, collection, previous, next) = v_shop.get_item_info_by_id(request, id)
+    else:
+        (item, collection, previous, next) = v_shop.get_item_info_by_title(request, id)
 
     return {
         'page_title': u'%s : %s : %s' % (_(u'Item'), item, settings.SITE_TITLE),

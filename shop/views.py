@@ -65,25 +65,35 @@ def get_items_by_collection(request, id):
         raise Http404
     return (collection, items)
     
-def get_item_info(request, id):
+def get_item_info_by_id(request, id):
     try:
         item = models.Item.objects.get(id=id)
-        collection = models.Item.objects.filter(collection=item.collection, 
-                                                collection__isnull=False).exclude(id=item.id)
-        cached_items = request.session.get('cached_items', [])
-        # ToDo: продумать логику перехода к следующей/предыдущей моделям товара
-        previous = next = None
-        try:
-            index = list(cached_items).index(filter(lambda x: x.id==item.id, cached_items)[0])
-            if index > 0:
-                previous = cached_items[index - 1]
-            if index < len(cached_items) - 1:
-                next = cached_items[index + 1]
-        except IndexError:
-            index = 0
-        return (item, collection, previous, next)
+        return get_item_info(request, item)
     except models.Item.DoesNotExist:
         raise Http404
+
+def get_item_info_by_title(request, title):
+    try:
+        item = models.Item.objects.get(title=title)
+        return get_item_info(request, item)
+    except models.Item.DoesNotExist:
+        raise Http404
+
+def get_item_info(request, item):
+    collection = models.Item.objects.filter(collection=item.collection, 
+                                            collection__isnull=False).exclude(id=item.id)
+    cached_items = request.session.get('cached_items', [])
+    # ToDo: продумать логику перехода к следующей/предыдущей моделям товара
+    previous = next = None
+    try:
+        index = list(cached_items).index(filter(lambda x: x.id==item.id, cached_items)[0])
+        if index > 0:
+            previous = cached_items[index - 1]
+        if index < len(cached_items) - 1:
+            next = cached_items[index + 1]
+    except IndexError:
+        index = 0
+    return (item, collection, previous, next)
 
 def init_cart(request):
     """ Инициализация корзины. """

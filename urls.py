@@ -54,32 +54,31 @@ urlpatterns = patterns(
     (r'^manager/', include('manager.urls')),
 
     # ajax
-    (r'^ajax/cart/add/', 'shop.ajax.add_to_cart'),
-    (r'^ajax/cart/remove/', 'shop.ajax.cart_remove_item'),
-    (r'^ajax/cart/recalculate/', 'shop.ajax.cart_recalculate'),
-    (r'^ajax/cart/clean/', 'shop.ajax.clean_cart'),
-    (r'^ajax/jabber/message/', 'shop.ajax.jabber_message'),
-    (r'^ajax/jabber/poll/', 'shop.ajax.jabber_poll'),
-    (r'^ajax/advice/random/', 'advice.views.get_random_advice'),
+    (r'^ajax/cart/add/$', 'shop.ajax.add_to_cart'),
+    (r'^ajax/cart/remove/$', 'shop.ajax.cart_remove_item'),
+    (r'^ajax/cart/recalculate/$', 'shop.ajax.cart_recalculate'),
+    (r'^ajax/cart/clean/$', 'shop.ajax.clean_cart'),
+    (r'^ajax/jabber/message/$', 'shop.ajax.jabber_message'),
+    (r'^ajax/jabber/poll/$', 'shop.ajax.jabber_poll'),
+    (r'^ajax/advice/random/$', 'advice.views.get_random_advice'),
 
     # основное
     (r'^$', 'django.views.generic.simple.redirect_to', {'url': '/category/popular/'}),
-    (r'^category/(?P<title>[\w_]+)/((?P<page>\d+)/)?', 'views.category'),
-    (r'^collection/(?P<id>\d+)/((?P<page>\d+)/)?', 'views.collection'),
-    (r'^tag/(?P<tag>\w+)/', 'views.tag_search'),
-    (r'^search/', 'views.search_query'),
-    (r'^result/((?P<page>\d+)/)?', 'views.search_results'),
-    (r'^item/(?P<id>\d+)/', 'views.item'),
-    #(r'^item/(?P<title>\d+\-\d+\-\d+)/', 'views.item'),
-    #(r'^item/(?P<title>[\w\d\-]+)/', 'views.item'),
+    (r'^category/(?P<title>[\w_]+)/((?P<page>\d+)/)?$', 'views.category'),
+    (r'^collection/(?P<id>\d+)/((?P<page>\d+)/)?$', 'views.collection'),
+    (r'^tag/(?P<tag>\w+)/$', 'views.tag_search'),
+    (r'^search/$', 'views.search_query'),
+    (r'^result/((?P<page>\d+)/)?$', 'views.search_results'),
+    (r'^item/(?P<id>\d+)/$', 'views.item'),
+    (r'^item/(?P<id>[\w\d\-]+)/$', 'views.item'),
 
     # сортировка
     (r'^sort/(?P<mode>\d)/', 'views.set_sort_mode'),
 
     # процесс покупки
-    (r'^cart', 'views.show_cart'),
-    (r'^order', 'views.show_order'),
-    (r'^profit', 'views.show_profit'),
+    (r'^cart/$', 'views.show_cart'),
+    (r'^order/$', 'views.show_order'),
+    (r'^profit/$', 'views.show_profit'),
 
     # отображение текстов
     #(r'^text/((?P<label>\w+)/)?', 'shop.views.show_text_page'),   
