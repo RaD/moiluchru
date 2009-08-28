@@ -65,7 +65,6 @@ class OfferForm(forms.Form):
             status = models.OrderStatus.objects.get(id=1)
             )
         for i in self.cart.keys():
-            print i
             item = models.Item.objects.get(id=i)
             orderdetail = models.OrderDetail(order = order, item = item,
                                              count = self.cart[i]['count'],
