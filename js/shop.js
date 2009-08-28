@@ -133,12 +133,12 @@ function jabber_init() {
                               function(e) {
 				  var code = (e.keyCode ? e.keyCode : e.which);
 				  if (code == 13) {
-				      jabber_message($('#message-window'));
+				      jabber_message();
 				  }
 			      }
 			     );
-    $('#message-window').focus();
-     tID = setTimeout(jabber_poll, POLL_TIMEOUT);
+    $('#message-window input[type="text"]').focus();
+    tID = setTimeout(jabber_poll, POLL_TIMEOUT);
     return false;
 }
 
@@ -150,17 +150,17 @@ function jabber_destroy() {
     return false;
 }
 
-function jabber_message(input) {
+function jabber_message() {
     var chat = $('#chat-window');
+    var input = $('#message-window input');
     var loading = $('#loading');
-    var params = {}
-    var msgwin = $('#chat-window').offset();
+    var msgwin = chat.offset();
     if (loading.hasClass('hide')) {
 	loading.css({'top': parseInt(msgwin.top) + 'px', 'left': parseInt(msgwin.left) + 'px'}).toggleClass('hide');
     }
-    input[0].disabled = true;
-    params = { message: input.val() }
-    $.post('/ajax/jabber/message/', params,
+    input.attr('disabled', 'disabled');
+    console.log(input.val());
+    $.post('/ajax/jabber/message/', { message: input.val(), system: '0' },
 	   function(json) {
 	       loading.toggleClass('hide');
 	       if (json['code'] == 200) {
@@ -169,7 +169,7 @@ function jabber_message(input) {
 	       } else {
 		   $('#down').before('<div style="color: red;">Ошибка: [' + json['code'] + '] ' + json['desc'] + '</div>');
 	       }
-	       input[0].disabled = false;
+	       input.attr('disabled', '');
 	       $('#message-window').focus();
 	       chat.scrollTo($('#down'), 500);
 	   }, 'json' );

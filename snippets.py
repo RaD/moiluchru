@@ -100,11 +100,17 @@ def ajax_processor(form_object=None):
                     if form.is_valid():
                         result = func(request, form, *args, **kwargs)
                     else:
-                        result = {'code': '301', 'desc': 'form is not valid'}
+                        if settings.DEBUG:
+                            result = {'code': '301', 'desc': 'form is not valid : %s' % form.errors}
+                        else:
+                            result = {'code': '301', 'desc': 'Сервис временно отключен. Приносим свои извинения.'}
                 else:
                     result = func(request, *args, **kwargs)
             else:
-                result = {'code': '401', 'desc': 'it must be POST'}
+                if settings.DEBUG:
+                    result = {'code': '401', 'desc': 'it must be POST'}
+                else:
+                    result = {'code': '401', 'desc': 'Не надо нас ломать, ну пожалуйста :)'}
             json = simplejson.dumps(result)
             return HttpResponse(json, mimetype="application/json")
         return wrapper

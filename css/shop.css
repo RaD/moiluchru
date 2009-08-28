@@ -79,16 +79,14 @@ input,textarea,select { border: 1px solid gray; -moz-border-radius: 4px; padding
    width: 25%; text-align: right;
    padding: 4px 8px; white-space: nowrap;
    color: white; background-color: #cfbb40; 
-   font-size: 110%; font-weight: bold;}
-
+   font-size: 110%; font-weight: bold;
+}
 #advicebot table .desc {
    color: #54026e; background-color: #FFEB73; 
    font-weight: normal; padding: 1em;
    text-align: left; vertical-align: bottom; 
    opacity: 0.9; filter: alpha(opacity=0.9);
 }
-
-#advicebot .i-ve-know { border-bottom: 1px dotted gray; padding: 4px 1em; cursor: pointer; }
 
 #control { margin-top: 3em; }
 
@@ -218,12 +216,6 @@ form input[type="text"] { width: 96%; }
    font-family: courier new;
 }
 
-#chat-window {
-   width: 300px; height: 300px; overflow: auto;
-   border: 1px solid gray; -moz-border-radius: 4px; 
-   padding: 2px 4px; margin: 2px 0px;
-}
-
 #widget-jabber {
    position: absolute; top: 0px; right: 0px; z-index: 1; width: 120px; height: 1.5em; 
    color: #54026e; background-color: #bfab30; font-weight: bold; padding: 4px;
@@ -231,13 +223,20 @@ form input[type="text"] { width: 96%; }
    cursor: pointer;
 }
 
+/* Стили для всплывающего окна джаббер клиента - начало */
 #jabber-client {
-   height: 400px;
-   width: 400px;
-   background-color: white;
-   border: 1px solid gray;
-   padding: 4px;
+   height: 400px; width: 400px;
+   background-color: white; border: 1px solid gray;
 }
+#popup .title { font-family: verdana; font-size: 120%; font-weight: bold; background: none; padding: 8px; }
+#popup #chat-window {
+   position: absolute; top: 3em; bottom: 3em; left: 8px; right: 8px; 
+   overflow: auto; padding: 2px 4px;
+   border: 1px solid gray; -moz-border-radius: 4px; 
+}
+#popup #message-window { position: absolute; bottom: 8px; top: auto; left: 8px; right: 8px; }
+#popup #message-window input[type="text"] { width: 96%; }
+/* Стили для всплывающего окна джаббер клиента - конец */
 
 .collection-list-item {
    width: 100px; height: 130px; 
@@ -325,11 +324,3 @@ BUTTON {
 #simple_search #id_userinput { width: auto; }
 #simple_search INPUT { width: 60px; margin: 0px 2px; }
 #full_search INPUT { width: 60px; margin: 0px 2px; }
-
-
-#tagcloud { text-align: center; }
-#tagcloud ul { list-style-type: none; margin: 0 auto; padding: 0; }
-#tagcloud li { display: inline; background-image: none !important;
-   padding: 0 5px; margin: 0; vertical-align: baseline !important;
-   border: 0 !important; }
-
