@@ -163,6 +163,20 @@ def show_profit(request):
         'page_title': u'%s : %s' % (_(u'Order processed'), settings.SITE_TITLE, ),
         }
 
+### Выведем текст
+@render_to('flatpage.html', common_context)
+def flatpage(request, url):
+    v_shop.init_cart(request)
+    
+    from django.contrib.flatpages.models import FlatPage
+    from django.shortcuts import get_object_or_404
+    page = get_object_or_404(FlatPage, url__exact=url)
+    return {
+        'page_title': u'%s : %s' % (page.title, settings.SITE_TITLE, ),
+        'title': page.title,
+        'body': page.content
+        }
+
 # Метод для изменения параметров сортировки
 def set_sort_mode(request, mode=1):
     if int(mode) in range(1,3):

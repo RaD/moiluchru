@@ -6,7 +6,7 @@ from django.conf.urls.defaults import *
 from django.contrib import admin
 admin.autodiscover()
 
-handler404 = 'shop.views.handler404'
+#handler404 = 'shop.views.handler404'
 #handler500 = 'shop.views.handler500'
 
 # карта сайта
@@ -81,5 +81,5 @@ urlpatterns = patterns(
     (r'^profit/$', 'views.show_profit'),
 
     # отображение текстов
-    #(r'^text/((?P<label>\w+)/)?', 'shop.views.show_text_page'),   
+    (r'^delivery/$', 'views.flatpage', {'url': '/delivery/'}),   
 )
