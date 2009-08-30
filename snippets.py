@@ -51,7 +51,6 @@ def columns(param, count):
     def cols(func):
         def wrapper(request, *args, **kwargs):
             context =  func(request, *args, **kwargs)
-            #import pdb; pdb.set_trace()
             if param in context:
                 object_list = context.get(param, None)
                 length = len(object_list)
