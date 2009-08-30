@@ -1,7 +1,7 @@
 include config.mk
 
 CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)
-SUBDIRS=advice css dumps jabber js locale manager pics shop templates text
+SUBDIRS=advice css dumps jabber js locale manager pics shop templates
 FILES=$(wildcard *.py) django.wsgi
 LANGS=ru
 
