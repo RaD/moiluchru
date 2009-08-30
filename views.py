@@ -165,12 +165,12 @@ def show_profit(request):
 
 ### Выведем текст
 @render_to('flatpage.html', common_context)
-def flatpage(request, url):
+def flatpage(request):
     v_shop.init_cart(request)
     
     from django.contrib.flatpages.models import FlatPage
     from django.shortcuts import get_object_or_404
-    page = get_object_or_404(FlatPage, url__exact=url)
+    page = get_object_or_404(FlatPage, url__exact=request.path)
     return {
         'page_title': u'%s : %s' % (page.title, settings.SITE_TITLE, ),
         'title': page.title,

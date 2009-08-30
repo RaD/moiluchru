@@ -82,5 +82,5 @@ urlpatterns = patterns(
     (r'^profit/$', 'views.show_profit'),
 
     # отображение текстов
-    (r'^delivery/$', 'views.flatpage', {'url': '/delivery/'}),   
+    (r'^delivery/$', 'views.flatpage'),   
 )
