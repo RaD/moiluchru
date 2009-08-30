@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.conf import settings
+from django.shortcuts import get_object_or_404
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.utils.translation import ugettext_lazy as _
@@ -40,44 +41,32 @@ def get_items_by_category(request, title):
         def __unicode__(self):
             return self.title
 
-    try:
-        if title == 'popular':
-            category = Category(u'Популярные', u'popular')
-            items = models.Item.objects.all().order_by('-buys')
-        elif title == 'new':
-            category = Category(u'Новинки', u'new')
-            items = models.Item.objects.all().order_by('-reg_date')
-        else:
-            category = models.Category.objects.get(slug=title)
-            items = models.Item.objects.filter(category=category)
-        request.session['cached_items'] = items # кэшируем для paginator
-    except models.Item.DoesNotExist:
-        raise Http404
+    if title == 'popular':
+        category = Category(u'Популярные', u'popular')
+        items = models.Item.objects.all().order_by('-buys')
+    elif title == 'new':
+        category = Category(u'Новинки', u'new')
+        items = models.Item.objects.all().order_by('-reg_date')
+    else:
+        category = get_object_or_404(models.Category, slug__exact=title)
+        items = models.Item.objects.filter(category=category)
+    request.session['cached_items'] = items # кэшируем для paginator
     request.session['cached_items'] = items
     return (category, items)
 
 def get_items_by_collection(request, id):
-    try:
-        collection = models.Collection.objects.get(id=id)
-        items = models.Item.objects.filter(collection=id)
-        request.session['cached_items'] = items # кэшируем для paginator
-    except models.Collection.DoesNotExist:
-        raise Http404
+    collection = get_object_or_404(models.Collection, id__exact=id)
+    items = models.Item.objects.filter(collection=id)
+    request.session['cached_items'] = items # кэшируем для paginator
     return (collection, items)
     
 def get_item_info_by_id(request, id):
-    try:
-        item = models.Item.objects.get(id=id)
-        return get_item_info(request, item)
-    except models.Item.DoesNotExist:
-        raise Http404
+    item = get_object_or_404(models.Item, id__exact=id)
+    return get_item_info(request, item)
 
 def get_item_info_by_title(request, title):
-    try:
-        item = models.Item.objects.get(title=title)
-        return get_item_info(request, item)
-    except models.Item.DoesNotExist:
-        raise Http404
+    item = get_object_or_404(models.Item, title__exact=title)
+    return get_item_info(request, item)
 
 def get_item_info(request, item):
     collection = models.Item.objects.filter(collection=item.collection, 
@@ -196,16 +185,3 @@ def get_cart_items(request):
             items.append(CartItem(record, cart[i]['count'], cart[i]['price']))
     return items
 
-def handler404(request):
-    try:
-        items = models.Item.objects.all()
-    except models.Item.DoesNotExist:
-        items = []
-    return {'menu_current': 1, 'page_title': '404: Страница не найдена...'}
-
-def handler500(request):
-    try:
-        items = models.Item.objects.all()
-    except models.Item.DoesNotExist:
-        items = []
-    return {'menu_current': 1, 'page_title': '500: Что-то с моим кодом...'}
