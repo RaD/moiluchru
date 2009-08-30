@@ -102,7 +102,7 @@ form input[type="text"] { width: 96%; }
    background-color: orange;
 }
 #cartwidget .header {
-   font-family: comic sans ms; font-size: 120%; 
+   font-family: arial; font-size: 120%; 
    padding: 0.2em 0.4em;
 }
 #cartwidget .body {
@@ -128,7 +128,7 @@ form input[type="text"] { width: 96%; }
    overflow: hidden; text-overflow: ellipsis; 
    white-space: nowrap; }
 .title {
-   font-family: comic sans ms; font-size: 150%; 
+   font-family: arial; font-size: 150%; 
    line-height: 1.0;
    padding: 0.2em 0.3em; margin-bottom: 0.5em;
    background-color: #fdd99b;
@@ -186,11 +186,11 @@ form input[type="text"] { width: 96%; }
 #header h1 {
    margin: 0; width: 8em; color: #a68f00; text-align: center;
    font-family: comic sans ms; font-size: 160%; font-weight: bold;
-   line-height: 1.33; text-transform: uppercase;
+   line-height: 1.33; text-transform: uppercase; cursor: pointer;
 }
 
 #header h2 {
-   margin: 0; width: 20em; color: white;
+   margin: 0; width: 20em; color: white; cursor: pointer;
    font-family: comic sans ms; font-size: 100%; font-weight: bold;
    line-height: 1.33; text-transform: uppercase; text-align: right;
 }
@@ -318,7 +318,8 @@ BUTTON {
    border-bottom: 1px dashed #071c71; color: #54026e;
 }
 
-.warning { border: 2px solid #ffdb00; background-color: #ffeb73; -moz-border-radius: 8px; padding: 2px 4px; margin: 0px 0px 2em 0px;}
+.warning { padding: 2px 4px; margin: 0px 0px 2em 0px;}
+.warning p { margin: 1em; }
 
 #simple_search #id_userinput { width: auto; }
 #simple_search INPUT { width: 60px; margin: 0px 2px; }

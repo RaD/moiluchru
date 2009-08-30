@@ -195,3 +195,11 @@ def set_sort_mode(request, mode=1):
     else:
         raise Http404
 
+@render_to('404.html', common_context)
+def handler404(request):
+    return {'page_title': '404: Страница не найдена...'}
+
+@render_to('500.html', common_context)
+def handler500(request):
+    return {'page_title': '500: Ошибка приложения...'}
+

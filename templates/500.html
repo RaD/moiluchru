@@ -1,55 +1,31 @@
-{% extends "shop/base.html" %}
+{% extends "content.html" %}
 
 {% load markup %}
 
+{% block panel_top %}
+<div class="title">
+  Произошла ошибка
+</div>
+{% endblock %}
+
+{% block panel_bottom %}
+<div class="title">
+  Произошла ошибка
+</div>
+{% endblock %}
+
 {% block content %}
-  <div id="left">
-    <h3 class="ttl"><span></span>Категории</h3>
+<div class="title">Ошибка 500</div>
 
-    {% include "shop/inc-category.html" %}
-
-    <h3 class="ttl"><span></span>Облако поиска</h3>
-
-    {% include "shop/inc-tagcloud.html" %}
-  </div>
-
-  <div id="right">
-
-    <h3 class="ttl"><span></span>Произошла ошибка</h3>
-
-    <div class="warning">
-      <p>
-	В результате обработки запроса произошла страшная ошибка. Мы
-	немедленно отправили сообщение об этом администратор и он уже
-	полсекунды назад начал разбираться с данной проблемой.
-      </p>
+<div class="warning">
+  <p>
+    В результате обработки запроса произошла страшная ошибка. Мы
+    немедленно отправили сообщение об этом администратор и он уже
+    полсекунды назад начал разбираться с данной проблемой.
+  </p>
       
-      <p>
-	Возможно вам поможет облако поиска?
-      </p>
-    </div>
-
-    <h3 class="ttl"><span></span>Самые популярные</h3>
-
-    <table width="100%">
-      <tr>
-	<td>
-	  {% for item in items_col1 %}
-	  {% include "shop/inc-column-items.html" %}
-	  {% empty %}
-	  К сожалению база товаров на данный момент пуста.
-	  {% endfor %}
-	</td>
-
-	<td>
-	  {% for item in items_col2 %}
-	  {% include "shop/inc-column-items.html" %}
-	  {% empty %}
-	  К сожалению база товаров на данный момент пуста.
-	  {% endfor %}
-	</td>
-      </tr>
-    </table>
-    
-  </div>
+  <p>
+    Возможно вам помогут метки или поиск?
+  </p>
+</div>
 {% endblock %}

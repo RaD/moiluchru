@@ -6,8 +6,8 @@ from django.conf.urls.defaults import *
 from django.contrib import admin
 admin.autodiscover()
 
-#handler404 = 'shop.views.handler404'
-#handler500 = 'shop.views.handler500'
+handler404 = 'views.handler404'
+handler500 = 'views.handler500'
 
 # карта сайта
 from django.contrib.sitemaps import Sitemap, FlatPageSitemap, GenericSitemap
@@ -63,7 +63,8 @@ urlpatterns = patterns(
     (r'^ajax/advice/random/$', 'advice.views.get_random_advice'),
 
     # основное
-    (r'^$', 'django.views.generic.simple.redirect_to', {'url': '/category/popular/'}),
+    #(r'^$', 'django.views.generic.simple.redirect_to', {'url': '/category/popular/'}),
+    (r'^$', 'views.category', {'title': 'popular', 'page': None}),
     (r'^category/(?P<title>[\w_]+)/((?P<page>\d+)/)?$', 'views.category'),
     (r'^collection/(?P<id>\d+)/((?P<page>\d+)/)?$', 'views.collection'),
     (r'^tag/(?P<tag>\w+)/$', 'views.tag_search'),
