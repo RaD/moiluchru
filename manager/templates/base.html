@@ -8,9 +8,7 @@
   <meta name="description" content=""/>
   <link rel="stylesheet" href="http://moiluchru/css/manager.css" type="text/css"/>
   <link rel="shortcut icon" href="http://moiluchru/pics/favicon.png"/>
-  <script type="text/javascript" src="http://moiluchru/js/prototype.js"></script>
-  <script type="text/javascript" src="http://moiluchru/js/common.js"></script>
-  <script type="text/javascript" src="http://moiluchru/js/shop.js"></script>
+  <script type="text/javascript" src="http://moiluchru/js/jquery.js"></script>
   <title>Магазин - Управление заказами</title>
 </head>
 <body onLoad="{{ js_onload }}">
@@ -22,7 +20,7 @@
     <td>
       {% if user.is_authenticated %}
       {{ user.get_full_name }}
-      <button onclick="document.location='/manager/logout';">Выйти</button>
+      <button onclick="document.location='/manager/logout/';">Выйти</button>
       {% endif %}
     </td>
   </tr>
