@@ -166,7 +166,7 @@ def get_search_results(request):
             return None
     else: # обращение через paginator
         try:
-            items = request.session.get('cached_items', [])
+            items = request.session.get('cached_items', None)
         except:
             # видать прошли по ссылке напрямую, отправим на страницу поиска
             return None
