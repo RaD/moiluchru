@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-26 10:29+0400\n"
+"POT-Creation-Date: 2009-09-02 16:43+0400\n"
 "PO-Revision-Date: 2008-07-09 20:40+0400\n"
 "Last-Translator: Ruslan Popov <ruslan.popov@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -15,35 +15,39 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: views.py:49
+#: views.py:40 views.py:53
 msgid "Search"
 msgstr "Поиск"
 
-#: views.py:49
+#: views.py:40
+msgid "Advanced"
+msgstr "Расширенный"
+
+#: views.py:53
 msgid "Results"
 msgstr "Результаты"
 
-#: views.py:65 shop/models.py:78 shop/models.py:107
+#: views.py:69 shop/models.py:78 shop/models.py:107
 msgid "Category"
 msgstr "Категория"
 
-#: views.py:81 shop/models.py:90 shop/models.py:108
+#: views.py:85 shop/models.py:90 shop/models.py:108
 msgid "Collection"
 msgstr "Коллекция"
 
-#: views.py:96 shop/models.py:122
+#: views.py:105 shop/models.py:122
 msgid "Item"
 msgstr "Товар"
 
-#: views.py:108
+#: views.py:117
 msgid "Cart"
 msgstr "Корзина"
 
-#: views.py:129 shop/models.py:211
+#: views.py:138 shop/models.py:211
 msgid "Order"
 msgstr "Заказ"
 
-#: views.py:154
+#: views.py:163
 msgid "Order processed"
 msgstr "Заказ обработан"
 
@@ -79,11 +83,11 @@ msgstr "Активирован"
 msgid "Is this advice enabled?"
 msgstr "Активирован ли данный совет?"
 
-#: advice/models.py:23 text/models.py:12
+#: advice/models.py:23
 msgid "Text"
 msgstr "Текст"
 
-#: advice/models.py:24 text/models.py:13
+#: advice/models.py:24
 msgid "Texts"
 msgstr "Тексты"
 
@@ -99,7 +103,7 @@ msgstr "Система"
 msgid "Nick"
 msgstr "Псевдоним"
 
-#: jabber/models.py:10 shop/forms.py:81
+#: jabber/models.py:10 shop/forms.py:80
 msgid "Password"
 msgstr "Пароль"
 
@@ -119,23 +123,27 @@ msgstr "Отправлено"
 msgid "Form has bad data."
 msgstr "Форма содержит плохие данные."
 
-#: shop/admin.py:56 shop/models.py:168
+#: shop/admin.py:50
+msgid "Use [a-z] and _ only."
+msgstr "Используйте только символы a-z и _."
+
+#: shop/admin.py:70 shop/models.py:168
 msgid "Price (shop)"
 msgstr "Цена (продажа)"
 
-#: shop/admin.py:57 shop/models.py:167
+#: shop/admin.py:71 shop/models.py:167
 msgid "Price (store)"
 msgstr "Цена (склад)"
 
-#: shop/admin.py:110
+#: shop/admin.py:124
 msgid "Preview"
 msgstr "Просмотр"
 
-#: shop/admin.py:119
+#: shop/admin.py:133
 msgid "Price of a store"
 msgstr "Цена склада"
 
-#: shop/admin.py:127
+#: shop/admin.py:141
 msgid "Price of the shop"
 msgstr "Цена магазина"
 
@@ -167,27 +175,27 @@ msgstr "Е-почта"
 msgid "Comment"
 msgstr "Комментарий"
 
-#: shop/forms.py:79
+#: shop/forms.py:78
 msgid "Login"
 msgstr "Логин"
 
-#: shop/forms.py:85
+#: shop/forms.py:84
 msgid "Status"
 msgstr "Состояние"
 
-#: shop/forms.py:87
+#: shop/forms.py:86
 msgid "Courier"
 msgstr "Курьер"
 
-#: shop/forms.py:92 shop/forms.py:99 shop/forms.py:103
+#: shop/forms.py:91 shop/forms.py:98 shop/forms.py:102
 msgid "Item id"
 msgstr "Идентификатор товара"
 
-#: shop/forms.py:93 shop/forms.py:100
+#: shop/forms.py:92 shop/forms.py:99
 msgid "Item count"
 msgstr "Количество товара"
 
-#: shop/forms.py:141
+#: shop/forms.py:140
 msgid "Min field is greater than Max field."
 msgstr "Минимальное значение больше максимального."
 
@@ -263,7 +271,7 @@ msgstr "Товар есть на складе"
 msgid "Has lamp"
 msgstr "Лампы в поставке"
 
-#: shop/models.py:114 text/models.py:8
+#: shop/models.py:114
 msgid "Defined"
 msgstr "Определено"
 
@@ -391,6 +399,5 @@ msgstr "Диаметр отверстия, в миллиметрах"
 msgid "Diameter of an montage hole, in millimeters"
 msgstr "Диаметр монтажного отверстия, в миллиметрах"
 
-#: text/models.py:7
-msgid "Label"
-msgstr "Метка"
+#~ msgid "Label"
+#~ msgstr "Метка"

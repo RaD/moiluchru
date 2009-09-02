@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import os
+import os, re
 
 from django.conf import settings
 from django.contrib import admin
@@ -36,7 +36,21 @@ class ProducerAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 admin.site.register(models.Producer, ProducerAdmin)
 
+### Category
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = models.Category
+
+    def clean_slug(self):
+        slug = self.cleaned_data['slug']
+        if re.match(r'^[a-z_]+$', slug):
+            return slug
+        else:
+            raise forms.ValidationError(_(u'Use [a-z] and _ only.'))
+
 class CategoryAdmin(admin.ModelAdmin):
+    form = CategoryForm
     fieldsets = ((None,{'fields': ('title', 'slug', 'parent')}),)
     list_display = ('title', 'slug', 'parent')
     ordered = ('parent', 'title')
