@@ -7,6 +7,9 @@ LANGS=ru
 
 all: locale subdirs
 
+help:
+	echo -en '\nUseful commands:\n\tinstall\n\tclean\n\ttranslate\n\tshow\n\tget\n\timport_db\n\timport_pics\n\n'
+
 install: create_dir install_files install_subdirs chown_all
 	mkdir -p $(CURRENT_INSTALL_DIR)/media/itempics/thumbnails
 	chmod -R o+w $(CURRENT_INSTALL_DIR)/media/itempics/*
@@ -28,15 +31,26 @@ translate:
 %.mo: %.po
 	django-admin.py compilemessages
 
+agent:
+	. ./ssh-agent.sh
+
 show:
 	ssh rad@caml.ru ls -l ~/django/moiluchru/dumps
-	echo "scp rad@caml.ru:django/moiluchru/dumps/TS.dump.bz2 ./dumps/"
-	echo "scp rad@caml.ru:django/moiluchru/dumps/TS.tar ./dumps/"
 
-pushhome:
-	git push ssh://rad@nemo/~/development/git.repos/moiluchru.git/
+get:
+	scp rad@caml.ru:django/moiluchru/dumps/`date '+%Y%m%d'`.* ./dumps/
 
-pushprod:
-	git push ssh://rad@caml.ru/~/sites/moiluchru/repos/moiluchru.git/
+import_db:
+	dbdump=`ls ./dumps/*bz2|sort|tail -1`; \
+	impsql=`dirname $$dbdump`/`basename $$dbdump .dump.bz2`.sql; \
+	echo $$dbdump; \
+	bzcat $$dbdump > $$impsql; \
+	echo "\. $$impsql"; \
+	./manage.py dbshell
+
+import_pics:
+	picsdump=`pwd`/`ls ./dumps/*tar|sort|tail -1`; \
+	cd $(CURRENT_INSTALL_DIR)/media/itempics/; \
+	tar xvf $$picsdump
 
 include targets.mk
