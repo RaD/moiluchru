@@ -7,20 +7,6 @@ from django.contrib.admin import models as admmodels
 
 from shop import models
 
-# Определяем класс для отображения ошибок в пользовательском вводе
-class DivErrorList(forms.util.ErrorList):
-    def __unicode__(self):
-        return self.as_divs()
-    def as_divs(self):
-        if not self: return u''
-        return u'<div class="errorlist">%s</div>' % ''.join([u'<div class="error">%s</div>' % e for e in self])
-
-class CourierSelect(forms.ModelChoiceField):
-    """ Класс предназначен для переопределения метода отображения списка курьеров. """
-    def label_from_instance(self, obj):
-        return "%s" % obj.get_full_name()
-            
-
 class OfferForm(forms.Form):
     fname = forms.CharField(label=_(u'Last name'), max_length=64,
                             widget=forms.TextInput(attrs={'class':'longitem'}))
@@ -79,13 +65,6 @@ class LoginForm(forms.Form):
                             widget=forms.TextInput(attrs={'class':'longitem'}))
     passwd = forms.CharField(label=_(u'Password'), max_length=128,
                              widget=forms.PasswordInput(attrs={'class':'longitem'}))
-
-class OrderForm(forms.Form):
-    status = forms.ModelChoiceField(label=_(u'Status'), queryset=models.OrderStatus.objects.all(),
-                                    widget=forms.Select(attrs={'class':'longitem'}))
-    courier = CourierSelect(label=_(u'Courier'), required=False,
-                            queryset=admmodels.User.objects.filter(groups=1),
-                            widget=forms.Select(attrs={'class':'longitem'}))
 
 class CartAdd(forms.Form):
     item = forms.CharField(label=_(u'Item id'), max_length=8)

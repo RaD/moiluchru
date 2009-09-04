@@ -10,7 +10,7 @@ from tagging.models import Tag
 from tagging.utils import calculate_cloud
 
 from shop import models
-from shop.forms import DivErrorList, SearchForm, OfferForm
+from shop.forms import SearchForm
 
 from snippets import render_to, columns, paginate_by
 

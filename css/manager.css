@@ -25,6 +25,7 @@ BODY { padding: 1em; font: 14px arial, helvetica, sans-serif;
 #login { width: 40%; }
 FORM TH { text-align: left; font-weight: normal; }
 BUTTON,INPUT,TEXTAREA,SELECT { border: 1px solid gray; -moz-border-radius: 4px; padding: 2px 4px; }
+form input[type="text"] { width: 30px; }
 .pointer { cursor: pointer; }
 
 .wideitem { width: 100%; }

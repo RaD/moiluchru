@@ -7,6 +7,8 @@
     <th>Клиент</th>
     <th>Кол-во</th>
     <th>Стоимость</th>
+    <th>Скидка</th>
+    <th>Итого</th>
     <th>Состояние</th>
     <th>Заказан</th>
     <th>Курьер</th>
@@ -19,6 +21,8 @@
     </td>
     <td class="center even nowrap">{{ order.count }} шт.</td>
     <td class="right nowrap">{{ order.totalprice|floatformat:2 }} руб.</td>
+    <td class="right nowrap">{{ order.discount }}%.</td>
+    <td class="right nowrap">{{ order.discountprice|floatformat:2 }} руб.</td>
     <td class="center even">{{ order.status }}</td>
     <td class="center">{{ order.reg_date }}</td>
     <td class="even">{{ order.courier.get_full_name }}</td>

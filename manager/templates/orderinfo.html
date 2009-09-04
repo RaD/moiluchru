@@ -18,14 +18,16 @@
 	  <div class="content">{{ order.comment }}</div>
 	</td>
 	<td valign="top" width="40%">
-	  <form id="order" method="post" action="">
+	  {% for f in forms %}
+	  <form method="post" action="">
 	    <table width="100%">
-	      {{ form }}
+	      {{ f }}
 	    </table>
 	    <div class="right">
-	      <input type="submit" class="pointer" value="Сохранить изменения"/>
+	      <input type="submit" class="pointer" value="Сохранить"/>
 	    </div>
 	  </form>
+	  {% endfor %}
 	</td>
       </tr>
     </table>
@@ -52,6 +54,12 @@
 	<td colspan="3">Итого</td>
 	<td class="right">{{ order.totalprice|floatformat:2 }} руб.</td>
       </tr>
+      {% ifnotequal order.discount 0 %}
+      <tr class="total">
+	<td colspan="3">Итого, со скидкой</td>
+	<td class="right">{{ order.discountprice|floatformat:2 }} руб.</td>
+      </tr>
+      {% endifnotequal %}
     </table>
   </div>
   {% if history %}

@@ -202,6 +202,7 @@ class Order(models.Model):
     buyer = models.ForeignKey(Buyer)
     count = models.PositiveIntegerField(default=0)
     totalprice = models.FloatField()
+    discount = models.PositiveIntegerField(default=0)
     comment = models.TextField(blank=True, default=u'')
     reg_date = models.DateTimeField(auto_now_add=True)
     status = models.ForeignKey(OrderStatus)
