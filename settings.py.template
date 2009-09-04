@@ -93,6 +93,7 @@ INSTALLED_APPS = (
     'advice',
     'robots',
     'tagging',
+    'text',
 )
 
 AUTH_PROFILE_MODULE = "moiluchru.profile"

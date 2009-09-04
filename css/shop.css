@@ -182,6 +182,9 @@ form input[type="text"] { width: 96%; }
 #content .desc {
    padding: 0em 0.2em 0em 1em;
 }
+#content .text p {
+   margin: 0.5em; text-indent: 1em;
+}
 
 #header h1 {
    margin: 0; width: 8em; color: #a68f00; text-align: center;

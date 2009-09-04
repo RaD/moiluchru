@@ -1,0 +1,14 @@
+<div id="categories">
+  <div class="title">
+    Статьи
+  </div>
+  {% for art in article_list %}
+  <div class="item {% ifequal this.slug cat.slug %} choosen{% endifequal %}" title="{{ art.title }}">
+    <a href="{{ art.get_absolute_url }}"><div class="overflow">{{ art.title }}</div></a>
+  </div>
+  {% empty %}
+  <div class="empty">
+    Надо обязательно заполнить этот раздел!
+  </div>
+  {% endfor %}
+</div>

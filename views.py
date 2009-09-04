@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from shop import views as v_shop
 from shop import forms as f_shop
+from text import models as t_models
 
 from snippets import render_to, columns, paginate_by
 
@@ -18,6 +19,7 @@ def common_context(request):
     context = {
         'category_list': v_shop.get_all_categories(),
         'tag_list': v_shop.get_all_tags(),
+        'article_list': t_models.ArticleProxy.objects.all(),
         'debug': getattr(settings, 'DEBUG', False),
         'jabber': getattr(settings, 'JABBER_ENGINE', False),
         'search_query': request.session.get('searchquery', 'Поиск: Введите запрос и нажмите [Enter]'),
@@ -173,6 +175,7 @@ def flatpage(request):
     page = get_object_or_404(FlatPage, url__exact=request.path)
     return {
         'page_title': u'%s : %s' % (page.title, settings.SITE_TITLE, ),
+        'this': page,
         'title': page.title,
         'body': page.content
         }

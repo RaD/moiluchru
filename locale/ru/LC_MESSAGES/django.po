@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-04 09:37+0400\n"
+"POT-Creation-Date: 2009-09-04 22:35+0400\n"
 "PO-Revision-Date: 2008-07-09 20:40+0400\n"
 "Last-Translator: Ruslan Popov <ruslan.popov@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -15,39 +15,39 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: views.py:40 views.py:53
+#: views.py:42 views.py:55
 msgid "Search"
 msgstr "Поиск"
 
-#: views.py:40
+#: views.py:42
 msgid "Advanced"
 msgstr "Расширенный"
 
-#: views.py:53
+#: views.py:55
 msgid "Results"
 msgstr "Результаты"
 
-#: views.py:69 shop/models.py:78 shop/models.py:107
+#: views.py:71 shop/models.py:78 shop/models.py:107
 msgid "Category"
 msgstr "Категория"
 
-#: views.py:85 shop/models.py:90 shop/models.py:108
+#: views.py:87 shop/models.py:90 shop/models.py:108
 msgid "Collection"
 msgstr "Коллекция"
 
-#: views.py:105 shop/models.py:122
+#: views.py:107 shop/models.py:122
 msgid "Item"
 msgstr "Товар"
 
-#: views.py:117
+#: views.py:119
 msgid "Cart"
 msgstr "Корзина"
 
-#: views.py:138 shop/models.py:212
+#: views.py:140 shop/models.py:212
 msgid "Order"
 msgstr "Заказ"
 
-#: views.py:163
+#: views.py:165
 msgid "Order processed"
 msgstr "Заказ обработан"
 
@@ -131,7 +131,7 @@ msgstr "Курьер"
 msgid "Discount, in %"
 msgstr "Скидка, в %"
 
-#: manager/views.py:52 manager/views.py:55
+#: manager/views.py:51 manager/views.py:54
 msgid "Form has bad data."
 msgstr "Форма содержит плохие данные."
 
@@ -403,5 +403,15 @@ msgstr "Диаметр отверстия, в миллиметрах"
 msgid "Diameter of an montage hole, in millimeters"
 msgstr "Диаметр монтажного отверстия, в миллиметрах"
 
-#~ msgid "Label"
-#~ msgstr "Метка"
+#: text/admin.py:23
+msgid "More"
+msgstr "Подробнее"
+
+#: text/models.py:17
+msgid "Article"
+msgstr "Статья"
+
+#: text/models.py:18
+msgid "Articles"
+msgstr "Статьи"
+

@@ -197,11 +197,10 @@ def translit(value):
         (u"п", u"p"),   (u"р", u"r"),   (u"с", u"s"),   (u"т", u"t"),
         (u"у", u"u"),   (u"ф", u"f"),   (u"х", u"h"),   (u"ц", u"ts"),
         (u"ч", u"ch"),  (u"ш", u"sh"),  (u"щ", u"sch"), (u"ъ", u"_"),
-        (u"ы", u"yi"),  (u"ь", u""),   (u"э", u"e"),   (u"ю", u"yu"),
+        (u"ы", u"yi"),  (u"ь", u""),    (u"э", u"e"),   (u"ю", u"yu"),
         (u"я", u"ya"),  (u" ", u"_"),
         )
-    translit = value
+    translit = value.lower()
     for symb_in, symb_out in TRANSTABLE:
         translit = translit.replace(symb_in, symb_out)
-    translit = slugify(translit)
     return translit
