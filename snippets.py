@@ -68,7 +68,7 @@ def columns(param, count):
 def paginate_by(object_name, page_name='page', count=getattr(settings, 'SHOP_ITEMS_PER_PAGE', 20)):
     def paged(func):
         def wrapper(request, *args, **kwargs):
-            pagenum = int(kwargs.get(page_name, 1)) or 1
+            pagenum = int(kwargs.get(page_name, 1) or 1)
             del(kwargs[page_name])
             # получаем контекст
             context =  func(request, *args, **kwargs)
