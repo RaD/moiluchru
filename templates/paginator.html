@@ -5,6 +5,13 @@
       <td align="left">
 	Страница {{ page.number }} из {{ page.paginator.num_pages }}
 
+	{% if page.previous_ten %}
+	<a href="{{ url }}{{ page.previous_ten }}/">
+	  <span title="Назад на 10 страниц" class="button">&lt;&lt;&lt;</span></a>
+	{% else %}
+	<span title="Назад на 10 страниц" class="button disabled">&lt;&lt;&lt;</span>
+	{% endif %}
+
 	{% if page.has_previous %}
 	<a href="{{ url }}{{ page.previous_page_number }}/">
 	  <span title="Предыдущая страница" class="button">&lt;</span></a>
@@ -17,6 +24,13 @@
 	  <span title="Следующая страница" class="button">&gt;</span></a>
 	{% else %}
 	<span title="Следующая страница" class="button disabled">&gt;</span>
+	{% endif %}
+
+	{% if page.next_ten %}
+	<a href="{{ url }}{{ page.next_ten }}/">
+	  <span title="Вперёд на 10 страниц" class="button">&gt;&gt;&gt;</span></a>
+	{% else %}
+	<span title="Вперёд на 10 страниц" class="button disabled">&gt;&gt;&gt;</span>
 	{% endif %}
       </td>
       <td>&nbsp;</td>

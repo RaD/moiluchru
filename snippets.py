@@ -68,7 +68,7 @@ def columns(param, count):
 def paginate_by(object_name, page_name='page', count=getattr(settings, 'SHOP_ITEMS_PER_PAGE', 20)):
     def paged(func):
         def wrapper(request, *args, **kwargs):
-            pagenum = kwargs.get(page_name, 1) or 1
+            pagenum = int(kwargs.get(page_name, 1)) or 1
             del(kwargs[page_name])
             # получаем контекст
             context =  func(request, *args, **kwargs)
@@ -82,7 +82,17 @@ def paginate_by(object_name, page_name='page', count=getattr(settings, 'SHOP_ITE
                              int(3 * ipp_settings)][int(request.session.get('howmuch_id', 1))]
                     paginator = Paginator(objects, count)
 
-                    context['page'] = paginator.page(pagenum)
+                    page = paginator.page(pagenum)
+
+                    next_ten = pagenum + 10
+                    if next_ten <= paginator.num_pages:
+                        page.next_ten = next_ten
+
+                    previous_ten = pagenum - 10
+                    if previous_ten >= 1:
+                        page.previous_ten = previous_ten
+
+                    context['page'] = page
                     context[object_name] = paginator.page(pagenum).object_list
                 except EmptyPage:
                     context[object_name] = paginator.page(paginator.num_pages).object_list
