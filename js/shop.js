@@ -194,7 +194,7 @@ function jabber_poll() {
 
 
 var IE6 = false /*@cc_on || @_jscript_version < 5.7 @*/;
-var ADVICE_WAIT_TIMEOUT = 10 * 1000;
+var ADVICE_WAIT_TIMEOUT = 100 * 1000;
 var ADVICE_HIDE_TIMEOUT = 5 * 1000;
 var ADVICE_SLEEP_TIMEOUT = 60 * 1000;
 var t_wait = t_hide = t_sleep = null;
