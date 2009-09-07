@@ -3,7 +3,7 @@
     Статьи
   </div>
   {% for art in article_list %}
-  <div class="item {% ifequal this.slug cat.slug %} choosen{% endifequal %}" title="{{ art.title }}">
+  <div class="item {% ifequal this.url art.url %} choosen{% endifequal %}" title="{{ art.title }}">
     <a href="{{ art.get_absolute_url }}"><div class="overflow">{{ art.title }}</div></a>
   </div>
   {% empty %}
