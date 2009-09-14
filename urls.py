@@ -63,8 +63,7 @@ urlpatterns = patterns(
     (r'^ajax/advice/random/$', 'advice.views.get_random_advice'),
 
     # основное
-    #(r'^$', 'django.views.generic.simple.redirect_to', {'url': '/category/popular/'}),
-    (r'^$', 'views.category', {'title': 'popular', 'page': None}),
+    (r'^$', 'views.flatpage', {'title': 'index'}),
     (r'^category/(?P<title>[\w_]+)/((?P<page>\d+)/)?$', 'views.category'),
     (r'^collection/(?P<id>\d+)/((?P<page>\d+)/)?$', 'views.collection'),
     (r'^tag/(?P<tag>\w+)/$', 'views.tag_search'),
