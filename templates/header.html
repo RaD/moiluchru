@@ -1,7 +1,12 @@
 {# header.html begins #}
 <table id="control" width="100%">
+  <colgroup>
+    <col width="250"/>
+    <col width="auto"/>
+    <col width="250"/>
+  </colgroup>
   <tr>
-    <td width="250" valign="middle">
+    <td valign="middle">
       <div style="width: 220px; margin: 0px 8px; padding: 8px;"
 	   onclick="document.location='/';" class="pointer">
 	<div style="font-family: comic sans ms; font-size: 300%; padding-top: 10px;">{{ settings.SITE_TITLE }}</div>
@@ -10,7 +15,7 @@
       {# <span><a href="/contact/">Контакты</a></span> #}
     </td>
 
-    <td width="auto" valign="bottom" style="text-align: center; padding: 4px 8px;">
+    <td valign="bottom" style="text-align: center; padding: 4px 8px;">
       <div id="title-phone">
 	<span class="region-code">({{ settings.SITE_PHONE_PREFIX }})</span>
 	<img src="http://moiluchru/pics/phone.png"/>
@@ -23,7 +28,7 @@
       <div style="text-align: right;"><a href="/search/">Расширенный поиск</a></div>
     </td>
 
-    <td width="250" valign="middle">
+    <td valign="middle">
       <div id="cartwidget">
 	<div class="header">
 	  <span title="Очистить корзину" style="font-family: arial; font-size: 80%; float: right; vertical-align: middle; "><a href="#" onclick="clean_cart(); return false;">Очистить</a></span>
