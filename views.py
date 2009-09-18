@@ -178,7 +178,7 @@ def flatpage(request, title=None):
     else:
         page = get_object_or_404(FlatPage, url__exact=request.path)
     return {
-        'page_title': u'светильники из дерева, деревянные светильники, светильники тиффани, светильники для ванн, подсветки для картин, энергосберегающие лампы, продажа светильников, светильники для кухни, светильники влагозащищенные, купить люстру, светильники настенные, купить люстру недорого, бра, торшер : %s' % (settings.SITE_TITLE, ),
+        'page_title': u'%s : %s' % (settings.PROMO_TEXT, settings.SITE_TITLE),
         'this': page,
         'title': page.title,
         'body': page.content
