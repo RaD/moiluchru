@@ -39,5 +39,5 @@
   {% include "jabber.html" %}
 </body>
 
-{% if not debug %}{% include "google.html" %}{% endif %}
+{% if not debug %}{{ settings.GOOGLE_ANALYTICS|safe }}{% endif %}
 </html>
