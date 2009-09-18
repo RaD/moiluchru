@@ -18,12 +18,14 @@
     <td valign="bottom" style="text-align: center; padding: 4px 8px;">
       <div id="title-phone">
 	<span class="region-code">({{ settings.SITE_PHONE_PREFIX }})</span>
-	<img src="http://moiluchru/pics/phone.png"/>
+	<img src="http://moiluchru/pics/phone.png" alt="" title=""/>
 	<span class="phone-number">{{ settings.SITE_PHONE_SUFFIX }}</span>
       </div>
       <form method="post" action="/result/">
-	<input type="text" name="userinput" value="{{ search_query }}"/>
-	<input type="hidden" name="howmuch" value="1"/>
+	<div>
+	  <input type="text" name="userinput" value="{{ search_query }}"/>
+	  <input type="hidden" name="howmuch" value="1"/>
+	</div>
       </form>
       <div style="text-align: right;"><a href="/search/">Расширенный поиск</a></div>
     </td>

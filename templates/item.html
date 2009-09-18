@@ -45,8 +45,13 @@
 
 {% block content %}
 <table width="100%" height="210" border="0" cellspacing="4">
+  <colgroup>
+    <col width="200"/>
+    <col width="auto"/>
+    <col width="auto"/>
+  </colgroup>
   <tr>
-    <td width="200" height="200" align="center" valign="middle" id="image-container"
+    <td height="200" align="center" valign="middle" id="image-container"
 	onclick="$('#cartadd_{{ item.id }}').toggleZoom(); return false;">
       {# Изображение товара #}
       <img src="{{ item.image.path|thumbnail:"200x,itempics" }}" id="thumbnail" border="0" title="{{ item.title }} : Нажмите, чтобы увеличить" />

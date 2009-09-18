@@ -1,6 +1,11 @@
 {% if page %}
 <div class="paginator">
   <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <colgroup>
+    <col width="auto"/>
+    <col width="auto"/>
+    <col width="auto"/>
+  </colgroup>
     <tr>
       <td align="left">
 	Страница {{ page.number }} из {{ page.paginator.num_pages }}

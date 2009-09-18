@@ -1,13 +1,17 @@
 {% extends "base.html" %}
 {% block structure %}
-<br/>
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <colgroup>
+    <col width="250"/>
+    <col width="650"/>
+    <col width="auto"/>
+  </colgroup>
   <tr>
-    <td width="250" valign="top">
+    <td valign="top">
       {% include "catlist.html" %}
       {% include "artlist.html" %}
     </td>
-    <td width="650" valign="top" style="border: 1px sold green;">
+    <td valign="top" style="border: 1px solid green;">
       <div id="placeholder">
 	<div class="panel">
 	  {% block panel_top %}{% endblock %}
@@ -20,7 +24,7 @@
 	</div>
       </div>
     </td>
-    <td width="auto" valign="top">
+    <td valign="top">
       {% include "taglist.html" %}
     </td>
   </tr>

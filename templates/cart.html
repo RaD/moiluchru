@@ -59,18 +59,26 @@
 </script>
 
 <table id="cart-list" width="100%" class="cart" cellpadding="4">
+  <colgroup>
+    <col width="100"/>
+    <col width="30%"/>
+    <col width="20%"/>
+    <col width="20%"/>
+    <col width="20%"/>
+    <col width="50"/>
+  </colgroup>
   <tr class="header">
-    <th width="100" class="left">Товар</td>
-    <th width="30%" class="left">Наименование</td>
-    <th width="20%" class="center">Цена</td>
-    <th width="20%" class="center">Кол-во</td>
-    <th width="20%" class="center">Стоимость</td>
-    <th width="50"></td>
+    <th class="left">Товар</td>
+    <th class="left">Наименование</td>
+    <th class="center">Цена</td>
+    <th class="center">Кол-во</td>
+    <th class="center">Стоимость</td>
+    <th></td>
   </tr>
 
   {% for i in items %}
   <tr item="{{ i.record.id }}">
-    <td width="100" height="100" align="center" valign="middle" class="thumbnail-containter">
+    <td height="100" align="center" valign="middle" class="thumbnail-containter">
       <a href="{{ i.record.get_absolute_url }}">
 	<img id="th_{{ i.record.id }}" src="{{ i.record.image.path|thumbnail:"100x,itempics" }}" 
              border="0" title="{{ i.record.title }}: Перейти на страницу товара"/></a>
@@ -107,7 +115,7 @@
   {% endcomment %}
   {% empty %}
   <tr item="None">
-    <td width="100" height="100" align="center" valign="middle" class="thumbnail-containter"></td>
+    <td height="100" align="center" valign="middle" class="thumbnail-containter"></td>
     <td class="longitem" title="{{ i.title }}">
       <div style="font-size: 150%;">Нет товаров</div>
     </td>

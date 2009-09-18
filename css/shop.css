@@ -210,7 +210,7 @@ form input[type="text"] { width: 96%; }
 #cart-list tr th { font-weight: bold; text-align: center; border-bottom: 1px solid gray; }
 #cart-list tr td { padding: 2px; font-size: 100%; }
 #cart-list tr[class="total"] { font-weight: bold; border-top: 1px solid gray; }
-#cart-list tr[class="total"] #cart_total { color: darkblue; }
+#cart-list tr[class="total"] #cart_total { color: #0000aa }
 
 #advanced_search { font-size: 100%; padding: 4px }
 #advanced_search th { width: 200px; }
