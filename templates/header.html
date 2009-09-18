@@ -12,9 +12,9 @@
 
     <td width="auto" valign="bottom" style="text-align: center; padding: 4px 8px;">
       <div id="title-phone">
-	<span class="region-code">(495)</span>
+	<span class="region-code">({{ settings.SITE_PHONE_PREFIX }})</span>
 	<img src="http://moiluchru/pics/phone.png"/>
-	<span class="phone-number">789-17-22</span>
+	<span class="phone-number">{{ settings.SITE_PHONE_SUFFIX }}</span>
       </div>
       <form method="post" action="/result/">
 	<input type="text" name="userinput" value="{{ search_query }}"/>
