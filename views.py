@@ -17,6 +17,7 @@ def common_context(request):
     if not 'cart_items' in request.session:
         v_shop.init_cart(request)
     context = {
+        'settings': settings,
         'category_list': v_shop.get_all_categories(),
         'tag_list': v_shop.get_all_tags(),
         'article_list': t_models.ArticleProxy.objects.all(),
