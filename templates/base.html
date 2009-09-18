@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 {% load i18n %}
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <meta http-equiv="Content-Language" content="ru"/>
@@ -17,6 +17,11 @@
   <div id="opaco" class="hide"></div> {# элемент для затемнения экрана #}
   <div id="popup" class="hide"></div> {# элемент для всплывающих окон #}
 
+  {% include "header.html" %}
+  {% block structure %}{% endblock %}
+  {% include "footer.html" %}
+  {% include "jabber.html" %}
+
   <div id="advicebot">
     <div class="trigger"></div>
     <table class="hide">
@@ -31,12 +36,6 @@
       </tr>
     </table>
   </div>
-
-
-  {% include "header.html" %}
-  {% block structure %}{% endblock %}
-  {% include "footer.html" %}
-  {% include "jabber.html" %}
 </body>
 
 {% if not debug %}{{ settings.GOOGLE_ANALYTICS|safe }}{% endif %}
