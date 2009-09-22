@@ -86,9 +86,10 @@ def get_item_info(request, item):
 
 def init_cart(request):
     """ Инициализация корзины. """
-    request.session['cart_items'] = {}
-    request.session['cart_count'] = 0
-    request.session['cart_price'] = 0.00
+    if 'cart_items' not in request.session:
+        request.session['cart_items'] = {}
+        request.session['cart_count'] = 0
+        request.session['cart_price'] = 0.00
 
 def tag_search(request, tag):
     """ Функция для результатов поиска по тегу. """
