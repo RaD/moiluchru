@@ -10,7 +10,7 @@ TEMPLATE_DEBUG = DEBUG
 DEFAULT_CHARSET = 'UTF-8'
 
 ADMINS = (
-    ('Ruslan Popov', 'radz@yandex.ru'),
+    ('Ruslan Popov', 'ruslan.popov@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -58,6 +58,7 @@ SECRET_KEY = '+&oxu(m-yg6#0am-pdcxb%^#ok(*w&w6gtrh8grdc3m3$=s(#j'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
+    'visagiste.loader.load_template_source',
     'django.template.loaders.filesystem.load_template_source',
     'django.template.loaders.app_directories.load_template_source',
 )

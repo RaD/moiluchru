@@ -1,0 +1,2 @@
+
+APPNAME=visagiste
