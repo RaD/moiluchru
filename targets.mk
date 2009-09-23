@@ -3,8 +3,6 @@
 # $Id$
 #
 
-MAKE=`which make`
-
 subdirs:
 	for i in $(SUBDIRS) end-of-subdirs-list; do \
 		if [ $$i != end-of-subdirs-list ]; then \
@@ -30,7 +28,11 @@ create_dir:
 	mkdir -p $(CURRENT_INSTALL_DIR);
 
 install_files:
-	cp $(FILES) $(CURRENT_INSTALL_DIR)/;
+	for i in $(FILES) end-of-files-list; do \
+	  if [ $$i != end-of-files-list ]; then \
+	    cp $$i $(CURRENT_INSTALL_DIR)/;
+	  fi; \
+	done
 
 install_templates:
 	for i in $(TEMPLATES) end-of-files-list; do \

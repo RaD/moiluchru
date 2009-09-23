@@ -6,6 +6,8 @@ GROUP=rad
 
 INSTALL_DJANGO_DIR=/home/rad/django.apps
 
+MAKE=make
+
 REGEXP_DEVEL_URL=http:\/\/moiluchru\/
 
 PO=$(wildcard ./locale/ru/LC_MESSAGES/*.po)
