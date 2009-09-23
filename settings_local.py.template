@@ -1,0 +1,71 @@
+# -*- coding: utf-8 -*-
+
+import os
+
+from settings import MIDDLEWARE_CLASSES, INSTALLED_APPS, TEMPLATE_LOADERS, TEMPLATE_DIRS
+
+DATABASE_NAME = 'moiluchru'
+DATABASE_USER = 'moiluchru'
+DATABASE_PASSWORD = 'q1'
+DATABASE_HOST = ''
+
+MEDIA_ROOT = '/home/rad/django.apps/moiluchru/media/'
+MEDIA_URL = 'http://moiluchru/media'
+ADMIN_MEDIA_PREFIX = 'http://moiluchru/adminmedia/'
+
+# Make this unique, and don't share it with anybody.
+SECRET_KEY = '+&oxu(m-yg6#0am-pdcxb%^#ok(*w&w6gtrh8grdc3m3$=s(#j'
+
+TEMPLATE_LOADERS = (
+    'visagiste.loader.load_template_source',
+) + TEMPLATE_LOADERS
+
+TEMPLATE_DIRS = (
+    os.path.join(os.path.dirname(__file__), 'templates/manager'),
+    #'/home/rad/django.apps/moiluchru/templates',
+)
+
+INSTALLED_APPS += (
+    'shop',
+    'jabber',
+    'manager',
+    'advice',
+    'robots',
+    'tagging',
+    'text',
+    'visagiste',
+)
+
+AUTH_PROFILE_MODULE = "moiluchru.profile"
+
+SITE_TITLE = u'Мой Луч'
+SITE_SUBTITLE = u'Многообразие света!'
+SITE_PHONE_PREFIX = '495'
+SITE_PHONE_SUFFIX = '789-17-22'
+SHOP_ITEMS_PER_PAGE = 10
+ITEMS_ON_MAIN_PAGE = 10
+MANAGER_ORDERS_PER_PAGE = 10
+PROMO_TEXT = u'светильники из дерева, деревянные светильники, светильники тиффани, светильники для ванн, подсветки для картин, энергосберегающие лампы, продажа светильников, светильники для кухни, светильники влагозащищенные, купить люстру, светильники настенные, купить люстру недорого, бра, торшер'
+
+GOOGLE_ANALYTICS = """
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-3919032-7");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+"""
+
+JABBER_ENGINE = True
+JABBER_ID = 'moiluchru@jabber.ru'
+JABBER_PASSWORD = 'alexsizov'
+JABBER_RECIPIENTS = ('ruslan.popov@gmail.com',) # 'alexxs21@gmail.com')
+JABBER_NOTIFICATION = True
+
+# tagging begin
+FORCE_LOWERCASE_TAGS = True
+# tagging end
+
