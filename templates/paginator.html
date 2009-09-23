@@ -53,4 +53,9 @@
     </tr>
   </table>
 </div>
+
+<script>
+$(document).bind('keyup', 'Ctrl+left', function (evt){document.location='{{ url }}{{ page.previous_page_number }}';});
+$(document).bind('keyup', 'Ctrl+right', function (evt){document.location='{{ url }}{{ page.next_page_number }}';});
+</script>
 {% endif %}
