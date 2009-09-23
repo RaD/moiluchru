@@ -30,7 +30,7 @@ create_dir:
 install_files:
 	for i in $(FILES) end-of-files-list; do \
 	  if [ $$i != end-of-files-list ]; then \
-	    cp $$i $(CURRENT_INSTALL_DIR)/;
+	    cp $$i $(CURRENT_INSTALL_DIR)/; \
 	  fi; \
 	done
 
