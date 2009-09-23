@@ -40,7 +40,6 @@ subgraph cluster_include {label="Подключаемые шаблоны"; label
 	 taglist [label="taglist.html", shape="record", color="green"];
 	 jabber [label="jabber.html", shape="record", color="green"];
 	 zoom [label="zoom.html", shape="record", color="green"];
-	 ga [label="google.html", shape="record", color="green"];
 	 short [label="short.html", shape="record", color="green"];
 	 paginator [label="paginator.html", shape="record", color="green"];
 };
@@ -65,7 +64,6 @@ jabber -> base [color="orange"];
 zoom -> base [color="orange", label="jabber widget"];
 zoom -> item [color="orange"];
 zoom -> short [color="orange"];
-ga -> base [color="orange"];
 short -> list [color="orange"];
 paginator -> list [color="orange"];
 
