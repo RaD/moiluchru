@@ -1,14 +1,14 @@
-TOP_DIR=..
-APP_DIR=.
+APP_DIR=..
+TOP_DIR=$(APP_DIR)/..
 
-include $(TOP_DIR)/config.mk
 include $(APP_DIR)/config.mk
+include $(TOP_DIR)/config.mk
 
-CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/$(APPNAME)
-SUBDIRS=management
+CURRENT_INSTALL_DIR=$(INSTALL_DJANGO_DIR)/$(PROJECTNAME)/$(APPNAME)/management
+SUBDIRS=commands
 FILES=$(wildcard *.py)
 
-all:
+all: subdirs
 
 install: create_dir install_files install_subdirs
 
