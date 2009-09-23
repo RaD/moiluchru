@@ -13,6 +13,7 @@ from snippets import render_to, columns, paginate_by
 
 sort_variants = ['', '-buys', 'buys', '-sort_price', 'sort_price']
 
+### Общий контекст
 def common_context(request):
     if not 'cart_items' in request.session:
         v_shop.init_cart(request)

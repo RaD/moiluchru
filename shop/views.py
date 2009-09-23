@@ -10,7 +10,7 @@ from tagging.models import Tag
 from tagging.utils import calculate_cloud
 
 from shop import models
-from shop.forms import SearchForm
+from shop.forms_search import SearchForm
 
 from snippets import render_to, columns, paginate_by
 
@@ -99,12 +99,12 @@ def tag_search(request, tag):
     return items
 
 def get_search_forms(request):
-    from shop.forms import get_search_form # воспользуемся фабрикой поисковых форм
+    from shop.forms_search import get_search_form as factory # воспользуемся фабрикой поисковых форм
     context = {
         'searchform': SearchForm(request.POST or None), 
-        'mainsearchform': get_search_form('MainSearchForm', request.POST or None, initial={'is_present': True}),
-        'sizesearchform': get_search_form('SizeSearchForm', request.POST or None),
-        'fullsearchform': get_search_form('FullSearchForm', request.POST or None),
+        'mainsearchform': factory('MainSearchForm', request.POST or None, initial={'is_present': True}),
+        'sizesearchform': factory('SizeSearchForm', request.POST or None),
+        'fullsearchform': factory('FullSearchForm', request.POST or None),
         }
 
 #     # здесь мы обрабатываем ситуацию вызова поисковых форм после
@@ -138,7 +138,7 @@ def get_search_results(request):
                                                    Q(tags__search=u'*"%s"*' % clean['userinput']))
             # поиск по дополнительным параметрам товара
             if full_search:
-                from shop.forms import get_search_form # воспользуемся фабрикой поисковых форм
+                from shop.forms_search import get_search_form # воспользуемся фабрикой поисковых форм
 
                 for key in ['MainSearchForm', 'SizeSearchForm', 'FullSearchForm']:
                     form = get_search_form(key, data=request.POST)

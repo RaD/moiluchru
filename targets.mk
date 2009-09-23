@@ -40,5 +40,5 @@ install_templates:
 	done
 
 chown_all:
-	chown -R $(OWNER):$(GROUP) $(CURRENT_INSTALL_DIR);
+	chown --recursive $(OWNER):$(GROUP) $(CURRENT_INSTALL_DIR);
 
