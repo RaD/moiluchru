@@ -8,7 +8,8 @@
   </colgroup>
     <tr>
       <td align="left">
-	Страница {{ page.number }} из {{ page.paginator.num_pages }}
+	Страница <span id="current_page_number">{{ page.number }}</span> 
+	из <span id="maximum_page_number">{{ page.paginator.num_pages }}</span>
 
 	{% if page.previous_ten %}
 	<a href="{{ url }}{{ page.previous_ten }}/">
@@ -18,14 +19,14 @@
 	{% endif %}
 
 	{% if page.has_previous %}
-	<a href="{{ url }}{{ page.previous_page_number }}/">
+	<a id="navigation_prev_page" href="{{ url }}{{ page.previous_page_number }}/">
 	  <span title="Предыдущая страница" class="button">&lt;</span></a>
 	{% else %}
 	<span title="Предыдущая страница" class="button disabled">&lt;</span>
 	{% endif %}
 
 	{% if page.has_next %}
-	<a href="{{ url }}{{ page.next_page_number }}/">
+	<a id="navigation_next_page" href="{{ url }}{{ page.next_page_number }}/">
 	  <span title="Следующая страница" class="button">&gt;</span></a>
 	{% else %}
 	<span title="Следующая страница" class="button disabled">&gt;</span>
@@ -53,9 +54,4 @@
     </tr>
   </table>
 </div>
-
-<script>
-$(document).bind('keyup', 'Ctrl+left', function (evt){document.location='{{ url }}{{ page.previous_page_number }}';});
-$(document).bind('keyup', 'Ctrl+right', function (evt){document.location='{{ url }}{{ page.next_page_number }}';});
-</script>
 {% endif %}

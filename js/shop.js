@@ -248,4 +248,19 @@ $(document).ready(function() {
 		      );
 	}
     );
+
+    // навигация
+    $(document).bind('keyup', function(e) {
+	var page_current = parseInt($('#current_page_number').text());
+	var page_maximum = parseInt($('#maximum_page_number').text());
+	if (e.ctrlKey) {
+	    if (e.keyCode == 37 && page_current > 1) {
+		document.location = $('#navigation_prev_page').attr('href');
+	    }
+	    if (e.keyCode == 39 && page_current < page_maximum) {
+		document.location = $('#navigation_next_page').attr('href');
+	    }
+	}
+	//console.log(e.ctrlKey, e.keyCode, page_current, page_maximum);
+    });
 });
