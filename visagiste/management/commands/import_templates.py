@@ -13,7 +13,6 @@ class Command(NoArgsCommand):
     help = "Populates Visagiste.Template model with the content of templates. Useful after installation."
 
     def handle_noargs(self, **options):
-        print 'WORKS'
         Template.objects.all().delete()
         for indir in settings.TEMPLATE_DIRS:
             for infile in glob.glob(os.path.join(indir, '*.html')):
