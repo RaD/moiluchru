@@ -32,7 +32,7 @@ admin.site.register(models.Country, CountryAdmin)
 class ProducerAdmin(admin.ModelAdmin):
     fieldsets = ((None,{'fields': ('name','country', 'buys')}),)
     list_display = ('name', 'country', 'buys')
-    ordering = ('title', 'country')
+    ordering = ('name', 'country')
     search_fields = ('name',)
 admin.site.register(models.Producer, ProducerAdmin)
 
@@ -124,7 +124,7 @@ class ItemAdmin(admin.ModelAdmin):
         )
     list_display = ('title', 'field_image_preview', 'category',
                     'field_price_shop', 'buys', 'reg_date')
-    ordering = ('reg_date', 'title', 'category')
+    ordering = ('-reg_date', 'title', 'category')
     search_fields = ('title', 'category')
     save_as = True
     inlines = [SizeInline, LampInline, EslLampInline, IntegratedInline]
