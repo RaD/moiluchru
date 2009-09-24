@@ -18,12 +18,12 @@ SECRET_KEY = '+&oxu(m-yg6#0am-pdcxb%^#ok(*w&w6gtrh8grdc3m3$=s(#j'
 
 TEMPLATE_LOADERS = (
     'visagiste.loader.load_template_source',
-) + TEMPLATE_LOADERS
+    ) + TEMPLATE_LOADERS
 
 TEMPLATE_DIRS = (
+    '/home/rad/django.apps/moiluchru/templates',
     os.path.join(os.path.dirname(__file__), 'templates/manager'),
-    #'/home/rad/django.apps/moiluchru/templates',
-)
+    )
 
 INSTALLED_APPS += (
     'shop',
