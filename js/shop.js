@@ -95,6 +95,9 @@ $.fn.extend({
 		     'left': offset.left,
 		     'opacity': 0.3}).toggleClass('hide').fadeIn();
 	});
+    },
+    exists: function() {
+	return (this.length > 0);
     }
 });
 
@@ -263,4 +266,26 @@ $(document).ready(function() {
 	}
 	//console.log(e.ctrlKey, e.keyCode, page_current, page_maximum);
     });
+
+    // поисковый интерфейс
+    var obj = $('#id_item_type');
+    if (obj.exists()) {
+	item_type_handler = function(e) {
+	    var advice = $('#search_advice');
+	    var place = $('#full_search');
+	    var val = $('option:selected', obj).val()
+	    if (val == '') {
+		place.hide().html();
+		return
+	    }
+	    $('#loading').show();
+	    $.post('/ajax/search/addon/', {id: val},
+		   function(json) {
+				place.html(json.form).show();
+		       $('#loading').hide();
+		   }, 'json');
+	};
+	obj.bind('change', item_type_handler);
+	item_type_handler();
+    }
 });

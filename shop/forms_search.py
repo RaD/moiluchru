@@ -38,7 +38,15 @@ class MinMaxFormField(forms.MultiValueField):
         super(MinMaxFormField, self).__init__(fields, *args, **kwargs)
 
     def clean(self, data_list):
-        if int(data_list[0]) > int(data_list[1]):
+        for i in xrange(len(data_list)):
+            if data_list[i] == '':
+                data_list[i] = '0'
+        try:
+            min_val = int(data_list[0])
+            max_val = int(data_list[1])
+        except ValueError:
+            raise forms.ValidationError(_(u'These fields accept integers only.'))
+        if min_val > max_val:
             raise forms.ValidationError(_(u'Min field is greater than Max field.'))
         return data_list
 
@@ -109,6 +117,11 @@ class BaseSearchForm(forms.ModelForm):
                 queryset = queryset.filter(**filter)
         return queryset
 
+class SearchAddon(forms.Form):
+    """ Класс для получения информации о форме, которую необходимо
+    подгрузить через Ajax. """
+    id = forms.CharField(max_length=2)
+
 # Настройки для выпадашки "количество элементов на странице".
 ipp_settings = settings.SHOP_ITEMS_PER_PAGE
 ITEMS_PER_PAGE_CHOICE = [(1, ipp_settings),
@@ -157,12 +170,13 @@ def modelform_factory(model, form=BaseSearchForm, fields=None, exclude=None,
 def get_search_form(form_name, *args, **kwargs):
     # Описываем возможные формы поиска
     mutable_forms = {'MainSearchForm': {'model': models.Item,
-                                        'exclude': ('title', 'desc', 'item_type', 'collection', 
+                                        'exclude': ('title', 'desc', 'collection', 
                                                     'producer', 'has_lamp', 'image', 'buys', 'tags')},
                      'SizeSearchForm': {'model': models.Size, 'exclude': ('item',)} ,
-                     'FullSearchForm': {'model': models.Lamp, 'exclude': ('item',)}}
+                     'Lamp': {'model': models.Lamp, 'exclude': ('item',)},
+                     'EslLamp': {'model': models.EslLamp, 'exclude': ('item',)},
+                     }
     
     info = mutable_forms[form_name]
     form_class = modelform_factory(info['model'], exclude=info['exclude'])
     return form_class(*args, **kwargs)
-

@@ -61,6 +61,7 @@ urlpatterns = patterns(
     (r'^ajax/jabber/message/$', 'shop.ajax.jabber_message'),
     (r'^ajax/jabber/poll/$', 'shop.ajax.jabber_poll'),
     (r'^ajax/advice/random/$', 'advice.views.get_random_advice'),
+    url(r'^ajax/search/addon/$', 'shop.ajax.get_search_addon'),
 
     # основное
     (r'^$', 'views.flatpage', {'title': 'index'}),

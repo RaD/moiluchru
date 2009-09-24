@@ -29,6 +29,10 @@
     вносите изменения в эти поля. Ноль в обоих полях означает, что
     данное условие не будет учитываться при выполнении поиска.
   </p>
+  <p>
+    Укажите тип товара для отображения поисковой формы по его
+    уникальным характеристикам.
+  </p>
 </div>
 
 {% if error_desc %}<div id="error">{{ error_desc }}</div>{% endif %}
@@ -48,15 +52,12 @@
     {{ sizesearchform }}
   </table>
 
-  <h3>Уникальные характеристики продукта</h3>
-  
-  <table id="full_search" width="100%">
-    {{ fullsearchform }}
+  <img id="loading" class="hide" src="/pics/loading.gif" title="Ожидайте..." border="0"/>
+  <table id="full_search" width="100%" class="hide">
   </table>
   
   <p align="right">
     <input type="submit" name="go" value="Найти"/>
   </p>
 </form>
-    
 {% endblock %}

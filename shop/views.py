@@ -10,7 +10,7 @@ from tagging.models import Tag
 from tagging.utils import calculate_cloud
 
 from shop import models
-from shop.forms_search import SearchForm
+from shop.forms_search import SearchForm, get_search_form as factory
 
 from snippets import render_to, columns, paginate_by
 
@@ -99,28 +99,26 @@ def tag_search(request, tag):
     return items
 
 def get_search_forms(request):
-    from shop.forms_search import get_search_form as factory # воспользуемся фабрикой поисковых форм
     context = {
         'searchform': SearchForm(request.POST or None), 
         'mainsearchform': factory('MainSearchForm', request.POST or None, initial={'is_present': True}),
         'sizesearchform': factory('SizeSearchForm', request.POST or None),
-        'fullsearchform': factory('FullSearchForm', request.POST or None),
         }
-
-#     # здесь мы обрабатываем ситуацию вызова поисковых форм после
-#     # обнаружения ошибки в поисковом запросе
-#     try:
-#         (form_name, post, desc) = request.session['error']
-#         del(request.session['error'])
-#         context.update({'error_desc': desc})
-#         if form_name == 'simple':
-#             context.update({'searchform': SearchForm(post)})
-#         else:
-#             context.update({ form_name.lower():  get_search_form(form_name, data=post) })
-#     except KeyError:
-#         pass
-
     return context
+
+def filter_items(request, model_name, items):
+    """ Вспомогательная функция для получения более уточнённой выборки. """
+    form = factory(model_name, data=request.POST)
+    if form.is_valid():
+        subset = form.search()
+        # для inline моделей фильтр создаётся немного по другому, т.к. у них item.id
+        if model_name == 'MainSearchForm':
+            id_array = [i.id for i in subset]
+        else:
+            id_array = [i.item.id for i in subset]
+        return (form, items.filter(id__in=id_array))
+    else:
+        return None
 
 def get_search_results(request):
     if request.method == 'POST':
@@ -136,27 +134,23 @@ def get_search_results(request):
                 items = models.Item.objects.filter(Q(title__search=u'*"%s"*' % clean['userinput']) |
                                                    Q(desc__search=u'*"%s"*' % clean['userinput']) |
                                                    Q(tags__search=u'*"%s"*' % clean['userinput']))
-            # поиск по дополнительным параметрам товара
-            if full_search:
-                from shop.forms_search import get_search_form # воспользуемся фабрикой поисковых форм
 
-                for key in ['MainSearchForm', 'SizeSearchForm', 'FullSearchForm']:
-                    form = get_search_form(key, data=request.POST)
-                    if form.is_valid():
-                        subset = form.search()
-                        # для inline моделей фильтр создаётся немного по другому, т.к. у них item.id
-                        if key == 'MainSearchForm':
-                            id_array = [i.id for i in subset]
-                        else:
-                            id_array = [i.item.id for i in subset]
-                        items = items.filter(id__in=id_array)
-                    else:
-                        try: # сохраняем имя класса формы
-                            request.session['error'] = (key, request.POST, 
-                                                        u'Ошибка во введённых данных. Проверьте их правильность.')
-                        except KeyError:
-                            raise Http404
+            if full_search:
+                model_name = None
+                for key in ['MainSearchForm', 'SizeSearchForm']:
+                    result = filter_items(request, key, items)
+                    if not result: # форма не прошла проверка
                         return None
+                    (form, items) = result 
+                    if key == 'MainSearchForm':
+                        obj = form.cleaned_data['item_type']
+                        if obj:
+                            model_name = obj.model_name
+                if model_name:
+                    result = filter_items(request, model_name, items)
+                    if not result: # форма не прошла проверка
+                        return None
+                    (form, items) = result
 
             request.session['searchquery'] = clean['userinput']
             request.session['howmuch_id'] = clean['howmuch']
@@ -166,16 +160,11 @@ def get_search_results(request):
                                         u'Ошибка во введённых данных. Проверьте их правильность.')
             return None
     else: # обращение через paginator
-        try:
-            items = request.session.get('cached_items', None)
-        except:
-            # видать прошли по ссылке напрямую, отправим на страницу поиска
-            return None
+        items = request.session.get('cached_items', None)
     return items
 
 def get_cart_items(request):
     """ Возвращаем содержимое корзины. """
-
     cart = request.session.get('cart_items', {})
     if len(cart) == 0:
         items = None

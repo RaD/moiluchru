@@ -97,9 +97,9 @@ class ItemType(CommonEntity):
     """ The collection for items. """
     model_name = models.CharField(_(u'Name of model'), max_length=64)
 
-    #class Meta:
-    #    verbose_name = _(u'Item type')
-    #    verbose_name_plural = _(u'Item types')
+    class Meta:
+        verbose_name = _(u'Item type')
+        verbose_name_plural = _(u'Item types')
 
 class Item(CommonEntity):
     desc = models.TextField(verbose_name=_(u'Description'), null=True, blank=True)
@@ -239,10 +239,28 @@ class Phone(models.Model):
     number = models.CharField(max_length=20)
     owner = models.ForeignKey(Buyer)
 
+
 ##
 ## Определение специфических свойств товара
 ##
 
+class Size(models.Model):
+    item = models.ForeignKey(Item)
+    diameter = models.PositiveIntegerField(verbose_name=_(u'Diameter'), 
+                                           help_text=_(u'Diameter of an item, in millimeters'),
+                                           null=True, blank=True)
+    height = models.PositiveIntegerField(verbose_name=_(u'Height'), 
+                                         help_text=_(u'Height of an item, in millimeters'),
+                                         null=True, blank=True)
+    length = models.PositiveIntegerField(verbose_name=_(u'Length'), 
+                                         help_text=_(u'Length of an item, in millimeters'),
+                                         null=True, blank=True)
+    width = models.PositiveIntegerField(verbose_name=_(u'Width'), 
+                                        help_text=_(u'Width of an item, in millimeters'),
+                                        null=True, blank=True)
+    brow = models.PositiveIntegerField(verbose_name=_(u'Brow'), 
+                                       help_text=_(u'Brow of an item, in millimeters'),
+                                       null=True, blank=True)
 # Освещение
 class Socle(CommonEntity):
     pass
@@ -263,24 +281,6 @@ class Lamp(models.Model):
     voltage = models.PositiveIntegerField(verbose_name=_(u'Voltage'),
                                           help_text=_(u'Voltage of lamps'), default=220)
 
-class Size(models.Model):
-    item = models.ForeignKey(Item)
-    diameter = models.PositiveIntegerField(verbose_name=_(u'Diameter'), 
-                                           help_text=_(u'Diameter of an item, in millimeters'),
-                                           null=True, blank=True)
-    height = models.PositiveIntegerField(verbose_name=_(u'Height'), 
-                                         help_text=_(u'Height of an item, in millimeters'),
-                                         null=True, blank=True)
-    length = models.PositiveIntegerField(verbose_name=_(u'Length'), 
-                                         help_text=_(u'Length of an item, in millimeters'),
-                                         null=True, blank=True)
-    width = models.PositiveIntegerField(verbose_name=_(u'Width'), 
-                                        help_text=_(u'Width of an item, in millimeters'),
-                                        null=True, blank=True)
-    brow = models.PositiveIntegerField(verbose_name=_(u'Brow'), 
-                                       help_text=_(u'Brow of an item, in millimeters'),
-                                       null=True, blank=True)
-
 class IntegratedLight(models.Model):
     item = models.ForeignKey(Item)
     color = models.ForeignKey(Color, verbose_name=_(u'Color'))
@@ -289,3 +289,17 @@ class IntegratedLight(models.Model):
         help_text=_(u'Diameter of an montage hole, in millimeters'),
         null=True, blank=True)
     
+# Энергосберегающие лампы
+class EslLamp(models.Model):
+    item = models.ForeignKey(Item)
+    socle = models.ForeignKey(Socle, 
+                              verbose_name=_(u'Socle'),
+                              help_text=_(u'Socle of lamp'))
+    consumption = models.PositiveIntegerField(verbose_name=_(u'Consuption'), default=0,
+                                              help_text=_(u'Consumption of lamp in Watts'))
+    luminosity = models.PositiveIntegerField(verbose_name=_(u'Luminosity'), default=0,
+                                              help_text=_(u'Luminosity of lamp in Watts'))
+    temperature = models.PositiveIntegerField(verbose_name=_(u'Temperature'), default=0,
+                                              help_text=_(u'Light\'s temperature in K'))
+    voltage = models.PositiveIntegerField(verbose_name=_(u'Voltage'), 
+                                          help_text=_(u'Voltage of lamps'), default=220)

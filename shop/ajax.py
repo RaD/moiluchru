@@ -5,7 +5,8 @@ from django.conf import settings
 from snippets import ajax_processor
 from shop.views import init_cart
 from shop.forms import CartAdd, CartClean, CartRecalculate, CartRemoveItem
-from shop.models import Item
+from shop.forms_search import SearchAddon
+from shop.models import Item, ItemType
 from jabber.forms import JabberMessage
 from jabber.models import Message
 
@@ -82,9 +83,17 @@ def cart_remove_item(request, form):
             'cart_count': request.session['cart_count'],
             'cart_price': request.session['cart_price']}
 
-# Отправка сообщения на джаббер
+@ajax_processor(SearchAddon)
+def get_search_addon(request, form):
+    """ Получение дополнительной формы. """
+    from shop.forms_search import get_search_form as factory
+    id = int(form.cleaned_data['id'])
+    item_type = ItemType.objects.get(id=id)
+    return {'form': factory(item_type.model_name).as_table()}
+
 @ajax_processor(JabberMessage)
 def jabber_message(request, form):
+    """ Отправка сообщения на джаббер. """
     if 'system' in form.cleaned_data and form.cleaned_data['system'] == '1': # системное сообщение
         # отправляем сообщение сервису для закрытия соединения
         try:
@@ -96,7 +105,6 @@ def jabber_message(request, form):
         except KeyError:
             # нет такого ключа, значит ничего не делаем
             pass
-
         return {'code': '200', 'desc': 'closed'} # FIXME
 
     # при первом обращении клиента следует автоматически сгенерировать
@@ -126,9 +134,9 @@ def jabber_message(request, form):
         return {'code': '400', 'desc': e}
     return {'code': '200', 'desc': 'sent'}
 
-# Отправка сообщения клиенту
 @ajax_processor(None)
 def jabber_poll(request):
+    """ Отправка сообщения клиенту. """
     nick = request.session.get('JABBER_NICK', dt.now().strftime('%M%S'))
     try:
         # приём сообщений

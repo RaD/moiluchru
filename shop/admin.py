@@ -64,6 +64,13 @@ class CollectionAdmin(admin.ModelAdmin):
     search_fields = ('title',)
 admin.site.register(models.Collection, CollectionAdmin)
 
+class ItemTypeAdmin(admin.ModelAdmin):
+    fieldsets = ((None,{'fields': ('title', 'model_name')}),)
+    list_display = ('title', 'model_name')
+    ordered = ('title', 'model_name')
+    search_fields = ('title', 'model_name')
+admin.site.register(models.ItemType, ItemTypeAdmin)
+
 ### Item
 
 class ItemForm(forms.ModelForm):
@@ -92,6 +99,10 @@ class LampInline(admin.TabularInline):
     model = models.Lamp
     extra = 1
       
+class EslLampInline(admin.TabularInline):
+    model = models.EslLamp
+    extra = 1
+      
 class SizeInline(admin.TabularInline):
     model = models.Size
     max_num = 1
@@ -116,7 +127,7 @@ class ItemAdmin(admin.ModelAdmin):
     ordering = ('title', 'category')
     search_fields = ('title', 'category')
     save_as = True
-    inlines = [SizeInline, LampInline, IntegratedInline]
+    inlines = [SizeInline, LampInline, EslLampInline, IntegratedInline]
 
     def field_image_preview(self, item):
         url = thumbnail(item.image.path, '100x,itempics')

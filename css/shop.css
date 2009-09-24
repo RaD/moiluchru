@@ -182,6 +182,7 @@ form input[type="text"] { width: 96%; }
    font-size: 130%; background: none; margin-top: 0.3em;
 }
 #content .desc { padding: 0em 0.2em 0em 1em;}
+#content .desc p { margin: 0.3em 0em 0.3em 0em;}
 #content .text p { margin: 0.5em; text-indent: 1em; line-height: 1.5;}
 #content .text ul { margin: 0.5em; line-height: 1.5; }
 #content .text ul li { list-style-position: inside; margin: 0.5em 1em; }
@@ -218,6 +219,7 @@ form input[type="text"] { width: 96%; }
    text-align: right;
    font-family: courier new;
 }
+#advanced_search #full_search { background-color: #eeeeff; }
 
 #widget-jabber {
    position: absolute; top: 0px; right: 0px; z-index: 1; width: 120px; height: 1.5em; 
