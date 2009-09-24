@@ -20,19 +20,19 @@ admin.site.register(models.Socle, SocleAdmin)
 class ColorAdmin(admin.ModelAdmin):
     fieldsets = ((None,{'fields': ('title','code')}),)
     list_display = ('title','code')
-    ordered = ('title',)
+    ordering = ('title',)
 admin.site.register(models.Color, ColorAdmin)
 
 class CountryAdmin(admin.ModelAdmin):
     fieldsets = ((None,{'fields': ('title',)}),)
     list_display = ('title',)
-    ordered = ('title',)
+    ordering = ('title',)
 admin.site.register(models.Country, CountryAdmin)
 
 class ProducerAdmin(admin.ModelAdmin):
     fieldsets = ((None,{'fields': ('name','country', 'buys')}),)
     list_display = ('name', 'country', 'buys')
-    ordered = ('title', 'country')
+    ordering = ('title', 'country')
     search_fields = ('name',)
 admin.site.register(models.Producer, ProducerAdmin)
 
@@ -53,21 +53,21 @@ class CategoryAdmin(admin.ModelAdmin):
     form = CategoryForm
     fieldsets = ((None,{'fields': ('title', 'slug', 'parent')}),)
     list_display = ('title', 'slug', 'parent')
-    ordered = ('parent', 'title')
+    ordering = ('parent', 'title')
     search_fields = ('title',)
 admin.site.register(models.Category, CategoryAdmin)
 
 class CollectionAdmin(admin.ModelAdmin):
     fieldsets = ((None,{'fields': ('title',)}),)
     list_display = ('title',)
-    ordered = ('title',)
+    ordering = ('title',)
     search_fields = ('title',)
 admin.site.register(models.Collection, CollectionAdmin)
 
 class ItemTypeAdmin(admin.ModelAdmin):
     fieldsets = ((None,{'fields': ('title', 'model_name')}),)
     list_display = ('title', 'model_name')
-    ordered = ('title', 'model_name')
+    ordering = ('title', 'model_name')
     search_fields = ('title', 'model_name')
 admin.site.register(models.ItemType, ItemTypeAdmin)
 
@@ -124,7 +124,7 @@ class ItemAdmin(admin.ModelAdmin):
         )
     list_display = ('title', 'field_image_preview', 'category',
                     'field_price_shop', 'buys', 'reg_date')
-    ordering = ('title', 'category')
+    ordering = ('reg_date', 'title', 'category')
     search_fields = ('title', 'category')
     save_as = True
     inlines = [SizeInline, LampInline, EslLampInline, IntegratedInline]
