@@ -18,3 +18,4 @@ class Command(NoArgsCommand):
             for infile in glob.glob(os.path.join(indir, '*.html')):
                 content = open(infile, 'r').read()
                 Template(name=infile, content=content).save()
+                print infile
