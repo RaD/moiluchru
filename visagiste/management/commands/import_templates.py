@@ -17,5 +17,5 @@ class Command(NoArgsCommand):
         for indir in settings.TEMPLATE_DIRS:
             for infile in glob.glob(os.path.join(indir, '*.html')):
                 content = open(infile, 'r').read()
-                Template(name=infile, content=content).save()
+                Template(name=os.path.basename(infile), content=content).save()
                 print infile
