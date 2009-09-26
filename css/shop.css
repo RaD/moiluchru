@@ -98,6 +98,8 @@ input,textarea,select { border: 1px solid gray; -moz-border-radius: 4px; padding
 #title-phone .phone-number { color: black; }
 
 form input[type="text"] { width: 96%; }
+form .errorlist ul { list-style-type: none; }
+form .errorlist li { color: red; display: inline; }
 
 #cartwidget {
    border: 0px solid orange; -moz-border-radius: 0.4em 0em 0em 0.4em;

@@ -39,6 +39,9 @@ def tag_search(request, tag):
 ### Выдача расширенного поискового интерфейса
 @render_to('search.html', common_context)
 def search_query(request):
+    if 'bad_search_query' in request.session:
+        request.POST = request.session['bad_search_query']
+        del(request.session['bad_search_query'])
     context = v_shop.get_search_forms(request)
     context.update({
             'page_title': u'%s : %s : %s' % (_(u'Search'), _(u'Advanced'), settings.SITE_TITLE,),
@@ -52,6 +55,7 @@ def search_query(request):
 def search_results(request):
     items = v_shop.get_search_results(request)
     if items is None:
+        request.session['bad_search_query'] = request.POST
         return HttpResponseRedirect('/search/')
     return {
         'page_title': u'%s : %s : %s' % (_(u'Search'), _(u'Results'), settings.SITE_TITLE,),
