@@ -241,6 +241,57 @@ class Phone(models.Model):
 
 
 ##
+## Статистика поисковых запросов
+##
+
+class SearchStatQuery(models.Model):
+    ip_address = models.IPAddressField()
+
+    class Meta:
+        verbose_name = _(u'Search statistic query')
+        verbose_name_plural = _(u'Search statistic query')
+
+    def __init__(self, *args, **kwargs):
+        if 'request' in kwargs:
+            request = kwargs['request']
+            self.post = request.POST
+            self.meta = request.META
+            del kwargs['request']
+        super(SearchStatQuery, self).__init__(*args, **kwargs)
+        self.ip_address = self.meta.get('REMOTE_ADDR', '127.0.0.127')
+
+    def save(self, *args, **kwargs):
+        super(SearchStatQuery, self).save()
+        for param in self.post.keys():
+            value = self.post[param]
+            if param in ['go', 'howmuch', 'simple']:
+                continue
+            if param.endswith('_0') and value == '0':
+                base_param_name = param[0:param.rfind('_')]
+                pair_param = '%s_1' % (base_param_name, )
+                pair_value = self.post[pair_param]
+                if pair_value == '0':
+                    continue
+            if param.endswith('_1') and value == '0':
+                base_param_name = param[0:param.rfind('_')]
+                pair_param = '%s_0' % (base_param_name, )
+                pair_value = self.post[pair_param]
+                if pair_value == '0':
+                    continue
+            if value == '':
+                continue
+            SearchStatOption(query=self, param=param, value=value).save()
+
+class SearchStatOption(models.Model):
+    query = models.ForeignKey(SearchStatQuery)
+    param = models.CharField(max_length=64)
+    value = models.CharField(max_length=1024)
+
+    class Meta:
+        verbose_name = _(u'Search statistic option')
+        verbose_name_plural = _(u'Search statistic options')
+
+##
 ## Определение специфических свойств товара
 ##
 

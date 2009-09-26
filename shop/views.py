@@ -155,6 +155,7 @@ def get_search_results(request):
             request.session['searchquery'] = clean['userinput']
             request.session['howmuch_id'] = clean['howmuch']
             request.session['cached_items'] = items # кэшируем для paginator
+            models.SearchStatQuery(request=request).save() # сохраняем запрос для статистики
         else:
             request.session['error'] = ('simple', request.POST, 
                                         u'Ошибка во введённых данных. Проверьте их правильность.')
