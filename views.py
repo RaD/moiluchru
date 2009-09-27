@@ -109,13 +109,14 @@ def item(request, id=None):
     else:
         (item, collection, previous, next) = v_shop.get_item_info_by_title(request, id)
 
+    print item.get_addons()
     return {
         'page_title': u'%s : %s : %s' % (_(u'Item'), item, settings.SITE_TITLE),
         'mode': 'item',
         'this': item.category,
         'item': item, 'collection': collection,
         'previous': previous, 'next': next,
-        'lamp': item.get_lamp(), 'addons': item.get_size(),
+        'addons': item.get_addons(),
         }
 
 ### Отображение содержимого корзины.

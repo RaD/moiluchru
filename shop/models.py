@@ -128,17 +128,15 @@ class Item(CommonEntity):
     def get_absolute_url_by_title(self):
         return u'/item/%s/' % self.title
 
-    def get_lamp(self):
-        try:
-            return Lamp.objects.filter(item=self)
-        except Lamp.DoesNotExist:
-            return None
-
-    def get_size(self):
-        try:
-            return Size.objects.get(item=self)
-        except Size.DoesNotExist:
-            return None
+    def get_addons(self):
+        related = [Size, Lamp, EslLamp]
+        objects = {}
+        for model in related:
+            try:
+                objects.update({model.__name__: model.objects.filter(item=self)})
+            except model.DoesNotExist:
+                pass
+        return objects
 
     def get_price(self):
         try:

@@ -4,85 +4,85 @@
 {% load markup %}
 
 {% block panel_top %}
-<div class="rfloat">
-  {% if previous %}
-  <a href="{{ previous.get_absolute_url }}"><span title="Предыдущий товар категории" class="button">&lt;</span></a>
-  {% else %}
-  <span title="Предыдущий товар категории" class="button disabled">&lt;</span>
-  {% endif %}
+  <div class="rfloat">
+    {% if previous %}
+    <a href="{{ previous.get_absolute_url }}"><span title="Предыдущий товар категории" class="button">&lt;</span></a>
+    {% else %}
+    <span title="Предыдущий товар категории" class="button disabled">&lt;</span>
+    {% endif %}
 
-  {% if next %}
-  <a href="{{ next.get_absolute_url }}"><span title="Следующий товар категории" class="button">&gt;</span></a>
-  {% else %}
-  <span title="Следующий товар категории" class="button disabled">&gt;</span>
-  {% endif %}
-</div>
+    {% if next %}
+    <a href="{{ next.get_absolute_url }}"><span title="Следующий товар категории" class="button">&gt;</span></a>
+    {% else %}
+    <span title="Следующий товар категории" class="button disabled">&gt;</span>
+    {% endif %}
+  </div>
 
-<div class="title lfloat">
-  Артикул: {{ item.title }}
-</div>
+  <div class="title lfloat">
+    Артикул: {{ item.title }}
+  </div>
 {% endblock %}
 
 {% block panel_bottom %}
-<div class="rfloat">
-  {% if previous %}
-  <a href="{{ previous.get_absolute_url }}"><span title="Предыдущий товар категории" class="button">&lt;</span></a>
-  {% else %}
-  <span title="Предыдущий товар категории" class="button disabled">&lt;</span>
-  {% endif %}
+  <div class="rfloat">
+    {% if previous %}
+    <a href="{{ previous.get_absolute_url }}"><span title="Предыдущий товар категории" class="button">&lt;</span></a>
+    {% else %}
+    <span title="Предыдущий товар категории" class="button disabled">&lt;</span>
+    {% endif %}
 
-  {% if next %}
-  <a href="{{ next.get_absolute_url }}"><span title="Следующий товар категории" class="button">&gt;</span></a>
-  {% else %}
-  <span title="Следующий товар категории" class="button disabled">&gt;</span>
-  {% endif %}
-</div>
+    {% if next %}
+    <a href="{{ next.get_absolute_url }}"><span title="Следующий товар категории" class="button">&gt;</span></a>
+    {% else %}
+    <span title="Следующий товар категории" class="button disabled">&gt;</span>
+    {% endif %}
+  </div>
 
-<div class="title lfloat">
-  Артикул: {{ item.title }}
-</div>
-{% endblock %}
+  <div class="title lfloat">
+    Артикул: {{ item.title }}
+  </div>
+  {% endblock %}
 
 {% block content %}
-<table width="100%" height="210" border="0" cellspacing="4">
-  <colgroup>
-    <col width="200"/>
-    <col width="auto"/>
-    <col width="auto"/>
-  </colgroup>
-  <tr>
-    <td height="200" align="center" valign="middle" id="image-container"
-	onclick="$('#cartadd_{{ item.id }}').toggleZoom(); return false;">
-      {# Изображение товара #}
-      <img src="{{ item.image.path|thumbnail:"200x,itempics" }}" id="thumbnail" border="0" title="{{ item.title }} : Нажмите, чтобы увеличить" />
-	{% for l in lamp %}
+  <table width="100%" height="210" border="0" cellspacing="4">
+    <colgroup>
+      <col width="200"/>
+      <col width="auto"/>
+      <col width="auto"/>
+    </colgroup>
+    <tr>
+      <td height="200" align="center" valign="middle" id="image-container"
+	  onclick="$('#cartadd_{{ item.id }}').toggleZoom(); return false;">
+	{# Изображение товара #}
+	<img src="{{ item.image.path|thumbnail:"200x,itempics" }}" id="thumbnail" border="0" title="{{ item.title }} : Нажмите, чтобы увеличить" />
+	{% for l in addons.Lamp %}
 	<img id="lamp_{{ l.socle|lower|cut:' ' }}" src="http://moiluchru/pics/lamps/{{ l.socle|lower|cut:' ' }}.jpeg" class="hide" 
 	     style="position: relative; top: 0px; left: 0px;"/>
 	{% endfor %}
-    </td>
+      </td>
 
-    <td style="padding: 0px 4px; border: 0px dotted gray; border-width: 0px 1px 0px 1px;">
-      <div id="addwidget" class="active-zone"
+      <td style="padding: 0px 4px; border: 0px dotted gray; border-width: 0px 1px 0px 1px;">
+	<div id="addwidget" class="active-zone"
 	     onclick="$('#cartadd_{{ item.id }}').toggleZoom(); return false;">
 
-	<div class="important-zone-discount"
-	     title="При покупке нескольких элементов коллекции спрашивайте о скидке.">
+	  <div class="important-zone-discount"
+	       title="При покупке нескольких элементов коллекции спрашивайте о скидке.">
 	    Скидка?
-	</div>
+	  </div>
 
-	<img src="http://moiluchru/pics/add.png" title="Добавить в корзину" width="32" height="32" align="left" style="margin: 0.5em; 4px;"/>
-	<div style="line-height: 1.0;">
-	  <div style="color: #2c3d82;">Цена:</div>
-	  <span style="font-size: 200%; font-weight: bold; color: #071c71;">{{ item.get_price.1|floatformat:2 }}</span>
-	  <span style="color: #2c3d82;">руб.</span>
-	</div>
+	  <img src="http://moiluchru/pics/add.png" title="Добавить в корзину" width="32" height="32" align="left" style="margin: 0.5em; 4px;"/>
+	  <div style="line-height: 1.0;">
+	    <div style="color: #2c3d82;">Цена:</div>
+	    <span style="font-size: 200%; font-weight: bold; color: #071c71;">{{ item.get_price.1|floatformat:2 }}</span>
+	    <span style="color: #2c3d82;">руб.</span>
+	  </div>
 
-	<div style="text-align: center; text-decoration: underline;">
-	  Добавить в корзину
+	  <div style="text-align: center; text-decoration: underline;">
+	    Добавить в корзину
+	  </div>
 	</div>
-      </div>
-      <div>{% ifequal item.is_present 1 %}Есть в наличии{% else %}Ожидается{% endifequal %}.</div>
-
+	<div>{% ifequal item.is_present 1 %}Есть в наличии{% else %}Ожидается{% endifequal %}.</div>
+	
 	{% if jabber %}
 	<div onclick="jabber_init();"
 	     style="border: 1px solid green; -moz-border-radius: 4px; 
@@ -91,69 +91,75 @@
 	</div>
 	<br/>
 	{% endif %}
-    </td>
-      
-    <td valign="top" style="padding: 4px;">
-      <h4>Характеристики</h4>
-      <div>
-	<div>Цвет: <span>{{ item.color }}</span></div>
-	{% if addons.diameter %}<div>Диаметр: {{ addons.diameter }} мм.</div>{% endif %}
-	{% if addons.height %}<div>Высота: {{ addons.height }} мм.</div>{% endif %}
-	{% if addons.length %}<div>Длина: {{ addons.length }} мм.</div>{% endif %}
-	{% if addons.width %}<div>Ширина: {{ addons.width }} мм.</div>{% endif %}
-	{% if addons.brow %}<div>Выступ: {{ addons.brow }} мм.</div>{% endif %}
-      </div>
+      </td>
 
-      {% if lamp %}
-      <h4 class="ttl"><span></span>Лампочки</h4>
-      {% for l in lamp %}
-      <div style="padding: 2px;">
-	<span class="active-zone"
-	      onmouseover="show_lamp('lamp_{{ l.socle|lower|cut:' ' }}');" 
-	      style="font-size: 150%; font-weight: bold;">{{ l.socle }}</span>
-	<span style="font-size: 80%;">{{ l.count }} x {{ l.watt }} Вт</span>
-      </div>
-      <img id="lamp_{{ l.socle|lower }}" src="/pics/lamps/{{ l.socle|lower }}.jpeg" class="hide" style="border: 2px solid red; -moz-border-radius: 8px; padding: 4px; background-color: white;"/>
-      {% endfor %}
-      <div>{% ifequal item.has_lamp 1 %}Лампочки идут в поставке{% else %}Лампочек в поставке нет{% endifequal %}.</div>
-      {% endif %}
+      <td valign="top" style="padding: 4px;">
+	<h4>Характеристики</h4>
+	<div>
+	  <div>Цвет: <span>{{ item.color }}</span></div>
+	  {% for size in addons.Size %}
+	    {% if size.diameter %}<div>Диаметр: {{ size.diameter }} мм.</div>{% endif %}
+	    {% if size.height %}<div>Высота: {{ size.height }} мм.</div>{% endif %}
+	    {% if size.length %}<div>Длина: {{ size.length }} мм.</div>{% endif %}
+	    {% if size.width %}<div>Ширина: {{ size.width }} мм.</div>{% endif %}
+	    {% if size.brow %}<div>Выступ: {{ size.brow }} мм.</div>{% endif %}
+	  {% endfor %}
+	  {% for lamp in addons.EslLamp %}
+	    {% if lamp.socle %}<div>Цоколь: {{ lamp.socle }}</div>{% endif %}
+	    {% if lamp.consumption %}<div>Потребление: {{ lamp.consumption }} Вт.</div>{% endif %}
+	    {% if lamp.luminosity %}<div>Аналогична: {{ lamp.luminosity }} Вт.</div>{% endif %}
+	    {% if lamp.temperature %}<div>Цветовая температура: {{ lamp.temperature }} К.</div>{% endif %}
+	    {% if lamp.voltage %}<div>Напряжение: {{ lamp.voltage }} В.</div>{% endif %}
+	  {% endfor %}
+	</div>
 
-    </td>
-  </tr>
-</table>
+	{% if addons.Lamp %}
+	  <h4 class="ttl"><span></span>Лампочки</h4>
+	  {% for l in addons.Lamp %}
+	    <div style="padding: 2px;">
+	      <span class="active-zone"
+		    onmouseover="show_lamp('lamp_{{ l.socle|lower|cut:' ' }}');" 
+		    style="font-size: 150%; font-weight: bold;">{{ l.socle }}</span>
+	      <span style="font-size: 80%;">{{ l.count }} x {{ l.watt }} Вт</span>
+	    </div>
+	  {% endfor %}
+	  <div>{% ifequal item.has_lamp 1 %}Лампочки идут в поставке{% else %}Лампочек в поставке нет{% endifequal %}.</div>
+	{% endif %}
+      </td>
+    </tr>
+  </table>
 
-{% if item.desc %}
-<div>
-  <div class="title">Описание</div>
-  <div class="desc">{{ item.desc|markdown }}</div>
-  <div class="desc">Приоритетная доставка &mdash; Москва, Красногорск, Нахабино, Дедовск, Снегири, Истра.</div>
-</div>
-{% endif %}
-
-{# Отображение остальных элементов коллекции #}
-{% if collection %}
-<div>
-  <div class="title">Коллекция</div>
-
+  {% if item.desc %}
   <div>
-    {% for i in collection %}
-    <table width="100" height="130" class="collection-list-item">
-      <tr>
-	<td align="center" valign="middle">
-	  <a href="{{ i.get_absolute_url }}" title="Нажмите для просмотра товара">{{ i.title }}</a>
-	</td>
-      </tr>
-      <tr>
-	<td align="center" valign="middle" height="100" width="100" >
-	  <a href="{{ i.get_absolute_url }}" title="Нажмите для просмотра товара"><img src="{{ i.image.path|thumbnail:"100x,itempics" }}" border="0"/></a>
-	</td>
-      </tr>
-    </table>
-    {% endfor %}
+    <div class="title">Описание</div>
+    <div class="desc">{{ item.desc|markdown }}</div>
   </div>
+  {% endif %}
 
-  <div style="clear: both;"></div>
-</div>
+  {# Отображение остальных элементов коллекции #}
+  {% if collection %}
+  <div>
+    <div class="title">Коллекция</div>
+
+    <div>
+      {% for i in collection %}
+      <table width="100" height="130" class="collection-list-item">
+	<tr>
+	  <td align="center" valign="middle">
+	    <a href="{{ i.get_absolute_url }}" title="Нажмите для просмотра товара">{{ i.title }}</a>
+	  </td>
+	</tr>
+	<tr>
+	  <td align="center" valign="middle" height="100" width="100" >
+	    <a href="{{ i.get_absolute_url }}" title="Нажмите для просмотра товара"><img src="{{ i.image.path|thumbnail:"100x,itempics" }}" border="0"/></a>
+	  </td>
+	</tr>
+      </table>
+      {% endfor %}
+    </div>
+
+    <div style="clear: both;"></div>
+  </div>
 {% endif %}
 
 {% include "zoom.html" %}
