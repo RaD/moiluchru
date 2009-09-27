@@ -162,7 +162,7 @@ function jabber_message() {
 	loading.css({'top': parseInt(msgwin.top) + 'px', 'left': parseInt(msgwin.left) + 'px'}).toggleClass('hide');
     }
     input.attr('disabled', 'disabled');
-    console.log(input.val());
+    //console.log(input.val());
     $.post('/ajax/jabber/message/', { message: input.val(), system: '0' },
 	   function(json) {
 	       loading.toggleClass('hide');
