@@ -101,7 +101,7 @@ class LampInline(admin.TabularInline):
       
 class EslLampInline(admin.TabularInline):
     model = models.EslLamp
-    extra = 1
+    max_num = 1
       
 class SizeInline(admin.TabularInline):
     model = models.Size
@@ -127,7 +127,7 @@ class ItemAdmin(admin.ModelAdmin):
     ordering = ('-reg_date', 'title', 'category')
     search_fields = ('title', 'category')
     save_as = True
-    inlines = [SizeInline, LampInline, EslLampInline, IntegratedInline]
+    inlines = [eval('%sInline' % model_name) for model_name in settings.SHOP_INLINES]
 
     def field_image_preview(self, item):
         url = thumbnail(item.image.path, '100x,itempics')
