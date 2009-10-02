@@ -1,0 +1,2 @@
+0 5 * * * /home/rad/django/moiluchru/dumps/dump.sh
+0 6 * * * /home/rad/django/moiluchru/dumps/itempics.sh
