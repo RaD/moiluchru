@@ -8,6 +8,8 @@ from datetime import datetime
 from tagging.fields import TagField
 from tagging.utils import parse_tag_input
 
+from snippets import translit
+
 class Profile(models.Model):
     # обязательная часть профайла
     user = models.ForeignKey(User, unique=True)
@@ -80,6 +82,10 @@ class Category(CommonEntity):
 
     def get_absolute_url(self):
         return u'/category/%s/' % self.slug
+
+    def save(self):
+        self.slug = translit(self.title)
+        super(Category, self).save()
 
 # Наследуем класс от entity
 class Collection(CommonEntity):

@@ -41,17 +41,11 @@ admin.site.register(models.Producer, ProducerAdmin)
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = models.Category
-
-    def clean_slug(self):
-        slug = self.cleaned_data['slug']
-        if re.match(r'^[a-z_]+$', slug):
-            return slug
-        else:
-            raise forms.ValidationError(_(u'Use [a-z] and _ only.'))
+        exclude = ('slug', )
 
 class CategoryAdmin(admin.ModelAdmin):
     form = CategoryForm
-    fieldsets = ((None,{'fields': ('title', 'slug', 'parent')}),)
+    fieldsets = ((None,{'fields': ('title', 'parent')}),)
     list_display = ('title', 'slug', 'parent')
     ordering = ('parent', 'title')
     search_fields = ('title',)
