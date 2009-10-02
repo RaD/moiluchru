@@ -25,7 +25,6 @@ class ArticleProxyAdmin(admin.ModelAdmin):
 
     def queryset(self, request):
         return super(ArticleProxyAdmin, self).queryset(request)
-    #.filter(url__regex=r'^\/article\/[^\/]+\/$')
 
     def save_model(self, request, obj, form, change):
         title = request.POST['title']
