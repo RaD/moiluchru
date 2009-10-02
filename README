@@ -40,6 +40,7 @@ Django-related:
     python-openid	- OpenID support for servers and consumer
     python-dnspython python-m2crypto python-pyxmpp python-pyxmpp-doc - for xmpp
     svn co http://django-tagging.googlecode.com/svn/trunk django-tagging
+    hg clone http://bitbucket.org/jezdez/django-robots/
 
 Настройка полнотекстового поиска:
 1. Добавить в /etc/mysql/my.cnf, в раздел [mysqld] строку:
@@ -47,3 +48,8 @@ Django-related:
 2. Перезапустить MySQL сервер.
 3. Зайти в базу и перестроить таблицу:
    repair table shop_item quick;
+
+Настройка django-robots:
+1. Добавляем URL: '/', '/pics/', '/admin/'.
+2. Создаём правило: * allow:'/' disallow: '/pics/', '/admin/'.
+3. Смотрим в setting.py.
