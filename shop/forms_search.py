@@ -90,7 +90,7 @@ class BaseSearchForm(forms.ModelForm):
     """ Базовый класс для форм, строящихся по модели. """
     __metaclass__ = SearchFormMetaclass
 
-    simple = forms.BooleanField(widget=forms.HiddenInput, 
+    simple = forms.BooleanField(widget=forms.HiddenInput,
                                 initial=False, required=False)
 
     def search(self):
@@ -133,7 +133,7 @@ class SearchForm(forms.Form):
     """ Реализация формы простого поиска. """
     userinput = forms.CharField(max_length=64, required=False)
     howmuch = forms.ChoiceField(choices=ITEMS_PER_PAGE_CHOICE)
-    simple = forms.BooleanField(widget=forms.HiddenInput, 
+    simple = forms.BooleanField(widget=forms.HiddenInput,
                                 initial=True, required=False)
 
 def modelform_factory(model, form=BaseSearchForm, fields=None, exclude=None,
@@ -170,13 +170,14 @@ def modelform_factory(model, form=BaseSearchForm, fields=None, exclude=None,
 def get_search_form(form_name, *args, **kwargs):
     # Описываем возможные формы поиска
     mutable_forms = {'MainSearchForm': {'model': models.Item,
-                                        'exclude': ('title', 'desc', 'collection', 
+                                        'exclude': ('title', 'desc', 'collection',
                                                     'producer', 'has_lamp', 'image', 'buys', 'tags')},
                      'SizeSearchForm': {'model': models.Size, 'exclude': ('item',)} ,
                      'Lamp': {'model': models.Lamp, 'exclude': ('item',)},
                      'EslLamp': {'model': models.EslLamp, 'exclude': ('item',)},
+                     'CarAlarmSystem': {'model': models.CarAlarmSystem, 'exclude': ('item',)},
                      }
-    
+
     info = mutable_forms[form_name]
     form_class = modelform_factory(info['model'], exclude=info['exclude'])
     return form_class(*args, **kwargs)
