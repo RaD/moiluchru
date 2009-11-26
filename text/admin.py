@@ -8,6 +8,7 @@ from django.contrib.flatpages.models import FlatPage
 from django.shortcuts import get_object_or_404
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+from django.utils.html import escape
 
 from snippets import translit
 from text import models
@@ -28,7 +29,7 @@ class ArticleProxyAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         title = request.POST['title']
-        obj.url = '/article/%s/' % (translit(title),)
+        obj.url = '/article/%s/' % (translit(escape(title)),)
         obj.template_name = u'flatpage.html'
         obj.save()
 
