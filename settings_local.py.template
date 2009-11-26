@@ -46,7 +46,7 @@ SHOP_ITEMS_PER_PAGE = 10
 ITEMS_ON_MAIN_PAGE = 10
 MANAGER_ORDERS_PER_PAGE = 10
 
-SHOP_INLINES = ('Size', 'Lamp', 'EslLamp', 'Integrated')
+SHOP_INLINES = ('Size', 'Lamp', 'EslLamp', 'Integrated', 'CarAlarmSystem')
 
 PROMO_TEXT = u'продажа светильников из дерева, деревянные светильники, тиффани, светильники для ванн, подсветки для картин, энергосберегающие лампы, для кухни, светильники влагозащищенные, купить люстру, светильники настенные, купить люстру недорого, бра, торшер'
 

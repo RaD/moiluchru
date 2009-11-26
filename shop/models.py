@@ -3,6 +3,7 @@
 from django.db import models
 from django.contrib.admin.models import User
 from django.utils.translation import ugettext_lazy as _
+from django.utils.html import escape
 
 from datetime import datetime
 from tagging.fields import TagField
@@ -18,7 +19,7 @@ class Profile(models.Model):
     address = models.CharField(max_length=50)
 #    headshot = models.ImageField(upload_to='/tmp')
 #    passport = models.ImageField(upload_to='/tmp')
-    
+
 # Определяем абстрактный класс для Entity
 class CommonEntity(models.Model):
     title = models.CharField(verbose_name=_(u'Title'), max_length=64)
@@ -57,7 +58,7 @@ class Producer(models.Model):
 
     def __unicode__(self):
         return self.name
-    
+
     def get_absolute_url(self):
         return u'/shop/producer/%i/' % self.id
 
@@ -84,7 +85,7 @@ class Category(CommonEntity):
         return u'/category/%s/' % self.slug
 
     def save(self):
-        self.slug = translit(self.title)
+        self.slug = translit(escape(self.title))
         super(Category, self).save()
 
 # Наследуем класс от entity
@@ -114,7 +115,7 @@ class Item(CommonEntity):
     collection = models.ForeignKey(Collection, verbose_name=_(u'Collection'), null=True, blank=True)
     producer = models.ForeignKey(Producer, verbose_name=_(u'Producer'))
     color = models.ForeignKey(Color, verbose_name=_(u'Color'))
-    is_present = models.BooleanField(verbose_name=_(u'Is present'), 
+    is_present = models.BooleanField(verbose_name=_(u'Is present'),
                                      help_text=_(u'An item is present at store'))
     has_lamp = models.BooleanField(verbose_name=_(u'Has lamp'))
     reg_date = models.DateTimeField(verbose_name=_(u'Defined'), auto_now_add=True)
@@ -123,7 +124,7 @@ class Item(CommonEntity):
     buys = models.IntegerField(verbose_name=_(u'Buys'), default=0)
     sort_price = models.FloatField(_(u'Price'), help_text=_(u'Price of an item, in roubles'))
     tags = TagField()
-    
+
     class Meta:
         verbose_name = _(u'Item')
         verbose_name_plural = _(u'Items')
@@ -159,7 +160,7 @@ class Item(CommonEntity):
         self.sort_price = shop # эта цена используется при сортировке
         self.save()
         # сохраняем информацию о цене
-        price = Price(item=self, price_store=store, price_shop=shop, 
+        price = Price(item=self, price_store=store, price_shop=shop,
                       applied=datetime.now())
         price.save()
 
@@ -171,14 +172,14 @@ class Price(models.Model):
     price_store = models.FloatField(_(u'Price (store)'))
     price_shop = models.FloatField(_(u'Price (shop)'))
     applied = models.DateTimeField()
-    
+
     class Meta:
         verbose_name = _(u'Price')
         verbose_name_plural = _(u'Prices')
 
     def __unicode__(self):
         return '%s : %s' % (self.price_shop, self.price_store)
-    
+
 class Buyer(models.Model):
     lastname = models.CharField(max_length=64)
     firstname = models.CharField(max_length=64)
@@ -186,7 +187,7 @@ class Buyer(models.Model):
     address = models.CharField(max_length=255)
     email = models.EmailField()
     join_date = models.DateTimeField(auto_now_add=True)
-    
+
     class Meta:
         verbose_name = _(u'Buyer')
         verbose_name_plural = _(u'Buyers')
@@ -194,7 +195,7 @@ class Buyer(models.Model):
     def __unicode__(self):
         return u'%s %s %s' %(self.lastname,
                              self.firstname, self.secondname)
-    
+
 class OrderStatus(CommonEntity):
     pass
 
@@ -218,11 +219,11 @@ class Order(models.Model):
 
     def __unicode__(self):
         return self.buyer.lastname
-    
+
     def get_absolute_url(self):
         """ This returns the absolute URL for a record. """
         return u'/manager/orderinfo/%i/' % self.id
-    
+
 class OrderDetail(models.Model):
     order = models.ForeignKey(Order)
     item = models.ForeignKey(Item)
@@ -301,19 +302,19 @@ class SearchStatOption(models.Model):
 
 class Size(models.Model):
     item = models.ForeignKey(Item)
-    diameter = models.PositiveIntegerField(verbose_name=_(u'Diameter'), 
+    diameter = models.PositiveIntegerField(verbose_name=_(u'Diameter'),
                                            help_text=_(u'Diameter of an item, in millimeters'),
                                            null=True, blank=True)
-    height = models.PositiveIntegerField(verbose_name=_(u'Height'), 
+    height = models.PositiveIntegerField(verbose_name=_(u'Height'),
                                          help_text=_(u'Height of an item, in millimeters'),
                                          null=True, blank=True)
-    length = models.PositiveIntegerField(verbose_name=_(u'Length'), 
+    length = models.PositiveIntegerField(verbose_name=_(u'Length'),
                                          help_text=_(u'Length of an item, in millimeters'),
                                          null=True, blank=True)
-    width = models.PositiveIntegerField(verbose_name=_(u'Width'), 
+    width = models.PositiveIntegerField(verbose_name=_(u'Width'),
                                         help_text=_(u'Width of an item, in millimeters'),
                                         null=True, blank=True)
-    brow = models.PositiveIntegerField(verbose_name=_(u'Brow'), 
+    brow = models.PositiveIntegerField(verbose_name=_(u'Brow'),
                                        help_text=_(u'Brow of an item, in millimeters'),
                                        null=True, blank=True)
 # Освещение
@@ -326,12 +327,12 @@ class Socle(CommonEntity):
 
 class Lamp(models.Model):
     item = models.ForeignKey(Item)
-    socle = models.ForeignKey(Socle, 
+    socle = models.ForeignKey(Socle,
                               verbose_name=_(u'Socle'),
                               help_text=_(u'Socle of lamp'))
     watt = models.PositiveIntegerField(verbose_name=_(u'Power'), default=0,
                                        help_text=_(u'Power of lamp'))
-    count = models.PositiveIntegerField(verbose_name=_(u'Count of lamps'), 
+    count = models.PositiveIntegerField(verbose_name=_(u'Count of lamps'),
                                         help_text=_(u'Count of lamps'), default=1)
     voltage = models.PositiveIntegerField(verbose_name=_(u'Voltage'),
                                           help_text=_(u'Voltage of lamps'), default=220)
@@ -340,14 +341,14 @@ class IntegratedLight(models.Model):
     item = models.ForeignKey(Item)
     color = models.ForeignKey(Color, verbose_name=_(u'Color'))
     montage_diameter = models.PositiveIntegerField(
-        verbose_name=_(u'Diameter of an hole'), 
+        verbose_name=_(u'Diameter of an hole'),
         help_text=_(u'Diameter of an montage hole, in millimeters'),
         null=True, blank=True)
-    
+
 # Энергосберегающие лампы
 class EslLamp(models.Model):
     item = models.ForeignKey(Item)
-    socle = models.ForeignKey(Socle, 
+    socle = models.ForeignKey(Socle,
                               verbose_name=_(u'Socle'),
                               help_text=_(u'Socle of lamp'))
     consumption = models.PositiveIntegerField(verbose_name=_(u'Consuption'), default=0,
@@ -356,5 +357,23 @@ class EslLamp(models.Model):
                                               help_text=_(u'Luminosity of lamp in Watts'))
     temperature = models.PositiveIntegerField(verbose_name=_(u'Temperature'), default=0,
                                               help_text=_(u'Light\'s temperature in K'))
-    voltage = models.PositiveIntegerField(verbose_name=_(u'Voltage'), 
+    voltage = models.PositiveIntegerField(verbose_name=_(u'Voltage'),
                                           help_text=_(u'Voltage of lamps'), default=220)
+
+# Сигнализации
+class CarAlarmSystem(models.Model):
+    item = models.ForeignKey(Item)
+    distance = models.PositiveIntegerField(verbose_name=_(u'Distance'), default=0,
+                                              help_text=_(u'Receiver/Transmitter work distance in meters'))
+    additional_channels = models.PositiveIntegerField(verbose_name=_(u'Channels'), default=0,
+                                              help_text=_(u'Additional channels'))
+    is_duplex = models.BooleanField(verbose_name=_(u'Is duplex'),
+                                    help_text=_(u'Two way link'))
+    may_engine_start = models.BooleanField(verbose_name=_(u'Engine starts'),
+                                           help_text=_(u'May starts the engine'))
+    is_engine_timer = models.BooleanField(verbose_name=_(u'Engine starts by timer'),
+                                          help_text=_(u'May starts the engine by timer'))
+    is_engine_temp = models.BooleanField(verbose_name=_(u'Engine starts by temperature'),
+                                          help_text=_(u'May starts the engine by temperature'))
+    is_engine_akku = models.BooleanField(verbose_name=_(u'Check accumulator'),
+                                          help_text=_(u'Check accumulator level before engine starts'))

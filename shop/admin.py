@@ -89,22 +89,26 @@ class ItemForm(forms.ModelForm):
             m.set_price(price_store, price_shop)
         return m
 
-class LampInline(admin.TabularInline):
-    model = models.Lamp
-    extra = 1
-      
-class EslLampInline(admin.TabularInline):
-    model = models.EslLamp
-    max_num = 1
-      
 class SizeInline(admin.TabularInline):
     model = models.Size
     max_num = 1
-      
+
+class LampInline(admin.TabularInline):
+    model = models.Lamp
+    extra = 1
+
+class EslLampInline(admin.TabularInline):
+    model = models.EslLamp
+    max_num = 1
+
 class IntegratedInline(admin.TabularInline):
     model = models.IntegratedLight
     max_num = 1
-      
+
+class CarAlarmSystemInline(admin.TabularInline):
+    model = models.CarAlarmSystem
+    max_num = 1
+
 class ItemAdmin(admin.ModelAdmin):
     form = ItemForm
     fieldsets = (
@@ -128,7 +132,7 @@ class ItemAdmin(admin.ModelAdmin):
         return '<img src="%s"/>' % url
     field_image_preview.short_description = _(u'Preview')
     field_image_preview.allow_tags = True
-    
+
     def field_price_store(self, item):
         try:
             # берём самую свежую запись
