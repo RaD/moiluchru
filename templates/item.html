@@ -56,7 +56,7 @@
 	{# Изображение товара #}
 	<img src="{{ item.image.path|thumbnail:"200x,itempics" }}" id="thumbnail" border="0" title="{{ item.title }} : Нажмите, чтобы увеличить" />
 	{% for l in addons.Lamp %}
-	<img id="lamp_{{ l.socle|lower|cut:' ' }}" src="http://moiluchru/pics/lamps/{{ l.socle|lower|cut:' ' }}.jpeg" class="hide" 
+	<img id="lamp_{{ l.socle|lower|cut:' ' }}" src="http://moiluchru/pics/lamps/{{ l.socle|lower|cut:' ' }}.jpeg" class="hide"
 	     style="position: relative; top: 0px; left: 0px;"/>
 	{% endfor %}
       </td>
@@ -65,10 +65,12 @@
 	<div id="addwidget" class="active-zone"
 	     onclick="$('#cartadd_{{ item.id }}').toggleZoom(); return false;">
 
+	  {% if collection %}
 	  <div class="important-zone-discount"
 	       title="При покупке нескольких элементов коллекции спрашивайте о скидке.">
 	    Скидка?
 	  </div>
+	  {% endif %}
 
 	  <img src="http://moiluchru/pics/add.png" title="Добавить в корзину" width="32" height="32" align="left" style="margin: 0.5em; 4px;"/>
 	  <div style="line-height: 1.0;">
@@ -82,10 +84,10 @@
 	  </div>
 	</div>
 	<div>{% ifequal item.is_present 1 %}Есть в наличии{% else %}Ожидается{% endifequal %}.</div>
-	
+
 	{% if jabber %}
 	<div onclick="jabber_init();"
-	     style="border: 1px solid green; -moz-border-radius: 4px; 
+	     style="border: 1px solid green; -moz-border-radius: 4px;
 		    padding: 4px; margin: 4px; cursor: pointer; text-align: center;">
 	  <img src="http://moiluchru/pics/jabber-protocol.png" align="left"/> Задать вопрос консультанту
 	</div>
@@ -118,7 +120,7 @@
 	  {% for l in addons.Lamp %}
 	    <div style="padding: 2px;">
 	      <span class="active-zone"
-		    onmouseover="show_lamp('lamp_{{ l.socle|lower|cut:' ' }}');" 
+		    onmouseover="show_lamp('lamp_{{ l.socle|lower|cut:' ' }}');"
 		    style="font-size: 150%; font-weight: bold;">{{ l.socle }}</span>
 	      <span style="font-size: 80%;">{{ l.count }} x {{ l.watt }} Вт</span>
 	    </div>
