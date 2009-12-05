@@ -13,6 +13,7 @@
 	    <div class="client">{{ order.buyer.lastname }} {{ order.buyer.firstname }} {{ order.buyer.secondname }}</div>
 	    <div>Адрес: <a href="http://maps.google.com/?q={{ order.buyer.address }}">{{ order.buyer.address }}</a></div>
 	    <div>Контактный телефон: {{ phone.number }}, {{ phone.type }}</div>
+	    {% if order.buyer.email %}<div>Электронная почта: <a href="mailto:{{ order.buyer.email }}">{{ order.buyer.email }}</a></div>{% endif %}
 	  </div>
 	  <div class="title">Комментарий к заказу</div>
 	  <div class="content">{{ order.comment }}</div>
