@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# (c) 2009-2010 Ruslan Popov <ruslan.popov@gmail.com>
 
 from django.conf import settings
 from django.shortcuts import get_object_or_404
@@ -59,7 +60,7 @@ def get_items_by_collection(request, id):
     items = models.Item.objects.filter(collection=id)
     request.session['cached_items'] = items # кэшируем для paginator
     return (collection, items)
-    
+
 def get_item_info_by_id(request, id):
     item = get_object_or_404(models.Item, id__exact=id)
     return get_item_info(request, item)
@@ -69,7 +70,7 @@ def get_item_info_by_title(request, title):
     return get_item_info(request, item)
 
 def get_item_info(request, item):
-    collection = models.Item.objects.filter(collection=item.collection, 
+    collection = models.Item.objects.filter(collection=item.collection,
                                             collection__isnull=False).exclude(id=item.id)
     cached_items = request.session.get('cached_items', [])
     # ToDo: продумать логику перехода к следующей/предыдущей моделям товара
@@ -84,9 +85,9 @@ def get_item_info(request, item):
         index = 0
     return (item, collection, previous, next)
 
-def init_cart(request):
+def init_cart(request, force=False):
     """ Инициализация корзины. """
-    if 'cart_items' not in request.session:
+    if force or 'cart_items' not in request.session:
         request.session['cart_items'] = {}
         request.session['cart_count'] = 0
         request.session['cart_price'] = 0.00
@@ -100,7 +101,7 @@ def tag_search(request, tag):
 
 def get_search_forms(request):
     context = {
-        'searchform': SearchForm(request.POST or None), 
+        'searchform': SearchForm(request.POST or None),
         'mainsearchform': factory('MainSearchForm', request.POST or None, initial={'is_present': True}),
         'sizesearchform': factory('SizeSearchForm', request.POST or None),
         }
@@ -141,7 +142,7 @@ def get_search_results(request):
                     result = filter_items(request, key, items)
                     if not result: # форма не прошла проверка
                         return None
-                    (form, items) = result 
+                    (form, items) = result
                     if key == 'MainSearchForm':
                         obj = form.cleaned_data['item_type']
                         if obj:
@@ -157,7 +158,7 @@ def get_search_results(request):
             request.session['cached_items'] = items # кэшируем для paginator
             models.SearchStatQuery(request=request).save() # сохраняем запрос для статистики
         else:
-            request.session['error'] = ('simple', request.POST, 
+            request.session['error'] = ('simple', request.POST,
                                         u'Ошибка во введённых данных. Проверьте их правильность.')
             return None
     else: # обращение через paginator

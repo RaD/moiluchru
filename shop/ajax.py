@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# (c) 2009-2010 Ruslan Popov <ruslan.popov@gmail.com>
 
 from django.conf import settings
 
@@ -29,7 +30,7 @@ def add_to_cart(request, form):
         items[id]['price'] = price
         # поместить в сессию
         request.session['cart_items'] = items
-        
+
         request.session['cart_count'] = 0
         request.session['cart_price'] = 0.00
         for i in request.session.get('cart_items', {}):
@@ -38,14 +39,14 @@ def add_to_cart(request, form):
         return {'code': '200', 'desc': 'success',
                 'cart_count': request.session['cart_count'],
                 'cart_price': request.session['cart_price']}
-        
+
     except Item.DoesNotExists:
         return {'code': '300', 'desc': 'Can\'t get object'}
 
 @ajax_processor(CartClean)
 def clean_cart(request, form):
     """ Функция очистки корзины  """
-    init_cart(request)
+    init_cart(request, True)
     return {'code': '200', 'desc': 'success'}
 
 @ajax_processor(CartRecalculate)
@@ -123,7 +124,7 @@ def jabber_message(request, form):
         del(request.session['JABBER_NICK'])
 
     nick = request.session.get('JABBER_NICK', dt.now().strftime('%M%S'))
-    
+
     try:
         message = form.cleaned_data['message'] # может быть пустым
         msg = Message(nick=nick, msg=message)

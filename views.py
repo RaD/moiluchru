@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# (c) 2009-2010 Ruslan Popov <ruslan.popov@gmail.com>
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -132,6 +133,9 @@ def show_cart(request):
 @render_to('order.html', common_context)
 def show_order(request):
     error_desc = None
+    if request.session.get('cart_count', 0) == 0:
+        # боремся с кнопкой back
+        return HttpResponseRedirect('/')
     form = f_shop.OfferForm(request.POST or None,
                             cart = request.session.get('cart_items', {}),
                             count = request.session.get('cart_count', 0),
@@ -140,6 +144,7 @@ def show_order(request):
     if request.method == 'POST' and form.is_valid():
         try:
             form.save()
+            v_shop.init_cart(request, True)
             return HttpResponseRedirect('/profit/')
         except Exception, e:
             error_desc = e
@@ -152,14 +157,13 @@ def show_order(request):
 ### Скажем спасибо за заказ
 @render_to('profit.html', common_context)
 def show_profit(request):
-    v_shop.init_cart(request)
     if getattr(settings, 'JABBER_NOTIFICATION', False) and not getattr(settings, 'DEBUG', False):
         import xmpp, time
         jid = xmpp.protocol.JID(getattr(settings, 'JABBER_ID', None))
         cl = xmpp.Client(jid.getDomain(), debug=[])
         conn = cl.connect()
         if conn:
-            auth = cl.auth(jid.getNode(), 
+            auth = cl.auth(jid.getNode(),
                            getattr(settings, 'JABBER_PASSWORD', None),
                            resource=jid.getResource())
             if auth:
@@ -176,7 +180,7 @@ def show_profit(request):
 @render_to('flatpage.html', common_context)
 def flatpage(request, title=None):
     v_shop.init_cart(request)
-    
+
     from django.contrib.flatpages.models import FlatPage
     from django.shortcuts import get_object_or_404
     if title:

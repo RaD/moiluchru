@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# (c) 2009-2010 Ruslan Popov <ruslan.popov@gmail.com>
 
 from django.conf.urls.defaults import *
 
@@ -82,5 +83,5 @@ urlpatterns = patterns(
     (r'^profit/$', 'views.show_profit'),
 
     # отображение текстов
-    (r'^.*/$', 'views.flatpage'),   
+    (r'^.*/$', 'views.flatpage'),
 )

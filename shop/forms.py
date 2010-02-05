@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# (c) 2009-2010 Ruslan Popov <ruslan.popov@gmail.com>
 
 from django import forms
 from django.conf import settings
@@ -32,32 +33,34 @@ class OfferForm(forms.Form):
     def save(self):
         clean = self.cleaned_data
         buyer, created = models.Buyer.objects.get_or_create(
-            lastname = clean['fname'], 
-            firstname = clean['iname'], 
+            lastname = clean['fname'],
+            firstname = clean['iname'],
             secondname = clean['oname'],
-            address = clean['address'], 
+            address = clean['address'],
             email =  clean['email']
             )
         phone, created = models.Phone.objects.get_or_create(
-            number = clean['phone'], 
+            number = clean['phone'],
             owner = buyer
             )
-        order, created = models.Order.objects.get_or_create(
+        order = models.Order(
             buyer = buyer,
             count = self.count,
             totalprice = self.total,
             comment = clean['comment'],
             status = models.OrderStatus.objects.get(id=1)
             )
+        order.save()
         for i in self.cart.keys():
             item = models.Item.objects.get(id=i)
-            orderdetail = models.OrderDetail(order = order, item = item,
-                                             count = self.cart[i]['count'],
-                                             price = self.cart[i]['price'])
+            orderdetail = models.OrderDetail(
+                order = order, item = item,
+                count = self.cart[i]['count'],
+                price = self.cart[i]['price'])
             orderdetail.save()
-        # убираем товар с витрины
-        item.buys += 1
-        item.save()
+            # убираем товар с витрины
+            item.buys += 1
+            item.save()
 
 class LoginForm(forms.Form):
     login = forms.CharField(label=_(u'Login'), max_length=30,
